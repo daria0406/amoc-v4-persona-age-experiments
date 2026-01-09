@@ -1,20 +1,8 @@
-#!/usr/bin/env python3
-"""
-Run AMoC age-related statistical analysis for a single model.
-
-This is a thin wrapper around `run_statistical_analysis(model_tag)`
-defined in `vllm_train_minimal_v4.py`.
-
-Usage example (Qwen):
-
-    python run_amoc_stats.py \
-        --model "Qwen/Qwen3-30B-A3B-Instruct-2507"
-
-Usage example (GPT-OSS 120B):
-
-    python run_amoc_stats.py \
-        --model "openai/gpt-oss-120b"
-"""
+# Run AMoC age-related statistical analysis for a single model.
+# This is a thin wrapper around `run_statistical_analysis(model_tag)` defined in `vllm_train_minimal_v4.py`.
+# Usage example (Qwen):
+#     python run_amoc_stats.py \
+#         --model "Qwen/Qwen3-30B-A3B-Instruct-2507"
 
 import argparse
 import sys

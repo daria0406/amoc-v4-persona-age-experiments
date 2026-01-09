@@ -20,8 +20,7 @@ multiprocessing.set_start_method("spawn", force=True)
 os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
 os.environ["HF_HOME"] = "/export/projects/nlp/.cache"
 
-OUTPUT_DIR = "/export/projects/nlp/daria_amoc_output/personas_dfs"
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+OUTPUT_DIR = "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments/personas_dfs"
 
 PERSONAHUB_CONFIGS = [
     "persona",
@@ -314,7 +313,9 @@ sampling_params = None
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Filter PersonaHub for high school students using gpt-oss.")
+    parser = argparse.ArgumentParser(
+        description="Filter PersonaHub for high school students using gpt-oss."
+    )
     parser.add_argument(
         "--model",
         type=str,
@@ -347,7 +348,8 @@ def parse_args():
     )
     return parser.parse_args()
 
-#for LLama - add tokenizer bc we should use a chat template via tokenizer.apply_chat_template
+
+# for LLama - add tokenizer bc we should use a chat template via tokenizer.apply_chat_template
 def init_llm(model_name: str, tensor_parallel_size: int):
     global llm, sampling_params, tokenizer
 
@@ -386,9 +388,6 @@ def text_fields(record):
 
 
 def is_relevant(rec, keywords):
-    """
-    Filter: Checks if the persona mentions early education terms.
-    """
     blob = " ".join(text_fields(rec)).lower()
     if keywords == "young":
         return any(k in blob for k in YOUNG_EDU_KEYWORDS)
@@ -414,6 +413,7 @@ def preferred_persona_text(rec):
         if cand in rec and isinstance(rec[cand], str) and rec[cand].strip():
             return rec[cand].strip()
     return " ".join(text_fields(rec))[:1500]
+
 
 def extract_age(text):
     if not isinstance(text, str):
@@ -477,11 +477,8 @@ def extract_age(text):
 
     return None
 
+
 def should_exclude_non_primary_st(text):
-    """
-    UPDATED: Only removes the PARENT, keeps the CHILD.
-    We removed the exclusion for '5 year old child' so we can capture the student.
-    """
     if not isinstance(text, str):
         return True
     text_low = text.lower()
@@ -571,10 +568,8 @@ def should_exclude_non_primary_st(text):
 
     return False
 
+
 def should_exclude_non_sec_school_student(text):
-    """
-    Removes Teachers, Parents, and Adults reminiscing.
-    """
     if not isinstance(text, str):
         return True
     text_low = text.lower()
@@ -649,11 +644,8 @@ def should_exclude_non_sec_school_student(text):
 
     return False
 
+
 def should_exclude_non_hs_student(text):
-    """
-    Returns True if the persona should be EXCLUDED.
-    Identifies Alumni, Adults, Parents, Staff, and 'Slice of Life' fans.
-    """
     if not isinstance(text, str):
         return True
 
@@ -753,7 +745,9 @@ def should_exclude_non_hs_student(text):
         return True
 
     if re.search(r"\b(alumna|alumnus|alumni|alma mater)\b", text_low):
-        if re.search(r"^\s*(a|an|the)\s+([\w\s]*)\b(alumna|alumnus|alumni)\b", text_low):
+        if re.search(
+            r"^\s*(a|an|the)\s+([\w\s]*)\b(alumna|alumnus|alumni)\b", text_low
+        ):
             return True
 
     if re.search(r"\bgraduat(e|ed)\b", text_low):
@@ -792,10 +786,8 @@ def should_exclude_non_hs_student(text):
 
     return False
 
+
 def should_exclude_non_uni_student(text):
-    """
-    Enhanced exclusion logic based on dataset scan.
-    """
     if not isinstance(text, str):
         return True
     text_low = text.lower()
@@ -913,13 +905,6 @@ def should_keep_uni_student(text):
 
 
 def loading_filtering_young_learners(min_confidence: int = 70) -> pd.DataFrame:
-    """
-    Load and filter for PRESCHOOL, KINDERGARTEN, and PRIMARY-like personas,
-    then use the LLM judge (primary prompt) to get a clean primary-school subset.
-
-    Returns:
-        df_primary_llm (pd.DataFrame): personas judged as primary-level students.
-    """
     print("Loading and Filtering for PRESCHOOL, KINDERGARDEN AND PRI...")
     all_rows = []
 
@@ -962,9 +947,7 @@ def loading_filtering_young_learners(min_confidence: int = 70) -> pd.DataFrame:
     # Step 4: Strict Age Limit (Max 11)
     # Age <= 11 AND Valid Age AND Not Excluded
     df_final = df_young[
-        (df_young["age"].notna())
-        & (df_young["age"] <= 11)
-        & (~df_young["is_excluded"])
+        (df_young["age"].notna()) & (df_young["age"] <= 11) & (~df_young["is_excluded"])
     ].copy()
 
     df_final = df_final.sort_values(by="age")
@@ -1010,15 +993,7 @@ def loading_filtering_young_learners(min_confidence: int = 70) -> pd.DataFrame:
     return df_primary_llm
 
 
-
 def loading_filtering_secondary_students(min_confidence: int = 70) -> pd.DataFrame:
-    """
-    Load and filter for SECONDARY SCHOOL STUDENTS (middle + early secondary),
-    then use the LLM judge (secondary prompt) to refine.
-
-    Returns:
-        df_secondary_llm (pd.DataFrame): personas judged as secondary-level students.
-    """
     print("Loading and Filtering for SECONDARY SCHOOL STUDENTS...")
     all_rows = []
 
@@ -1112,14 +1087,8 @@ def loading_filtering_secondary_students(min_confidence: int = 70) -> pd.DataFra
 
     return df_secondary_llm
 
-def loading_filtering_university_students(min_confidence: int = 70) -> pd.DataFrame:
-    """
-    Load and filter for UNIVERSITY STUDENTS, then use LLM judge to keep
-    only university FRESHMEN (first-year students).
 
-    Returns:
-        df_uni_llm (pd.DataFrame): personas judged as university freshmen.
-    """
+def loading_filtering_university_students(min_confidence: int = 70) -> pd.DataFrame:
     print("Loading and Filtering for UNIVERSITY STUDENTS...")
     all_rows = []
 
@@ -1155,9 +1124,7 @@ def loading_filtering_university_students(min_confidence: int = 70) -> pd.DataFr
     df_uni["age"] = df_uni["persona_text"].apply(extract_age)
 
     # Step 3: Exclude clear non-students
-    df_uni["is_excluded"] = df_uni["persona_text"].apply(
-        should_exclude_non_uni_student
-    )
+    df_uni["is_excluded"] = df_uni["persona_text"].apply(should_exclude_non_uni_student)
     df_uni["to_keep"] = df_uni["persona_text"].apply(should_keep_uni_student)
 
     # Step 4: Filter for Age Range (17–18 as proxy for first-year)
@@ -1236,13 +1203,10 @@ def build_prompt(persona: str) -> str:
         add_generation_prompt=True,  # add assistant header
     )
     return prompt
-    #return JUDGE_SYSTEM_PROMPT.strip() + "\n\nPersona:\n" + persona + "\n\nAnswer:"
+    # return JUDGE_SYSTEM_PROMPT.strip() + "\n\nPersona:\n" + persona + "\n\nAnswer:"
 
 
 def judge_batch_120b(personas: List[str]) -> List[Dict]:
-    """
-    Use the global llm + sampling_params to classify a batch of personas.
-    """
     if llm is None or sampling_params is None:
         raise RuntimeError("LLM not initialized. Call init_llm() first.")
 
@@ -1254,7 +1218,7 @@ def judge_batch_120b(personas: List[str]) -> List[Dict]:
         text = out.outputs[0].text.strip()
         print("RAW LLM OUTPUT EXAMPLE:")
         print(text)
-       
+
     for out in outputs:
         text = out.outputs[0].text.strip()
         try:
@@ -1268,7 +1232,7 @@ def judge_batch_120b(personas: List[str]) -> List[Dict]:
                 "reason": f"Could not parse JSON: {text[:120]}",
             }
         results.append(data)
-        
+
     return results
 
 
@@ -1344,7 +1308,7 @@ def loading_filtering_high_school_students(
     df_candidates["hs_label"] = [j["label"] for j in judgments]
     df_candidates["hs_confidence"] = [j["confidence"] for j in judgments]
     df_candidates["hs_reason"] = [j["reason"] for j in judgments]
-    
+
     print("Label distribution:")
     print(df_candidates["hs_label"].value_counts(dropna=False))
 
@@ -1352,15 +1316,21 @@ def loading_filtering_high_school_students(
     print(df_candidates["hs_confidence"].describe())
 
     print("\nA few 'yes' rows regardless of confidence:")
-    print(df_candidates[df_candidates["hs_label"] == "yes"][["age", "hs_confidence", "persona_text"]].head(10))
+    print(
+        df_candidates[df_candidates["hs_label"] == "yes"][
+            ["age", "hs_confidence", "persona_text"]
+        ].head(10)
+    )
 
     print("\nA few 'uncertain' rows:")
-    print(df_candidates[df_candidates["hs_label"] == "uncertain"][["age", "hs_confidence", "persona_text"]].head(10))
+    print(
+        df_candidates[df_candidates["hs_label"] == "uncertain"][
+            ["age", "hs_confidence", "persona_text"]
+        ].head(10)
+    )
 
-    mask_llm = (
-        df_candidates["hs_label"] == "yes"
-    ) 
-    #& (df_candidates["hs_confidence"] >= high_conf_threshold)
+    mask_llm = df_candidates["hs_label"] == "yes"
+    # & (df_candidates["hs_confidence"] >= high_conf_threshold)
 
     df_final = df_candidates[mask_llm].copy()
 
@@ -1382,7 +1352,7 @@ def main():
     init_llm(args.model, args.tensor_parallel_size)
 
     file_name = args.file
-    if file_name=="high-school":
+    if file_name == "high-school":
         df_final = loading_filtering_high_school_students(
             batch_size=args.batch_size,
             high_conf_threshold=args.high_conf_threshold,
@@ -1395,7 +1365,7 @@ def main():
         df_final.to_csv(output_file, index=False)
         print(f"\nSaved to {output_file}")
 
-    elif file_name=="primary":
+    elif file_name == "primary":
         df_primary = loading_filtering_young_learners(min_confidence=80)
         if df_primary is None:
             print("\nNo data to save.")
@@ -1404,7 +1374,7 @@ def main():
         df_primary.to_csv(output_file, index=False)
         print(f"\nSaved to {output_file}")
 
-    elif file_name=="university":
+    elif file_name == "university":
         df_uni = loading_filtering_university_students(min_confidence=80)
         if df_uni is None:
             print("\nNo data to save.")
@@ -1412,15 +1382,16 @@ def main():
         output_file = os.path.join(OUTPUT_DIR, "university_students.csv")
         df_uni.to_csv(output_file, index=False)
         print(f"\nSaved to {output_file}")
-        
-    elif file_name=="secondary":
+
+    elif file_name == "secondary":
         df_secondary = loading_filtering_secondary_students(min_confidence=70)
         if df_secondary is None:
             print("\nNo data to save.")
-            return   
+            return
         output_file = os.path.join(OUTPUT_DIR, "secondary_students.csv")
         df_secondary.to_csv(output_file, index=False)
         print(f"\nSaved to {output_file}")
+
 
 if __name__ == "__main__":
     main()

@@ -8,9 +8,13 @@ import pandas as pd
 from datasets import load_dataset
 from vllm import LLM, SamplingParams
 from transformers import AutoTokenizer
+import csv
+import math
+from typing import Optional, Dict, Any, List, Tuple
 
-tokenizer = None  # will init later
-OUTPUT_FOLDER = "/export/home/acs/stud/a/ana_daria.zahaleanu/amoc_output/personas_dfs"    
+tokenizer = None
+OUTPUT_FOLDER = "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments/personas_dfs"
+FINAL_HS_FILE = os.path.join(OUTPUT_FOLDER, "highschool_FINAL.csv")
 # -------------------------------------------------------------------
 # Multiprocessing & environment setup
 # -------------------------------------------------------------------
@@ -160,29 +164,98 @@ Output format (JSON only):
 Return ONLY this JSON object, with no additional text.
 """
 
+SYSTEM_PROMPT = """
+You are a constrained attribute annotator.
+
+Your task is to infer an approximate AGE for a PERSONA.
+This is NOT a creative task. You must follow the rules strictly.
+
+Authoritative rules (in order):
+1. If the persona explicitly states a numeric age (e.g. "I am 16 years old"), return that exact age.
+2. If no numeric age is stated, infer a reasonable AVERAGE age based ONLY on the described school level or role.
+3. If the persona is clearly an adult (18+), return null.
+4. If there is not enough information to infer an age, return null.
+
+You MUST NOT:
+- Invent precise ages without evidence.
+- Guess ages outside typical school-level averages.
+- Use stereotypes, emotions, or narrative cues.
+- Output an age ≥ 18 for a student persona.
+- Override explicit numeric ages.
+
+Allowed school-level → age mappings (use ONLY these averages):
+- young_child → 5
+- primary_school_child → 9
+- middle_school_student → 13
+- high_school_student → 16
+- university_student → 19
+
+Age group definitions:
+- young_child: preschool or early childhood references
+- primary_school_child: elementary / primary school
+- middle_school_student: middle school / junior high / lower secondary
+- high_school_student: high school / upper secondary
+- university_student: college / university
+- adult: clearly post-education or full-time work
+- unknown: insufficient information
+
+If the persona mentions high school but gives no grade or age, always use age = 16.
+
+Output format (JSON ONLY, no extra text):
+{
+  "age": <integer or null>,
+  "age_group": "<one of: young_child | primary_school_child | middle_school_student | high_school_student | university_student | adult | unknown>",
+  "reason": "<brief factual justification>"
+}
+
+The "reason" must reference ONLY explicit text cues (e.g. "mentions high school student").
+Do not add commentary, hedging, or speculation.
+""".strip()
+
+
 # -------------------------------------------------------------------
 # Keyword lists for quick filtering
 # -------------------------------------------------------------------
 PRIMARY_EXCLUDE_KEYWORDS = [
-    "teacher", "professor", "lecturer", "instructor",
-    "parent", "mother", "father", "mom", "dad",
-    "doctoral", "phd", "postdoc"
+    "teacher",
+    "professor",
+    "lecturer",
+    "instructor",
+    "parent",
+    "mother",
+    "father",
+    "mom",
+    "dad",
+    "doctoral",
+    "phd",
+    "postdoc",
 ]
 
 SECONDARY_EXCLUDE_KEYWORDS = [
-    "professor", "lecturer", "postdoc", "phd",
-    "kindergarten teacher", "preschool teacher"
+    "professor",
+    "lecturer",
+    "postdoc",
+    "phd",
+    "kindergarten teacher",
+    "preschool teacher",
 ]
 
 HIGH_EXCLUDE_KEYWORDS = [
-    "professor", "lecturer", "postdoc", "phd",
-    "kindergarten teacher", "preschool teacher"
+    "professor",
+    "lecturer",
+    "postdoc",
+    "phd",
+    "kindergarten teacher",
+    "preschool teacher",
 ]
 
 UNI_EXCLUDE_KEYWORDS = [
-    "high school teacher", "middle school teacher",
-    "elementary teacher", "primary teacher",
-    "principal", "headmaster"
+    "high school teacher",
+    "middle school teacher",
+    "elementary teacher",
+    "primary teacher",
+    "principal",
+    "headmaster",
 ]
 
 # These are used by is_relevant()
@@ -339,6 +412,44 @@ UNIVERSITY_KEYWORDS = [
     "art student",
 ]
 
+
+PHRASE_AGE_MAP = {
+    "child": 5,
+    "young child": 4,
+    "younger child": 4,
+    "kid": 6,
+    "little kid": 5,
+    "younger sibling": 6,
+    "young student": 7,
+    "schoolchild": 8,
+    "school child": 8,
+    "pupil": 8,
+    "schoolboy": 8,
+    "schoolgirl": 8,
+    "primary school student": 8,
+    "elementary school student": 9,
+    "middle school student": 13,
+    "junior high student": 13,
+    "high school student": 16,
+    "high-school student": 16,
+    "college student": 19,
+    "university student": 19,
+    "student council president": 17,
+    "student council": 17,
+    "debate team captain": 18,
+    "debate team": 17,
+    "varsity": 17,
+    "cheerleader": 16,
+}
+AGE_GROUP_DEFAULTS = {
+    "young_child": 5,
+    "primary_school_child": 9,
+    "middle_school_student": 13,
+    "high_school_student": 16,
+    "university_student": 19,
+}
+
+
 # -------------------------------------------------------------------
 # Simple exclusion helpers
 # -------------------------------------------------------------------
@@ -362,18 +473,223 @@ def should_exclude_university(text: str) -> bool:
     return any(kw in t for kw in UNI_EXCLUDE_KEYWORDS)
 
 
+def strict_high_school_filter(persona_text: str, age: int | None) -> list[str]:
+    reasons = []
+    text = persona_text.lower()
+
+    # Age rules
+    if age is None:
+        reasons.append("missing age")
+    elif age < 14 or age >= 18:
+        reasons.append("age out of range")
+
+    # Explicit HS grounding
+    if "high school" not in text and not re.search(r"\bgrade\s*(9|10|11|12)\b", text):
+        reasons.append("no explicit high school mention")
+
+    # Hard exclusions
+    if any(t in text for t in ["university", "college", "degree"]):
+        reasons.append("mentions university/college")
+
+    if any(t in text for t in ["full-time job", "working full time"]):
+        reasons.append("mentions full-time work")
+
+    if any(
+        t in text
+        for t in [
+            "when i was in high school",
+            "back in high school",
+            "used to be in high school",
+        ]
+    ):
+        reasons.append("adult reflection")
+
+    return reasons
+
+
+def extract_age_heuristic(text: str) -> Optional[int]:
+    if not isinstance(text, str):
+        return None
+
+    low = text.lower()
+
+    # 1) Explicit age patterns like "16-year-old"
+    m = AGE_REGEX.search(low)
+    if m:
+        try:
+            return int(m.group(1))
+        except ValueError:
+            pass
+
+    # 2) Generic phrase -> default age
+    for phrase, age in PHRASE_AGE_MAP.items():
+        if phrase in low:
+            return age
+
+    # 3) Extra school-level heuristics
+    if "preschool" in low:
+        return 3
+    if "kindergarten" in low:
+        return 5
+    if "primary school" in low or "elementary school" in low:
+        return 8
+    if "middle school" in low or "junior high" in low or "secondary school" in low:
+        return 13
+    if "high school" in low or "highschool" in low:
+        return 16
+    if "university" in low or "college" in low:
+        return 19
+
+    return None
+
+
+def resolve_final_age(persona_text: str, llm_result: Dict[str, Any]) -> Optional[int]:
+    age = llm_result.get("age", None)
+    age_group = llm_result.get("age_group", "unknown")
+
+    if isinstance(age, (int, float)) and not math.isnan(float(age)):
+        age = int(age)
+        if age >= 18:
+            return None
+        return age
+
+    if isinstance(age_group, str):
+        key = age_group.strip().lower()
+        if key in AGE_GROUP_DEFAULTS:
+            candidate = AGE_GROUP_DEFAULTS[key]
+            if candidate >= 18:
+                return None
+            return candidate
+
+    return extract_age_heuristic(persona_text)
+
+
+def call_llm_for_batch(llm, sampling_params, personas: List[str]) -> List[Dict]:
+    messages_list = [
+        [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {
+                "role": "user",
+                "content": f"Persona:\n{p}\n\nReturn ONLY the JSON object.",
+            },
+        ]
+        for p in personas
+    ]
+
+    prompts = [
+        tokenizer.apply_chat_template(m, tokenize=False, add_generation_prompt=True)
+        for m in messages_list
+    ]
+
+    outputs = llm.generate(prompts, sampling_params)
+
+    results = []
+    for out in outputs:
+        text = out.outputs[0].text.strip()
+        try:
+            start = text.find("{")
+            end = text.rfind("}") + 1
+            results.append(json.loads(text[start:end]))
+        except Exception:
+            results.append(
+                {"age": None, "age_group": "unknown", "reason": "parse failure"}
+            )
+    return results
+
+
+def fill_missing_ages_in_df(
+    df: pd.DataFrame,
+    persona_col: str,
+    age_col: str,
+    llm: LLM,
+    sampling_params: SamplingParams,
+    batch_size: int = 16,
+) -> pd.DataFrame:
+    if persona_col not in df.columns:
+        raise ValueError(f"Column '{persona_col}' missing in dataframe.")
+    if age_col not in df.columns:
+        raise ValueError(f"Column '{age_col}' missing in dataframe.")
+
+    df = df.copy()
+    df[age_col] = pd.to_numeric(df[age_col], errors="coerce")
+
+    needs_age_mask = df[age_col].isna()
+    print(f"  → rows with missing age: {needs_age_mask.sum()}")
+
+    if needs_age_mask.sum() == 0:
+        return df
+
+    ages = df[age_col].copy()
+    rows_needing_llm: List[int] = []
+
+    # 1) Heuristics
+    for idx in df.index[needs_age_mask]:
+        persona = str(df.at[idx, persona_col])
+        h_age = extract_age_heuristic(persona)
+        if h_age is not None:
+            ages.at[idx] = h_age
+        else:
+            rows_needing_llm.append(idx)
+
+    print(f"  → after heuristics, need LLM for {len(rows_needing_llm)} rows.")
+
+    # 2) LLM for remaining
+    for start in range(0, len(rows_needing_llm), batch_size):
+        batch_indices = rows_needing_llm[start : start + batch_size]
+        personas_batch = [str(df.at[i, persona_col]) for i in batch_indices]
+
+        results = call_llm_for_batch(llm, sampling_params, personas_batch)
+
+        for idx, llm_result in zip(batch_indices, results):
+            persona = str(df.at[idx, persona_col])
+            final_age = resolve_final_age(persona, llm_result)
+            if final_age is not None:
+                ages.at[idx] = final_age
+            # else: leave NaN
+
+    df[age_col] = ages
+    print(f"  → after LLM, remaining NaN ages: {df[age_col].isna().sum()}")
+    return df
+
+
+def refine_highschool_ages_with_llm(
+    csv_path: str,
+    persona_col: str = "persona_text",
+    age_col: str = "age",
+    batch_size: int = 16,
+):
+    print("Running LLM-based age refinement for high school personas...")
+
+    df = pd.read_csv(csv_path)
+
+    # Preserve original ages for auditability
+    if "age_heuristic" not in df.columns:
+        df["age_heuristic"] = df[age_col]
+
+    df = fill_missing_ages_in_df(
+        df,
+        persona_col=persona_col,
+        age_col=age_col,
+        llm=llm,
+        sampling_params=sampling_params,
+        batch_size=batch_size,
+    )
+
+    # Optional: rename refined age
+    df.rename(columns={age_col: "age_refined"}, inplace=True)
+    df["age"] = df["age_refined"]
+
+    df.to_csv(csv_path, index=False)
+    print("Age refinement complete.")
+
+
 # -------------------------------------------------------------------
 # V2 loaders (LLM-centric)
 # -------------------------------------------------------------------
-def loading_filtering_young_learners(min_confidence: int = 80) -> pd.DataFrame:
-    """
-    V2: Minimal rule-based filtering (domain + simple keyword excludes).
-    LLM decides if persona is a PRIMARY / young learner.
-
-    Returns df with:
-      idx, source_config, persona_text, age,
-      llm_label, llm_confidence, llm_reason
-    """
+def loading_filtering_young_learners(
+    min_confidence: int = 80,
+    num_rows: int = 100,
+) -> pd.DataFrame:
     print("V2: Loading and Filtering for PRESCHOOL / PRIMARY (LLM-centric)...")
     all_rows = []
 
@@ -400,6 +716,12 @@ def loading_filtering_young_learners(min_confidence: int = 80) -> pd.DataFrame:
     if df.empty:
         print("V2: No young learner candidates found.")
         return df
+
+    if len(df) > num_rows:
+        print(
+            f"V2: Limiting PRIMARY candidates to first {num_rows} rows for LLM judging."
+        )
+        df = df.sample(n=num_rows, random_state=42).copy()
 
     # Step 2: normalize text + extract age for info
     df["persona_text"] = df["persona_text"].astype(str)
@@ -432,19 +754,17 @@ def loading_filtering_young_learners(min_confidence: int = 80) -> pd.DataFrame:
     df_final = df[
         (df["llm_label"] == "yes")
         & (df["llm_confidence"].astype(float) >= min_confidence)
+        & df["age"].notna()
     ].copy()
 
     print(f"V2: Final PRIMARY personas (LLM-approved): {len(df_final)}")
     return df_final
 
 
-def loading_filtering_secondary_students(min_confidence: int = 80) -> pd.DataFrame:
-    """
-    V2: Minimal rule-based filtering for SECONDARY (middle/high) students.
-    Age is extracted but not used to gate; LLM decides category.
-
-    Returns df with persona_text, age, LLM fields.
-    """
+def loading_filtering_secondary_students(
+    min_confidence: int = 80,
+    num_rows: int = 100,
+) -> pd.DataFrame:
     print("V2: Loading and Filtering for SECONDARY SCHOOL STUDENTS...")
     all_rows = []
 
@@ -472,6 +792,11 @@ def loading_filtering_secondary_students(min_confidence: int = 80) -> pd.DataFra
         print("V2: No secondary candidates found.")
         return df
 
+    # if len(df) > num_rows:
+    #     print(
+    #         f"V2: Limiting PRIMARY candidates to first {num_rows} rows for LLM judging."
+    #     )
+    #     df = df.sample(n=num_rows, random_state=42).copy()
     print(f"V2: Initial secondary domain matches: {len(df)}")
 
     # Step 2: normalize + age for info
@@ -505,6 +830,7 @@ def loading_filtering_secondary_students(min_confidence: int = 80) -> pd.DataFra
     df_final = df[
         (df["llm_label"] == "yes")
         & (df["llm_confidence"].astype(float) >= min_confidence)
+        & df["age"].notna()
     ].copy()
 
     print(f"V2: Final SECONDARY personas (LLM-approved): {len(df_final)}")
@@ -513,12 +839,6 @@ def loading_filtering_secondary_students(min_confidence: int = 80) -> pd.DataFra
 
 
 def loading_filtering_university_students(min_confidence: int = 80) -> pd.DataFrame:
-    """
-    V2: Minimal rule-based filtering for UNIVERSITY FRESHMEN.
-    Only domain + keyword excludes; LLM decides if persona is a first-year uni student.
-
-    Returns df with persona_text, age, LLM fields.
-    """
     print("V2: Loading and Filtering for UNIVERSITY STUDENTS...")
     all_rows = []
 
@@ -546,6 +866,9 @@ def loading_filtering_university_students(min_confidence: int = 80) -> pd.DataFr
         print("V2: No university candidates found.")
         return df
 
+    # if len(df) > num_rows:
+    #         print(f"V2: Limiting PRIMARY candidates to first {num_rows} rows for LLM judging.")
+    #         df = df.head(num_rows).copy()
     print(f"V2: Initial university domain matches: {len(df)}")
 
     # Step 2: normalize + age for info
@@ -554,7 +877,7 @@ def loading_filtering_university_students(min_confidence: int = 80) -> pd.DataFr
 
     # Step 3: minimalist keyword exclude
     df["is_excluded"] = df["persona_text"].apply(should_exclude_university)
-    df = df[~df["is_excluded"]].copy()
+    df = df[~df["is_excluded"] & (df["age"] <= 18)].copy()
 
     print(f"V2: University candidates after keyword exclude: {len(df)}")
 
@@ -579,6 +902,7 @@ def loading_filtering_university_students(min_confidence: int = 80) -> pd.DataFr
     df_final = df[
         (df["llm_label"] == "yes")
         & (df["llm_confidence"].astype(float) >= min_confidence)
+        & df["age"].notna()
     ].copy()
 
     print(f"V2: Final UNIVERSITY FRESHMEN personas (LLM-approved): {len(df_final)}")
@@ -586,22 +910,18 @@ def loading_filtering_university_students(min_confidence: int = 80) -> pd.DataFr
     return df_final
 
 
-def loading_filtering_highschool_students(min_confidence: int = 80) -> pd.DataFrame:
-    """
-    V2: Minimal rule-based filtering for HIGH SCHOOL STUDENTS.
+def loading_filtering_highschool_students(
+    min_confidence: int = 80,
+    num_rows: int = 100,
+    strict: bool = False,
+    shard_id: int = 0,
+    num_shards: int = 1,
+) -> pd.DataFrame:
 
-    - Uses domain filter (is_relevant(..., "highschool"))
-    - Applies a very light keyword-based exclusion
-    - Does NOT filter by age (only extracts it for analysis)
-    - Asks the LLM (JUDGE_SYSTEM_PROMPT_HIGHSCHOOL) to decide if the persona
-      is a high school student.
-    
-    Returns a dataframe with:
-        idx, source_config, persona_text, age,
-        is_excluded, llm_label, llm_confidence, llm_reason
-    """
     print("V2: Loading and Filtering for HIGH SCHOOL STUDENTS...")
     all_rows = []
+
+    FINAL_OUT = os.path.join(OUTPUT_FOLDER, "highschool_FINAL.csv")
 
     # -------- STEP 1: DOMAIN FILTER --------
     for config_name in PERSONAHUB_CONFIGS:
@@ -611,15 +931,26 @@ def loading_filtering_highschool_students(min_confidence: int = 80) -> pd.DataFr
             )
             for i in range(len(ds)):
                 rec = ds[i]
-                # you may also want to treat 'secondary' as high school depending on configs
-                if is_relevant(rec, "highschool"):
-                    all_rows.append(
-                        {
-                            "idx": i,
-                            "persona_text": preferred_persona_text(rec),
-                            "source_config": config_name,
-                        }
-                    )
+                if not is_relevant(rec, "highschool"):
+                    continue
+
+                persona_text = preferred_persona_text(rec)
+                age = extract_age(persona_text)
+
+                # ---- HARD GATE ----
+                if strict:
+                    violations = strict_high_school_filter(persona_text, age)
+                    if violations:
+                        continue
+
+                all_rows.append(
+                    {
+                        "idx": i,
+                        "persona_text": persona_text,
+                        "age": age,
+                        "source_config": config_name,
+                    }
+                )
         except Exception:
             pass
 
@@ -628,6 +959,11 @@ def loading_filtering_highschool_students(min_confidence: int = 80) -> pd.DataFr
         print("V2: No high school candidates found.")
         return df
 
+    # if len(df) > num_rows:
+    #     print(
+    #         f"V2: Limiting PRIMARY candidates to first {num_rows} rows for LLM judging."
+    #     )
+    #     df = df.sample(n=num_rows, random_state=42).copy()
     print(f"V2: Initial high school domain matches: {len(df)}")
 
     # -------- STEP 2: NORMALIZE TEXT + EXTRACT AGE (for info only) --------
@@ -639,33 +975,78 @@ def loading_filtering_highschool_students(min_confidence: int = 80) -> pd.DataFr
     df = df[~df["is_excluded"]].copy()
 
     print(f"V2: High school candidates after keyword exclude: {len(df)}")
+    df["persona_id"] = df["source_config"].astype(str) + "::" + df["idx"].astype(str)
+    # -------- SHARDING (AFTER HARD GATE, BEFORE LLM) --------
+    if num_shards > 1:
+        df = df.sort_values("idx").reset_index(drop=True)
+        df = df.iloc[shard_id::num_shards].copy()
+        print(f"V2: Shard {shard_id}/{num_shards} — " f"{len(df)} personas to judge")
+
+    already_done = set()
+    if os.path.exists(FINAL_HS_FILE):
+        done_df = pd.read_csv(FINAL_HS_FILE, usecols=["persona_id"])
+        already_done = set(done_df["persona_id"].astype(str))
+        print(
+            f"Shard {shard_id}: {len(already_done)} personas already completed globally"
+        )
+
+    before = len(df)
+    df = df[~df["persona_id"].isin(already_done)].copy()
+    skipped = before - len(df)
+
+    if skipped > 0:
+        print(f"Shard {shard_id}: skipping {skipped} already-judged personas")
 
     if df.empty:
         return df
 
     # -------- STEP 4: LLM JUDGE FOR HIGH SCHOOL --------
     print("V2: Running LLM judge for HIGH SCHOOL classification...")
-    llm_labels, llm_conf, llm_reasons = [], [], []
 
-    for text in df["persona_text"]:
-        result = judge_persona(text, JUDGE_SYSTEM_PROMPT_HIGHSCHOOL)
-        llm_labels.append(result.get("label"))
-        llm_conf.append(result.get("confidence"))
-        llm_reasons.append(result.get("reason"))
+    write_header = not os.path.exists(FINAL_OUT)
 
-    df["llm_label"] = llm_labels
-    df["llm_confidence"] = llm_conf
-    df["llm_reason"] = llm_reasons
+    with open(FINAL_OUT, "a", newline="") as f:
+        writer = csv.DictWriter(
+            f,
+            fieldnames=[
+                "persona_id",
+                "idx",
+                "source_config",
+                "persona_text",
+                "age",
+                "llm_label",
+                "llm_confidence",
+                "llm_reason",
+                "shard_id",
+            ],
+        )
+        if write_header:
+            writer.writeheader()
 
-    # -------- STEP 5: KEEP LLM-APPROVED PERSONAS --------
-    df_final = df[
-        (df["llm_label"] == "yes")
-        & (df["llm_confidence"].astype(float) >= min_confidence)
-    ].copy()
+        for _, row in df.iterrows():
+            result = judge_persona(row["persona_text"], JUDGE_SYSTEM_PROMPT_HIGHSCHOOL)
 
-    print(f"V2: Final HIGH SCHOOL personas (LLM-approved): {len(df_final)}")
+            if (
+                result.get("label") == "yes"
+                and float(result.get("confidence", 0)) >= min_confidence
+            ):
+                writer.writerow(
+                    {
+                        "persona_id": row["persona_id"],
+                        "idx": row["idx"],
+                        "source_config": row["source_config"],
+                        "persona_text": row["persona_text"],
+                        "age": row["age"],
+                        "llm_label": result["label"],
+                        "llm_confidence": result["confidence"],
+                        "llm_reason": result["reason"],
+                        "shard_id": shard_id,
+                    }
+                )
 
-    return df_final
+    print(f"Shard {shard_id}: appended approved personas to highschool_FINAL.csv")
+
+    return df
 
 
 # -------------------------------------------------------------------
@@ -721,6 +1102,30 @@ def parse_args():
         default=80,
         help="Min confidence (%) to accept 'yes' judgments (default: 80).",
     )
+    parser.add_argument(
+        "--num_rows",
+        type=int,
+        default=100,
+        help="Max number of calls to the LLM.",
+    )
+    parser.add_argument(
+        "--strict-high-school",
+        action="store_true",
+        help="Apply hard symbolic filtering for high school personas (AMoC strict mode)",
+    )
+    parser.add_argument(
+        "--shard-id",
+        type=int,
+        default=0,
+        help="Shard index for SLURM array jobs (0-based).",
+    )
+    parser.add_argument(
+        "--num-shards",
+        type=int,
+        default=1,
+        help="Total number of shards for SLURM array jobs.",
+    )
+
     return parser.parse_args()
 
 
@@ -762,9 +1167,6 @@ def text_fields(record):
 
 
 def is_relevant(rec, keywords):
-    """
-    Filter: Checks if the persona mentions education terms per group.
-    """
     blob = " ".join(text_fields(rec)).lower()
     if keywords == "young":
         return any(k in blob for k in YOUNG_EDU_KEYWORDS)
@@ -868,10 +1270,6 @@ def extract_age(text):
 # LLM judging helpers
 # -------------------------------------------------------------------
 def judge_persona(persona: str, system_prompt: str) -> Dict:
-    """
-    Classify a SINGLE persona using the provided system_prompt.
-    Returns a dict: {label, confidence, reason}.
-    """
     if llm is None or sampling_params is None or tokenizer is None:
         raise RuntimeError("LLM/tokenizer not initialized. Call init_llm() first.")
 
@@ -905,11 +1303,6 @@ def judge_persona(persona: str, system_prompt: str) -> Dict:
 
 
 def judge_batch_120b(personas: List[str]) -> List[Dict]:
-    """
-    (Unused in current pipeline, but left as utility)
-    Use the global llm + sampling_params to classify a batch of personas
-    with some default system prompt (e.g., JUDGE_SYSTEM_PROMPT_HIGHSCHOOL).
-    """
     if llm is None or sampling_params is None:
         raise RuntimeError("LLM not initialized. Call init_llm() first.")
 
@@ -927,9 +1320,7 @@ def judge_batch_120b(personas: List[str]) -> List[Dict]:
     ]
 
     prompts = [
-        tokenizer.apply_chat_template(
-            msgs, tokenize=False, add_generation_prompt=True
-        )
+        tokenizer.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True)
         for msgs in messages_list
     ]
 
@@ -966,21 +1357,26 @@ def main():
     args = parse_args()
     out_file = args.file
     min_conf = args.min_confidence
+    num_rows = args.num_rows
 
     # Initialize LLM once
     init_llm(args.model, args.tensor_parallel_size)
 
-    # Extract category from filename
     filename = os.path.basename(out_file).lower()
 
-    # Determine category
     if "primary" in filename:
         print("Detected CATEGORY = PRIMARY from filename.")
-        df = loading_filtering_young_learners(min_confidence=min_conf)
+        df = loading_filtering_young_learners(
+            min_confidence=min_conf,
+            num_rows=num_rows,
+        )
 
     elif "secondary" in filename:
         print("Detected CATEGORY = SECONDARY from filename.")
-        df = loading_filtering_secondary_students(min_confidence=min_conf)
+        df = loading_filtering_secondary_students(
+            min_confidence=min_conf,
+            num_rows=num_rows,
+        )
 
     elif (
         "highschool" in filename
@@ -988,11 +1384,20 @@ def main():
         or "high-school" in filename
     ):
         print("Detected CATEGORY = HIGH SCHOOL from filename.")
-        df = loading_filtering_highschool_students(min_confidence=min_conf)
+        df = loading_filtering_highschool_students(
+            min_confidence=min_conf,
+            num_rows=num_rows,
+            strict=args.strict_high_school,
+            shard_id=args.shard_id,
+            num_shards=args.num_shards,
+        )
 
     elif "university" in filename or "uni" in filename:
         print("Detected CATEGORY = UNIVERSITY FRESHMEN from filename.")
-        df = loading_filtering_university_students(min_confidence=min_conf)
+        df = loading_filtering_university_students(
+            min_confidence=min_conf,
+            # num_rows=num_rows,
+        )
 
     else:
         raise ValueError(
@@ -1001,9 +1406,31 @@ def main():
 
     # Save dataframe
     if df is not None and not df.empty:
-        out_path = os.path.join(OUTPUT_FOLDER, f"{out_file}_llm_judge.csv")
-        df.to_csv(out_file, index=False)
-        print(f"\nSaved {len(df)} personas to: {out_file}")
+        out_path = os.path.join(
+            OUTPUT_FOLDER,
+            f"{out_file}_shard{args.shard_id}.csv",
+        )
+
+        # -------- HIGH SCHOOL SPECIAL CASE --------
+        if "highschool" in filename and args.strict_high_school:
+            # Phase 1: sharded jobs
+            if args.num_shards > 1:
+                print(
+                    f"Shard {args.shard_id} finished. "
+                    "High school personas appended to highschool_FINAL.csv."
+                )
+            # Phase 2: single post-processing job → refine ages -> re-run job with --num-shards 1
+            else:
+                print("Running FINAL age refinement for high school personas...")
+                refine_highschool_ages_with_llm(
+                    csv_path=FINAL_HS_FILE,
+                    batch_size=args.batch_size,
+                )
+                print("High school age refinement complete.")
+        else:
+            df.to_csv(out_path, index=False)
+            print(f"\nSaved {len(df)} personas to: {out_path}")
+
     else:
         print("\nNo personas found for this category; nothing saved.")
 

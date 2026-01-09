@@ -1,0 +1,66 @@
+from typing import List, Tuple, Iterable, Optional
+
+import pandas as pd
+
+from amoc.pipeline.core import AMoCv4
+from amoc.llm.vllm_client import VLLMClient
+from amoc.config.constants import (
+    MAX_DISTANCE_FROM_ACTIVE_NODES,
+    MAX_NEW_CONCEPTS,
+    MAX_NEW_PROPERTIES,
+    CONTEXT_LENGTH,
+    EDGE_FORGET,
+    NR_RELEVANT_EDGES,
+    DEBUG,
+    STORY_TEXT,
+)
+
+
+class AgeAwareAMoCEngine:
+    def __init__(self, vllm_client: VLLMClient, spacy_nlp):
+        self.vllm_client = vllm_client
+        self.spacy_nlp = spacy_nlp
+
+    def _build_analysis_text(self, persona_text: str, age_refined_int: int) -> str:
+        # This is the text that both AMoC and the LLM see as "persona"
+        return f"Age: {age_refined_int} years old.\n{persona_text}"
+
+    def run(
+        self,
+        persona_text: str,
+        age_refined,
+        replace_pronouns: bool = False,
+        plot_after_each_sentence: bool = False,
+        graphs_output_dir: str | None = None,
+        highlight_nodes: Optional[Iterable[str]] = None,
+    ) -> List[Tuple[str, str, str]]:
+
+        try:
+            age_refined_int = int(age_refined)
+        except Exception:
+            age_refined_int = int(float(age_refined)) if pd.notna(age_refined) else -1
+
+        persona_description = self._build_analysis_text(persona_text, age_refined_int)
+
+        amoc = AMoCv4(
+            persona_description=persona_description,
+            story_text=STORY_TEXT,
+            vllm_client=self.vllm_client,
+            max_distance_from_active_nodes=MAX_DISTANCE_FROM_ACTIVE_NODES,
+            max_new_concepts=MAX_NEW_CONCEPTS,
+            max_new_properties=MAX_NEW_PROPERTIES,
+            context_length=CONTEXT_LENGTH,
+            edge_forget=EDGE_FORGET,
+            nr_relevant_edges=NR_RELEVANT_EDGES,
+            spacy_nlp=self.spacy_nlp,
+            debug=DEBUG,
+            persona_age=age_refined_int,
+        )
+        return list(
+            amoc.analyze(
+                replace_pronouns=replace_pronouns,
+                plot_after_each_sentence=plot_after_each_sentence,
+                graphs_output_dir=graphs_output_dir,
+                highlight_nodes=highlight_nodes,
+            )
+        )

@@ -1,0 +1,68 @@
+idx,persona_text,source_config,age,is_excluded,llm_label,llm_confidence,llm_reason
+3310,A middle school student who loves playing mobile games after school and interacts actively with their favorite YouTubers,persona,12.0,False,yes,100,Explicitly described as a middle school student
+5301,a middle school student who has just started learning history in school.,persona,12.0,False,yes,100,Explicitly described as a middle school student
+8382,a 13-year-old middle school student who is neither particularly interested in poetry nor deeply versed on who Annelyse Gelman is.,persona,13.0,False,yes,100,Explicitly described as a 13-year-old middle school student
+17374,A curious middle school student who is fascinated by rocks and minerals,persona,12.0,False,yes,100,Explicitly described as a middle school student
+18769,A keen middle school student working on a project about famous architects in history,persona,12.0,False,yes,100,Explicitly described as a middle school student
+20456,"A middle schooler struggling with attention and behavior issues, benefiting from personalized interventions",persona,12.0,False,yes,100,Explicitly described as a middle schooler
+20845,A middle schooler with severe allergies who relies on the school nurse for emergency care,persona,12.0,False,yes,100,Explicitly described as a middle schooler
+21530,A middle school student who turns to the stream for encouragement while dealing with school stress,persona,12.0,False,yes,100,Explicitly described as a middle school student
+21697,a middle school student from Uganda,persona,12.0,False,yes,100,explicitly described as a middle school student
+23313,A middle school student seeking guidance on how to improve their computer skills for school assignments,persona,12.0,False,yes,100,Explicitly described as a middle school student
+26653,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,persona,12.0,False,yes,100,7th grade is a typical middle school grade level
+28109,A precocious middle school student benefiting from the sibling's guidance and support,persona,12.0,False,yes,100,Explicitly described as a middle school student
+29945,A middle school band member interested in learning a variety of percussion instruments,persona,12.0,False,yes,100,Explicitly mentioned as a middle school band member
+36766,an Israeli student attending Stephen Lewis Secondary School,persona,11.0,False,yes,100,attending a secondary school
+37896,a South Korean middle school student who is a history nerd,persona,12.0,False,yes,100,explicitly described as a middle school student
+38352,An inquisitive middle school student joining the science club for the first time,persona,12.0,False,yes,100,Explicitly described as a middle school student
+41399,"a middle school student who loves music, movies, and television shows.",persona,12.0,False,yes,100,Explicitly described as a middle school student
+43752,a rebellious middle school student who is uninterested in learning about extinct creatures,persona,12.0,False,yes,100,explicitly described as a middle school student
+47951,A middle school soccer player who is learning the importance of safety gear and fair play,persona,12.0,False,yes,100,Explicitly described as a middle school student
+53014,A middle school student who aspires to beat their grandparent in a game of chess,persona,12.0,False,yes,100,Explicitly described as a middle school student
+53203,7th grade student in a computer science class,persona,12.0,False,yes,100,"Explicitly mentioned as a 7th grade student, which is typically part of middle school"
+53699,A group of enthusiastic middle school students eager to learn about human evolution,persona,12.0,False,yes,100,Explicitly described as middle school students
+54517,"A middle school student who started to learn HTML a month ago, haven't studied Javascript yet，and eager to make my site more interactive.",persona,12.0,False,yes,100,Persona explicitly describes themselves as a middle school student
+60310,A quiet and studious student who prefers working alone and is skeptical of the student council's impact,persona,,False,yes,80,"description implies a student in a school setting, likely secondary due to mention of student council"
+66135,A shy middle schooler with a hidden knack for strategic thinking and chess,persona,12.0,False,yes,100,Explicitly described as a middle schooler
+66161,A student council president who feels environmental efforts detract from other school priorities,persona,,False,yes,90,Student council president is a common role in secondary schools
+69806,A middle schooler who loves exploring their town's history through geocaching and local legends,persona,12.0,False,yes,100,Explicitly described as a middle schooler
+71383,"A middle schooler struggling with fractions and decimals, seeking extra support outside the classroom",persona,12.0,False,yes,100,Explicitly described as a middle schooler
+74499,A shy and quiet middle school student who is always grateful for the bus driver's kind gestures,persona,12.0,False,yes,100,Explicitly described as a middle school student
+75127,A fellow student who is running against the student council president for the next term and challenges her on her budgeting plans during campaign debates,persona,,False,yes,90,participating in student council elections and debates is typical for secondary school students
+85360,A middle school student working on a school project about mystery novels,persona,12.0,False,yes,100,Explicitly described as a middle school student
+87874,A Japanese middle school student who is a big fan of Super Sentai.,persona,12.0,False,yes,100,Explicitly described as a middle school student
+90612,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,persona,12.0,False,yes,100,Explicitly described as a middle school student
+90719,A curious middle school student who loves learning about aerodynamics and helps their grandparent with building model airplanes,persona,12.0,False,yes,100,Explicitly described as a middle school student
+90818,A middle school student currently working on a science fair project about the water cycle,persona,12.0,False,yes,100,Explicitly described as a middle school student
+92105,A secondary school student who is just starting to learn about programming and open-source projects,persona,11.0,False,yes,100,Explicitly described as a secondary school student
+96030,A curious middle schooler who thrives in interactive history lessons with digital resources,persona,12.0,False,yes,100,Explicitly described as a middle schooler
+97625,A middle school student interested in genetic genealogy and exploring their Irish heritage,persona,12.0,False,yes,100,Explicitly described as a middle school student
+104718,A bright and curious middle schooler struggling with reading comprehension,persona,12.0,False,yes,100,Explicitly described as a middle schooler
+106024,A curious and science-minded middle school student who appreciates the nurse's informative and engaging presentations on health and wellness,persona,12.0,False,yes,100,Explicitly described as a middle school student
+111451,A middle school student who looks up to the high school student's achievements in STEM competitions,persona,12.0,False,yes,100,Explicitly described as a middle school student
+111683,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,persona,13.0,False,yes,100,8th grade is typically part of middle school or junior high school
+112135,A middle school student who is obsessed with freshwater aquariums and often daydreams about discovering new species.,persona,12.0,False,yes,100,Explicitly described as a middle school student
+114465,A fellow middle school student from another country who shares their experiences and challenges in expressing empathy,persona,12.0,False,yes,100,Explicitly described as a middle school student
+121207,A straight-laced student council president who occasionally clashes with the blogger's radical ideas,persona,,False,yes,90,student council president implies a secondary school setting
+122372,A curious middle school student who loves playing strategy games based on ancient civilizations,persona,12.0,False,yes,100,Explicitly described as a middle school student
+122827,a middle school student who loves reading books about animals and history,persona,12.0,False,yes,100,explicitly described as a middle school student
+123260,A picky eater and student council representative trying to cater to the diverse food preferences of the student body,persona,,False,yes,90,student council representative implies a secondary school setting
+124609,A creative middle schooler who has started a cooking vlog using the new kitchen,persona,12.0,False,yes,100,Persona is explicitly described as a middle schooler
+125281,A middle school student who dislikes mathematics.,persona,12.0,False,yes,100,Explicitly described as a middle school student
+131821,A curious middle school student from India studying for a history test,persona,12.0,False,yes,100,Explicitly described as a middle school student
+134631,A curious middle school student fascinated by the tales of King Arthur,persona,12.0,False,yes,100,Explicitly described as a middle school student
+144183,"a secondary school student in Delta State, Nigeria",persona,11.0,False,yes,100,Explicitly described as a secondary school student
+148450,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,persona,12.0,False,yes,100,Explicitly described as a middle schooler
+149329,A middle school student who attends the coding workshops and looks up to the advocate as a role model,persona,12.0,False,yes,100,Explicitly described as a middle school student
+155660,Non-English speaking middle school student struggling to learn English,persona,12.0,False,yes,100,Explicitly described as a middle school student
+164851,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,persona,12.0,False,yes,100,Explicitly described as a middle schooler
+166500,Another middle school student who is also struggling with coding assignments and seeks collaboration with the middle school student,persona,12.0,False,yes,100,Explicitly described as a middle school student
+173036,A curious and inquisitive middle school student eager to learn about the town's past,persona,12.0,False,yes,100,Explicitly described as a middle school student
+173385,A student at Mountain Logan Middle School (MLMS),persona,12.0,False,yes,100,Explicitly mentioned as a middle school student
+184367,a fourth-grade student at the Northeast Middle School,persona,12.0,False,yes,100,Fourth grade is typically part of middle school in many educational systems
+191922,A fellow middle school dancer who also wears braces and shares tips and advice on how to maintain oral hygiene and confidence,persona,12.0,False,yes,100,Explicitly described as a middle school student
+192817,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,persona,12.0,False,yes,100,Explicitly mentioned as being in middle school
+192879,A curious middle school student who loves snakes and researching animals on Wikipedia.,persona,12.0,False,yes,100,Explicitly described as a middle school student
+195641,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,persona,12.0,False,yes,100,Explicitly described as a middle school student
+197487,A middle school student who participated in building the arcade machine,persona,12.0,False,yes,100,Explicitly described as a middle school student
+198636,A curious and enthusiastic group of middle school students eager to learn through gaming,persona,12.0,False,yes,100,Explicitly described as middle school students

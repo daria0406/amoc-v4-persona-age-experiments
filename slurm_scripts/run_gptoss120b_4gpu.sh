@@ -11,8 +11,8 @@
 
 echo "Running GPT-OSS-120B..."
 
-bash "$HOME/amoc-run.sh" \
-    "$HOME/vllm_train_minimal_v4.py" \
+bash "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments/amoc-run.sh" \
+    "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments/vllm_train_minimal_v4.py" \
     --models "openai/gpt-oss-120b" \
     --tp 4 \
     --replace-pronouns
