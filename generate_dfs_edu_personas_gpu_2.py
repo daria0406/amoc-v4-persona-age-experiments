@@ -100,34 +100,54 @@ Return ONLY this JSON object, with no additional text.
 JUDGE_SYSTEM_PROMPT_HIGHSCHOOL = """
 You are a strict classifier.
 
-Task: Decide whether the persona describes a high school student.
+Task: Decide whether the persona describes a CURRENT high school / upper secondary student.
 
-Definitions:
-- High school = upper secondary education before university/college, typically around ages 14–18.
-- The key requirement is that the PERSONA is currently attending high school (or an equivalent upper secondary level), such as "high school", "upper secondary", "gymnasium" (in some systems), etc.
+Definition:
+- High school = upper secondary education immediately prior to university or college.
+- The persona MUST explicitly self-identify as currently enrolled in high school (or an explicitly equivalent upper secondary institution).
 
-Exclude:
-- Primary / elementary / middle school / lower secondary students.
-- University / college students.
-- Teachers, parents, or other adults talking about high school students.
-- Adults describing their past in high school.
-- Vocational or professional training that is clearly post-secondary (unless it is explicitly described as a high school program).
+MANDATORY condition (must be satisfied):
+- The persona explicitly states current enrollment in high school / upper secondary education using unambiguous language.
 
-If the text does not give enough information to decide, label it as "uncertain".
+Accepted evidence (ONE OR MORE required):
+- Explicit phrase such as:
+  - "I am in high school"
+  - "I am a high school student"
+  - "I attend high school"
+  - "I am currently in upper secondary school"
+  - "I am in gymnasium" (or a clearly equivalent term)
+- Explicit statement of current enrollment in a high-school grade (e.g., "I am in 10th grade", "grade 11", "year 12"), **and**
+  - the grade is clearly associated with high school / upper secondary education
+
+NOT accepted as sufficient evidence (these ALONE are insufficient):
+- Mentions of exams, homework, studying, stress, or grades without naming high school
+- References to being “a student” without specifying level
+- Statements about preparing for university or thinking about the future
+- Statements about being friends with high school students
+- Statements about past high school experiences (e.g., "when I was in high school")
+- Mentions of “school” without specifying high school / upper secondary
+- Mentions of age ranges commonly associated with high school (e.g., 15–18) without school-level identification
+
+Explicit exclusions (automatic "no"):
+- Primary, elementary, middle school, or lower secondary references
+- University, college, or post-secondary references
+- Vocational or professional training unless explicitly stated to be part of a high-school program
+- Adults recalling or narrating past high school experiences
+- Teachers, parents, or third parties describing high school students
 
 Decision rules:
-- If the persona clearly describes a current high school / upper secondary student, label "yes".
-- If the persona clearly belongs to a different educational level (primary, middle school, university, adult), label "no".
-- If the age or educational level is unclear or ambiguous, label "uncertain".
+- Label "yes" ONLY if the mandatory condition is met with explicit textual evidence.
+- Label "no" if another educational level is explicitly stated.
+- Label "uncertain" in ALL other cases, including vague, implied, or assumed high school status.
 
-Output format (JSON only):
+Output format (JSON ONLY, no extra text):
 {
   "label": "yes" | "no" | "uncertain",
-  "confidence": <integer 0-100>,
-  "reason": "<short explanation>"
+  "confidence": <integer 0–100>,
+  "reason": "<direct quote or paraphrase of the explicit evidence>"
 }
 
-Return ONLY this JSON object, with no additional text.
+Return ONLY this JSON object.
 """
 
 JUDGE_SYSTEM_PROMPT_UNI = """
@@ -167,28 +187,30 @@ Return ONLY this JSON object, with no additional text.
 SYSTEM_PROMPT = """
 You are a constrained attribute annotator.
 
-Your task is to infer an approximate AGE for a PERSONA.
+Your task is to infer an APPROXIMATE AGE RANGE for a PERSONA.
 This is NOT a creative task. You must follow the rules strictly.
 
 Authoritative rules (in order):
-1. If the persona explicitly states a numeric age (e.g. "I am 16 years old"), return that exact age.
-2. If no numeric age is stated, infer a reasonable AVERAGE age based ONLY on the described school level or role.
-3. If the persona is clearly an adult (18+), return null.
-4. If there is not enough information to infer an age, return null.
+1. If the persona explicitly states a numeric age (e.g. "I am 16 years old"):
+   - Set age_min = age_max = that exact age.
+2. If no numeric age is stated, infer an AGE RANGE based ONLY on the described school level or role.
+3. If the persona is clearly an adult (18+), return null for both age_min and age_max.
+4. If there is not enough information to infer an age range, return null for both age_min and age_max.
 
 You MUST NOT:
-- Invent precise ages without evidence.
-- Guess ages outside typical school-level averages.
+- Invent precise ages when only school level is known.
+- Guess outside typical educational age ranges.
 - Use stereotypes, emotions, or narrative cues.
-- Output an age ≥ 18 for a student persona.
+- Output age_min or age_max ≥ 18 for a student persona.
 - Override explicit numeric ages.
 
-Allowed school-level → age mappings (use ONLY these averages):
-- young_child → 5
-- primary_school_child → 9
-- middle_school_student → 13
-- high_school_student → 16
-- university_student → 19
+Allowed school-level → age RANGE mappings (use ONLY these):
+
+- young_child → age_min: 4, age_max: 6
+- primary_school_child → age_min: 7, age_max: 11
+- middle_school_student → age_min: 11, age_max: 14
+- high_school_student → age_min: 14, age_max: 18
+- university_student → age_min: 18, age_max: 22
 
 Age group definitions:
 - young_child: preschool or early childhood references
@@ -199,11 +221,14 @@ Age group definitions:
 - adult: clearly post-education or full-time work
 - unknown: insufficient information
 
-If the persona mentions high school but gives no grade or age, always use age = 16.
+If the persona mentions high school but gives no grade or age, always use:
+- age_min = 14
+- age_max = 18
 
 Output format (JSON ONLY, no extra text):
 {
-  "age": <integer or null>,
+  "age_min": <integer or null>,
+  "age_max": <integer or null>,
   "age_group": "<one of: young_child | primary_school_child | middle_school_student | high_school_student | university_student | adult | unknown>",
   "reason": "<brief factual justification>"
 }

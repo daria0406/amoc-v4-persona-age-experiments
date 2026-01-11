@@ -3,7 +3,7 @@
 #SBATCH --partition=dgxa100
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --gres=gpu:tesla_a100:4  
+#SBATCH --gres=gpu:tesla_a100:1
 #SBATCH --cpus-per-task=32
 #SBATCH --mem=256G
 #SBATCH --output=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%j.out
