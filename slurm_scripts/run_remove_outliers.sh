@@ -20,7 +20,10 @@ apptainer exec --nv \
     bash "$HOME/to_transfer/amoc-v4-persona-age-experiments/slurm_scripts/amoc_sh_simplified.sh" \
         "$HOME/to_transfer/amoc-v4-persona-age-experiments/remove_outliers.py" \
         --input-dir "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/" \
-        --model "$MODEL"
+        --model "$MODEL" \
+        --refined-age-dir "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments/personas_dfs/personas_refined_age" \
+        --plots-age \
+        --plots
 
 #works to run on CPU locally 
 # apptainer exec \

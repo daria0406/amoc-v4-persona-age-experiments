@@ -58,7 +58,10 @@ def main():
     if "original_index" in df_stats_all.columns:
         df_stats_all = df_stats_all.rename(columns={"original_index": "idx"})
 
-    df_stats_all.to_csv(os.path.join(args.input_dir, "persona_stats"), index=False)
+    # Save raw stats as a CSV (not a directory) to avoid clashing with the output dir
+    df_stats_all.to_csv(
+        os.path.join(args.input_dir, "persona_stats_raw.csv"), index=False
+    )
     # trimming by quantiles
     df_trimmed = quantile_trim(
         df_stats_all,

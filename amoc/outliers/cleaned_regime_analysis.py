@@ -3,7 +3,7 @@ import pandas as pd
 from scipy.stats import kruskal
 import glob
 from typing import Iterable
-from amoc.analysis.outliers.io import filter_bins_by_min_n
+from amoc.outliers.io import filter_bins_by_min_n
 from amoc.analysis.age_regimes import assign_age_bin
 
 from amoc.analysis.regime_plots import (
