@@ -299,7 +299,7 @@ def run_cleaned_regime_analysis(
 
         df_q["age_bin"] = df_q["age_refined"].apply(assign_age_bin)
         df_q = df_q.dropna(subset=["age_bin"])
-        df_q = filter_bins_by_min_n(df_q, "age_bin", min_n=15)
+        df_q = filter_bins_by_min_n(df_q, "age_bin", min_n=1)
         df_q["age_bin"] = pd.Categorical(
             df_q["age_bin"],
             categories=AGE_BIN_ORDER,

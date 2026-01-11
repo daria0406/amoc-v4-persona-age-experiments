@@ -5,3 +5,7 @@
 ._*
 /pycache__/
 *.pyc
+*.png
+*.json
+venv/
+old_code/
