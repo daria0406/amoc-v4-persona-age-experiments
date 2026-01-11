@@ -104,29 +104,30 @@ Task: Decide whether the persona describes a CURRENT high school / upper seconda
 
 Definition:
 - High school = upper secondary education immediately prior to university or college.
-- The persona MUST explicitly self-identify as currently enrolled in high school (or an explicitly equivalent upper secondary institution).
+- The persona MUST explicitly describe an individual who is currently enrolled in high school or an equivalent upper secondary institution.
 
-MANDATORY condition (must be satisfied):
-- The persona explicitly states current enrollment in high school / upper secondary education using unambiguous language.
+MANDATORY CONDITIONS (ALL must be satisfied):
 
-Accepted evidence (ONE OR MORE required):
-- Explicit phrase such as:
-  - "I am in high school"
-  - "I am a high school student"
-  - "I attend high school"
-  - "I am currently in upper secondary school"
-  - "I am in gymnasium" (or a clearly equivalent term)
-- Explicit statement of current enrollment in a high-school grade (e.g., "I am in 10th grade", "grade 11", "year 12"), **and**
-  - the grade is clearly associated with high school / upper secondary education
+1. The persona explicitly identifies the individual as a high school / upper secondary student
+   (e.g., “a high school student”, “a high school senior”, “a student in upper secondary school”).
 
-NOT accepted as sufficient evidence (these ALONE are insufficient):
-- Mentions of exams, homework, studying, stress, or grades without naming high school
-- References to being “a student” without specifying level
-- Statements about preparing for university or thinking about the future
-- Statements about being friends with high school students
-- Statements about past high school experiences (e.g., "when I was in high school")
-- Mentions of “school” without specifying high school / upper secondary
-- Mentions of age ranges commonly associated with high school (e.g., 15–18) without school-level identification
+2. The persona includes at least ONE explicit reference to a concrete school context,
+   such as:
+   - classes or coursework
+   - teachers or classmates
+   - exams, finals, or graduation
+   - school life, school environment, or curriculum
+
+Role labels WITHOUT school context are NOT sufficient.
+
+NOT accepted as sufficient evidence (even if present):
+- Mentions of age alone
+- Generic mentions of being “a student”
+- Mentions of exams or studying WITHOUT explicit reference to high school
+- Statements about preparing for university without describing current high school attendance
+- Mentions of “school” without specifying high school or upper secondary
+- Statements about past high school experiences
+- Third-person descriptions that only assign a demographic role
 
 Explicit exclusions (automatic "no"):
 - Primary, elementary, middle school, or lower secondary references
@@ -136,11 +137,11 @@ Explicit exclusions (automatic "no"):
 - Teachers, parents, or third parties describing high school students
 
 Decision rules:
-- Label "yes" ONLY if the mandatory condition is met with explicit textual evidence.
+- Label "yes" ONLY if ALL mandatory conditions are met with explicit textual evidence.
 - Label "no" if another educational level is explicitly stated.
-- Label "uncertain" in ALL other cases, including vague, implied, or assumed high school status.
+- Label "uncertain" in ALL other cases.
 
-Output format (JSON ONLY, no extra text):
+Output format (JSON ONLY):
 {
   "label": "yes" | "no" | "uncertain",
   "confidence": <integer 0–100>,
@@ -466,6 +467,7 @@ PHRASE_AGE_MAP = {
     "varsity": 17,
     "cheerleader": 16,
 }
+
 AGE_GROUP_DEFAULTS = {
     "young_child": 5,
     "primary_school_child": 9,
@@ -473,6 +475,16 @@ AGE_GROUP_DEFAULTS = {
     "high_school_student": 16,
     "university_student": 19,
 }
+
+HIGH_SCHOOL_ROLE_KEYWORDS = [
+    "high school student",
+    "high schooler",
+    "high school senior",
+    "high school junior",
+    "high school sophomore",
+    "high school freshman",
+    "upper secondary student",
+]
 
 
 # -------------------------------------------------------------------
@@ -496,6 +508,14 @@ def should_exclude_highschool(text: str) -> bool:
 def should_exclude_university(text: str) -> bool:
     t = text.lower()
     return any(kw in t for kw in UNI_EXCLUDE_KEYWORDS)
+
+
+def is_role_based_high_school(text: str) -> bool:
+    t = text.lower()
+    for k in HIGH_SCHOOL_ROLE_KEYWORDS:
+        if re.search(r"\b" + re.escape(k) + r"\b", t):
+            return True
+    return False
 
 
 def strict_high_school_filter(persona_text: str, age: int | None) -> list[str]:
@@ -1024,6 +1044,10 @@ def loading_filtering_highschool_students(
 
     if df.empty:
         return df
+
+    # include only the ones that have an educational context
+    df = df[df["persona_text"].apply(is_role_based_high_school)]
+    print(f"V2: High school candidates after school context exclude: {len(df)}")
 
     # -------- STEP 4: LLM JUDGE FOR HIGH SCHOOL --------
     print("V2: Running LLM judge for HIGH SCHOOL classification...")

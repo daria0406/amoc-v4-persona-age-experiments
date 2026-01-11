@@ -3,7 +3,7 @@
 #SBATCH --partition=dgxa100
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --gres=gpu:tesla_a100:4  
+#SBATCH --gres=gpu:tesla_a100:2  
 #SBATCH --cpus-per-task=32
 #SBATCH --mem=256G
 #SBATCH --output=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%j.out
@@ -20,7 +20,7 @@ apptainer exec --nv \
     bash "$HOME/to_transfer/amoc-v4-persona-age-experiments/slurm_scripts/amoc_sh_simplified.sh" \
         "$HOME/to_transfer/amoc-v4-persona-age-experiments/refine_age_personas.py" \
         --regime "$OUT_FILE" \
-        --model "meta-llama/Llama-3.3-70B-Instruct" \
+        --model "Qwen/Qwen3-30B-A3B-Instruct-2507" \
         --batch-size 8 \
         --min-confidence 60 \
-        --tensor-parallel-size 4
+        --tensor-parallel-size 2
