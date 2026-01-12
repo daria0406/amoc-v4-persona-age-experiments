@@ -3,7 +3,7 @@ set -euo pipefail
 
 SIF_IMAGE="/export/projects/nlp/containers/daria-vllm.sif"
 PROJECT_ROOT="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments"
-INPUT_DIR="${PROJECT_ROOT}/personas_dfs/chunks"
+INPUT_DIR="${PROJECT_ROOT}/personas_dfs/personas_refined_age/chunks/"
 OUTPUT_DIR="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output"
 
 mkdir -p "${OUTPUT_DIR}/extracted_triplets"

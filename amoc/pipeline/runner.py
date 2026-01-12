@@ -3,7 +3,7 @@ import time
 import logging
 from typing import List, Dict, Any, Optional
 from datetime import datetime
-
+from pathlib import Path
 
 import pandas as pd
 
@@ -91,6 +91,9 @@ def process_persona_csv(
     short_filename = os.path.basename(filename)
     print(f"\n=== Processing File (chunk): {short_filename} ===")
 
+    # --- Path normalization (CRITICAL FIX) ---
+    output_dir = Path(output_dir)
+
     # 1. Load data (entire chunk)
     df = robust_read_persona_csv(filename)
 
@@ -103,8 +106,6 @@ def process_persona_csv(
         return
 
     regime = infer_regime_from_filename(filename)
-
-    # Ensure valid age_refined
     df["age_refined"] = pd.to_numeric(df["age_refined"], errors="coerce")
 
     # Optional row cap (debug / testing only)
@@ -131,18 +132,17 @@ def process_persona_csv(
             spacy_nlp=spacy_nlp,
         )
     # 3. For each model, collect triplets into a table (incremental write)
-    os.makedirs(output_dir, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     # 3. Process per model
     for model_name, engine in engines.items():
         safe_model_name = model_name.replace(":", "-").replace("/", "-")
-
         output_filename = f"model_{safe_model_name}_triplets_{short_filename}"
         output_path = output_dir / output_filename
 
         ckpt_path = get_checkpoint_path(
             output_dir=str(output_dir),
-            input_filename=short_filename,
+            short_filename=short_filename,
             model_name=model_name,
         )
 
@@ -151,11 +151,9 @@ def process_persona_csv(
         failures = ckpt.get("failures", [])
         personas_processed = ckpt.get("personas_processed", 0)
 
-        print(f"   [Model] {model_name}: writing to {output_path}")
-        print(
-            f"   [Model] {model_name}: checkpoint at {ckpt_path} "
-            f"(already processed {personas_processed} personas)"
-        )
+        print(f"[Model] {model_name}")
+        print(f"  → Output: {output_path}")
+        print(f"  → Checkpoint: {ckpt_path}")
 
         if not output_path.exists():
             pd.DataFrame([], columns=CSV_HEADERS).to_csv(
@@ -163,11 +161,10 @@ def process_persona_csv(
             )
 
         start_model_time = time.time()
-        total_personas = len(df)
+        total_rows = len(df)
 
         try:
             for idx, (row_idx, row) in enumerate(df.iterrows(), start=1):
-                # Skip already processed rows
                 if row_idx in processed_indices:
                     continue
 
@@ -175,14 +172,6 @@ def process_persona_csv(
                 age_refined_int = (
                     int(row["age_refined"]) if pd.notna(row["age_refined"]) else -1
                 )
-
-                print(
-                    f"      [{idx}/{total_personas}] "
-                    f"Age: {age_refined_int} | "
-                    f"Persona: {persona_text[:50]}..."
-                )
-
-                start_time = time.time()
 
                 try:
                     triplets = engine.run(
@@ -194,10 +183,10 @@ def process_persona_csv(
                         highlight_nodes=highlight_nodes,
                     )
 
-                    row_records = []
+                    records = []
                     for s, r, o in triplets:
                         s, r, o = repair_triplet(s, r, o)
-                        row_records.append(
+                        records.append(
                             {
                                 "original_index": row_idx,
                                 "age_refined": age_refined_int,
@@ -210,9 +199,8 @@ def process_persona_csv(
                             }
                         )
 
-                    # Incremental flush
-                    if row_records:
-                        pd.DataFrame(row_records).to_csv(
+                    if records:
+                        pd.DataFrame(records).to_csv(
                             output_path,
                             mode="a",
                             header=False,
@@ -220,23 +208,16 @@ def process_persona_csv(
                             encoding="utf-8",
                         )
 
-                    time_taken = time.time() - start_time
-                    print(
-                        f"         -> extracted {len(triplets)} "
-                        f"triplets in {time_taken:.2f}s",
-                        flush=True,
-                    )
-
-                    # Update checkpoint
                     personas_processed += 1
                     processed_indices.add(row_idx)
+
                     ckpt["personas_processed"] = personas_processed
                     ckpt["processed_indices"] = sorted(processed_indices)
                     save_checkpoint(ckpt_path, ckpt)
 
                 except Exception as e:
                     logging.error(
-                        f"Failed persona idx={row_idx}, model={model_name}: {e}",
+                        f"Failure idx={row_idx}, model={model_name}",
                         exc_info=True,
                     )
                     failures.append(
@@ -256,6 +237,6 @@ def process_persona_csv(
             save_checkpoint(ckpt_path, ckpt)
 
             print(
-                f"   [Model] {model_name}: processed {personas_processed} personas "
-                f"from file {short_filename}"
+                f"[Model] {model_name}: processed {personas_processed} "
+                f"personas from {short_filename}"
             )

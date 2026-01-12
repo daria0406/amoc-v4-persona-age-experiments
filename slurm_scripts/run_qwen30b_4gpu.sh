@@ -13,7 +13,7 @@
 set -euo pipefail
 
 PROJECT_ROOT="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments"
-CHUNKS_DIR="${PROJECT_ROOT}/personas_dfs/chunks"
+CHUNKS_DIR="${PROJECT_ROOT}/personas_dfs/personas_refined_age/chunks"
 
 # list of chunk files
 CHUNK_FILES=($(ls ${CHUNKS_DIR}/*.csv | sort))
