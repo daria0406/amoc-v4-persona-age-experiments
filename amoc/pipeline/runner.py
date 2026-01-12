@@ -84,44 +84,38 @@ def process_persona_csv(
     replace_pronouns: bool = False,
     tensor_parallel_size: int = 1,
     resume_only: bool = False,
-    start_index: int = 0,
-    end_index: Optional[int] = None,
     plot_after_each_sentence: bool = False,
     graphs_output_dir: Optional[str] = None,
     highlight_nodes: Optional[List[str]] = None,
 ) -> None:
     short_filename = os.path.basename(filename)
-    print(f"\n=== Processing File: {short_filename} ===")
+    print(f"\n=== Processing File (chunk): {short_filename} ===")
 
-    # 1. Load Data
+    # 1. Load data (entire chunk)
     df = robust_read_persona_csv(filename)
-    # --- Apply slicing ---
-    end_index = end_index or len(df)
-    df = df.iloc[start_index:end_index]
 
     # Ensure required columns
     if "persona_text" not in df.columns or "age_refined" not in df.columns:
         print(
-            f"   [Skip] File {short_filename} missing 'persona_text' or 'age_refined' columns."
+            f"   [Skip] File {short_filename} missing "
+            f"'persona_text' or 'age_refined' columns."
         )
         return
 
-    # Extract age bin:
     regime = infer_regime_from_filename(filename)
 
     # Ensure valid age_refined
     df["age_refined"] = pd.to_numeric(df["age_refined"], errors="coerce")
 
-    # Apply max_rows limit if provided
+    # Optional row cap (debug / testing only)
     if max_rows is not None and max_rows > 0:
         df = df.head(max_rows)
 
     if df.empty:
-        print(
-            f"   [Skip] File {short_filename} has no valid rows after age_refined filtering."
-        )
+        print(f"   [Skip] File {short_filename} has no valid rows.")
         return
 
+    # 2. Initialize engines
     engines: Dict[str, AgeAwareAMoCEngine] = {}
 
     for model_name in model_names:
@@ -136,24 +130,25 @@ def process_persona_csv(
             vllm_client=VLLM_CLIENT_CACHE[model_name],
             spacy_nlp=spacy_nlp,
         )
-    # 3. For each model, collect triplets into a table (incremental write)
-    os.makedirs(output_dir, exist_ok=True)
 
+    from pathlib import Path
+
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    # 3. Process per model
     for model_name, engine in engines.items():
         safe_model_name = model_name.replace(":", "-").replace("/", "-")
-        output_filename = f"model_{safe_model_name}_triplets_{short_filename}"
-        if not output_filename.lower().endswith(".csv"):
-            output_filename += ".csv"
-        output_path = os.path.join(output_dir, output_filename)
 
-        # checkpoint path for this model+file
+        output_filename = f"model_{safe_model_name}_triplets_{short_filename}"
+        output_path = output_dir / output_filename
+
         ckpt_path = get_checkpoint_path(
-            output_dir,
-            short_filename,
-            model_name,
-            start_index=start_index,
-            end_index=end_index,
+            output_dir=str(output_dir),
+            input_filename=short_filename,
+            model_name=model_name,
         )
+
         ckpt = load_checkpoint(ckpt_path)
         processed_indices = set(ckpt.get("processed_indices", []))
         failures = ckpt.get("failures", [])
@@ -162,53 +157,32 @@ def process_persona_csv(
         print(f"   [Model] {model_name}: writing to {output_path}")
         print(
             f"   [Model] {model_name}: checkpoint at {ckpt_path} "
-            f"(already processed {personas_processed} personas; "
-            f"{len(processed_indices)} indices)"
+            f"(already processed {personas_processed} personas)"
         )
 
-        # Ensure CSV exists with header (once)
-        if not os.path.isfile(output_path):
+        if not output_path.exists():
             pd.DataFrame([], columns=CSV_HEADERS).to_csv(
                 output_path, index=False, encoding="utf-8"
             )
-            print(f"   [Model] {model_name}: initialized empty CSV at {output_path}")
 
-        # all_extracted_data: List[Dict[str, Any]] = []
         start_model_time = time.time()
-        total_personas_in_slice = len(df)
-        last_progress_log = 0
-        PROGRESS_LOG_EVERY = 10
-        MAX_RUNTIME = 60 * 60 * 3.5  # 3.5 hours
+        total_personas = len(df)
 
         try:
             for idx, (row_idx, row) in enumerate(df.iterrows(), start=1):
-                if time.time() - start_model_time > MAX_RUNTIME:
-                    print("Approaching walltime, exiting safely.")
-                    return
-                # Skip if already processed in a previous run
-                if resume_only and start_index != 0:
-                    raise RuntimeError(
-                        "resume_only is not supported with array slicing unless checkpoints are slice-scoped"
-                    )
-                else:
-                    # Normal mode → process everything
-                    # But still skip already-processed rows to avoid double-writing
-                    if row_idx in processed_indices:
-                        continue
+                # Skip already processed rows
+                if row_idx in processed_indices:
+                    continue
 
                 persona_text = str(row["persona_text"])
-                age_refined = row["age_refined"]
-
-                try:
-                    age_refined_int = int(age_refined)
-                except Exception:
-                    age_refined_int = (
-                        int(float(age_refined)) if pd.notna(age_refined) else -1
-                    )
+                age_refined_int = (
+                    int(row["age_refined"]) if pd.notna(row["age_refined"]) else -1
+                )
 
                 print(
-                    f"      [{idx}/{len(df)}] "
-                    f"Age: {age_refined_int} | Persona: {persona_text[:50]}..."
+                    f"      [{idx}/{total_personas}] "
+                    f"Age: {age_refined_int} | "
+                    f"Persona: {persona_text[:50]}..."
                 )
 
                 start_time = time.time()
@@ -222,27 +196,26 @@ def process_persona_csv(
                         graphs_output_dir=graphs_output_dir,
                         highlight_nodes=highlight_nodes,
                     )
-                    row_records: List[Dict[str, Any]] = []
+
+                    row_records = []
                     for s, r, o in triplets:
                         s, r, o = repair_triplet(s, r, o)
-                        rec = {
-                            "original_index": row_idx,
-                            "age_refined": age_refined_int,
-                            "persona_text": persona_text,
-                            "model_name": model_name,
-                            "subject": s,
-                            "relation": r,
-                            "object": o,
-                            "regime": regime,
-                        }
-                        # all_extracted_data.append(rec)
-                        row_records.append(rec)
+                        row_records.append(
+                            {
+                                "original_index": row_idx,
+                                "age_refined": age_refined_int,
+                                "persona_text": persona_text,
+                                "model_name": model_name,
+                                "subject": s,
+                                "relation": r,
+                                "object": o,
+                                "regime": regime,
+                            }
+                        )
 
-                    # Incremental flush per persona
+                    # Incremental flush
                     if row_records:
-                        df_chunk = pd.DataFrame(row_records)
-                        # header=False because we ensured file exists above
-                        df_chunk.to_csv(
+                        pd.DataFrame(row_records).to_csv(
                             output_path,
                             mode="a",
                             header=False,
@@ -252,79 +225,40 @@ def process_persona_csv(
 
                     time_taken = time.time() - start_time
                     print(
-                        f"         -> extracted {len(triplets)} triplets in {time_taken:.2f}s",
+                        f"         -> extracted {len(triplets)} "
+                        f"triplets in {time_taken:.2f}s",
                         flush=True,
                     )
 
                     # Update checkpoint
                     personas_processed += 1
                     processed_indices.add(row_idx)
-                    # ---- Job-level progress logging ----
-                    if personas_processed % PROGRESS_LOG_EVERY == 0:
-                        elapsed = time.time() - start_model_time
-                        avg_time = elapsed / max(personas_processed, 1)
-                        remaining = max(total_personas_in_slice - personas_processed, 0)
-                        eta = remaining * avg_time
-
-                        print(
-                            f"[JOB PROGRESS] model={model_name} | "
-                            f"slice={start_index}-{end_index or 'end'} | "
-                            f"processed={personas_processed}/{total_personas_in_slice} "
-                            f"({(personas_processed / total_personas_in_slice) * 100:.1f}%) | "
-                            f"elapsed={format_seconds(elapsed)} | "
-                            f"avg={avg_time:.1f}s/persona | "
-                            f"ETA={format_seconds(eta)}",
-                            flush=True,
-                        )
-                    # ---- Job-level progress logging ----
                     ckpt["personas_processed"] = personas_processed
                     ckpt["processed_indices"] = sorted(processed_indices)
                     save_checkpoint(ckpt_path, ckpt)
 
                 except Exception as e:
-                    time_taken = time.time() - start_time
-                    print(
-                        f"{persona_text[:10]:<10} | {model_name:<15} | "
-                        f"{time_taken:<10.2f} | !! FAILED !!",
-                        flush=True,
-                    )
-                    err_info = {
-                        "row_index": int(row_idx),
-                        "age_refined": age_refined_int,
-                        "persona_snippet": persona_text[:80],
-                        "error": str(e),
-                        "time": datetime.utcnow().isoformat(),
-                    }
-                    failures.append(err_info)
-                    ckpt["failures"] = failures
-                    save_checkpoint(ckpt_path, ckpt)
                     logging.error(
-                        f"Failed run: idx={row_idx}, model={model_name}. Error: {e}",
+                        f"Failed persona idx={row_idx}, model={model_name}: {e}",
                         exc_info=True,
                     )
-                    # continue to next persona
+                    failures.append(
+                        {
+                            "row_index": int(row_idx),
+                            "persona_snippet": persona_text[:80],
+                            "error": str(e),
+                            "time": datetime.utcnow().isoformat(),
+                        }
+                    )
+                    ckpt["failures"] = failures
+                    save_checkpoint(ckpt_path, ckpt)
 
         finally:
-            elapsed_model = time.time() - start_model_time
-            ckpt["elapsed_seconds"] = elapsed_model
+            ckpt["elapsed_seconds"] = time.time() - start_model_time
             ckpt["failures"] = failures
-            ckpt["personas_processed"] = personas_processed
             save_checkpoint(ckpt_path, ckpt)
 
             print(
                 f"   [Model] {model_name}: processed {personas_processed} personas "
-                f"(skipped {len(processed_indices) - personas_processed} already done) "
-                f"in {elapsed_model:.2f}s. "
-                f"Checkpoint: {ckpt_path}"
+                f"from file {short_filename}"
             )
-
-        # # 4. In-memory summary
-        # if all_extracted_data:
-        #     print(
-        #         f"   [Model] {model_name}: Total triplets in memory this run: "
-        #         f"{len(all_extracted_data)}. CSV was written incrementally to: {output_path}"
-        #     )
-        # else:
-        #     print(
-        #         f"   [Model] {model_name}: No triplets extracted for {short_filename}."
-        #     )

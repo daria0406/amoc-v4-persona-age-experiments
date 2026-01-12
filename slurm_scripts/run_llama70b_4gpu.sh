@@ -6,7 +6,7 @@
 #SBATCH --gres=gpu:tesla_a100:4  
 #SBATCH --cpus-per-task=32
 #SBATCH --mem=256G
-#SBATCH --array=0-29%1
+#SBATCH --array=0-29%2
 #SBATCH --output=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%j.out
 #SBATCH --error=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%j.err
 

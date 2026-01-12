@@ -6,22 +6,28 @@
 #SBATCH --gres=gpu:tesla_a100:2
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=256G
-#SBATCH --array=0-31%1
+#SBATCH --array=0-31%2
 #SBATCH --output=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%j.out
 #SBATCH --error=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%j.err
 
-PERSONAS_PER_JOB=50
-START_INDEX=$((SLURM_ARRAY_TASK_ID * PERSONAS_PER_JOB))
-END_INDEX=$((START_INDEX + PERSONAS_PER_JOB))
+PROJECT_ROOT="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments"
+CHUNKS_DIR="${PROJECT_ROOT}/personas_dfs/chunks"
 
-echo "Running Qwen 30B..."
+# Define regimes explicitly
+REGIMES=(primary highschool secondary university)
+
+if [ "$SLURM_ARRAY_TASK_ID" -ge "${#REGIMES[@]}" ]; then
+    echo "Invalid SLURM_ARRAY_TASK_ID=${SLURM_ARRAY_TASK_ID}"
+    exit 1
+fi
+
+REGIME="${REGIMES[$SLURM_ARRAY_TASK_ID]}"
+
+echo "Running Qwen 30B"
 echo "SLURM ARRAY TASK ID: ${SLURM_ARRAY_TASK_ID}"
-echo "Processing personas ${START_INDEX} → ${END_INDEX}"
+echo "Processing educational regime: ${REGIME}"
 
 bash "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments/slurm_scripts/amoc-run.sh" \
     --models "Qwen/Qwen3-30B-A3B-Instruct-2507" \
     --tp 2 \
-    --start-index ${START_INDEX} \
-    --end-index ${END_INDEX}
-    # --max-rows 2
-    # --replace-pronouns \
+    --educational-regime "${REGIME}"

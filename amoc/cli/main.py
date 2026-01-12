@@ -82,6 +82,16 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
         help="Only process personas not yet completed (checkpoint-based).",
     )
 
+    p.add_argument(
+        "--educational-regime",
+        type=str,
+        default=None,
+        help=(
+            "Educational regime to process (e.g. primary, highschool). "
+            "If set, only CSVs matching <regime>_*.csv are processed."
+        ),
+    )
+
     return p.parse_args(argv)
 
 
@@ -136,8 +146,20 @@ def main(argv: List[str]) -> None:
 
     # --- Discover input files ---
     files_to_process = sorted(
-        os.path.join(INPUT_DIR, f) for f in os.listdir(INPUT_DIR) if f.endswith(".csv")
+        os.path.join(INPUT_DIR, f)
+        for f in os.listdir(INPUT_DIR)
+        if f.endswith(".csv")
+        and (
+            args.educational_regime is None
+            or f.startswith(f"{args.educational_regime}_")
+        )
     )
+
+    if args.educational_regime:
+        print(
+            f"Educational regime specified: {args.educational_regime} "
+            f"({len(files_to_process)} files)"
+        )
 
     if not files_to_process:
         print(f"No CSV files found in {INPUT_DIR}")
@@ -161,8 +183,6 @@ def main(argv: List[str]) -> None:
                 replace_pronouns=args.replace_pronouns,
                 tensor_parallel_size=args.tp_size,
                 resume_only=args.resume_only,
-                start_index=args.start_index,
-                end_index=args.end_index,
                 plot_after_each_sentence=False,
                 graphs_output_dir=OUTPUT_DIR,
                 highlight_nodes=BLUE_NODES,
