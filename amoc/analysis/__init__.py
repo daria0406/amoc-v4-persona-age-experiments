@@ -38,4 +38,5 @@ __all__ = [
     "plot_boxplot_by_age_bin",
     "plot_violin_box_by_age_bin",
     "assign_age_bin",
+    "coarse_age_bin",
 ]

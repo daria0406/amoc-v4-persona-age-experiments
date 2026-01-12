@@ -1,3 +1,4 @@
+import pandas as pd
 from amoc.config.constants import AGE_REGIMES
 
 AGE_BINS = [
@@ -16,6 +17,18 @@ def assign_age_bin(age):
         if lo <= age <= hi:
             return f"{lo}-{hi}"
     return None
+
+
+def coarse_age_bin(age):
+    if pd.isna(age):
+        return None
+    age = int(age)
+    if age <= 10:
+        return "≤10"
+    elif age <= 14:
+        return "11–14"
+    else:
+        return "15–18"
 
 
 def assign_age_regime(age: int) -> str | None:

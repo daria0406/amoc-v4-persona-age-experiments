@@ -19,7 +19,7 @@ apptainer exec --nv \
     "$SIF_IMAGE" \
     bash "$HOME/to_transfer/amoc-v4-persona-age-experiments/slurm_scripts/amoc_sh_simplified.sh" \
         "$HOME/to_transfer/amoc-v4-persona-age-experiments/remove_outliers.py" \
-        --input-dir "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/merged_files" \
+        --input-dir "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/" \
         --model "$MODEL" \
         --refined-age-dir "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments/personas_dfs/personas_refined_age" \
         --plots-age \

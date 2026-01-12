@@ -4,7 +4,7 @@ from scipy.stats import kruskal
 import glob
 from typing import Iterable
 from amoc.outliers.io import filter_bins_by_min_n
-from amoc.analysis.age_regimes import assign_age_bin
+from amoc.analysis.age_regimes import assign_age_bin, coarse_age_bin
 
 from amoc.analysis.regime_plots import (
     plot_violin_box,
@@ -37,13 +37,31 @@ IQR_WINSORIZED_METRICS = [
     "graph_avg_degree",
 ]
 
+# AGE_BIN_ORDER = [
+#     "5-6",
+#     "7-8",
+#     "9-10",
+#     "11-12",
+#     "13-14",
+#     "15-16",
+#     "17-18",
+# ]
 AGE_BIN_ORDER = [
-    "8-9",
-    "10-11",
-    "12-13",
-    "15-16",
-    "17-18",
+    "≤10",
+    "11–14",
+    "15–18",
 ]
+
+
+def normalize_age_bin(x: str | None) -> str | None:
+    if pd.isna(x):
+        return None
+    return (
+        str(x)
+        .strip()
+        .replace("-", "–")  # force EN-DASH
+        .replace("—", "–")  # em-dash → en-dash
+    )
 
 
 def normalize_regime(s: pd.Series) -> pd.Series:
@@ -294,17 +312,43 @@ def run_cleaned_regime_analysis(
     # Age plots
     # -----------------------------------------
     if plots_age:
-        df_q = attach_persona_attributes(df_q, refined_age_dir)
-        df_w = attach_persona_attributes(df_w, refined_age_dir)
+        # age_refined already present from aggregation
+        if "age_refined" not in df_q.columns:
+            raise RuntimeError("age_refined missing from df_q")
 
-        df_q["age_bin"] = df_q["age_refined"].apply(assign_age_bin)
+        if "age_refined" not in df_w.columns:
+            raise RuntimeError("age_refined missing from df_w")
+        # df_q = attach_persona_attributes(df_q, refined_age_dir)
+        # df_w = attach_persona_attributes(df_w, refined_age_dir)
+
+        print("Age_refined summary:")
+        print(df_q["age_refined"].describe())
+
+        print("Unique ages:")
+        print(sorted(df_q["age_refined"].dropna().unique())[:20], "...")
+
+        print("Age_refined value counts:")
+        print(df_q["age_refined"].value_counts().sort_index())
+
+        df_q["age_bin"] = (
+            df_q["age_refined"].apply(coarse_age_bin).apply(normalize_age_bin)
+        )
         df_q = df_q.dropna(subset=["age_bin"])
-        df_q = filter_bins_by_min_n(df_q, "age_bin", min_n=1)
+
         df_q["age_bin"] = pd.Categorical(
             df_q["age_bin"],
             categories=AGE_BIN_ORDER,
             ordered=True,
         )
+
+        # df_q = df_q.dropna(subset=["age_bin"])
+        unexpected = set(df_q["age_bin"].unique()) - set(AGE_BIN_ORDER)
+        if unexpected:
+            raise RuntimeError(f"Unexpected age_bin labels: {unexpected}")
+
+        print("Coarse age-bin counts:")
+        print(df_q["age_bin"].value_counts().sort_index())
+
         df_q_age = df_q.copy()
         df_q_wins_age = winsorize_by_group(
             df_q_age,
@@ -316,13 +360,8 @@ def run_cleaned_regime_analysis(
             age_col="age_bin",
             metric_col="triplets_per_100_tokens",
             k=1.5,
-            min_n=15,
+            min_n=1,
         )
-
-        # CHECK
-        unexpected = set(df_q["age_bin"]) - set(AGE_BIN_ORDER)
-        if unexpected:
-            raise RuntimeError(f"Unexpected age_bin labels: {unexpected}")
 
         print(
             "Age coverage (quantile-trimmed):",
@@ -367,28 +406,28 @@ def run_cleaned_regime_analysis(
                 continue
 
             plot_violin_box_by_age(
-                df=df_q_wins_age,
+                df=df_q,
                 metric=metric,
                 model_tag=f"{model}_quantile_trimmed",
                 output_dir=age_metric_out,
             )
 
             plot_boxplot_by_age(
-                df=df_q_wins_age,
+                df=df_q,
                 metric=metric,
                 model_tag=f"{model}_quantile_trimmed",
                 output_dir=age_metric_out,
             )
 
             plot_violin_box_by_age_bin(
-                df=df_q_wins_age,
+                df=df_q,
                 metric=metric,
                 model_tag=f"{model}_quantile_trimmed",
                 output_dir=age_metric_out,
             )
 
             plot_boxplot_by_age_bin(
-                df=df_q_wins_age,
+                df=df_q,
                 metric=metric,
                 model_tag=f"{model}_quantile_trimmed",
                 output_dir=age_metric_out,

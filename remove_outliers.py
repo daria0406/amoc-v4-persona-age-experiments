@@ -44,12 +44,26 @@ def main():
         default=None,
         help="Directory containing *_age_refined.csv files ",
     )
+    parser.add_argument(
+        "--triplet-dir",
+        default=None,
+        help=(
+            "Directory containing triplet CSVs. "
+            "Defaults to <input_dir>/merged_files, "
+            "falling back to input_dir if that subfolder does not exist."
+        ),
+    )
     args = parser.parse_args()
 
     model_name = canonicalize_model_name(args.model)
     safe_tag = model_name.replace("/", "-")
 
-    triplet_files = find_triplet_files(args.input_dir, safe_tag)
+    default_triplet_dir = os.path.join(args.input_dir, "merged_files")
+    triplet_dir = args.triplet_dir or default_triplet_dir
+    if not os.path.isdir(triplet_dir):
+        triplet_dir = default_triplet_dir
+
+    triplet_files = find_triplet_files(triplet_dir, safe_tag)
     if not triplet_files:
         raise RuntimeError("No triplet CSVs found.")
 
@@ -58,6 +72,8 @@ def main():
     if "original_index" in df_stats_all.columns:
         df_stats_all = df_stats_all.rename(columns={"original_index": "idx"})
 
+    print(df_stats_all.groupby("regime").size())
+    print(df_stats_all.shape)
     # Save raw stats as a CSV (not a directory) to avoid clashing with the output dir
     df_stats_all.to_csv(
         os.path.join(args.input_dir, "persona_stats_raw.csv"), index=False

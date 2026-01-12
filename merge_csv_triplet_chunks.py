@@ -11,7 +11,9 @@ from pathlib import Path
 from typing import Dict, List, Tuple
 import pandas as pd
 
-INPUT_DIR = "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/chunks"
+INPUT_DIR = (
+    "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/"
+)
 OUTPUT_DIR = "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/merged_files"
 
 KNOWN_REGIMES = {"primary", "secondary", "highschool", "high_school", "university"}
@@ -64,15 +66,9 @@ def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser(
         description="Merge chunked triplet CSVs into per-model, per-regime outputs."
     )
-    # ap.add_argument("--input-dir", required=True, help="Directory with chunked CSVs.")
-    # ap.add_argument(
-    #     "--output-dir",
-    #     required=True,
-    #     help="Directory to write merged CSVs (will be created).",
-    # )
     ap.add_argument(
         "--regime",
-        default="highschool",
+        default=None,
         choices=["primary", "highschool", "secondary", "university"],
         help="Educational regime (default: highschool).",
     )
@@ -81,8 +77,11 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    merge_chunks(INPUT_DIR, OUTPUT_DIR, args.regime)
-    # merge_chunks(Path(args.input_dir), Path(args.output_dir), args.regime)
+    merge_chunks(
+        Path(INPUT_DIR),
+        Path(OUTPUT_DIR),
+        args.regime,
+    )
 
 
 if __name__ == "__main__":

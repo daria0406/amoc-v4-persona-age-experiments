@@ -37,7 +37,7 @@ def save_persona_outputs(
     )
 
 
-def filter_bins_by_min_n(df, bin_col="age_bin", min_n=15):
+def filter_bins_by_min_n(df, bin_col="age_bin", min_n=1):
     counts = df[bin_col].value_counts()
     valid = counts[counts >= min_n].index
     dropped = set(counts.index) - set(valid)
