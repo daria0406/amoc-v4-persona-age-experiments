@@ -48,20 +48,6 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
     )
 
     p.add_argument(
-        "--start-index",
-        type=int,
-        default=None,
-        help="Start index for persona slicing.",
-    )
-
-    p.add_argument(
-        "--end-index",
-        type=int,
-        default=None,
-        help="End index for persona slicing (exclusive).",
-    )
-
-    p.add_argument(
         "--replace-pronouns",
         action="store_true",
         help="Enable pronoun resolution in AMoC.",
@@ -82,45 +68,24 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
         help="Only process personas not yet completed (checkpoint-based).",
     )
 
+    # p.add_argument(
+    #     "--educational-regime",
+    #     type=str,
+    #     default=None,
+    #     help=(
+    #         "Educational regime to process (e.g. primary, highschool). "
+    #         "If set, only CSVs matching <regime>_*.csv are processed."
+    #     ),
+    # )
+
     p.add_argument(
-        "--educational-regime",
+        "--file",
         type=str,
-        default=None,
-        help=(
-            "Educational regime to process (e.g. primary, highschool). "
-            "If set, only CSVs matching <regime>_*.csv are processed."
-        ),
+        required=True,
+        help="Path to a single persona CSV chunk file to process.",
     )
 
     return p.parse_args(argv)
-
-
-# ==========================================
-# SHARD COORDINATION
-# ==========================================
-
-
-def write_shard_done_marker():
-    shard_id = os.environ.get("SLURM_ARRAY_TASK_ID", "single")
-    done_dir = os.path.join(OUTPUT_DIR, "shard_done")
-    os.makedirs(done_dir, exist_ok=True)
-
-    marker = os.path.join(done_dir, f"shard_{shard_id}.done")
-    with open(marker, "w") as f:
-        f.write("done\n")
-
-
-def all_shards_done(expected_shards: int) -> bool:
-    done_dir = os.path.join(OUTPUT_DIR, "shard_done")
-    if not os.path.isdir(done_dir):
-        return False
-
-    done_files = [
-        f
-        for f in os.listdir(done_dir)
-        if f.startswith("shard_") and f.endswith(".done")
-    ]
-    return len(done_files) >= expected_shards
 
 
 def is_leader() -> bool:
@@ -145,21 +110,10 @@ def main(argv: List[str]) -> None:
         raise RuntimeError("spaCy failed to load")
 
     # --- Discover input files ---
-    files_to_process = sorted(
-        os.path.join(INPUT_DIR, f)
-        for f in os.listdir(INPUT_DIR)
-        if f.endswith(".csv")
-        and (
-            args.educational_regime is None
-            or f.startswith(f"{args.educational_regime}_")
-        )
-    )
+    if not os.path.isfile(args.file):
+        raise RuntimeError(f"Input file does not exist: {args.file}")
 
-    if args.educational_regime:
-        print(
-            f"Educational regime specified: {args.educational_regime} "
-            f"({len(files_to_process)} files)"
-        )
+    files_to_process = [args.file]
 
     if not files_to_process:
         print(f"No CSV files found in {INPUT_DIR}")
@@ -191,19 +145,8 @@ def main(argv: List[str]) -> None:
         elapsed = time.time() - total_start
         print(f"\nExtraction phase finished in {elapsed:.2f} seconds")
 
-        # --- Mark shard completion ---
-        write_shard_done_marker()
-
-        # --- Statistics (leader-only, after all shards) ---
-        EXPECTED_SHARDS = 32  # adjust
-
+        # Leader-only cumulative statistics:
         if is_leader():
-            print("Leader waiting for all shards to complete...")
-            while not all_shards_done(EXPECTED_SHARDS):
-                time.sleep(30)
-
-            print("All shards completed. Running statistics.")
-
             for model in model_names:
                 try:
                     run_statistical_analysis(model)

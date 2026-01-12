@@ -6,28 +6,31 @@
 #SBATCH --gres=gpu:tesla_a100:2
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=256G
-#SBATCH --array=0-31%2
-#SBATCH --output=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%j.out
-#SBATCH --error=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%j.err
+#SBATCH --array=0-13%2
+#SBATCH --output=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%A_%a.out
+#SBATCH --error=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%A_%a.err
+
+set -euo pipefail
 
 PROJECT_ROOT="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments"
 CHUNKS_DIR="${PROJECT_ROOT}/personas_dfs/chunks"
 
-# Define regimes explicitly
-REGIMES=(primary highschool secondary university)
+# list of chunk files
+CHUNK_FILES=($(ls ${CHUNKS_DIR}/*.csv | sort))
+NUM_CHUNKS=${#CHUNK_FILES[@]}
 
-if [ "$SLURM_ARRAY_TASK_ID" -ge "${#REGIMES[@]}" ]; then
-    echo "Invalid SLURM_ARRAY_TASK_ID=${SLURM_ARRAY_TASK_ID}"
+if [ "${SLURM_ARRAY_TASK_ID}" -ge "${NUM_CHUNKS}" ]; then
+    echo "SLURM_ARRAY_TASK_ID=${SLURM_ARRAY_TASK_ID} exceeds number of chunks (${NUM_CHUNKS})"
     exit 1
 fi
 
-REGIME="${REGIMES[$SLURM_ARRAY_TASK_ID]}"
+INPUT_FILE="${CHUNK_FILES[$SLURM_ARRAY_TASK_ID]}"
 
 echo "Running Qwen 30B"
 echo "SLURM ARRAY TASK ID: ${SLURM_ARRAY_TASK_ID}"
-echo "Processing educational regime: ${REGIME}"
+echo "Processing chunk file: ${INPUT_FILE}"
 
-bash "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments/slurm_scripts/amoc-run.sh" \
+bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
     --models "Qwen/Qwen3-30B-A3B-Instruct-2507" \
     --tp 2 \
-    --educational-regime "${REGIME}"
+    --file "${INPUT_FILE}"
