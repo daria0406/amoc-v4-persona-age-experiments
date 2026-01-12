@@ -130,11 +130,8 @@ def process_persona_csv(
             vllm_client=VLLM_CLIENT_CACHE[model_name],
             spacy_nlp=spacy_nlp,
         )
-
-    from pathlib import Path
-
-    output_dir = Path(output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
+    # 3. For each model, collect triplets into a table (incremental write)
+    os.makedirs(output_dir, exist_ok=True)
 
     # 3. Process per model
     for model_name, engine in engines.items():

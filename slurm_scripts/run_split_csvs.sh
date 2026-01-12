@@ -1,3 +1,4 @@
+#!/bin/bash
 set -euo pipefail
 
 SIF_IMAGE="/export/projects/nlp/containers/daria-vllm.sif"
