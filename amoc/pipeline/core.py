@@ -351,6 +351,13 @@ class AMoCv4:
                     text_based_activated_nodes
                 )
 
+            if self.debug:
+                logging.info(
+                    "Active graph after sentence %d:\n%s",
+                    i,
+                    self.graph.get_active_graph_repr(),
+                )
+
             if plot_after_each_sentence:
                 self._plot_graph_snapshot(
                     sentence_index=i,
@@ -477,6 +484,10 @@ class AMoCv4:
             # print("Reactivating edge: ", edges[i-1]) # Reduced verbosity
             edges[i - 1].forget_score = self.edge_forget
             edges[i - 1].active = True
+        # Fade away edges that were not selected and are not newly added
+        for j in range(1, len(edges) + 1):
+            if j not in relevant_edges_index and edges[j - 1] not in newly_added_edges:
+                edges[j - 1].fade_away()
 
     def init_graph(self, sent: Span) -> None:
         current_sentence_text_based_nodes, current_sentence_text_based_words = (

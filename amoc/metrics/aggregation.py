@@ -105,7 +105,11 @@ def abstract_concept_ratio(concepts) -> float:
 # Main aggregation function
 # ======================================================
 def process_triplets_file(path: str) -> pd.DataFrame:
-    df = pd.read_csv(path)
+    # Be permissive about field counts (legacy/extra columns, occasional bad lines)
+    df = pd.read_csv(path, engine="python", on_bad_lines="warn")
+
+    # Drop stray unnamed columns if present
+    df = df.loc[:, ~df.columns.str.startswith("Unnamed")]
 
     if df.empty:
         return pd.DataFrame()
@@ -122,6 +126,12 @@ def process_triplets_file(path: str) -> pd.DataFrame:
     if missing:
         logging.warning(f"Missing required columns in {path}: {missing}")
         return pd.DataFrame()
+
+    # # Optional new column: active flag
+    # if "active" not in df.columns:
+    #     df["active"] = True
+    # else:
+    #     df["active"] = df["active"].astype(bool)
 
     if "model_name" not in df.columns:
         df["model_name"] = None

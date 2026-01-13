@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=amoc_qwen30b_small_example
+#SBATCH --job-name=amoc_llama70b_small_example
 #SBATCH --partition=dgxa100
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --gres=gpu:tesla_a100:2
+#SBATCH --gres=gpu:tesla_a100:4
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=256G
 #SBATCH --array=0-13%2
@@ -26,13 +26,13 @@ fi
 
 INPUT_FILE="${CHUNK_FILES[$SLURM_ARRAY_TASK_ID]}"
 
-echo "Running Qwen 30B for a small example"
+echo "Running Llama3.3 70B for a small example"
 echo "SLURM ARRAY TASK ID: ${SLURM_ARRAY_TASK_ID}"
 echo "Processing chunk file: ${INPUT_FILE}"
 
 bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
-    --models "Qwen/Qwen3-30B-A3B-Instruct-2507" \
-    --tp 2 \
+    --models "meta-llama/Llama-3.3-70B-Instruct" \
+    --tp 4 \
     --max-rows 1 \
     --plot-after-each-sentence \
     --output-dir "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/small_example_output" \

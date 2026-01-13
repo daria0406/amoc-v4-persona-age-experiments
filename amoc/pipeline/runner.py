@@ -195,6 +195,9 @@ def process_persona_csv(
                         else:
                             s, r, o = trip
                             active = True
+                        # Skip inactive edges; we only persist active ones
+                        if not active:
+                            continue
                         s, r, o = repair_triplet(s, r, o)
                         records.append(
                             {
@@ -206,7 +209,7 @@ def process_persona_csv(
                                 "relation": r,
                                 "object": o,
                                 "regime": regime,
-                                "active": bool(active),
+                                "active": True,
                             }
                         )
 
