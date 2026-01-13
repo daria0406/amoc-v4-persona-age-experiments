@@ -286,8 +286,6 @@ class AMoCv4:
                         create_node=True,
                     )
                     edge_label = relationship[1].replace("(edge)", "").strip()
-                    if self._is_generic_relation(edge_label):
-                        continue
                     if source_node is None or dest_node is None:
                         continue
 
@@ -479,10 +477,6 @@ class AMoCv4:
             # print("Reactivating edge: ", edges[i-1]) # Reduced verbosity
             edges[i - 1].forget_score = self.edge_forget
             edges[i - 1].active = True
-        for j in range(1, len(edges) + 1):
-            if j not in relevant_edges_index and edges[j - 1] not in newly_added_edges:
-                # print("Fading away: ", edges[j-1])
-                edges[j - 1].fade_away()
 
     def init_graph(self, sent: Span) -> None:
         current_sentence_text_based_nodes, current_sentence_text_based_words = (

@@ -69,6 +69,18 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
     )
 
     p.add_argument(
+        "--output-dir",
+        default=None,
+        help="Output directory for extracted triplets (overrides config).",
+    )
+
+    p.add_argument(
+        "--plot-after-each-sentence",
+        action="store_true",
+        help="Plot a graph after each sentence for a specific persona.",
+    )
+
+    p.add_argument(
         "--plot-final-graph",
         action="store_true",
         help="Plot a single final graph per persona (disables per-sentence plotting).",
@@ -137,6 +149,13 @@ def main(argv: List[str]) -> None:
 
     total_start = time.time()
 
+    if args.output_dir:
+        os.makedirs(args.output_dir, exist_ok=True)
+        output_dir = args.output_dir
+        print(f"Overriding output directory to: {output_dir}")
+    else:
+        output_dir = OUTPUT_DIR
+
     try:
         for filename in files_to_process:
             print(f"\n=== Processing file: {os.path.basename(filename)} ===")
@@ -144,12 +163,12 @@ def main(argv: List[str]) -> None:
                 filename=filename,
                 model_names=model_names,
                 spacy_nlp=spacy_nlp,
-                output_dir=OUTPUT_DIR,
+                output_dir=output_dir,
                 max_rows=args.max_rows,
                 replace_pronouns=args.replace_pronouns,
                 tensor_parallel_size=args.tp_size,
                 resume_only=args.resume_only,
-                plot_after_each_sentence=False,
+                plot_after_each_sentence=args.plot_after_each_sentence,
                 graphs_output_dir=os.path.join(OUTPUT_ANALYSIS_DIR, "graphs"),
                 highlight_nodes=BLUE_NODES,
                 plot_final_graph=args.plot_final_graph,
