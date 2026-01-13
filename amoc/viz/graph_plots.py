@@ -16,6 +16,7 @@ def plot_amoc_triplets(
     blue_nodes: Optional[Iterable[str]] = None,
     output_dir: str | None = None,
     step_tag: Optional[str] = None,
+    largest_component_only: bool = False,
 ) -> str:
     blue_nodes = set(blue_nodes) if blue_nodes is not None else set(DEFAULT_BLUE_NODES)
     out_dir = output_dir or os.path.join(OUTPUT_ANALYSIS_DIR, "graphs")
@@ -37,12 +38,12 @@ def plot_amoc_triplets(
     for src, rel, dst in triplets:
         G.add_edge(src, dst, label=rel)
 
-    # Remove isolates and keep only the largest connected component to avoid fragmented plots.
+    # Remove isolates, optionally keep only largest component
     G.remove_nodes_from(list(nx.isolates(G)))
     if G.number_of_nodes() == 0:
         return save_path
     components = list(nx.connected_components(G.to_undirected()))
-    if components:
+    if largest_component_only and components:
         largest = max(components, key=len)
         G = G.subgraph(largest).copy()
 

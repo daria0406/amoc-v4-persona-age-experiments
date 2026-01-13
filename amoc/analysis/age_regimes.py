@@ -24,7 +24,7 @@ def coarse_age_bin(age):
         return None
     age = int(age)
     if age <= 10:
-        return "≤10"
+        return "3–10"
     elif age <= 14:
         return "11–14"
     else:

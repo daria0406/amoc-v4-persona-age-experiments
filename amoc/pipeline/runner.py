@@ -10,6 +10,7 @@ import pandas as pd
 from amoc.pipeline import AgeAwareAMoCEngine
 from amoc.llm.vllm_client import VLLMClient
 from amoc.config.constants import DEBUG
+from amoc.config.paths import OUTPUT_ANALYSIS_DIR
 from amoc.pipeline.io import (
     robust_read_persona_csv,
     get_checkpoint_path,
@@ -42,6 +43,7 @@ CSV_HEADERS = [
     "relation",
     "object",
     "regime",
+    "active",
 ]
 
 
@@ -87,6 +89,8 @@ def process_persona_csv(
     plot_after_each_sentence: bool = False,
     graphs_output_dir: Optional[str] = None,
     highlight_nodes: Optional[List[str]] = None,
+    plot_final_graph: bool = False,
+    plot_largest_component_only: bool = False,
 ) -> None:
     short_filename = os.path.basename(filename)
     print(f"\n=== Processing File (chunk): {short_filename} ===")
@@ -184,7 +188,13 @@ def process_persona_csv(
                     )
 
                     records = []
-                    for s, r, o in triplets:
+                    for trip in triplets:
+                        # Support both legacy 3-tuple and new 4-tuple with active flag
+                        if len(trip) == 4:
+                            s, r, o, active = trip
+                        else:
+                            s, r, o = trip
+                            active = True
                         s, r, o = repair_triplet(s, r, o)
                         records.append(
                             {
@@ -196,6 +206,7 @@ def process_persona_csv(
                                 "relation": r,
                                 "object": o,
                                 "regime": regime,
+                                "active": bool(active),
                             }
                         )
 
@@ -214,6 +225,27 @@ def process_persona_csv(
                     ckpt["personas_processed"] = personas_processed
                     ckpt["processed_indices"] = sorted(processed_indices)
                     save_checkpoint(ckpt_path, ckpt)
+
+                    if plot_final_graph and records:
+                        active_triplets = [
+                            (rec["subject"], rec["relation"], rec["object"])
+                            for rec in records
+                            if rec.get("active", True)
+                        ]
+                        if active_triplets:
+                            plot_dir = graphs_output_dir or os.path.join(
+                                OUTPUT_ANALYSIS_DIR, "graphs"
+                            )
+                            plot_amoc_triplets(
+                                triplets=active_triplets,
+                                persona=persona_text,
+                                model_name=model_name,
+                                age=age_refined_int,
+                                blue_nodes=highlight_nodes,
+                                output_dir=plot_dir,
+                                step_tag="final",
+                                largest_component_only=plot_largest_component_only,
+                            )
 
                 except Exception as e:
                     logging.error(

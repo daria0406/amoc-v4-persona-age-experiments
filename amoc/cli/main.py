@@ -13,7 +13,7 @@ os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
 os.environ["HF_HOME"] = "/export/projects/nlp/.cache"
 
 # --- AMoC imports ---
-from amoc.config import INPUT_DIR, OUTPUT_DIR, BLUE_NODES
+from amoc.config import INPUT_DIR, OUTPUT_DIR, OUTPUT_ANALYSIS_DIR, BLUE_NODES
 from amoc.pipeline.runner import process_persona_csv
 from amoc.analysis.statistics import run_statistical_analysis
 from amoc.nlp import load_spacy
@@ -66,6 +66,18 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
         "--resume-only",
         action="store_true",
         help="Only process personas not yet completed (checkpoint-based).",
+    )
+
+    p.add_argument(
+        "--plot-final-graph",
+        action="store_true",
+        help="Plot a single final graph per persona (disables per-sentence plotting).",
+    )
+
+    p.add_argument(
+        "--plot-largest-component-only",
+        action="store_true",
+        help="When plotting final graph, keep only the largest connected component (default: plot all).",
     )
 
     # p.add_argument(
@@ -138,8 +150,10 @@ def main(argv: List[str]) -> None:
                 tensor_parallel_size=args.tp_size,
                 resume_only=args.resume_only,
                 plot_after_each_sentence=False,
-                graphs_output_dir=OUTPUT_DIR,
+                graphs_output_dir=os.path.join(OUTPUT_ANALYSIS_DIR, "graphs"),
                 highlight_nodes=BLUE_NODES,
+                plot_final_graph=args.plot_final_graph,
+                plot_largest_component_only=args.plot_largest_component_only,
             )
     finally:
         elapsed = time.time() - total_start

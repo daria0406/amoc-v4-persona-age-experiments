@@ -367,9 +367,9 @@ class AMoCv4:
                 edge.source_node.get_text_representer(),
                 edge.label,
                 edge.dest_node.get_text_representer(),
+                edge.active,
             )
             for edge in self.graph.edges
-            if edge.active
         ]
 
     def infer_new_relationships_step_0(

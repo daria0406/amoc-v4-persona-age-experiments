@@ -47,7 +47,7 @@ IQR_WINSORIZED_METRICS = [
 #     "17-18",
 # ]
 AGE_BIN_ORDER = [
-    "≤10",
+    "3–10",
     "11–14",
     "15–18",
 ]
