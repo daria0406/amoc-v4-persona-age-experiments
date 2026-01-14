@@ -9,6 +9,7 @@ from amoc.viz.graph_plots import plot_amoc_triplets
 from amoc.llm.vllm_client import VLLMClient
 from amoc.nlp.spacy_utils import (
     get_concept_lemmas,
+    canonicalize_node_text,
     has_noun,
     get_content_words_from_sent,
 )
@@ -23,6 +24,8 @@ class AMoCv4:
         "has_attribute",
         "is_a",
     }
+
+    ENFORCE_ATTACHMENT_CONSTRAINT = False
 
     def __init__(
         self,
@@ -65,6 +68,46 @@ class AMoCv4:
         # Cache story lemmas for quick membership checks (currently unused)
         story_doc = self.spacy_nlp(story_text)
         self.story_lemmas = {tok.lemma_.lower() for tok in story_doc if tok.is_alpha}
+
+    def _passes_attachment_constraint(
+        self,
+        subject: str,
+        obj: str,
+        current_sentence_words: List[str],
+        current_sentence_nodes: List[Node],
+        graph_active_nodes: List[Node],
+    ) -> bool:
+        # Connectivity constraint: avoid introducing edges that would form a new
+        # disconnected component. Accept an edge only if it (a) touches the current
+        # sentence and (b) attaches to a node already in the active graph.
+        if not self.ENFORCE_ATTACHMENT_CONSTRAINT:
+            return True
+
+        # If the active graph is empty, allow edges so the graph can re-seed.
+        if not graph_active_nodes:
+            return True
+
+        subject = canonicalize_node_text(self.spacy_nlp, subject)
+        obj = canonicalize_node_text(self.spacy_nlp, obj)
+
+        def _lemma_key(text: str) -> tuple[str, ...]:
+            return tuple(get_concept_lemmas(self.spacy_nlp, text))
+
+        sentence_lemma_keys = {tuple(n.lemmas) for n in current_sentence_nodes}
+        active_lemma_keys = {tuple(n.lemmas) for n in graph_active_nodes}
+
+        subj_key = _lemma_key(subject)
+        obj_key = _lemma_key(obj)
+
+        touches_sentence = (
+            subject in current_sentence_words
+            or obj in current_sentence_words
+            or subj_key in sentence_lemma_keys
+            or obj_key in sentence_lemma_keys
+        )
+        touches_active = subj_key in active_lemma_keys or obj_key in active_lemma_keys
+
+        return touches_sentence and touches_active
 
     def reset_graph(self) -> None:
         self.graph = Graph()
@@ -125,7 +168,7 @@ class AMoCv4:
                 age=age_for_filename,
                 blue_nodes=highlight_nodes,
                 output_dir=output_dir,
-                step_tag=f"sent{sentence_index}",
+                step_tag=f"sent{sentence_index+1}",
             )
             if triplets:
                 logging.info(
@@ -218,6 +261,9 @@ class AMoCv4:
                 )
 
                 text_based_activated_nodes = current_sentence_text_based_nodes
+                sentence_lemma_keys = {
+                    tuple(n.lemmas) for n in current_sentence_text_based_nodes
+                }
                 for idx, relationship in enumerate(new_relationships):
                     # Skip None or scalar junk (int, float, bool, etc.)
                     if relationship is None or isinstance(
@@ -267,6 +313,15 @@ class AMoCv4:
                     if not isinstance(subj, str) or not isinstance(obj, str):
                         continue
 
+                    if not self._passes_attachment_constraint(
+                        subj,
+                        obj,
+                        current_sentence_text_based_words,
+                        current_sentence_text_based_nodes,
+                        graph_active_nodes,
+                    ):
+                        continue
+
                     # Continue with your original code
                     source_node = self.get_node_from_new_relationship(
                         subj,
@@ -289,9 +344,9 @@ class AMoCv4:
                     if source_node is None or dest_node is None:
                         continue
 
-                    if relationship[0] in current_sentence_text_based_words:
+                    if tuple(source_node.lemmas) in sentence_lemma_keys:
                         source_node.node_source = NodeSource.TEXT_BASED
-                    if relationship[2] in current_sentence_text_based_words:
+                    if tuple(dest_node.lemmas) in sentence_lemma_keys:
                         dest_node.node_source = NodeSource.TEXT_BASED
 
                     potential_new_edge = self.graph.add_edge(
@@ -363,7 +418,7 @@ class AMoCv4:
                     sentence_index=i,
                     output_dir=graphs_output_dir,
                     highlight_nodes=highlight_nodes,
-                    only_active=True,
+                    only_active=False,
                 )
 
         # Return triplets for external saving
@@ -477,16 +532,33 @@ class AMoCv4:
         edges_text, edges = self.graph.get_edges_str(
             self.graph.nodes, only_active=False
         )
-        relevant_edges_index = self.client.get_relevant_edges(
+        raw_indices = self.client.get_relevant_edges(
             edges_text, prev_sentences_text, self.persona
-        )[: self.nr_relevant_edges]
-        for i in relevant_edges_index:
-            # print("Reactivating edge: ", edges[i-1]) # Reduced verbosity
+        )
+        valid_indices: List[int] = []
+        for idx in raw_indices:
+            try:
+                i = int(idx)
+            except Exception:
+                continue
+            if 1 <= i <= len(edges):
+                valid_indices.append(i)
+
+        valid_indices = valid_indices[: self.nr_relevant_edges]
+        if not valid_indices:
+            # If the LLM selection fails, do not aggressively fade everything.
+            # This keeps behavior closer to the legacy runs where indices were
+            # consistently returned.
+            return
+
+        selected = set(valid_indices)
+        for i in selected:
             edges[i - 1].forget_score = self.edge_forget
             edges[i - 1].active = True
+
         # Fade away edges that were not selected and are not newly added
         for j in range(1, len(edges) + 1):
-            if j not in relevant_edges_index and edges[j - 1] not in newly_added_edges:
+            if j not in selected and edges[j - 1] not in newly_added_edges:
                 edges[j - 1].fade_away()
 
     def init_graph(self, sent: Span) -> None:
@@ -581,17 +653,19 @@ class AMoCv4:
             if self._is_generic_relation(edge_label):
                 continue
             if source_node is None:
+                subj = canonicalize_node_text(self.spacy_nlp, relationship[0])
                 source_node = self.graph.add_or_get_node(
-                    get_concept_lemmas(self.spacy_nlp, relationship[0]),
-                    relationship[0],
+                    get_concept_lemmas(self.spacy_nlp, subj),
+                    subj,
                     node_type,
                     NodeSource.INFERENCE_BASED,
                 )
 
             if dest_node is None:
+                obj = canonicalize_node_text(self.spacy_nlp, relationship[2])
                 dest_node = self.graph.add_or_get_node(
-                    get_concept_lemmas(self.spacy_nlp, relationship[2]),
-                    relationship[2],
+                    get_concept_lemmas(self.spacy_nlp, obj),
+                    obj,
                     node_type,
                     NodeSource.INFERENCE_BASED,
                 )
@@ -624,6 +698,14 @@ class AMoCv4:
                 or self._appears_in_story(relationship[2])
             ):
                 continue
+            if not self._passes_attachment_constraint(
+                relationship[0],
+                relationship[2],
+                curr_sentences_words,
+                curr_sentences_nodes,
+                active_graph_nodes,
+            ):
+                continue
             source_node = self.get_node_from_new_relationship(
                 relationship[0],
                 active_graph_nodes,
@@ -644,17 +726,19 @@ class AMoCv4:
             if self._is_generic_relation(edge_label):
                 continue
             if source_node is None:
+                subj = canonicalize_node_text(self.spacy_nlp, relationship[0])
                 source_node = self.graph.add_or_get_node(
-                    get_concept_lemmas(self.spacy_nlp, relationship[0]),
-                    relationship[0],
+                    get_concept_lemmas(self.spacy_nlp, subj),
+                    subj,
                     node_type,
                     NodeSource.INFERENCE_BASED,
                 )
 
             if dest_node is None:
+                obj = canonicalize_node_text(self.spacy_nlp, relationship[2])
                 dest_node = self.graph.add_or_get_node(
-                    get_concept_lemmas(self.spacy_nlp, relationship[2]),
-                    relationship[2],
+                    get_concept_lemmas(self.spacy_nlp, obj),
+                    obj,
                     node_type,
                     NodeSource.INFERENCE_BASED,
                 )
@@ -676,14 +760,15 @@ class AMoCv4:
         if text in curr_sentences_words:
             return curr_sentences_nodes[curr_sentences_words.index(text)]
         if create_node:
-            lemmas = get_concept_lemmas(self.spacy_nlp, text)
-            if has_noun(self.spacy_nlp, text):
+            canon = canonicalize_node_text(self.spacy_nlp, text)
+            lemmas = get_concept_lemmas(self.spacy_nlp, canon)
+            if has_noun(self.spacy_nlp, canon):
                 new_node = self.graph.add_or_get_node(
-                    lemmas, text, NodeType.CONCEPT, node_source
+                    lemmas, canon, NodeType.CONCEPT, node_source
                 )
             else:
                 new_node = self.graph.add_or_get_node(
-                    lemmas, text, NodeType.PROPERTY, node_source
+                    lemmas, canon, NodeType.PROPERTY, node_source
                 )
             return new_node
         return None
@@ -700,19 +785,21 @@ class AMoCv4:
         if text in curr_sentences_words:
             return curr_sentences_nodes[curr_sentences_words.index(text)]
         else:
-            lemmas = get_concept_lemmas(self.spacy_nlp, text)
+            canon = canonicalize_node_text(self.spacy_nlp, text)
+            lemmas = get_concept_lemmas(self.spacy_nlp, canon)
             for node in graph_active_nodes:
                 if lemmas == node.lemmas:
                     return node
         if create_node:
-            lemmas = get_concept_lemmas(self.spacy_nlp, text)
-            if has_noun(self.spacy_nlp, text):
+            canon = canonicalize_node_text(self.spacy_nlp, text)
+            lemmas = get_concept_lemmas(self.spacy_nlp, canon)
+            if has_noun(self.spacy_nlp, canon):
                 new_node = self.graph.add_or_get_node(
-                    lemmas, text, NodeType.CONCEPT, node_source
+                    lemmas, canon, NodeType.CONCEPT, node_source
                 )
             else:
                 new_node = self.graph.add_or_get_node(
-                    lemmas, text, NodeType.PROPERTY, node_source
+                    lemmas, canon, NodeType.PROPERTY, node_source
                 )
             return new_node
         return None

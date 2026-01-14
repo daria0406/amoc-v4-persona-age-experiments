@@ -97,10 +97,11 @@ def plot_amoc_triplets(
                 nx.draw_networkx_edge_labels(
                     G,
                     pos,
-                    edge_labels={(u, v, k): edge_labels.get((u, v, k), "")},
+                    edge_labels=edge_labels,
                     font_color="darkred",
                     font_size=9,
                     label_pos=0.5,
+                    bbox=dict(facecolor="white", edgecolor="none", pad=0.2),
                 )
 
     nx.draw_networkx_labels(

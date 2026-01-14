@@ -34,4 +34,5 @@ bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
     --models "Qwen/Qwen3-30B-A3B-Instruct-2507" \
     --tp 2 \
     --plot-final-graph \
+    --include-inactive-edges \
     --file "${INPUT_FILE}"

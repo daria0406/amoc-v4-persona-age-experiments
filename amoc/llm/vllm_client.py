@@ -76,20 +76,12 @@ class VLLMClient:
             outputs = self.llm.generate([prompt], self.sampling_params, use_tqdm=False)
             raw_text = outputs[0].outputs[0].text
 
-            # Split by 'final'
+            # Keep output as-is; downstream parsing helpers extract the first
+            # [...] or {...} block. Mutating here can easily corrupt otherwise
+            # parseable responses (e.g., prefixing '[' before prose containing a list).
             if "final" in raw_text:
-                result = raw_text.split("final")[-1]
-            else:
-                result = raw_text
-
-            result = result.replace("assistant", "").replace("!", "").strip()
-
-            if not result.startswith("[") and result.endswith("]"):
-                result = "[" + result
-            elif not result.startswith("{") and result.endswith("}"):
-                result = "{" + result
-
-            return result
+                return raw_text.split("final")[-1].strip()
+            return raw_text.strip()
 
         except Exception as e:
             logging.exception(f"VLLM runtime error: {e}")

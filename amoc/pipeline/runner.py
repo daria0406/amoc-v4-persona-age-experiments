@@ -91,6 +91,7 @@ def process_persona_csv(
     highlight_nodes: Optional[List[str]] = None,
     plot_final_graph: bool = False,
     plot_largest_component_only: bool = False,
+    include_inactive_edges: bool = False,
 ) -> None:
     short_filename = os.path.basename(filename)
     print(f"\n=== Processing File (chunk): {short_filename} ===")
@@ -195,8 +196,7 @@ def process_persona_csv(
                         else:
                             s, r, o = trip
                             active = True
-                        # Skip inactive edges; we only persist active ones
-                        if not active:
+                        if (not include_inactive_edges) and (not active):
                             continue
                         s, r, o = repair_triplet(s, r, o)
                         records.append(
@@ -209,7 +209,7 @@ def process_persona_csv(
                                 "relation": r,
                                 "object": o,
                                 "regime": regime,
-                                "active": True,
+                                "active": bool(active),
                             }
                         )
 
@@ -230,17 +230,17 @@ def process_persona_csv(
                     save_checkpoint(ckpt_path, ckpt)
 
                     if plot_final_graph and records:
-                        active_triplets = [
+                        triplets_for_plot = [
                             (rec["subject"], rec["relation"], rec["object"])
                             for rec in records
-                            if rec.get("active", True)
+                            if include_inactive_edges or rec.get("active", True)
                         ]
-                        if active_triplets:
+                        if triplets_for_plot:
                             plot_dir = graphs_output_dir or os.path.join(
                                 OUTPUT_ANALYSIS_DIR, "graphs"
                             )
                             plot_amoc_triplets(
-                                triplets=active_triplets,
+                                triplets=triplets_for_plot,
                                 persona=persona_text,
                                 model_name=model_name,
                                 age=age_refined_int,

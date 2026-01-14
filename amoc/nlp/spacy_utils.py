@@ -39,6 +39,41 @@ def get_concept_lemmas(nlp, concept: str) -> List[str]:
     doc = nlp(concept)
     return [token.lemma_ for token in doc]
 
+def canonicalize_node_text(nlp, text: str) -> str:
+    """
+    Canonicalize a node string into a single token to reduce phrase variants.
+
+    Examples:
+    - "young knight" -> "knight"
+    - "the kingdom" -> "kingdom"
+    - "princesses" -> "princess"
+    """
+    if not isinstance(text, str):
+        text = str(text)
+    text = text.strip()
+    if not text:
+        return text
+
+    doc = nlp(text)
+    if len(doc) == 0:
+        return text
+
+    root = doc[:].root
+    alpha_tokens = [t for t in doc if getattr(t, "is_alpha", False)]
+    if not alpha_tokens:
+        return (root.lemma_ if getattr(root, "lemma_", None) else text).strip()
+
+    noun_tokens = [t for t in alpha_tokens if t.pos_ in {"NOUN", "PROPN"}]
+    if noun_tokens:
+        chosen = root if root in noun_tokens else noun_tokens[-1]
+    else:
+        adj_tokens = [t for t in alpha_tokens if t.pos_ == "ADJ"]
+        chosen = root if root in adj_tokens else (adj_tokens[-1] if adj_tokens else alpha_tokens[0])
+
+    # Preserve surface form for proper nouns; otherwise use lemma lowercased.
+    if chosen.pos_ == "PROPN":
+        return chosen.text.strip()
+    return (chosen.lemma_ or chosen.text).strip().lower()
 
 def has_noun(nlp, text: str) -> bool:
     doc = nlp(text)

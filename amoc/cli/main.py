@@ -92,6 +92,12 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
         help="When plotting final graph, keep only the largest connected component (default: plot all).",
     )
 
+    p.add_argument(
+        "--include-inactive-edges",
+        action="store_true",
+        help="Include inactive (forgotten) edges in CSV export and plots (default: export/plot only active edges).",
+    )
+
     # p.add_argument(
     #     "--educational-regime",
     #     type=str,
@@ -173,6 +179,7 @@ def main(argv: List[str]) -> None:
                 highlight_nodes=BLUE_NODES,
                 plot_final_graph=args.plot_final_graph,
                 plot_largest_component_only=args.plot_largest_component_only,
+                include_inactive_edges=args.include_inactive_edges,
             )
     finally:
         elapsed = time.time() - total_start
