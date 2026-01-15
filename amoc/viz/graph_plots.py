@@ -17,6 +17,7 @@ def plot_amoc_triplets(
     output_dir: str | None = None,
     step_tag: Optional[str] = None,
     largest_component_only: bool = False,
+    sentence_text: str = "",
 ) -> str:
     blue_nodes = set(blue_nodes) if blue_nodes is not None else set(DEFAULT_BLUE_NODES)
     out_dir = output_dir or os.path.join(OUTPUT_ANALYSIS_DIR, "graphs")
@@ -111,7 +112,8 @@ def plot_amoc_triplets(
     title_persona = (persona[:150] + "...") if len(persona) > 150 else persona
     plt.title(f"AMoC Knowledge Graph: {model_name}", size=20, pad=20)
     plt.suptitle(
-        f"Persona: {title_persona}",
+        f"Persona: {title_persona}\n",
+        f"Sentence {sentence_index + 1}: {sentence_text}",
         y=0.98,
         fontsize=12,
         style="italic",

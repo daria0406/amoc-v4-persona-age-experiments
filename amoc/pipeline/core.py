@@ -154,6 +154,7 @@ class AMoCv4:
     def _plot_graph_snapshot(
         self,
         sentence_index: int,
+        sentence_text: str,
         output_dir: Optional[str],
         highlight_nodes: Optional[Iterable[str]],
         only_active: bool = True,
@@ -169,6 +170,7 @@ class AMoCv4:
                 blue_nodes=highlight_nodes,
                 output_dir=output_dir,
                 step_tag=f"sent{sentence_index+1}",
+                sentence_text=sentence_text,
             )
             if triplets:
                 logging.info(
@@ -436,6 +438,7 @@ class AMoCv4:
             if plot_after_each_sentence:
                 self._plot_graph_snapshot(
                     sentence_index=i,
+                    sentence_text=sent.text,
                     output_dir=graphs_output_dir,
                     highlight_nodes=highlight_nodes,
                     only_active=False,
