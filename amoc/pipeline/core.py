@@ -1,7 +1,7 @@
 import logging
 import re
 from typing import List, Tuple, Optional, Iterable
-
+import pandas as pd
 from spacy.tokens import Span, Token
 
 from amoc.graph import Graph, Node, Edge, NodeType, NodeSource
@@ -188,6 +188,8 @@ class AMoCv4:
         graphs_output_dir: Optional[str] = None,
         highlight_nodes: Optional[Iterable[str]] = None,
     ) -> List[Tuple[str, str, str]]:
+        if not hasattr(self, "_amoc_matrix_records"):
+            self._amoc_matrix_records = []
         text = self.story_text
         if replace_pronouns:
             text = self.resolve_pronouns(text)
@@ -201,6 +203,17 @@ class AMoCv4:
                 prev_sentences.append(sent)
                 self.init_graph(sent)
 
+                current_sentence_text_based_nodes, _ = (
+                    self.get_senteces_text_based_nodes(
+                        [sent], create_unexistent_nodes=True
+                    )
+                )
+
+                sentence_id = i + 1
+                for token in {n.text for n in current_sentence_text_based_nodes}:
+                    self._amoc_matrix_records.append(
+                        {"sentence": sentence_id, "token": token, "score": 1.0}
+                    )
                 inferred_concept_relationships, inferred_property_relationships = (
                     self.infer_new_relationships_step_0(sent)
                 )
@@ -223,6 +236,13 @@ class AMoCv4:
                         [current_sentence], create_unexistent_nodes=True
                     )
                 )
+
+                sentence_id = i + 1
+
+                for token in {n.text for n in current_sentence_text_based_nodes}:
+                    self._amoc_matrix_records.append(
+                        {"sentence": sentence_id, "token": token, "score": 1.0}
+                    )
 
                 current_all_text = sent.text
                 graph_active_nodes = self.graph.get_active_nodes(
@@ -421,6 +441,15 @@ class AMoCv4:
                     only_active=False,
                 )
 
+        # save score matrix
+        df = pd.DataFrame(self._amoc_matrix_records)
+
+        matrix = df.pivot_table(
+            index="token", columns="sentence", values="score", fill_value=0
+        ).sort_index()
+
+        matrix.to_csv("amoc_activation_matrix.csv")
+        logging.info("AMoC activation matrix:\n%s", matrix.to_string())
         # Return triplets for external saving
         return [
             (
