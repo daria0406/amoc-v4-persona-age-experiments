@@ -10,7 +10,6 @@ from amoc.llm.vllm_client import VLLMClient
 from amoc.nlp.spacy_utils import (
     get_concept_lemmas,
     canonicalize_node_text,
-    has_noun,
     get_content_words_from_sent,
 )
 
@@ -160,6 +159,28 @@ class AMoCv4:
         return any(
             tok.lemma_.lower() in self.story_lemmas for tok in doc if tok.is_alpha
         )
+
+    def _classify_canonical_node_text(self, canon: str) -> Optional[NodeType]:
+        if not canon:
+            return None
+        doc = self.spacy_nlp(canon)
+        if not doc:
+            return None
+        token = next((t for t in doc if getattr(t, "is_alpha", False)), None) or doc[0]
+        lemma = (getattr(token, "lemma_", "") or "").lower()
+        if lemma in self.spacy_nlp.Defaults.stop_words:
+            return None
+        if token.pos_ in {"NOUN", "PROPN"}:
+            return NodeType.CONCEPT
+        if token.pos_ in {"ADJ", "ADV"}:
+            return NodeType.PROPERTY
+        return None
+
+    def _canonicalize_and_classify_node_text(
+        self, text: str
+    ) -> tuple[str, Optional[NodeType]]:
+        canon = canonicalize_node_text(self.spacy_nlp, text)
+        return canon, self._classify_canonical_node_text(canon)
 
     def _plot_graph_snapshot(
         self,
@@ -710,6 +731,10 @@ class AMoCv4:
                 or self._appears_in_story(relationship[2])
             ):
                 continue
+            subj, subj_type = self._canonicalize_and_classify_node_text(relationship[0])
+            obj, obj_type = self._canonicalize_and_classify_node_text(relationship[2])
+            if subj_type is None or obj_type is None:
+                continue
             source_node = self.get_node_from_text(
                 relationship[0],
                 current_sentence_text_based_nodes,
@@ -728,20 +753,18 @@ class AMoCv4:
             if self._is_generic_relation(edge_label):
                 continue
             if source_node is None:
-                subj = canonicalize_node_text(self.spacy_nlp, relationship[0])
                 source_node = self.graph.add_or_get_node(
                     get_concept_lemmas(self.spacy_nlp, subj),
                     subj,
-                    node_type,
+                    subj_type,
                     NodeSource.INFERENCE_BASED,
                 )
 
             if dest_node is None:
-                obj = canonicalize_node_text(self.spacy_nlp, relationship[2])
                 dest_node = self.graph.add_or_get_node(
                     get_concept_lemmas(self.spacy_nlp, obj),
                     obj,
-                    node_type,
+                    obj_type,
                     NodeSource.INFERENCE_BASED,
                 )
 
@@ -781,6 +804,10 @@ class AMoCv4:
                 active_graph_nodes,
             ):
                 continue
+            subj, subj_type = self._canonicalize_and_classify_node_text(relationship[0])
+            obj, obj_type = self._canonicalize_and_classify_node_text(relationship[2])
+            if subj_type is None or obj_type is None:
+                continue
             source_node = self.get_node_from_new_relationship(
                 relationship[0],
                 active_graph_nodes,
@@ -801,20 +828,18 @@ class AMoCv4:
             if self._is_generic_relation(edge_label):
                 continue
             if source_node is None:
-                subj = canonicalize_node_text(self.spacy_nlp, relationship[0])
                 source_node = self.graph.add_or_get_node(
                     get_concept_lemmas(self.spacy_nlp, subj),
                     subj,
-                    node_type,
+                    subj_type,
                     NodeSource.INFERENCE_BASED,
                 )
 
             if dest_node is None:
-                obj = canonicalize_node_text(self.spacy_nlp, relationship[2])
                 dest_node = self.graph.add_or_get_node(
                     get_concept_lemmas(self.spacy_nlp, obj),
                     obj,
-                    node_type,
+                    obj_type,
                     NodeSource.INFERENCE_BASED,
                 )
 
@@ -835,17 +860,11 @@ class AMoCv4:
         if text in curr_sentences_words:
             return curr_sentences_nodes[curr_sentences_words.index(text)]
         if create_node:
-            canon = canonicalize_node_text(self.spacy_nlp, text)
+            canon, inferred_type = self._canonicalize_and_classify_node_text(text)
+            if inferred_type is None:
+                return None
             lemmas = get_concept_lemmas(self.spacy_nlp, canon)
-            if has_noun(self.spacy_nlp, canon):
-                new_node = self.graph.add_or_get_node(
-                    lemmas, canon, NodeType.CONCEPT, node_source
-                )
-            else:
-                new_node = self.graph.add_or_get_node(
-                    lemmas, canon, NodeType.PROPERTY, node_source
-                )
-            return new_node
+            return self.graph.add_or_get_node(lemmas, canon, inferred_type, node_source)
         return None
 
     def get_node_from_new_relationship(
@@ -860,23 +879,19 @@ class AMoCv4:
         if text in curr_sentences_words:
             return curr_sentences_nodes[curr_sentences_words.index(text)]
         else:
-            canon = canonicalize_node_text(self.spacy_nlp, text)
+            canon, inferred_type = self._canonicalize_and_classify_node_text(text)
+            if inferred_type is None:
+                return None
             lemmas = get_concept_lemmas(self.spacy_nlp, canon)
             for node in graph_active_nodes:
                 if lemmas == node.lemmas:
                     return node
         if create_node:
-            canon = canonicalize_node_text(self.spacy_nlp, text)
+            canon, inferred_type = self._canonicalize_and_classify_node_text(text)
+            if inferred_type is None:
+                return None
             lemmas = get_concept_lemmas(self.spacy_nlp, canon)
-            if has_noun(self.spacy_nlp, canon):
-                new_node = self.graph.add_or_get_node(
-                    lemmas, canon, NodeType.CONCEPT, node_source
-                )
-            else:
-                new_node = self.graph.add_or_get_node(
-                    lemmas, canon, NodeType.PROPERTY, node_source
-                )
-            return new_node
+            return self.graph.add_or_get_node(lemmas, canon, inferred_type, node_source)
         return None
 
     def is_content_word_and_non_stopword(
@@ -886,6 +901,7 @@ class AMoCv4:
             "NOUN",
             "PROPN",
             "ADJ",
+            "ADV",
         ],
     ) -> bool:
         return (token.pos_ in pos_list) and (
@@ -907,7 +923,7 @@ class AMoCv4:
                     text_based_words.append(word.text)
                 else:
                     if create_unexistent_nodes:
-                        if word.pos_ == "ADJ":
+                        if word.pos_ in {"ADJ", "ADV"}:
                             new_node = self.graph.add_or_get_node(
                                 [word.lemma_],
                                 word.text,

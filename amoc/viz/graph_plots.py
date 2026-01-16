@@ -8,6 +8,48 @@ from amoc.config.paths import OUTPUT_ANALYSIS_DIR  # reuse existing output base
 
 DEFAULT_BLUE_NODES: Iterable[str] = ()
 
+TRIVIAL_NODE_TEXTS = {
+    "and",
+    "or",
+    "but",
+    "nor",
+    "so",
+    "yet",
+    "through",
+    "with",
+    "without",
+    "to",
+    "of",
+    "in",
+    "on",
+    "at",
+    "from",
+    "into",
+    "onto",
+    "by",
+    "for",
+    "about",
+    "over",
+    "under",
+    "after",
+    "before",
+    "during",
+    "while",
+    "as",
+}
+
+
+def _pretty_text(text: str) -> str:
+    text = (text or "").strip()
+    text = text.replace("_", " ")
+    text = re.sub(r"\s+", " ", text)
+    return text
+
+
+def _is_trivial_node_text(text: str) -> bool:
+    return _pretty_text(text).lower() in TRIVIAL_NODE_TEXTS
+
+
 def _wrap_angle(angle: float) -> float:
     two_pi = 2.0 * math.pi
     return angle % two_pi
@@ -64,6 +106,13 @@ def plot_amoc_triplets(
 
     G = nx.MultiDiGraph()
     for src, rel, dst in triplets:
+        src = str(src).strip()
+        dst = str(dst).strip()
+        rel = str(rel).strip()
+        if not src or not dst:
+            continue
+        if _is_trivial_node_text(src) or _is_trivial_node_text(dst):
+            continue
         G.add_edge(src, dst, label=rel)
 
     # Remove isolates, optionally keep only largest component
@@ -82,62 +131,102 @@ def plot_amoc_triplets(
     pos: Dict[str, Tuple[float, float]] = {}
     nodes = list(G.nodes())
     previous_positions = positions or {}
+    target_min_dist = 7.0
 
     if len(nodes) == 1:
         pos[nodes[0]] = (0.0, 0.0)
     else:
-        # Start from any existing angles
-        angles: Dict[str, float] = {}
+        UG = G.to_undirected()
+
+        # Pick a stable "hub" node (center) to produce a radial layout.
+        hub_candidates = [n for n in nodes if n in blue_nodes] or nodes
+        hub = max(hub_candidates, key=lambda n: (UG.degree(n), str(n)))
+
+        levels = nx.single_source_shortest_path_length(UG, hub)
+        max_level = max(levels.values(), default=0)
+
+        parents: Dict[str, str] = {}
         for node in nodes:
+            if node == hub:
+                continue
+            level = levels.get(node)
+            if level is None or level == 0:
+                continue
+            prevs = [nbr for nbr in UG.neighbors(node) if levels.get(nbr) == level - 1]
+            if prevs:
+                parents[node] = max(prevs, key=lambda n: (UG.degree(n), str(n)))
+
+        # Start from any existing angles for stability across snapshots
+        angles: Dict[str, float] = {hub: 0.0}
+        for node in nodes:
+            if node == hub:
+                continue
             if node in previous_positions:
                 x, y = previous_positions[node]
                 angles[node] = _wrap_angle(math.atan2(y, x))
 
-        # Assign angles to new nodes into "gaps" to avoid collisions/overlaps
-        missing = sorted([n for n in nodes if n not in angles])
-        if missing:
-            if not angles:
-                # First snapshot: simple evenly-spaced circle.
-                for idx, node in enumerate(missing):
-                    angles[node] = 2.0 * math.pi * idx / len(missing)
-            else:
-                candidate_count = max(64, 8 * len(nodes))
-                candidates = [
-                    2.0 * math.pi * i / candidate_count for i in range(candidate_count)
-                ]
-                occupied: List[float] = list(angles.values())
+        candidate_count = max(64, 8 * len(nodes))
+        base_candidates = [2.0 * math.pi * i / candidate_count for i in range(candidate_count)]
 
-                for node in missing:
-                    best_angle: float | None = None
-                    best_score = -1.0
-                    for cand in candidates:
-                        score = min(_circular_distance(cand, occ) for occ in occupied)
-                        if score > best_score:
-                            best_score = score
-                            best_angle = cand
-                    if best_angle is None:
-                        best_angle = 0.0
-                    angles[node] = best_angle
-                    occupied.append(best_angle)
-                    try:
-                        candidates.remove(best_angle)
-                    except ValueError:
-                        pass
+        for level in range(1, max_level + 1):
+            ring = sorted([n for n in nodes if levels.get(n) == level])
+            occupied = [angles[n] for n in ring if n in angles]
+            missing = [n for n in ring if n not in angles]
+            candidates = base_candidates.copy()
 
-        # Use a radius that scales with node count to reduce cramming.
-        # Then do a collision-avoid pass by expanding the radius until nodes
-        # have enough separation in data coordinates (heuristic).
-        radius = max(10.0, 3.0 + 0.8 * len(nodes))
-        max_label_len = max((len(str(n)) for n in nodes), default=0)
+            for node in missing:
+                parent_angle = angles.get(parents.get(node, ""))
+                best_angle: float | None = None
+                best_score = -1.0
+                for cand in candidates:
+                    min_sep = min(
+                        (_circular_distance(cand, occ) for occ in occupied),
+                        default=math.pi,
+                    )
+                    score = min_sep
+                    if parent_angle is not None:
+                        score -= 0.25 * _circular_distance(cand, parent_angle)
+                    if score > best_score:
+                        best_score = score
+                        best_angle = cand
+                if best_angle is None:
+                    best_angle = 0.0
+                angles[node] = best_angle
+                occupied.append(best_angle)
+                try:
+                    candidates.remove(best_angle)
+                except ValueError:
+                    pass
+
+        # Any nodes not reachable from the hub (disconnected component):
+        # place them on an outer ring so they don't overlap the main component.
+        unreachable = sorted([n for n in nodes if n not in levels and n != hub])
+        if unreachable:
+            outer_level = max_level + 1
+            for idx, node in enumerate(unreachable):
+                angles[node] = 2.0 * math.pi * idx / max(1, len(unreachable))
+            max_level = outer_level
+
+        level1_count = sum(1 for n in nodes if levels.get(n) == 1)
+        base_radius = max(12.0, 6.0 + 0.9 * level1_count)
+        ring_step = max(9.0, 6.0 + 0.35 * len(nodes))
+
+        max_label_len = max((len(_pretty_text(n)) for n in nodes), default=0)
         target_min_dist = 7.0 + max(0, max_label_len - 10) * 0.12
+
+        scale = 1.0
         for _ in range(25):
-            pos = {}
+            pos = {hub: (0.0, 0.0)}
             for node in nodes:
+                if node == hub:
+                    continue
+                level = levels.get(node, max_level)
+                r = (base_radius + max(0, level - 1) * ring_step) * scale
                 angle = angles.get(node, 0.0)
-                pos[node] = (radius * math.cos(angle), radius * math.sin(angle))
+                pos[node] = (r * math.cos(angle), r * math.sin(angle))
             if _min_pairwise_distance(pos) >= target_min_dist:
                 break
-            radius *= 1.15
+            scale *= 1.12
 
     nx.draw_networkx_nodes(
         G,
@@ -147,8 +236,23 @@ def plot_amoc_triplets(
         linewidths=2.0,
         edgecolors="black",
     )
+    ax = plt.gca()
+
     # Draw edges with per-edge curvature to separate parallel edges
     edge_labels = nx.get_edge_attributes(G, "label")
+    placed_label_points: List[Tuple[float, float]] = []
+    node_clearance = max(4.0, target_min_dist * 0.55)
+    label_clearance = 2.2
+
+    def _label_collides(x: float, y: float) -> bool:
+        for nx_, ny_ in pos.values():
+            if math.hypot(x - nx_, y - ny_) < node_clearance:
+                return True
+        for lx, ly in placed_label_points:
+            if math.hypot(x - lx, y - ly) < label_clearance:
+                return True
+        return False
+
     parallel_groups: Dict[Tuple[str, str], List[Tuple[str, str, int]]] = {}
     for u, v, k in G.edges(keys=True):
         parallel_groups.setdefault((u, v), []).append((u, v, k))
@@ -170,19 +274,60 @@ def plot_amoc_triplets(
             )
             label = edge_labels.get((u, v, k))
             if label:
-                label_pos = min(0.8, max(0.2, 0.5 + rad * 0.25))
-                nx.draw_networkx_edge_labels(
-                    G,
-                    pos,
-                    edge_labels={(u, v, k): label},
-                    font_color="darkred",
-                    font_size=9,
-                    label_pos=label_pos,
-                    bbox=dict(facecolor="white", edgecolor="none", pad=0.2),
-                )
+                label = _pretty_text(label)
+                x1, y1 = pos[u]
+                x2, y2 = pos[v]
+                dx, dy = x2 - x1, y2 - y1
+                length = math.hypot(dx, dy)
+                if length <= 1e-9:
+                    continue
 
+                ux, uy = dx / length, dy / length
+                nx_, ny_ = -uy, ux  # perpendicular
+
+                base_shift = 0.9 + 1.6 * abs(rad) + 0.02 * len(label)
+                t_candidates = [0.35, 0.5, 0.65]
+                mult_candidates = [0.0, 1.0, -1.0, 1.8, -1.8, 2.6, -2.6]
+
+                chosen_xy: Tuple[float, float] | None = None
+                for t in t_candidates:
+                    px = x1 + dx * t
+                    py = y1 + dy * t
+                    # Push labels "outward" relative to the origin to reduce central clutter.
+                    sign = 1.0 if (px * nx_ + py * ny_) >= 0 else -1.0
+                    for mult in mult_candidates:
+                        lx = px + sign * mult * base_shift * nx_
+                        ly = py + sign * mult * base_shift * ny_
+                        if not _label_collides(lx, ly):
+                            chosen_xy = (lx, ly)
+                            break
+                    if chosen_xy is not None:
+                        break
+
+                if chosen_xy is None:
+                    chosen_xy = (x1 + dx * 0.5, y1 + dy * 0.5)
+
+                ax.text(
+                    chosen_xy[0],
+                    chosen_xy[1],
+                    label,
+                    color="darkred",
+                    fontsize=9,
+                    ha="center",
+                    va="center",
+                    rotation=0,
+                    bbox=dict(facecolor="white", edgecolor="none", alpha=0.75, pad=0.2),
+                )
+                placed_label_points.append(chosen_xy)
+
+    node_labels = {n: _pretty_text(n) for n in G.nodes()}
     nx.draw_networkx_labels(
-        G, pos, font_size=11, font_weight="bold", font_color="black"
+        G,
+        pos,
+        labels=node_labels,
+        font_size=11,
+        font_weight="bold",
+        font_color="black",
     )
 
     title_persona = (persona[:150] + "...") if len(persona) > 150 else persona
@@ -192,7 +337,10 @@ def plot_amoc_triplets(
         sup_lines.append(f"Sentence: {sentence_text}")
     if deactivated_concepts is not None:
         if deactivated_concepts:
-            sup_lines.append("Deactivated concepts: " + ", ".join(deactivated_concepts))
+            sup_lines.append(
+                "Deactivated concepts: "
+                + ", ".join(_pretty_text(c) for c in deactivated_concepts)
+            )
         else:
             sup_lines.append("Deactivated concepts: none")
     plt.suptitle(

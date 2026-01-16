@@ -1,4 +1,5 @@
 import logging
+import re
 from typing import List
 
 try:
@@ -26,7 +27,7 @@ def load_spacy():
 
 def is_content_word_and_non_stopword(nlp, token: Token) -> bool:
     return (
-        token.pos_ in {"NOUN", "PROPN", "ADJ"}
+        token.pos_ in {"NOUN", "PROPN", "ADJ", "ADV"}
         and token.lemma_ not in nlp.Defaults.stop_words
     )
 
@@ -38,6 +39,7 @@ def get_content_words_from_sent(nlp, sent: Span) -> List[Token]:
 def get_concept_lemmas(nlp, concept: str) -> List[str]:
     doc = nlp(concept)
     return [token.lemma_ for token in doc]
+
 
 def canonicalize_node_text(nlp, text: str) -> str:
     """
@@ -54,6 +56,13 @@ def canonicalize_node_text(nlp, text: str) -> str:
     if not text:
         return text
 
+    # Parse:
+    # - underscores/hyphens used as "word separators"
+    # - punctuation-wrapped tokens
+    text = text.replace("_", " ").replace("-", " ")
+    text = text.replace("&", " and ")
+    text = re.sub(r"\s+", " ", text).strip()
+
     doc = nlp(text)
     if len(doc) == 0:
         return text
@@ -67,13 +76,17 @@ def canonicalize_node_text(nlp, text: str) -> str:
     if noun_tokens:
         chosen = root if root in noun_tokens else noun_tokens[-1]
     else:
-        adj_tokens = [t for t in alpha_tokens if t.pos_ == "ADJ"]
-        chosen = root if root in adj_tokens else (adj_tokens[-1] if adj_tokens else alpha_tokens[0])
+        descriptive_tokens = [t for t in alpha_tokens if t.pos_ in {"ADJ", "ADV"}]
+        if root in descriptive_tokens:
+            chosen = root
+        else:
+            chosen = descriptive_tokens[-1] if descriptive_tokens else alpha_tokens[0]
 
     # Preserve surface form for proper nouns; otherwise use lemma lowercased.
     if chosen.pos_ == "PROPN":
         return chosen.text.strip()
     return (chosen.lemma_ or chosen.text).strip().lower()
+
 
 def has_noun(nlp, text: str) -> bool:
     doc = nlp(text)
