@@ -23,6 +23,12 @@ Always base every edge strictly on information that is stated or clearly implied
 I want you to tell me the relationships (edges) between the nodes from the text themselves. And also between the nodes from the text and the other nodes from the graph (here prioritize the relationships based on the score). The text is:
 {text}
 
+IMPORTANT CONNECTIVITY CONSTRAINT: Every relationship you output must include:
+- at least one node from the extracted text nodes list ({nodes_from_text}), AND
+- at least one node that already exists in the graph nodes list ({nodes_from_graph}).
+
+Do NOT output relationships that only connect new text nodes to other new text nodes if neither side attaches to the existing graph.
+
 List them as a Python list and do not provide additional explanation."""
 
 NEW_RELATIONSHIPS_FOR_FIRST_SENTENCE_PROMPT = """I want to build a knowledge graph using the provided text. The graph should consist of two types of nodes: concept nodes and property nodes. Concepts nodes represent objects or persons from the story and are generally represented by nouns in the text. Property nodes describe the concepts nodes and are generally represented by adjectives in the text. An edge connects a concept to another concept or a concept to a property, and it is described by a relationship between the connected nodes.
@@ -201,6 +207,12 @@ Always base every edge strictly on information that is stated or clearly implied
 
 I want you to tell me the relationships (edges) between the nodes from the text themselves. And also between the nodes from the text and the other nodes from the graph (here prioritize the relationships based on the score). The text is:
 {text}
+
+IMPORTANT CONNECTIVITY CONSTRAINT: Every relationship you output must include:
+- at least one node from the extracted text nodes list ({nodes_from_text}), AND
+- at least one node that already exists in the graph nodes list ({nodes_from_graph}).
+
+Do NOT output relationships that only connect new text nodes to other new text nodes if neither side attaches to the existing graph.
 
 List them as a Python list and do not provide additional explanation."""
 
