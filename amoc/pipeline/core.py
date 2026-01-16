@@ -25,7 +25,7 @@ class AMoCv4:
         "is_a",
     }
 
-    ENFORCE_ATTACHMENT_CONSTRAINT = False
+    ENFORCE_ATTACHMENT_CONSTRAINT = True
 
     def __init__(
         self,
@@ -484,7 +484,7 @@ class AMoCv4:
                     output_dir=graphs_output_dir,
                     highlight_nodes=highlight_nodes,
                     deactivated_concepts=deactivated_concepts,
-                    only_active=False,
+                    only_active=True,
                 )
 
         # save score matrix
