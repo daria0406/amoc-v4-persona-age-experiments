@@ -68,6 +68,8 @@ class AMoCv4:
         # Cache story lemmas for quick membership checks (currently unused)
         story_doc = self.spacy_nlp(story_text)
         self.story_lemmas = {tok.lemma_.lower() for tok in story_doc if tok.is_alpha}
+        self._prev_active_nodes_for_plot: set[Node] = set()
+        self._viz_positions: dict[str, tuple[float, float]] = {}
 
     def _passes_attachment_constraint(
         self,
@@ -134,6 +136,14 @@ class AMoCv4:
             )
         return triplets
 
+    def _get_nodes_with_active_edges(self) -> set[Node]:
+        active_nodes: set[Node] = set()
+        for edge in self.graph.edges:
+            if edge.active:
+                active_nodes.add(edge.source_node)
+                active_nodes.add(edge.dest_node)
+        return active_nodes
+
     def _normalize_label(self, label: str) -> str:
         norm = (label or "").strip().lower()
         norm = re.sub(r"[\s\-]+", "_", norm)
@@ -157,6 +167,7 @@ class AMoCv4:
         sentence_text: str,
         output_dir: Optional[str],
         highlight_nodes: Optional[Iterable[str]],
+        deactivated_concepts: Optional[List[str]] = None,
         only_active: bool = True,
     ) -> None:
         triplets = self._graph_edges_to_triplets(only_active=only_active)
@@ -171,6 +182,8 @@ class AMoCv4:
                 output_dir=output_dir,
                 step_tag=f"sent{sentence_index+1}",
                 sentence_text=sentence_text,
+                deactivated_concepts=deactivated_concepts,
+                positions=self._viz_positions,
             )
             if triplets:
                 logging.info(
@@ -205,16 +218,26 @@ class AMoCv4:
                 prev_sentences.append(sent)
                 self.init_graph(sent)
 
-                current_sentence_text_based_nodes, _ = (
-                    self.get_senteces_text_based_nodes(
-                        [sent], create_unexistent_nodes=True
-                    )
+                (
+                    current_sentence_text_based_nodes,
+                    current_sentence_text_based_words,
+                ) = self.get_senteces_text_based_nodes(
+                    [sent], create_unexistent_nodes=True
                 )
 
                 sentence_id = i + 1
-                for token in {n.text for n in current_sentence_text_based_nodes}:
+                seen_tokens: set[str] = set()
+                for node in current_sentence_text_based_nodes:
+                    token = node.get_text_representer()
+                    if token in seen_tokens:
+                        continue
+                    seen_tokens.add(token)
                     self._amoc_matrix_records.append(
-                        {"sentence": sentence_id, "token": token, "score": 1.0}
+                        {
+                            "sentence": sentence_id,
+                            "token": token,
+                            "score": getattr(node, "score", 0),
+                        }
                     )
                 inferred_concept_relationships, inferred_property_relationships = (
                     self.infer_new_relationships_step_0(sent)
@@ -241,9 +264,18 @@ class AMoCv4:
 
                 sentence_id = i + 1
 
-                for token in {n.text for n in current_sentence_text_based_nodes}:
+                seen_tokens = set()
+                for node in current_sentence_text_based_nodes:
+                    token = node.get_text_representer()
+                    if token in seen_tokens:
+                        continue
+                    seen_tokens.add(token)
                     self._amoc_matrix_records.append(
-                        {"sentence": sentence_id, "token": token, "score": 1.0}
+                        {
+                            "sentence": sentence_id,
+                            "token": token,
+                            "score": getattr(node, "score", 0),
+                        }
                     )
 
                 current_all_text = sent.text
@@ -435,12 +467,23 @@ class AMoCv4:
                     self.graph.get_active_graph_repr(),
                 )
 
+            current_active_nodes = self._get_nodes_with_active_edges()
+            if i == 0:
+                deactivated_concepts = None  # no prior step to diff against
+            else:
+                gone = self._prev_active_nodes_for_plot - current_active_nodes
+                deactivated_concepts = sorted(
+                    {node.get_text_representer() for node in gone}
+                )
+            self._prev_active_nodes_for_plot = current_active_nodes
+
             if plot_after_each_sentence:
                 self._plot_graph_snapshot(
                     sentence_index=i,
                     sentence_text=sent.text,
                     output_dir=graphs_output_dir,
                     highlight_nodes=highlight_nodes,
+                    deactivated_concepts=deactivated_concepts,
                     only_active=False,
                 )
 

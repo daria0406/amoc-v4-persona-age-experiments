@@ -1,5 +1,6 @@
 import os
 import re
+import math
 from typing import List, Tuple, Iterable, Optional, Dict
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -18,6 +19,8 @@ def plot_amoc_triplets(
     step_tag: Optional[str] = None,
     largest_component_only: bool = False,
     sentence_text: str = "",
+    deactivated_concepts: Optional[List[str]] = None,
+    positions: Optional[Dict[str, Tuple[float, float]]] = None,
 ) -> str:
     blue_nodes = set(blue_nodes) if blue_nodes is not None else set(DEFAULT_BLUE_NODES)
     out_dir = output_dir or os.path.join(OUTPUT_ANALYSIS_DIR, "graphs")
@@ -52,18 +55,33 @@ def plot_amoc_triplets(
 
     node_colors = ["#a0cbe2" if node in blue_nodes else "#ffe8a0" for node in G.nodes()]
 
-    # Radial-ish layout: place the highest-degree node at the center shell, others around it.
-    pos: Dict[str, Tuple[float, float]]
-    if G.number_of_nodes() > 2:
-        degrees = dict(G.degree())
-        if degrees:
-            hub = max(degrees, key=degrees.get)
-            others = [n for n in G.nodes() if n != hub]
-            pos = nx.shell_layout(G, nlist=[[hub], others], scale=3.0)
-        else:
-            pos = nx.spring_layout(G, k=2.8, iterations=200, seed=42)
+    pos: Dict[str, Tuple[float, float]] = {}
+    nodes = list(G.nodes())
+
+    if len(nodes) == 1:
+        pos[nodes[0]] = (0.0, 0.0)
     else:
-        pos = nx.spring_layout(G, k=2.8, iterations=200, seed=42)
+        # Start from any existing angles
+        angles: Dict[str, float] = {}
+        for node in nodes:
+            if node in positions:
+                x, y = positions[node]
+                angles[node] = math.atan2(y, x)
+
+        # Assign angles to new nodes deterministically, evenly spaced
+        missing = [n for n in nodes if n not in angles]
+        missing.sort()
+        n_missing = len(missing)
+        if n_missing > 0:
+            for idx, node in enumerate(missing):
+                angle = 2 * math.pi * idx / n_missing
+                angles[node] = angle
+
+        # Use a radius that scales with node count to reduce cramming
+        radius = max(10.0, 3.0 + 0.8 * len(nodes))
+        for node in nodes:
+            angle = angles.get(node, 0.0)
+            pos[node] = (radius * math.cos(angle), radius * math.sin(angle))
 
     nx.draw_networkx_nodes(
         G,
@@ -111,9 +129,16 @@ def plot_amoc_triplets(
 
     title_persona = (persona[:150] + "...") if len(persona) > 150 else persona
     plt.title(f"AMoC Knowledge Graph: {model_name}", size=20, pad=20)
+    sup_lines = [f"Persona: {title_persona}"]
+    if sentence_text:
+        sup_lines.append(f"Sentence: {sentence_text}")
+    if deactivated_concepts is not None:
+        if deactivated_concepts:
+            sup_lines.append("Deactivated concepts: " + ", ".join(deactivated_concepts))
+        else:
+            sup_lines.append("Deactivated concepts: none")
     plt.suptitle(
-        f"Persona: {title_persona}\n",
-        f"Sentence {sentence_index + 1}: {sentence_text}",
+        "\n".join(sup_lines),
         y=0.98,
         fontsize=12,
         style="italic",
@@ -122,4 +147,9 @@ def plot_amoc_triplets(
     plt.axis("off")
     plt.savefig(save_path, format="PNG", dpi=300, bbox_inches="tight")
     plt.close()
+
+    if positions is not None:
+        positions.clear()
+        positions.update(pos)
+
     return save_path
