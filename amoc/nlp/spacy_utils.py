@@ -27,7 +27,7 @@ def load_spacy():
 
 def is_content_word_and_non_stopword(nlp, token: Token) -> bool:
     return (
-        token.pos_ in {"NOUN", "PROPN", "ADJ", "ADV"}
+        token.pos_ in {"NOUN", "PROPN", "ADJ"}
         and token.lemma_ not in nlp.Defaults.stop_words
     )
 
@@ -76,7 +76,7 @@ def canonicalize_node_text(nlp, text: str) -> str:
     if noun_tokens:
         chosen = root if root in noun_tokens else noun_tokens[-1]
     else:
-        descriptive_tokens = [t for t in alpha_tokens if t.pos_ in {"ADJ", "ADV"}]
+        descriptive_tokens = [t for t in alpha_tokens if t.pos_ == "ADJ"]
         if root in descriptive_tokens:
             chosen = root
         else:

@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from amoc.config.paths import OUTPUT_ANALYSIS_DIR  # reuse existing output base
 
 DEFAULT_BLUE_NODES: Iterable[str] = ()
+HUB_OUT_DEGREE_THRESHOLD = 6  # "more than 5" out-edges
 
 TRIVIAL_NODE_TEXTS = {
     "and",
@@ -36,6 +37,8 @@ TRIVIAL_NODE_TEXTS = {
     "during",
     "while",
     "as",
+    "soon",
+    "suddenly",
 }
 
 
@@ -73,6 +76,43 @@ def _min_pairwise_distance(pos: Dict[str, Tuple[float, float]]) -> float:
             if dist < min_dist:
                 min_dist = dist
     return min_dist
+
+
+def _choose_angles_in_gaps(
+    *,
+    existing_angles: Dict[str, float],
+    missing_nodes: List[str],
+    candidate_count: int,
+    penalty_target: Dict[str, float] | None = None,
+    penalty_weight: float = 0.0,
+) -> Dict[str, float]:
+    if not missing_nodes:
+        return {}
+    missing_nodes = list(missing_nodes)
+    candidates = [2.0 * math.pi * i / candidate_count for i in range(candidate_count)]
+    occupied: List[float] = list(existing_angles.values())
+    chosen: Dict[str, float] = {}
+    for node in missing_nodes:
+        best_angle: float | None = None
+        best_score = -1e9
+        target = penalty_target.get(node) if penalty_target else None
+        for cand in candidates:
+            min_sep = min((_circular_distance(cand, occ) for occ in occupied), default=math.pi)
+            score = min_sep
+            if target is not None and penalty_weight:
+                score -= penalty_weight * _circular_distance(cand, target)
+            if score > best_score:
+                best_score = score
+                best_angle = cand
+        if best_angle is None:
+            best_angle = 0.0
+        chosen[node] = best_angle
+        occupied.append(best_angle)
+        try:
+            candidates.remove(best_angle)
+        except ValueError:
+            pass
+    return chosen
 
 
 def plot_amoc_triplets(
@@ -131,102 +171,157 @@ def plot_amoc_triplets(
     pos: Dict[str, Tuple[float, float]] = {}
     nodes = list(G.nodes())
     previous_positions = positions or {}
-    target_min_dist = 7.0
+
+    max_label_len = max((len(_pretty_text(n)) for n in nodes), default=0)
+    target_min_dist = 7.0 + max(0, max_label_len - 10) * 0.12
 
     if len(nodes) == 1:
         pos[nodes[0]] = (0.0, 0.0)
     else:
         UG = G.to_undirected()
 
-        # Pick a stable "hub" node (center) to produce a radial layout.
-        hub_candidates = [n for n in nodes if n in blue_nodes] or nodes
-        hub = max(hub_candidates, key=lambda n: (UG.degree(n), str(n)))
+        # Multi-hub layout: every node with >5 out-edges becomes its own hub.
+        hubs = [n for n in nodes if G.out_degree(n) >= HUB_OUT_DEGREE_THRESHOLD]
+        if not hubs:
+            hub_candidates = [n for n in nodes if n in blue_nodes] or nodes
+            hubs = [max(hub_candidates, key=lambda n: (UG.degree(n), str(n)))]
+        hubs = sorted(set(hubs), key=lambda n: (-G.out_degree(n), str(n)))
 
-        levels = nx.single_source_shortest_path_length(UG, hub)
-        max_level = max(levels.values(), default=0)
+        hub_dists = {h: nx.single_source_shortest_path_length(UG, h) for h in hubs}
 
-        parents: Dict[str, str] = {}
+        node_to_hub: Dict[str, str] = {}
         for node in nodes:
-            if node == hub:
-                continue
-            level = levels.get(node)
-            if level is None or level == 0:
-                continue
-            prevs = [nbr for nbr in UG.neighbors(node) if levels.get(nbr) == level - 1]
-            if prevs:
-                parents[node] = max(prevs, key=lambda n: (UG.degree(n), str(n)))
+            best_hub: str | None = None
+            best_dist: int | None = None
+            for hub in hubs:
+                dist = hub_dists[hub].get(node)
+                if dist is None:
+                    continue
+                if best_dist is None or dist < best_dist or (
+                    dist == best_dist and str(hub) < str(best_hub)
+                ):
+                    best_hub = hub
+                    best_dist = dist
+            if best_hub is None:
+                best_hub = hubs[0]
+            node_to_hub[node] = best_hub
 
-        # Start from any existing angles for stability across snapshots
-        angles: Dict[str, float] = {hub: 0.0}
-        for node in nodes:
-            if node == hub:
-                continue
-            if node in previous_positions:
-                x, y = previous_positions[node]
-                angles[node] = _wrap_angle(math.atan2(y, x))
+        cluster_nodes: Dict[str, List[str]] = {h: [] for h in hubs}
+        for node, hub in node_to_hub.items():
+            cluster_nodes.setdefault(hub, []).append(node)
 
-        candidate_count = max(64, 8 * len(nodes))
-        base_candidates = [2.0 * math.pi * i / candidate_count for i in range(candidate_count)]
+        # Estimate cluster radii to space hubs far enough apart.
+        cluster_radii: Dict[str, float] = {}
+        for hub, members in cluster_nodes.items():
+            SG = UG.subgraph(members)
+            levels = nx.single_source_shortest_path_length(SG, hub)
+            max_level = max(levels.values(), default=0)
+            level1_count = sum(1 for n in members if levels.get(n) == 1)
+            base_radius = max(12.0, 6.0 + 0.9 * level1_count)
+            ring_step = max(9.0, 6.0 + 0.35 * len(members))
+            cluster_radii[hub] = base_radius + max(0, max_level - 1) * ring_step
 
-        for level in range(1, max_level + 1):
-            ring = sorted([n for n in nodes if levels.get(n) == level])
-            occupied = [angles[n] for n in ring if n in angles]
-            missing = [n for n in ring if n not in angles]
-            candidates = base_candidates.copy()
+        if len(hubs) == 1:
+            hub_positions = {hubs[0]: (0.0, 0.0)}
+        else:
+            max_cluster_r = max(cluster_radii.values(), default=20.0)
+            margin = 14.0
+            min_adj_dist = 2.0 * max_cluster_r + margin
+            hub_ring_radius = min_adj_dist / (2.0 * math.sin(math.pi / len(hubs)))
+            hub_ring_radius = max(hub_ring_radius, 35.0)
 
-            for node in missing:
-                parent_angle = angles.get(parents.get(node, ""))
-                best_angle: float | None = None
-                best_score = -1.0
-                for cand in candidates:
-                    min_sep = min(
-                        (_circular_distance(cand, occ) for occ in occupied),
-                        default=math.pi,
-                    )
-                    score = min_sep
-                    if parent_angle is not None:
-                        score -= 0.25 * _circular_distance(cand, parent_angle)
-                    if score > best_score:
-                        best_score = score
-                        best_angle = cand
-                if best_angle is None:
-                    best_angle = 0.0
-                angles[node] = best_angle
-                occupied.append(best_angle)
-                try:
-                    candidates.remove(best_angle)
-                except ValueError:
-                    pass
+            hub_angles: Dict[str, float] = {}
+            for hub in hubs:
+                if hub in previous_positions:
+                    x, y = previous_positions[hub]
+                    hub_angles[hub] = _wrap_angle(math.atan2(y, x))
 
-        # Any nodes not reachable from the hub (disconnected component):
-        # place them on an outer ring so they don't overlap the main component.
-        unreachable = sorted([n for n in nodes if n not in levels and n != hub])
-        if unreachable:
-            outer_level = max_level + 1
-            for idx, node in enumerate(unreachable):
-                angles[node] = 2.0 * math.pi * idx / max(1, len(unreachable))
-            max_level = outer_level
+            missing_hubs = [h for h in hubs if h not in hub_angles]
+            hub_angles.update(
+                _choose_angles_in_gaps(
+                    existing_angles=hub_angles,
+                    missing_nodes=missing_hubs,
+                    candidate_count=max(64, 8 * len(hubs)),
+                )
+            )
+            hub_positions = {
+                hub: (
+                    hub_ring_radius * math.cos(hub_angles.get(hub, 0.0)),
+                    hub_ring_radius * math.sin(hub_angles.get(hub, 0.0)),
+                )
+                for hub in hubs
+            }
 
-        level1_count = sum(1 for n in nodes if levels.get(n) == 1)
-        base_radius = max(12.0, 6.0 + 0.9 * level1_count)
-        ring_step = max(9.0, 6.0 + 0.35 * len(nodes))
+        pos = {}
+        for hub in hubs:
+            hx, hy = hub_positions[hub]
+            pos[hub] = (hx, hy)
 
-        max_label_len = max((len(_pretty_text(n)) for n in nodes), default=0)
-        target_min_dist = 7.0 + max(0, max_label_len - 10) * 0.12
+            members = cluster_nodes.get(hub, [hub])
+            SG = UG.subgraph(members)
+            levels = nx.single_source_shortest_path_length(SG, hub)
+            max_level = max(levels.values(), default=0)
 
-        scale = 1.0
-        for _ in range(25):
-            pos = {hub: (0.0, 0.0)}
-            for node in nodes:
+            parents: Dict[str, str] = {}
+            for node in members:
                 if node == hub:
                     continue
-                level = levels.get(node, max_level)
-                r = (base_radius + max(0, level - 1) * ring_step) * scale
-                angle = angles.get(node, 0.0)
-                pos[node] = (r * math.cos(angle), r * math.sin(angle))
+                level = levels.get(node)
+                if level is None or level == 0:
+                    continue
+                prevs = [nbr for nbr in SG.neighbors(node) if levels.get(nbr) == level - 1]
+                if prevs:
+                    parents[node] = max(prevs, key=lambda n: (SG.degree(n), str(n)))
+
+            angles: Dict[str, float] = {}
+            for node in members:
+                if node == hub:
+                    continue
+                if node in previous_positions:
+                    px, py = previous_positions[node]
+                    angles[node] = _wrap_angle(math.atan2(py - hy, px - hx))
+
+            candidate_count = max(64, 8 * len(members))
+            base_candidates = [2.0 * math.pi * i / candidate_count for i in range(candidate_count)]
+
+            for level in range(1, max_level + 1):
+                ring = sorted([n for n in members if levels.get(n) == level])
+                missing = [n for n in ring if n not in angles]
+                parent_targets = {n: angles.get(parents.get(n, "")) for n in missing}
+                parent_targets = {k: v for k, v in parent_targets.items() if v is not None}
+                chosen = _choose_angles_in_gaps(
+                    existing_angles={n: angles[n] for n in ring if n in angles},
+                    missing_nodes=missing,
+                    candidate_count=candidate_count,
+                    penalty_target=parent_targets,
+                    penalty_weight=0.25,
+                )
+                angles.update(chosen)
+
+            level1_count = sum(1 for n in members if levels.get(n) == 1)
+            base_radius = max(12.0, 6.0 + 0.9 * level1_count)
+            ring_step = max(9.0, 6.0 + 0.35 * len(members))
+
+            scale = 1.0
+            for _ in range(25):
+                for node in members:
+                    if node == hub:
+                        continue
+                    level = levels.get(node, max_level)
+                    r = (base_radius + max(0, level - 1) * ring_step) * scale
+                    angle = angles.get(node, 0.0)
+                    pos[node] = (hx + r * math.cos(angle), hy + r * math.sin(angle))
+                # Cluster-level collision avoid (quick heuristic)
+                if _min_pairwise_distance({n: pos[n] for n in members}) >= target_min_dist:
+                    break
+                scale *= 1.10
+
+        # Global collision-avoid scaling if needed.
+        for _ in range(25):
             if _min_pairwise_distance(pos) >= target_min_dist:
                 break
-            scale *= 1.12
+            for node, (x, y) in list(pos.items()):
+                pos[node] = (x * 1.08, y * 1.08)
 
     nx.draw_networkx_nodes(
         G,
@@ -307,6 +402,10 @@ def plot_amoc_triplets(
                 if chosen_xy is None:
                     chosen_xy = (x1 + dx * 0.5, y1 + dy * 0.5)
 
+                angle_deg = math.degrees(math.atan2(dy, dx))
+                if angle_deg > 90.0 or angle_deg < -90.0:
+                    angle_deg += 180.0
+
                 ax.text(
                     chosen_xy[0],
                     chosen_xy[1],
@@ -315,7 +414,8 @@ def plot_amoc_triplets(
                     fontsize=9,
                     ha="center",
                     va="center",
-                    rotation=0,
+                    rotation=angle_deg,
+                    rotation_mode="anchor",
                     bbox=dict(facecolor="white", edgecolor="none", alpha=0.75, pad=0.2),
                 )
                 placed_label_points.append(chosen_xy)

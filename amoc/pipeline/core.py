@@ -172,7 +172,7 @@ class AMoCv4:
             return None
         if token.pos_ in {"NOUN", "PROPN"}:
             return NodeType.CONCEPT
-        if token.pos_ in {"ADJ", "ADV"}:
+        if token.pos_ == "ADJ":
             return NodeType.PROPERTY
         return None
 
@@ -901,7 +901,6 @@ class AMoCv4:
             "NOUN",
             "PROPN",
             "ADJ",
-            "ADV",
         ],
     ) -> bool:
         return (token.pos_ in pos_list) and (
@@ -923,7 +922,7 @@ class AMoCv4:
                     text_based_words.append(word.text)
                 else:
                     if create_unexistent_nodes:
-                        if word.pos_ in {"ADJ", "ADV"}:
+                        if word.pos_ == "ADJ":
                             new_node = self.graph.add_or_get_node(
                                 [word.lemma_],
                                 word.text,
