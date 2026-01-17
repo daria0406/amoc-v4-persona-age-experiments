@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 from typing import List, Tuple, Optional, Iterable
 import pandas as pd
@@ -12,6 +13,16 @@ from amoc.nlp.spacy_utils import (
     canonicalize_node_text,
     get_content_words_from_sent,
 )
+from collections import deque
+from amoc.config.paths import OUTPUT_ANALYSIS_DIR
+
+
+def _sanitize_filename_component(component: str, max_len: int = 80) -> str:
+    component = (component or "").replace("\n", " ").strip()
+    component = component[:max_len]
+    component = re.sub(r"[\\/:*?\"<>|]", "_", component)
+    component = re.sub(r"\s+", "_", component)
+    return component or "unknown"
 
 
 class AMoCv4:
@@ -22,9 +33,13 @@ class AMoCv4:
         "related_to",
         "has_attribute",
         "is_a",
+        "appears",
+        "contains",
     }
 
-    ENFORCE_ATTACHMENT_CONSTRAINT = True
+    ENFORCE_ATTACHMENT_CONSTRAINT = False
+    ACTIVATION_MAX_DISTANCE = 2
+    RELATION_BLACKLIST = {"describes", "is_at_stake"}
 
     def __init__(
         self,
@@ -69,6 +84,171 @@ class AMoCv4:
         self.story_lemmas = {tok.lemma_.lower() for tok in story_doc if tok.is_alpha}
         self._prev_active_nodes_for_plot: set[Node] = set()
         self._viz_positions: dict[str, tuple[float, float]] = {}
+        self._recently_deactivated_nodes_for_inference: set[Node] = set()
+        self._anchor_nodes: set[Node] = set()
+
+    def _node_token_for_matrix(self, node: Node) -> str:
+        return (node.get_text_representer() or "").strip().lower()
+
+    def _distances_from_sources_active_edges(
+        self, sources: set[Node], max_distance: int
+    ) -> dict[Node, int]:
+        if not sources:
+            return {}
+        distances: dict[Node, int] = {s: 0 for s in sources}
+        queue: deque[Node] = deque(sources)
+        while queue:
+            node = queue.popleft()
+            dist = distances[node]
+            if dist >= max_distance:
+                continue
+            for edge in node.edges:
+                if not edge.active:
+                    continue
+                neighbor = (
+                    edge.dest_node if edge.source_node == node else edge.source_node
+                )
+                if neighbor in distances:
+                    continue
+                distances[neighbor] = dist + 1
+                queue.append(neighbor)
+        return distances
+
+    def _record_sentence_activation(
+        self,
+        sentence_id: int,
+        explicit_nodes: List[Node],
+        newly_inferred_nodes: set[Node],
+    ) -> None:
+        explicit_set = set(explicit_nodes)
+        distances = self._distances_from_sources_active_edges(
+            explicit_set, max_distance=self.ACTIVATION_MAX_DISTANCE
+        )
+
+        token_to_score: dict[str, int] = {}
+
+        # Step 2: explicit nodes reset to 0 (non-negotiable)
+        for node in explicit_set:
+            token = self._node_token_for_matrix(node)
+            if token:
+                token_to_score[token] = 0
+
+        # Step 5: newly inferred nodes start at 1 (never 0)
+        for node in newly_inferred_nodes:
+            if node in explicit_set:
+                continue
+            token = self._node_token_for_matrix(node)
+            if token:
+                token_to_score[token] = 1
+
+        # Step 3/4: carried-over nodes within range, score = distance
+        for node, dist in distances.items():
+            if node in explicit_set:
+                continue
+            if dist <= 0:
+                continue
+            token = self._node_token_for_matrix(node)
+            if not token:
+                continue
+            if token in token_to_score:
+                continue
+            token_to_score[token] = dist
+
+        for token, score in token_to_score.items():
+            self._amoc_matrix_records.append(
+                {"sentence": sentence_id, "token": token, "score": score}
+            )
+
+    def _infer_edges_to_recently_deactivated(
+        self,
+        current_sentence_nodes: List[Node],
+        current_sentence_words: List[str],
+        current_text: str,
+    ) -> List[Edge]:
+        if not self.ENFORCE_ATTACHMENT_CONSTRAINT:
+            return []
+        recent = [
+            n
+            for n in self._recently_deactivated_nodes_for_inference
+            if n in self.graph.nodes
+        ]
+        if not recent or not current_sentence_nodes:
+            return []
+
+        candidate_pairs: set[frozenset[Node]] = set()
+        for node in current_sentence_nodes:
+            for other in recent:
+                if node == other:
+                    continue
+                if self._has_edge_between(node, other):
+                    continue
+                candidate_pairs.add(frozenset((node, other)))
+        if not candidate_pairs:
+            return []
+
+        nodes_for_prompt = {n for pair in candidate_pairs for n in pair}
+
+        def _node_line(node: Node) -> str:
+            return f" - ({node.get_text_representer()}, {node.node_type})\n"
+
+        nodes_from_text = "".join(
+            _node_line(n)
+            for n in sorted(nodes_for_prompt, key=lambda x: x.get_text_representer())
+        )
+        graph_nodes_repr = self.graph.get_nodes_str(list(nodes_for_prompt))
+        graph_edges_repr, _ = self.graph.get_edges_str(
+            list(nodes_for_prompt), only_text_based=False
+        )
+
+        try:
+            new_relationships = self.client.get_new_relationships(
+                nodes_from_text,
+                graph_nodes_repr,
+                graph_edges_repr,
+                current_text,
+                self.persona,
+            )
+        except Exception:
+            logging.error("Targeted LLM edge inference failed", exc_info=True)
+            return []
+
+        added: List[Edge] = []
+        for idx, relationship in enumerate(new_relationships):
+            if relationship is None or isinstance(relationship, (int, float, bool)):
+                continue
+            if isinstance(relationship, dict):
+                subj = relationship.get("subject") or relationship.get("head")
+                rel = relationship.get("relation") or relationship.get("predicate")
+                obj = relationship.get("object") or relationship.get("tail")
+                if not (subj and rel and obj):
+                    continue
+                relationship = (str(subj), str(rel), str(obj))
+            if not isinstance(relationship, (list, tuple)) or len(relationship) != 3:
+                continue
+
+            subj, rel, obj = relationship
+            if not subj or not obj:
+                continue
+            if not isinstance(subj, str) or not isinstance(obj, str):
+                continue
+            edge_label = rel.replace("(edge)", "").strip()
+            if not self._is_valid_relation_label(edge_label):
+                continue
+
+            subj_node = self._find_node_by_text(subj, nodes_for_prompt)
+            obj_node = self._find_node_by_text(obj, nodes_for_prompt)
+            if subj_node is None or obj_node is None:
+                continue
+            pair_key = frozenset((subj_node, obj_node))
+            if pair_key not in candidate_pairs:
+                continue
+            if self._has_edge_between(subj_node, obj_node):
+                continue
+
+            edge = self._add_edge(subj_node, obj_node, edge_label, self.edge_forget)
+            if edge:
+                added.append(edge)
+        return added
 
     def _passes_attachment_constraint(
         self,
@@ -77,16 +257,26 @@ class AMoCv4:
         current_sentence_words: List[str],
         current_sentence_nodes: List[Node],
         graph_active_nodes: List[Node],
+        graph_active_edge_nodes: Optional[set[Node]] = None,
     ) -> bool:
         # Connectivity constraint: avoid introducing edges that would form a new
         # disconnected component. Accept an edge only if it (a) touches the current
-        # sentence and (b) attaches to a node already in the active graph.
-        if not self.ENFORCE_ATTACHMENT_CONSTRAINT:
+        # sentence and (b) attaches to a node already in the active graph (or, if
+        # no edges are active, any existing node in the graph). This guard is always
+        # enforced to keep the graph as a single component, regardless of the flag.
+
+        active_edge_nodes = graph_active_edge_nodes or set()
+        active_nodes_pool: set[Node] = set(graph_active_nodes) | active_edge_nodes
+        anchor_nodes = self._anchor_nodes
+
+        # If the graph is empty, allow seeding.
+        if not self.graph.nodes:
             return True
 
-        # If the active graph is empty, allow edges so the graph can re-seed.
-        if not graph_active_nodes:
-            return True
+        # If no active edges exist, fall back to the current anchor to keep
+        # connectivity. If the anchor is empty (pre-seed), we allow the first edge.
+        if not active_edge_nodes:
+            active_nodes_pool |= anchor_nodes
 
         subject = canonicalize_node_text(self.spacy_nlp, subject)
         obj = canonicalize_node_text(self.spacy_nlp, obj)
@@ -95,7 +285,8 @@ class AMoCv4:
             return tuple(get_concept_lemmas(self.spacy_nlp, text))
 
         sentence_lemma_keys = {tuple(n.lemmas) for n in current_sentence_nodes}
-        active_lemma_keys = {tuple(n.lemmas) for n in graph_active_nodes}
+        active_lemma_keys = {tuple(n.lemmas) for n in active_nodes_pool}
+        anchor_lemma_keys = {tuple(n.lemmas) for n in anchor_nodes}
 
         subj_key = _lemma_key(subject)
         obj_key = _lemma_key(obj)
@@ -107,11 +298,36 @@ class AMoCv4:
             or obj_key in sentence_lemma_keys
         )
         touches_active = subj_key in active_lemma_keys or obj_key in active_lemma_keys
+        attaches_anchor = (
+            not anchor_lemma_keys
+            or subj_key in anchor_lemma_keys
+            or obj_key in anchor_lemma_keys
+        )
 
-        return touches_sentence and touches_active
+        return touches_sentence and touches_active and attaches_anchor
+
+    def _add_edge(
+        self, source_node: Node, dest_node: Node, label: str, edge_forget: int
+    ) -> Optional[Edge]:
+        # Enforce anchor connectivity: if an anchor exists, at least one endpoint
+        # must be in it. Otherwise, reject.
+        if self._anchor_nodes and not (
+            source_node in self._anchor_nodes or dest_node in self._anchor_nodes
+        ):
+            return None
+
+        edge = self.graph.add_edge(source_node, dest_node, label, edge_forget)
+        if edge:
+            # Seed anchor on the very first edge, or grow it when touched.
+            if not self._anchor_nodes:
+                self._anchor_nodes.update({source_node, dest_node})
+            elif source_node in self._anchor_nodes or dest_node in self._anchor_nodes:
+                self._anchor_nodes.update({source_node, dest_node})
+        return edge
 
     def reset_graph(self) -> None:
         self.graph = Graph()
+        self._anchor_nodes = set()
 
     def resolve_pronouns(self, text: str) -> str:
         resolved = self.client.resolve_pronouns(text, self.persona)
@@ -125,6 +341,8 @@ class AMoCv4:
         triplets: List[Tuple[str, str, str]] = []
         for edge in self.graph.edges:
             if only_active and not edge.active:
+                continue
+            if not edge.label or not str(edge.label).strip():
                 continue
             triplets.append(
                 (
@@ -151,6 +369,51 @@ class AMoCv4:
     def _is_generic_relation(self, label: str) -> bool:
         norm = self._normalize_label(label)
         return norm in self.GENERIC_RELATION_LABELS
+
+    def _is_blacklisted_relation(self, label: str) -> bool:
+        norm = self._normalize_label(label)
+        return norm in self.RELATION_BLACKLIST
+
+    def _is_verb_relation(self, label: str) -> bool:
+        doc = self.spacy_nlp(label)
+        has_verb = False
+        for tok in doc:
+            if not getattr(tok, "is_alpha", False):
+                continue
+            if tok.pos_ in {"ADJ", "NOUN", "PROPN", "ADV"}:
+                return False
+            if tok.pos_ in {"VERB", "AUX"}:
+                has_verb = True
+        return has_verb
+
+    def _is_valid_relation_label(self, label: str) -> bool:
+        if not label:
+            return False
+        if self._is_generic_relation(label):
+            return False
+        if self._is_blacklisted_relation(label):
+            return False
+        if not self._is_verb_relation(label):
+            return False
+        return True
+
+    def _has_edge_between(self, a: Node, b: Node) -> bool:
+        for edge in self.graph.edges:
+            if (edge.source_node == a and edge.dest_node == b) or (
+                edge.source_node == b and edge.dest_node == a
+            ):
+                return True
+        return False
+
+    def _find_node_by_text(
+        self, text: str, candidates: Iterable[Node]
+    ) -> Optional[Node]:
+        canon = canonicalize_node_text(self.spacy_nlp, text)
+        lemmas = tuple(get_concept_lemmas(self.spacy_nlp, canon))
+        for node in candidates:
+            if lemmas == tuple(node.lemmas):
+                return node
+        return None
 
     def _appears_in_story(self, text: str) -> bool:
         if not text:
@@ -189,7 +452,9 @@ class AMoCv4:
         output_dir: Optional[str],
         highlight_nodes: Optional[Iterable[str]],
         deactivated_concepts: Optional[List[str]] = None,
-        only_active: bool = True,
+        new_nodes: Optional[List[str]] = None,
+        only_active: bool = False,
+        largest_component_only: bool = False,
     ) -> None:
         triplets = self._graph_edges_to_triplets(only_active=only_active)
         age_for_filename = self.persona_age if self.persona_age is not None else -1
@@ -204,6 +469,8 @@ class AMoCv4:
                 step_tag=f"sent{sentence_index+1}",
                 sentence_text=sentence_text,
                 deactivated_concepts=deactivated_concepts,
+                new_nodes=new_nodes,
+                largest_component_only=largest_component_only,
                 positions=self._viz_positions,
             )
             if triplets:
@@ -223,9 +490,13 @@ class AMoCv4:
         plot_after_each_sentence: bool = False,
         graphs_output_dir: Optional[str] = None,
         highlight_nodes: Optional[Iterable[str]] = None,
+        matrix_suffix: Optional[str] = None,
     ) -> List[Tuple[str, str, str]]:
         if not hasattr(self, "_amoc_matrix_records"):
             self._amoc_matrix_records = []
+        # Always start each analyze run with a fresh layout cache so plots begin
+        # from a clean radial arrangement.
+        self._viz_positions = {}
         text = self.story_text
         if replace_pronouns:
             text = self.resolve_pronouns(text)
@@ -233,6 +504,7 @@ class AMoCv4:
         prev_sentences = []
         current_sentence = ""
         for i, sent in enumerate(doc.sents):
+            nodes_before_sentence = set(self.graph.nodes)
             logging.info("Processing sentence %d: %s" % (i, sent))
             if i == 0:
                 current_sentence = sent
@@ -245,21 +517,6 @@ class AMoCv4:
                 ) = self.get_senteces_text_based_nodes(
                     [sent], create_unexistent_nodes=True
                 )
-
-                sentence_id = i + 1
-                seen_tokens: set[str] = set()
-                for node in current_sentence_text_based_nodes:
-                    token = node.get_text_representer()
-                    if token in seen_tokens:
-                        continue
-                    seen_tokens.add(token)
-                    self._amoc_matrix_records.append(
-                        {
-                            "sentence": sentence_id,
-                            "token": token,
-                            "score": getattr(node, "score", 0),
-                        }
-                    )
                 inferred_concept_relationships, inferred_property_relationships = (
                     self.infer_new_relationships_step_0(sent)
                 )
@@ -282,22 +539,6 @@ class AMoCv4:
                         [current_sentence], create_unexistent_nodes=True
                     )
                 )
-
-                sentence_id = i + 1
-
-                seen_tokens = set()
-                for node in current_sentence_text_based_nodes:
-                    token = node.get_text_representer()
-                    if token in seen_tokens:
-                        continue
-                    seen_tokens.add(token)
-                    self._amoc_matrix_records.append(
-                        {
-                            "sentence": sentence_id,
-                            "token": token,
-                            "score": getattr(node, "score", 0),
-                        }
-                    )
 
                 current_all_text = sent.text
                 graph_active_nodes = self.graph.get_active_nodes(
@@ -394,6 +635,7 @@ class AMoCv4:
                         current_sentence_text_based_words,
                         current_sentence_text_based_nodes,
                         graph_active_nodes,
+                        self._get_nodes_with_active_edges(),
                     ):
                         continue
 
@@ -416,6 +658,8 @@ class AMoCv4:
                         create_node=True,
                     )
                     edge_label = relationship[1].replace("(edge)", "").strip()
+                    if not self._is_valid_relation_label(edge_label):
+                        continue
                     if source_node is None or dest_node is None:
                         continue
 
@@ -424,7 +668,7 @@ class AMoCv4:
                     if tuple(dest_node.lemmas) in sentence_lemma_keys:
                         dest_node.node_source = NodeSource.TEXT_BASED
 
-                    potential_new_edge = self.graph.add_edge(
+                    potential_new_edge = self._add_edge(
                         source_node, dest_node, edge_label, self.edge_forget
                     )
                     if potential_new_edge:
@@ -469,6 +713,14 @@ class AMoCv4:
                     added_edges,
                 )
 
+                if self.ENFORCE_ATTACHMENT_CONSTRAINT:
+                    targeted_edges = self._infer_edges_to_recently_deactivated(
+                        current_sentence_text_based_nodes,
+                        current_sentence_text_based_words,
+                        current_all_text,
+                    )
+                    added_edges.extend(targeted_edges)
+
                 self.graph.set_nodes_score_based_on_distance_from_active_nodes(
                     text_based_activated_nodes
                 )
@@ -488,14 +740,41 @@ class AMoCv4:
                     self.graph.get_active_graph_repr(),
                 )
 
+            sentence_id = i + 1
+            newly_inferred_nodes = {
+                n
+                for n in (set(self.graph.nodes) - nodes_before_sentence)
+                if n.node_source == NodeSource.INFERENCE_BASED
+            }
+            self._record_sentence_activation(
+                sentence_id=sentence_id,
+                explicit_nodes=current_sentence_text_based_nodes,
+                newly_inferred_nodes=newly_inferred_nodes,
+            )
+
             current_active_nodes = self._get_nodes_with_active_edges()
             if i == 0:
-                deactivated_concepts = None  # no prior step to diff against
+                deactivated_concepts = None
+                recently_deactivated_nodes: set[Node] = set()
+                new_nodes_for_plot = None
             else:
                 gone = self._prev_active_nodes_for_plot - current_active_nodes
                 deactivated_concepts = sorted(
                     {node.get_text_representer() for node in gone}
                 )
+                recently_deactivated_nodes = set(gone)
+                appeared = current_active_nodes - self._prev_active_nodes_for_plot
+                new_nodes_for_plot = sorted(
+                    {node.get_text_representer() for node in appeared}
+                )
+            # Only keep the deactivated set for targeted inference when the
+            # attachment constraint is enforced.
+            if self.ENFORCE_ATTACHMENT_CONSTRAINT:
+                self._recently_deactivated_nodes_for_inference = (
+                    recently_deactivated_nodes
+                )
+            else:
+                self._recently_deactivated_nodes_for_inference = set()
             self._prev_active_nodes_for_plot = current_active_nodes
 
             if plot_after_each_sentence:
@@ -505,17 +784,38 @@ class AMoCv4:
                     output_dir=graphs_output_dir,
                     highlight_nodes=highlight_nodes,
                     deactivated_concepts=deactivated_concepts,
-                    only_active=True,
+                    new_nodes=new_nodes_for_plot,
+                    only_active=False,
+                    largest_component_only=False,
                 )
 
         # save score matrix
         df = pd.DataFrame(self._amoc_matrix_records)
+        matrix = (
+            df.pivot(index="token", columns="sentence", values="score")
+            .sort_index()
+            .replace(pd.NA, "0")
+        )
 
-        matrix = df.pivot_table(
-            index="token", columns="sentence", values="score", fill_value=0
-        ).sort_index()
+        matrix_dir = os.path.join(OUTPUT_ANALYSIS_DIR, "matrix")
+        os.makedirs(matrix_dir, exist_ok=True)
+        safe_model = _sanitize_filename_component(self.model_name, max_len=60)
+        safe_persona = _sanitize_filename_component(self.persona, max_len=60)
+        age_for_filename = self.persona_age if self.persona_age is not None else -1
+        suffix = (
+            f"_{_sanitize_filename_component(matrix_suffix)}" if matrix_suffix else ""
+        )
+        matrix_filename = (
+            f"amoc_matrix_{safe_model}_{safe_persona}_{age_for_filename}{suffix}.csv"
+        )
+        matrix_path = os.path.join(matrix_dir, matrix_filename)
 
-        matrix.to_csv("amoc_activation_matrix.csv")
+        matrix.to_csv(matrix_path)
+        logging.info(
+            "[Matrix] Saved activation matrix for persona '%s' to %s",
+            self.persona,
+            matrix_path,
+        )
         logging.info("AMoC activation matrix:\n%s", matrix.to_string())
         # Return triplets for external saving
         return [
@@ -641,16 +941,25 @@ class AMoCv4:
                 valid_indices.append(i)
 
         valid_indices = valid_indices[: self.nr_relevant_edges]
+        active_node_set = set(active_nodes)
         if not valid_indices:
-            # If the LLM selection fails, do not aggressively fade everything.
-            # This keeps behavior closer to the legacy runs where indices were
-            # consistently returned.
-            return
-
-        selected = set(valid_indices)
-        for i in selected:
-            edges[i - 1].forget_score = self.edge_forget
-            edges[i - 1].active = True
+            # Fallback (no LLM indices): keep only edges that are already active
+            # AND stay within the current active-node neighborhood, plus newly added.
+            selected = set()
+            for idx, edge in enumerate(edges, start=1):
+                if edge in newly_added_edges:
+                    selected.add(idx)
+                elif (
+                    edge.active
+                    and edge.source_node in active_node_set
+                    and edge.dest_node in active_node_set
+                ):
+                    selected.add(idx)
+        else:
+            selected = set(valid_indices)
+            for i in selected:
+                edges[i - 1].forget_score = self.edge_forget
+                edges[i - 1].active = True
 
         # Fade away edges that were not selected and are not newly added
         for j in range(1, len(edges) + 1):
@@ -684,6 +993,15 @@ class AMoCv4:
                 relationship[2], str
             ):
                 continue
+            if not self._passes_attachment_constraint(
+                relationship[0],
+                relationship[2],
+                current_sentence_text_based_words,
+                current_sentence_text_based_nodes,
+                list(self.graph.nodes),
+                self._get_nodes_with_active_edges(),
+            ):
+                continue
             source_node = self.get_node_from_text(
                 relationship[0],
                 current_sentence_text_based_nodes,
@@ -699,11 +1017,11 @@ class AMoCv4:
                 create_node=True,
             )
             edge_label = relationship[1].replace("(edge)", "").strip()
-            if self._is_generic_relation(edge_label):
+            if not self._is_valid_relation_label(edge_label):
                 continue
             if source_node is None or dest_node is None:
                 continue
-            self.graph.add_edge(source_node, dest_node, edge_label, self.edge_forget)
+            self._add_edge(source_node, dest_node, edge_label, self.edge_forget)
 
     def add_inferred_relationships_to_graph_step_0(
         self,
@@ -731,6 +1049,15 @@ class AMoCv4:
                 or self._appears_in_story(relationship[2])
             ):
                 continue
+            if not self._passes_attachment_constraint(
+                relationship[0],
+                relationship[2],
+                current_sentence_text_based_words,
+                current_sentence_text_based_nodes,
+                list(self.graph.nodes),
+                self._get_nodes_with_active_edges(),
+            ):
+                continue
             subj, subj_type = self._canonicalize_and_classify_node_text(relationship[0])
             obj, obj_type = self._canonicalize_and_classify_node_text(relationship[2])
             if subj_type is None or obj_type is None:
@@ -750,7 +1077,7 @@ class AMoCv4:
                 create_node=False,
             )
             edge_label = relationship[1].replace("(edge)", "").strip()
-            if self._is_generic_relation(edge_label):
+            if not self._is_valid_relation_label(edge_label):
                 continue
             if source_node is None:
                 source_node = self.graph.add_or_get_node(
@@ -768,7 +1095,7 @@ class AMoCv4:
                     NodeSource.INFERENCE_BASED,
                 )
 
-            self.graph.add_edge(source_node, dest_node, edge_label, self.edge_forget)
+            self._add_edge(source_node, dest_node, edge_label, self.edge_forget)
 
     def add_inferred_relationships_to_graph(
         self,
@@ -802,6 +1129,7 @@ class AMoCv4:
                 curr_sentences_words,
                 curr_sentences_nodes,
                 active_graph_nodes,
+                self._get_nodes_with_active_edges(),
             ):
                 continue
             subj, subj_type = self._canonicalize_and_classify_node_text(relationship[0])
@@ -825,7 +1153,7 @@ class AMoCv4:
                 create_node=False,
             )
             edge_label = relationship[1].replace("(edge)", "").strip()
-            if self._is_generic_relation(edge_label):
+            if not self._is_valid_relation_label(edge_label):
                 continue
             if source_node is None:
                 source_node = self.graph.add_or_get_node(
@@ -843,7 +1171,7 @@ class AMoCv4:
                     NodeSource.INFERENCE_BASED,
                 )
 
-            potential_edge = self.graph.add_edge(
+            potential_edge = self._add_edge(
                 source_node, dest_node, edge_label, self.edge_forget
             )
             if potential_edge:
