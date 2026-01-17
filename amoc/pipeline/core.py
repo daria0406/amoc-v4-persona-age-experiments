@@ -505,7 +505,7 @@ class AMoCv4:
                     output_dir=graphs_output_dir,
                     highlight_nodes=highlight_nodes,
                     deactivated_concepts=deactivated_concepts,
-                    only_active=False,
+                    only_active=True,
                 )
 
         # save score matrix
