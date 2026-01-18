@@ -17,12 +17,14 @@ class Graph:
         node_type: NodeType,
         node_source: NodeSource,
     ) -> Node:
+        lemmas = [lemma.lower() for lemma in lemmas]
+        actual_text_l = (actual_text or "").lower()
         node = self.get_node(lemmas)
         if node is None:
-            node = Node(lemmas, actual_text, node_type, node_source, 0)
+            node = Node(lemmas, actual_text_l, node_type, node_source, 0)
             self.nodes.add(node)
         else:
-            node.add_actual_text(actual_text)
+            node.add_actual_text(actual_text_l)
         return node
 
     def get_node(self, lemmas: List[str]) -> Optional[Node]:
@@ -52,6 +54,8 @@ class Graph:
     def add_edge(
         self, source_node: Node, dest_node: Node, label: str, edge_forget: int
     ) -> Optional[Edge]:
+        if source_node == dest_node:
+            return None
         edge = Edge(source_node, dest_node, label, edge_forget)
         if self.check_if_similar_edge_exists(edge, edge_forget):
             return None

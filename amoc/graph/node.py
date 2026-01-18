@@ -26,8 +26,9 @@ class Node:
         node_source: NodeSource,
         score: int,
     ) -> None:
-        self.lemmas: List[str] = lemmas
-        self.actual_texts: Dict[str, int] = {actual_text: 1}
+        self.lemmas: List[str] = [lemma.lower() for lemma in lemmas]
+        actual_text_l = (actual_text or "").lower()
+        self.actual_texts: Dict[str, int] = {actual_text_l: 1}
         self.node_type: NodeType = node_type
         self.node_source: NodeSource = node_source
         self.score = score
@@ -40,10 +41,11 @@ class Node:
         return hash(tuple(self.lemmas))
 
     def add_actual_text(self, actual_text: str) -> None:
-        if actual_text in self.actual_texts:
-            self.actual_texts[actual_text] += 1
+        actual_text_l = (actual_text or "").lower()
+        if actual_text_l in self.actual_texts:
+            self.actual_texts[actual_text_l] += 1
         else:
-            self.actual_texts[actual_text] = 1
+            self.actual_texts[actual_text_l] = 1
 
     def get_text_representer(self) -> str:
         return max(self.actual_texts, key=self.actual_texts.get)

@@ -175,9 +175,9 @@ def _push_nodes_off_edges(
     edges: List[Tuple[str, str]],
     *,
     node_size: float = 3800,
-    pad_px: float = 8.0,
-    corridor_scale: float = 0.95,
-    max_iter: int = 80,
+    pad_px: float = 12.0,
+    corridor_scale: float = 1.25,
+    max_iter: int = 140,
 ) -> None:
     if len(pos) < 3 or not edges:
         return
@@ -210,11 +210,51 @@ def _push_nodes_off_edges(
                 dx /= norm
                 dy /= norm
                 gap = corridor - dist
-                step = max(gap * 1.1, required * 0.05)
+                step = max(gap * 1.25, required * 0.12)
                 x += dx * step
                 y += dy * step
                 moved = True
             pos[node] = (x, y)
+        if not moved:
+            break
+
+
+def _enforce_min_edge_length(
+    pos: Dict[str, Tuple[float, float]],
+    edges: List[Tuple[str, str]],
+    *,
+    min_len: float,
+    hub: Optional[str] = None,
+    step_factor: float = 1.04,
+    max_iter: int = 80,
+) -> None:
+    if min_len <= 0 or not edges:
+        return
+    for _ in range(max_iter):
+        moved = False
+        for u, v in edges:
+            if u not in pos or v not in pos:
+                continue
+            x1, y1 = pos[u]
+            x2, y2 = pos[v]
+            dx = x2 - x1
+            dy = y2 - y1
+            dist = math.hypot(dx, dy)
+            if dist >= min_len:
+                continue
+            if dist < 1e-6:
+                dx, dy, dist = 1.0, 0.0, 1.0
+            deficit = (min_len - dist) * step_factor
+            if hub is not None and u == hub and v != hub:
+                # Keep hub fixed; push v away from hub.
+                pos[v] = (x2 + (dx / dist) * deficit, y2 + (dy / dist) * deficit)
+            elif hub is not None and v == hub and u != hub:
+                pos[u] = (x1 - (dx / dist) * deficit, y1 - (dy / dist) * deficit)
+            else:
+                shift = deficit * 0.5
+                pos[u] = (x1 - (dx / dist) * shift, y1 - (dy / dist) * shift)
+                pos[v] = (x2 + (dx / dist) * shift, y2 + (dy / dist) * shift)
+            moved = True
         if not moved:
             break
 
@@ -289,9 +329,8 @@ def plot_amoc_triplets(
     filename = f"amoc_graph_{safe_model}_{safe_persona}_{age}{suffix}.png"
     save_path = os.path.join(out_dir, filename)
 
-    # Use a simple undirected graph for plotting so we can enforce
-    # "one label per edge" (no parallel edges / duplicate labels).
-    G = nx.Graph()
+    # Directed graph so reciprocal edges can be visualized (e.g., A→B and B→A).
+    G = nx.DiGraph()
     edge_labels: Dict[Tuple[str, str], str] = {}
     duplicate_edges: set[Tuple[str, str]] = set()
     for src, rel, dst in triplets:
@@ -300,7 +339,7 @@ def plot_amoc_triplets(
         rel = str(rel).strip()
         if not src or not dst:
             continue
-        u, v = sorted((src, dst))
+        u, v = src, dst
         if (u, v) in edge_labels:
             duplicate_edges.add((u, v))
             continue
@@ -379,13 +418,17 @@ def plot_amoc_triplets(
                 lvl = levels.get(node)
                 if lvl is None:
                     continue
-                max_r_by_level[lvl] = max(max_r_by_level.get(lvl, 0.0), math.hypot(x, y))
+                max_r_by_level[lvl] = max(
+                    max_r_by_level.get(lvl, 0.0), math.hypot(x, y)
+                )
             for level in range(1, max_level + 1):
                 ring_nodes = [n for n in nodes if levels.get(n) == level]
                 n_ring = len(ring_nodes)
                 required_r = _ring_required_radius(n_ring, target_min_dist)
                 prev_r = radii.get(level - 1, 0.0)
-                radii[level] = max(required_r, prev_r + ring_step, max_r_by_level.get(level, 0.0))
+                radii[level] = max(
+                    required_r, prev_r + ring_step, max_r_by_level.get(level, 0.0)
+                )
 
             # Place new nodes ring-by-ring, filling angular gaps around already
             # placed nodes (if any).
@@ -494,7 +537,11 @@ def plot_amoc_triplets(
                     angles = [2.0 * math.pi * idx / n_ring for idx in range(n_ring)]
 
                 for idx, node in enumerate(ring):
-                    angle = angles[idx] if idx < len(angles) else 2.0 * math.pi * idx / n_ring
+                    angle = (
+                        angles[idx]
+                        if idx < len(angles)
+                        else 2.0 * math.pi * idx / n_ring
+                    )
                     pos[node] = (r * math.cos(angle), r * math.sin(angle))
 
             # Scale outward until node circles cannot overlap in screen space.
@@ -523,6 +570,8 @@ def plot_amoc_triplets(
 
     if pos and hub is None:
         hub = next(iter(pos.keys()))
+    min_edge_len = max(6.5, target_min_dist * 0.9)
+    _enforce_min_edge_length(pos, list(G.edges()), min_len=min_edge_len, hub=hub)
     if avoid_edge_overlap:
         _push_nodes_off_edges(fig, ax, pos, list(G.edges()))
     _enforce_minimum_spacing(
@@ -541,25 +590,56 @@ def plot_amoc_triplets(
         ax=ax,
     )
 
-    nx.draw_networkx_edges(
-        G,
-        pos,
-        edge_color="black",
-        arrows=False,
-        width=1.2,
-        ax=ax,
-    )
-    # Draw labels in the classic NetworkX style (single dict call).
-    nx.draw_networkx_edge_labels(
-        G,
-        pos,
-        edge_labels={(u, v): _pretty_text(lbl) for (u, v), lbl in edge_labels.items()},
-        font_color="darkred",
-        font_size=9,
-        label_pos=0.5,
-        bbox=dict(facecolor="white", edgecolor="none", pad=0.2),
-        ax=ax,
-    )
+    reciprocals: set[Tuple[str, str]] = {
+        (u, v) for u, v in G.edges() if (v, u) in G.edges()
+    }
+
+    # Draw all edges as straight lines; stagger reciprocal labels along the same
+    # line to avoid overlap while keeping the geometry straight.
+    grouped: Dict[str, List[Tuple[str, str]]] = {"plain": [], "recip_a": [], "recip_b": []}
+    for u, v in G.edges():
+        if (u, v) in reciprocals:
+            if u < v:
+                grouped["recip_a"].append((u, v))
+            else:
+                grouped["recip_b"].append((u, v))
+        else:
+            grouped["plain"].append((u, v))
+
+    for key, edgelist in grouped.items():
+        if not edgelist:
+            continue
+        label_pos = 0.5
+        if key == "recip_a":
+            label_pos = 0.42
+        elif key == "recip_b":
+            label_pos = 0.58
+        nx.draw_networkx_edges(
+            G,
+            pos,
+            edgelist=edgelist,
+            edge_color="black",
+            arrows=True,
+            arrowsize=16,
+            width=1.3,
+            connectionstyle="arc3,rad=0.0",
+            ax=ax,
+        )
+        nx.draw_networkx_edge_labels(
+            G,
+            pos,
+            edge_labels={
+                (u, v): _pretty_text(edge_labels[(u, v)])
+                for (u, v) in edgelist
+                if (u, v) in edge_labels
+            },
+            font_color="darkred",
+            font_size=9,
+            label_pos=label_pos,
+            bbox=dict(facecolor="white", edgecolor="none", pad=0.2),
+            connectionstyle="arc3,rad=0.0",
+            ax=ax,
+        )
 
     node_labels = {n: _pretty_text(n) for n in G.nodes()}
     nx.draw_networkx_labels(
@@ -572,11 +652,24 @@ def plot_amoc_triplets(
         ax=ax,
     )
 
+    def _normalize_title_line(text: str, max_len: int = 220) -> str:
+        # Avoid extremely long headers (e.g., if a full prompt leaks in) that
+        # blow up the canvas and distort node placement by compacting and
+        # truncating the line.
+        cleaned = re.sub(r"<[^>]+>", " ", text or "")
+        cleaned = re.sub(r"\s+", " ", cleaned).strip()
+        if len(cleaned) > max_len:
+            cleaned = cleaned[: max_len - 3].rstrip() + "..."
+        return cleaned
+
     title_persona = (persona[:150] + "...") if len(persona) > 150 else persona
     ax.set_title(f"AMoC Knowledge Graph: {model_name}", size=20, pad=20)
-    sup_lines = [f"Persona: {title_persona}"]
+    sup_lines = []
+    persona_line = _normalize_title_line(title_persona, max_len=180)
+    if persona_line:
+        sup_lines.append(f"Persona: {persona_line}")
     if sentence_text:
-        sup_lines.append(f"Sentence: {sentence_text}")
+        sup_lines.append(f"Sentence: {_normalize_title_line(sentence_text, max_len=220)}")
     if deactivated_concepts is not None:
         if deactivated_concepts:
             sup_lines.append(
@@ -587,7 +680,9 @@ def plot_amoc_triplets(
             sup_lines.append("Deactivated nodes: none")
     if new_nodes is not None:
         if new_nodes:
-            sup_lines.append("New nodes: " + ", ".join(_pretty_text(n) for n in new_nodes))
+            sup_lines.append(
+                "New nodes: " + ", ".join(_pretty_text(n) for n in new_nodes)
+            )
         else:
             sup_lines.append("New nodes: none")
     plt.suptitle(

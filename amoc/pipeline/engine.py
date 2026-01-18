@@ -29,7 +29,7 @@ class AgeAwareAMoCEngine:
         self,
         persona_text: str,
         age_refined,
-        replace_pronouns: bool = False,
+        replace_pronouns: bool = True,
         plot_after_each_sentence: bool = False,
         graphs_output_dir: str | None = None,
         highlight_nodes: Optional[Iterable[str]] = None,

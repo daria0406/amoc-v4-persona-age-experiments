@@ -41,7 +41,7 @@ class VLLMClient:
             tensor_parallel_size=tp_size,
             trust_remote_code=True,
             gpu_memory_utilization=0.80,
-            max_model_len=5000,
+            max_model_len=8200,
         )
         self.sampling_params = SamplingParams(
             temperature=0.8, top_p=0.95, max_tokens=1024

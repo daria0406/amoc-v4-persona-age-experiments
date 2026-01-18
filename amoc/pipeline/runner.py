@@ -196,7 +196,7 @@ def process_persona_csv(
                         else:
                             s, r, o = trip
                             active = True
-                        if (not include_inactive_edges) and (not active):
+                        if not active:
                             continue
                         s, r, o = repair_triplet(s, r, o)
                         records.append(
@@ -214,6 +214,22 @@ def process_persona_csv(
                         )
 
                     if records:
+                        # Deduplicate triplets (helps avoid repeats after pronoun replacement).
+                        seen = set()
+                        deduped = []
+                        for rec in records:
+                            key = (
+                                rec["subject"],
+                                rec["relation"],
+                                rec["object"],
+                                rec["active"],
+                            )
+                            if key in seen:
+                                continue
+                            seen.add(key)
+                            deduped.append(rec)
+                        records = deduped
+
                         pd.DataFrame(records).to_csv(
                             output_path,
                             mode="a",

@@ -35,6 +35,15 @@ class AMoCv4:
         "is_a",
         "appears",
         "contains",
+        "includes",
+        "include",
+        "contain",
+        "part_of",
+        "associated_with",
+        "|eot id|",
+        "refers to",
+        "is an",
+        "is mentioned in",
     }
 
     ENFORCE_ATTACHMENT_CONSTRAINT = False
@@ -83,6 +92,7 @@ class AMoCv4:
         story_doc = self.spacy_nlp(story_text)
         self.story_lemmas = {tok.lemma_.lower() for tok in story_doc if tok.is_alpha}
         self._prev_active_nodes_for_plot: set[Node] = set()
+        self._cumulative_deactivated_nodes_for_plot: set[Node] = set()
         self._viz_positions: dict[str, tuple[float, float]] = {}
         self._recently_deactivated_nodes_for_inference: set[Node] = set()
         self._anchor_nodes: set[Node] = set()
@@ -120,18 +130,29 @@ class AMoCv4:
         explicit_nodes: List[Node],
         newly_inferred_nodes: set[Node],
     ) -> None:
+        def _to_landscape_score(raw_score: float) -> float:
+            # Transform AMoC "distance" style (0=most active) into Landscape style (5=most active).
+            val = 5.0 - float(raw_score)
+            if val < 0.0:
+                return 0.0
+            if val > 5.0:
+                return 5.0
+            return val
+
         explicit_set = set(explicit_nodes)
         distances = self._distances_from_sources_active_edges(
             explicit_set, max_distance=self.ACTIVATION_MAX_DISTANCE
         )
 
-        token_to_score: dict[str, int] = {}
+        token_to_raw_score: dict[str, int] = {}
+        node_raw_score: dict[Node, int] = {}
 
         # Step 2: explicit nodes reset to 0 (non-negotiable)
         for node in explicit_set:
             token = self._node_token_for_matrix(node)
             if token:
-                token_to_score[token] = 0
+                token_to_raw_score[token] = 0
+                node_raw_score[node] = 0
 
         # Step 5: newly inferred nodes start at 1 (never 0)
         for node in newly_inferred_nodes:
@@ -139,7 +160,8 @@ class AMoCv4:
                 continue
             token = self._node_token_for_matrix(node)
             if token:
-                token_to_score[token] = 1
+                token_to_raw_score[token] = 1
+                node_raw_score[node] = 1
 
         # Step 3/4: carried-over nodes within range, score = distance
         for node, dist in distances.items():
@@ -150,11 +172,45 @@ class AMoCv4:
             token = self._node_token_for_matrix(node)
             if not token:
                 continue
-            if token in token_to_score:
+            if token in token_to_raw_score:
                 continue
-            token_to_score[token] = dist
+            token_to_raw_score[token] = dist
+            node_raw_score[node] = dist
 
-        for token, score in token_to_score.items():
+        # Convert node scores to Landscape scale and record.
+        for token, raw_score in token_to_raw_score.items():
+            self._amoc_matrix_records.append(
+                {
+                    "sentence": sentence_id,
+                    "token": token,
+                    "score": _to_landscape_score(raw_score),
+                }
+            )
+
+        # Add verb (edge-label) activations: take the max activation of connected nodes minus 0.5.
+        verb_scores: dict[str, float] = {}
+        for edge in self.graph.edges:
+            if not edge.active:
+                continue
+            label = (edge.label or "").strip().lower()
+            if not label:
+                continue
+            src_tok = self._node_token_for_matrix(edge.source_node)
+            dst_tok = self._node_token_for_matrix(edge.dest_node)
+            if not src_tok or not dst_tok:
+                continue
+            src_raw = node_raw_score.get(edge.source_node, edge.source_node.score)
+            dst_raw = node_raw_score.get(edge.dest_node, edge.dest_node.score)
+            src_act = _to_landscape_score(src_raw)
+            dst_act = _to_landscape_score(dst_raw)
+            verb_act = max(src_act, dst_act) - 0.5
+            if verb_act < 0.0:
+                verb_act = 0.0
+            prev = verb_scores.get(label)
+            if prev is None or verb_act > prev:
+                verb_scores[label] = verb_act
+
+        for token, score in verb_scores.items():
             self._amoc_matrix_records.append(
                 {"sentence": sentence_id, "token": token, "score": score}
             )
@@ -309,6 +365,12 @@ class AMoCv4:
     def _add_edge(
         self, source_node: Node, dest_node: Node, label: str, edge_forget: int
     ) -> Optional[Edge]:
+        # Keep the graph as a single connected component: once seeded, at least
+        # one endpoint of every new edge must already exist in the graph.
+        if self.graph.nodes:
+            if source_node not in self.graph.nodes and dest_node not in self.graph.nodes:
+                return None
+
         # Enforce anchor connectivity: if an anchor exists, at least one endpoint
         # must be in it. Otherwise, reject.
         if self._anchor_nodes and not (
@@ -344,6 +406,8 @@ class AMoCv4:
                 continue
             if not edge.label or not str(edge.label).strip():
                 continue
+            if edge.source_node == edge.dest_node:
+                continue
             triplets.append(
                 (
                     edge.source_node.get_text_representer(),
@@ -352,6 +416,16 @@ class AMoCv4:
                 )
             )
         return triplets
+
+    # Step 5 from paper - only explicit nodes from the current sentence stay active
+    def _restrict_active_to_current_explicit(self, explicit_nodes: List[Node]) -> None:
+        explicit_set = set(explicit_nodes)
+        inactive_score = self.max_distance_from_active_nodes + 1
+        for node in self.graph.nodes:
+            if node in explicit_set and node.node_source == NodeSource.TEXT_BASED:
+                node.score = 0
+            else:
+                node.score = inactive_score
 
     def _get_nodes_with_active_edges(self) -> set[Node]:
         active_nodes: set[Node] = set()
@@ -460,7 +534,11 @@ class AMoCv4:
         age_for_filename = self.persona_age if self.persona_age is not None else -1
         try:
             saved_path = plot_amoc_triplets(
-                triplets=triplets,
+                triplets=(
+                    self._graph_edges_to_triplets(only_active=True)
+                    if only_active
+                    else triplets
+                ),
                 persona=self.persona,
                 model_name=self.model_name,
                 age=age_for_filename,
@@ -486,7 +564,7 @@ class AMoCv4:
 
     def analyze(
         self,
-        replace_pronouns: bool = False,
+        replace_pronouns: bool = True,
         plot_after_each_sentence: bool = False,
         graphs_output_dir: Optional[str] = None,
         highlight_nodes: Optional[Iterable[str]] = None,
@@ -497,18 +575,60 @@ class AMoCv4:
         # Always start each analyze run with a fresh layout cache so plots begin
         # from a clean radial arrangement.
         self._viz_positions = {}
-        text = self.story_text
-        if replace_pronouns:
-            text = self.resolve_pronouns(text)
-        doc = self.spacy_nlp(text)
-        prev_sentences = []
+        self._cumulative_deactivated_nodes_for_plot = set()
+        self._prev_active_nodes_for_plot = set()
+
+        def _clean_resolved_sentence(orig_text: str, candidate: str) -> str:
+            if not isinstance(candidate, str) or not candidate.strip():
+                return orig_text
+            cleaned = re.sub(r"<[^>]+>", " ", candidate)
+            cleaned = re.sub(r"\s+", " ", cleaned).strip()
+
+            # Pick the candidate sentence with the highest content-word overlap
+            # with the original to avoid prompt echoes in the header.
+            orig_doc = self.spacy_nlp(orig_text)
+            orig_tokens = {t.lemma_.lower() for t in orig_doc if t.is_alpha}
+            best_sent = None
+            best_overlap = -1
+            cand_doc = self.spacy_nlp(cleaned)
+            for sent in cand_doc.sents:
+                toks = {t.lemma_.lower() for t in sent if t.is_alpha}
+                overlap = len(orig_tokens & toks)
+                if overlap > best_overlap:
+                    best_overlap = overlap
+                    best_sent = sent.text.strip()
+
+            chosen = best_sent or cleaned
+
+            # Trim runaway echoes to a reasonable length.
+            max_len = max(len(orig_text) * 2 + 40, 400)
+            if len(chosen) > max_len:
+                chosen = chosen[:max_len].rstrip(" ,.;") + "..."
+            return chosen or orig_text
+
+        doc = self.spacy_nlp(self.story_text)
+        resolved_sentences: list[tuple[Span, str, str]] = []
+        for orig_sent in doc.sents:
+            resolved_text = orig_sent.text
+            if replace_pronouns:
+                candidate = self.resolve_pronouns(orig_sent.text)
+                if isinstance(candidate, str) and candidate.strip():
+                    resolved_text = _clean_resolved_sentence(orig_sent.text, candidate)
+            resolved_doc = self.spacy_nlp(resolved_text)
+            if not resolved_doc:
+                resolved_text = orig_sent.text
+                resolved_doc = self.spacy_nlp(resolved_text)
+            resolved_span = resolved_doc[0 : len(resolved_doc)]
+            resolved_sentences.append((resolved_span, resolved_text, orig_sent.text))
+
+        prev_sentences: list[str] = []
         current_sentence = ""
-        for i, sent in enumerate(doc.sents):
+        for i, (sent, resolved_text, original_text) in enumerate(resolved_sentences):
             nodes_before_sentence = set(self.graph.nodes)
-            logging.info("Processing sentence %d: %s" % (i, sent))
+            logging.info("Processing sentence %d: %s", i, resolved_text)
             if i == 0:
                 current_sentence = sent
-                prev_sentences.append(sent)
+                prev_sentences.append(resolved_text)
                 self.init_graph(sent)
 
                 (
@@ -527,10 +647,16 @@ class AMoCv4:
                 self.add_inferred_relationships_to_graph_step_0(
                     inferred_property_relationships, NodeType.PROPERTY, sent
                 )
+                self._restrict_active_to_current_explicit(
+                    current_sentence_text_based_nodes
+                )
+                self.graph.set_nodes_score_based_on_distance_from_active_nodes(
+                    current_sentence_text_based_nodes
+                )
             else:
                 added_edges = []
                 current_sentence = sent
-                prev_sentences.append(sent)
+                prev_sentences.append(resolved_text)
                 if len(prev_sentences) > self.context_length:
                     prev_sentences.pop(0)
 
@@ -540,38 +666,24 @@ class AMoCv4:
                     )
                 )
 
-                current_all_text = sent.text
+                current_all_text = resolved_text
+                # Step 3: build active subgraph using only explicit (text-based) nodes.
                 graph_active_nodes = self.graph.get_active_nodes(
-                    self.max_distance_from_active_nodes
-                )
-                # Restrict prompt context to text-based active nodes/edges
-                text_active_nodes = self.graph.get_active_nodes(
                     self.max_distance_from_active_nodes, only_text_based=True
                 )
-                active_nodes_text = self.graph.get_nodes_str(text_active_nodes)
+                active_nodes_text = self.graph.get_nodes_str(graph_active_nodes)
                 active_nodes_edges_text, _ = self.graph.get_edges_str(
-                    text_active_nodes, only_text_based=True
+                    graph_active_nodes, only_text_based=True
                 )
 
                 nodes_from_text = ""
                 for idx, node in enumerate(current_sentence_text_based_nodes):
                     nodes_from_text += f" - ({current_sentence_text_based_words[idx]}, {node.node_type})\n"
 
-                # Fetch new relationships (CORRECTED ARGUMENT ORDER)
-                # Signature: (nodes_from_text, nodes_from_graph, edges_from_graph, text, persona)
-                # Use full active graph context (text + inferred) to allow richer connections.
-                full_active_nodes = self.graph.get_active_nodes(
-                    self.max_distance_from_active_nodes, only_text_based=False
-                )
-                full_active_nodes_text = self.graph.get_nodes_str(full_active_nodes)
-                full_active_edges_text, _ = self.graph.get_edges_str(
-                    full_active_nodes, only_text_based=False
-                )
-
                 new_relationships = self.client.get_new_relationships(
                     nodes_from_text,  # 1. Nodes from Text
-                    full_active_nodes_text,  # 2. Nodes from Graph
-                    full_active_edges_text,  # 3. Edges from Graph
+                    active_nodes_text,  # 2. Nodes from Graph (explicit only)
+                    active_nodes_edges_text,  # 3. Edges from Graph (explicit only)
                     current_all_text,  # 4. Text
                     self.persona,  # 5. Persona
                 )
@@ -725,12 +837,17 @@ class AMoCv4:
                     text_based_activated_nodes
                 )
                 self.reactivate_relevant_edges(
-                    self.graph.get_active_nodes(self.max_distance_from_active_nodes),
-                    " ".join([s.text for s in prev_sentences]),
+                    self.graph.get_active_nodes(
+                        self.max_distance_from_active_nodes, only_text_based=True
+                    ),
+                    " ".join(prev_sentences),
                     added_edges,
                 )
+                self._restrict_active_to_current_explicit(
+                    current_sentence_text_based_nodes
+                )
                 self.graph.set_nodes_score_based_on_distance_from_active_nodes(
-                    text_based_activated_nodes
+                    current_sentence_text_based_nodes
                 )
 
             if self.debug:
@@ -758,12 +875,19 @@ class AMoCv4:
                 recently_deactivated_nodes: set[Node] = set()
                 new_nodes_for_plot = None
             else:
+                appeared = current_active_nodes - self._prev_active_nodes_for_plot
                 gone = self._prev_active_nodes_for_plot - current_active_nodes
+                self._cumulative_deactivated_nodes_for_plot.update(gone)
+                self._cumulative_deactivated_nodes_for_plot.difference_update(
+                    current_active_nodes
+                )
                 deactivated_concepts = sorted(
-                    {node.get_text_representer() for node in gone}
+                    {
+                        node.get_text_representer()
+                        for node in self._cumulative_deactivated_nodes_for_plot
+                    }
                 )
                 recently_deactivated_nodes = set(gone)
-                appeared = current_active_nodes - self._prev_active_nodes_for_plot
                 new_nodes_for_plot = sorted(
                     {node.get_text_representer() for node in appeared}
                 )
@@ -785,7 +909,7 @@ class AMoCv4:
                     highlight_nodes=highlight_nodes,
                     deactivated_concepts=deactivated_concepts,
                     new_nodes=new_nodes_for_plot,
-                    only_active=False,
+                    only_active=True,
                     largest_component_only=False,
                 )
 
@@ -794,7 +918,7 @@ class AMoCv4:
         matrix = (
             df.pivot(index="token", columns="sentence", values="score")
             .sort_index()
-            .replace(pd.NA, "0")
+            .fillna(0.0)
         )
 
         matrix_dir = os.path.join(OUTPUT_ANALYSIS_DIR, "matrix")
@@ -826,6 +950,7 @@ class AMoCv4:
                 edge.active,
             )
             for edge in self.graph.edges
+            if edge.active
         ]
 
     def infer_new_relationships_step_0(

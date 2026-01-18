@@ -363,5 +363,3 @@ As you can see, they are numbered. Tell me what edges are related to / support /
 Provide them in the following format (a list of numbers):
 [1, 2, 3, ...]
 """
-
-REPLACE_PRONOUNS_PROMPT = 'Replace the pronouns "he, she, they" with the persons / nouns from the text that they are referring to. Sometimes there is no such reference and you should leave them as they are. Do not come up with imaginary names for the pronouns, they must be in the text. The text is:\n'

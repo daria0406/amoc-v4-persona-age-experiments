@@ -48,10 +48,12 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
     )
 
     p.add_argument(
-        "--replace-pronouns",
-        action="store_true",
-        help="Enable pronoun resolution in AMoC.",
+        "--no-replace-pronouns",
+        dest="replace_pronouns",
+        action="store_false",
+        help="Disable pronoun resolution (enabled by default).",
     )
+    p.set_defaults(replace_pronouns=True)
 
     p.add_argument(
         "--tp",
