@@ -64,12 +64,11 @@ class AgeAwareAMoCEngine:
             strict_attachament_constraint=strict_attachament_constraint,
             single_anchor_hub=single_anchor_hub,
         )
-        return list(
-            amoc.analyze(
-                replace_pronouns=replace_pronouns,
-                plot_after_each_sentence=plot_after_each_sentence,
-                graphs_output_dir=graphs_output_dir,
-                highlight_nodes=highlight_nodes,
-                largest_component_only=largest_component_only,
-            )
+        final_triplets, sentence_triplets = amoc.analyze(
+            replace_pronouns=replace_pronouns,
+            plot_after_each_sentence=plot_after_each_sentence,
+            graphs_output_dir=graphs_output_dir,
+            highlight_nodes=highlight_nodes,
+            largest_component_only=largest_component_only,
         )
+        return final_triplets, sentence_triplets

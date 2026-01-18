@@ -52,11 +52,23 @@ class Graph:
         return None
 
     def add_edge(
-        self, source_node: Node, dest_node: Node, label: str, edge_forget: int
+        self,
+        source_node: Node,
+        dest_node: Node,
+        label: str,
+        edge_forget: int,
+        created_at_sentence: Optional[int] = None,
     ) -> Optional[Edge]:
         if source_node == dest_node:
             return None
-        edge = Edge(source_node, dest_node, label, edge_forget)
+        edge = Edge(
+            source_node,
+            dest_node,
+            label,
+            edge_forget,
+            active=True,
+            created_at_sentence=created_at_sentence,
+        )
         if self.check_if_similar_edge_exists(edge, edge_forget):
             return None
         self.edges.add(edge)

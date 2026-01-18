@@ -41,6 +41,7 @@ class Edge:
         label: str,
         forget_score: int,
         active: bool = True,
+        created_at_sentence: Optional[int] = None,
     ) -> None:
         self.source_node: Node = source_node
         self.dest_node: Node = dest_node
@@ -49,6 +50,7 @@ class Edge:
         self.forget_score: int = forget_score
         self.similarity_threshold = 0.8
         self.embedding: Optional["np.ndarray"] = _maybe_embed(label)
+        self.created_at_sentence: Optional[int] = created_at_sentence
 
     def fade_away(self) -> None:
         self.forget_score -= 1

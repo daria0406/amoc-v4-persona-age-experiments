@@ -42,6 +42,21 @@ CSV_HEADERS = [
     "subject",
     "relation",
     "object",
+    "sentence_index",
+    "regime",
+    "active",
+]
+
+SENTENCE_CSV_HEADERS = [
+    "original_index",
+    "age_refined",
+    "persona_text",
+    "model_name",
+    "sentence_index",
+    "sentence_text",
+    "subject",
+    "relation",
+    "object",
     "regime",
     "active",
 ]
@@ -148,6 +163,10 @@ def process_persona_csv(
         safe_model_name = model_name.replace(":", "-").replace("/", "-")
         output_filename = f"model_{safe_model_name}_triplets_{short_filename}"
         output_path = output_dir / output_filename
+        sentence_output_filename = (
+            f"model_{safe_model_name}_sentence_triplets_{short_filename}"
+        )
+        sentence_output_path = output_dir / sentence_output_filename
 
         ckpt_path = get_checkpoint_path(
             output_dir=str(output_dir),
@@ -168,6 +187,10 @@ def process_persona_csv(
             pd.DataFrame([], columns=CSV_HEADERS).to_csv(
                 output_path, index=False, encoding="utf-8"
             )
+        if not sentence_output_path.exists():
+            pd.DataFrame([], columns=SENTENCE_CSV_HEADERS).to_csv(
+                sentence_output_path, index=False, encoding="utf-8"
+            )
 
         start_model_time = time.time()
         total_rows = len(df)
@@ -183,7 +206,7 @@ def process_persona_csv(
                 )
 
                 try:
-                    triplets = engine.run(
+                    final_triplets, sentence_triplets = engine.run(
                         persona_text=persona_text,
                         age_refined=age_refined_int,
                         replace_pronouns=replace_pronouns,
@@ -198,9 +221,12 @@ def process_persona_csv(
                     )
 
                     records = []
-                    for trip in triplets:
-                        # Support both legacy 3-tuple and new 4-tuple with active flag
-                        if len(trip) == 4:
+                    for trip in final_triplets:
+                        # Support legacy 3/4-tuple and new 5-tuple with sentence index
+                        sentence_idx = -1
+                        if len(trip) == 5:
+                            s, r, o, active, sentence_idx = trip
+                        elif len(trip) == 4:
                             s, r, o, active = trip
                         else:
                             s, r, o = trip
@@ -214,6 +240,33 @@ def process_persona_csv(
                                 "age_refined": age_refined_int,
                                 "persona_text": persona_text,
                                 "model_name": model_name,
+                                "subject": s,
+                                "relation": r,
+                                "object": o,
+                                "sentence_index": int(sentence_idx)
+                                if sentence_idx is not None
+                                else -1,
+                                "regime": regime,
+                                "active": bool(active),
+                            }
+                        )
+
+                    sentence_records = []
+                    for trip in sentence_triplets:
+                        if len(trip) == 6:
+                            sent_idx, sent_text, s, r, o, active = trip
+                        else:
+                            # fallback: skip malformed
+                            continue
+                        s, r, o = repair_triplet(s, r, o)
+                        sentence_records.append(
+                            {
+                                "original_index": row_idx,
+                                "age_refined": age_refined_int,
+                                "persona_text": persona_text,
+                                "model_name": model_name,
+                                "sentence_index": int(sent_idx),
+                                "sentence_text": sent_text,
                                 "subject": s,
                                 "relation": r,
                                 "object": o,
@@ -232,6 +285,7 @@ def process_persona_csv(
                                 rec["relation"],
                                 rec["object"],
                                 rec["active"],
+                                rec["sentence_index"],
                             )
                             if key in seen:
                                 continue
@@ -241,6 +295,15 @@ def process_persona_csv(
 
                         pd.DataFrame(records).to_csv(
                             output_path,
+                            mode="a",
+                            header=False,
+                            index=False,
+                            encoding="utf-8",
+                        )
+
+                    if sentence_records:
+                        pd.DataFrame(sentence_records).to_csv(
+                            sentence_output_path,
                             mode="a",
                             header=False,
                             index=False,

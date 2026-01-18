@@ -619,7 +619,7 @@ def plot_amoc_triplets(
         # Perpendicular unit vector
         nx_ = -dy / dist
         ny_ = dx / dist
-        base = dist * 0.035  # tighter offset so labels hug the edge
+        base = dist * 0.012  # very small perpendicular offset so labels hug the edge
         # For reciprocals, push labels to opposite sides and stagger along the edge.
         if (u, v) in reciprocals:
             sign = 1.0 if u < v else -1.0

@@ -375,7 +375,12 @@ class AMoCv4:
         return attaches_anchor and (touches_sentence or touches_active)
 
     def _add_edge(
-        self, source_node: Node, dest_node: Node, label: str, edge_forget: int
+        self,
+        source_node: Node,
+        dest_node: Node,
+        label: str,
+        edge_forget: int,
+        created_at_sentence: Optional[int] = None,
     ) -> Optional[Edge]:
         # Keep the graph as a single connected component: once seeded, at least
         # one endpoint of every new edge must already exist in the graph.
@@ -393,7 +398,18 @@ class AMoCv4:
         ):
             return None
 
-        edge = self.graph.add_edge(source_node, dest_node, label, edge_forget)
+        use_sentence = (
+            created_at_sentence
+            if created_at_sentence is not None
+            else getattr(self, "_current_sentence_index", None)
+        )
+        edge = self.graph.add_edge(
+            source_node,
+            dest_node,
+            label,
+            edge_forget,
+            created_at_sentence=use_sentence,
+        )
         if edge:
             # Seed anchor on the very first edge. If single-anchor mode is on,
             # keep only the initial hub; otherwise grow the anchor set when touched.
@@ -645,7 +661,11 @@ class AMoCv4:
 
         prev_sentences: list[str] = []
         current_sentence = ""
+        self._sentence_triplets: list[
+            tuple[int, str, str, str, str, bool]
+        ] = []  # sentence_idx, sentence_text, subj, rel, obj, active
         for i, (sent, resolved_text, original_text) in enumerate(resolved_sentences):
+            self._current_sentence_index = i + 1
             nodes_before_sentence = set(self.graph.nodes)
             logging.info("Processing sentence %d: %s", i, resolved_text)
             if i == 0:
@@ -935,6 +955,19 @@ class AMoCv4:
                     largest_component_only=largest_component_only,
                 )
 
+            # Capture triplets for this sentence (all edges, with current active flag)
+            for edge in self.graph.edges:
+                self._sentence_triplets.append(
+                    (
+                        self._current_sentence_index,
+                        original_text,
+                        edge.source_node.get_text_representer(),
+                        edge.label,
+                        edge.dest_node.get_text_representer(),
+                        edge.active,
+                    )
+                )
+
         # save score matrix
         df = pd.DataFrame(self._amoc_matrix_records)
         matrix = (
@@ -963,17 +996,20 @@ class AMoCv4:
             matrix_path,
         )
         logging.info("AMoC activation matrix:\n%s", matrix.to_string())
-        # Return triplets for external saving
-        return [
+        # Collect final active triplets
+        final_triplets = [
             (
                 edge.source_node.get_text_representer(),
                 edge.label,
                 edge.dest_node.get_text_representer(),
                 edge.active,
+                edge.created_at_sentence if edge.created_at_sentence is not None else -1,
             )
             for edge in self.graph.edges
             if edge.active
         ]
+
+        return final_triplets, self._sentence_triplets
 
     def infer_new_relationships_step_0(
         self, sent: Span
