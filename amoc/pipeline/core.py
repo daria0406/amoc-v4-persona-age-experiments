@@ -4,6 +4,7 @@ import re
 from typing import List, Tuple, Optional, Iterable
 import pandas as pd
 from spacy.tokens import Span, Token
+import networkx as nx
 
 from amoc.graph import Graph, Node, Edge, NodeType, NodeSource
 from amoc.viz.graph_plots import plot_amoc_triplets
@@ -103,6 +104,12 @@ class AMoCv4:
         self.strict_reactivate_function = strict_reactivate_function
         self.strict_attachament_constraint = strict_attachament_constraint
         self.single_anchor_hub = single_anchor_hub
+        self._current_sentence_text: str = ""
+        # Separate memory (cumulative) vs salience (active) graphs for auditing.
+        self.cumulative_graph = nx.MultiDiGraph()
+        self.active_graph = nx.MultiDiGraph()
+        # Stable triplet introduction index: (subj, rel, obj) -> introduced_at_sentence
+        self._triplet_intro: dict[tuple[str, str, str], int] = {}
 
     def _node_token_for_matrix(self, node: Node) -> str:
         return (node.get_text_representer() or "").strip().lower()
@@ -290,6 +297,10 @@ class AMoCv4:
                 continue
 
             subj, rel, obj = relationship
+            subj = self._normalize_endpoint_text(subj, is_subject=True) or None
+            obj = self._normalize_endpoint_text(obj, is_subject=False) or None
+            if subj is None or obj is None:
+                continue
             if not subj or not obj:
                 continue
             if not isinstance(subj, str) or not isinstance(obj, str):
@@ -396,6 +407,16 @@ class AMoCv4:
         if self._anchor_nodes and not (
             source_node in self._anchor_nodes or dest_node in self._anchor_nodes
         ):
+            # Anchor constraint failure: log and drop
+            self._anchor_drop_log.append(
+                (
+                    self._current_sentence_index or -1,
+                    self._current_sentence_text,
+                    source_node.get_text_representer(),
+                    label,
+                    dest_node.get_text_representer(),
+                )
+            )
             return None
 
         use_sentence = (
@@ -411,6 +432,16 @@ class AMoCv4:
             created_at_sentence=use_sentence,
         )
         if edge:
+            trip_id = (
+                edge.source_node.get_text_representer(),
+                edge.label,
+                edge.dest_node.get_text_representer(),
+            )
+            if trip_id not in self._triplet_intro:
+                self._triplet_intro[trip_id] = (
+                    use_sentence if use_sentence is not None else -1
+                )
+            self._record_edge_in_graphs(edge, self._current_sentence_index)
             # Seed anchor on the very first edge. If single-anchor mode is on,
             # keep only the initial hub; otherwise grow the anchor set when touched.
             if not self._anchor_nodes:
@@ -477,6 +508,69 @@ class AMoCv4:
         norm = re.sub(r"[\s\-]+", "_", norm)
         return norm
 
+    def _edge_key(self, edge: Edge) -> tuple[str, str, str]:
+        return (
+            edge.source_node.get_text_representer(),
+            edge.dest_node.get_text_representer(),
+            edge.label,
+        )
+
+    def _record_edge_in_graphs(self, edge: Edge, sentence_idx: Optional[int]) -> None:
+        u, v, lbl = self._edge_key(edge)
+        introduced = self._triplet_intro.get((u, lbl, v))
+        if introduced is None:
+            introduced = edge.created_at_sentence if edge.created_at_sentence is not None else -1
+        self._triplet_intro[(u, lbl, v)] = int(introduced)
+
+        # Only update last_active when the edge is currently active in this sentence.
+        existing_last_active = None
+        edge_key = f"{lbl}__introduced_{introduced}"
+        if self.cumulative_graph.has_edge(u, v, key=edge_key):
+            existing_last_active = self.cumulative_graph[u][v][edge_key].get("last_active_sentence")
+        last_active = existing_last_active
+        if edge.active and sentence_idx is not None:
+            last_active = sentence_idx
+        edge_key = f"{lbl}__introduced_{introduced}"
+        # Cumulative memory (never removed)
+        if self.cumulative_graph.has_edge(u, v, key=edge_key):
+            # Update attributes if already present
+            data = self.cumulative_graph[u][v][edge_key]
+            if data.get("introduced_at_sentence", introduced) == -1:
+                data["introduced_at_sentence"] = introduced
+            data["last_active_sentence"] = last_active
+        else:
+            self.cumulative_graph.add_edge(
+                u,
+                v,
+                key=edge_key,
+                relation=lbl,
+                introduced_at_sentence=int(introduced),
+                last_active_sentence=int(last_active),
+            )
+        # Active projection (salience)
+        if edge.active:
+            self.active_graph.add_edge(
+                u,
+                v,
+                key=edge_key,
+                relation=lbl,
+                introduced_at_sentence=int(introduced),
+                last_active_sentence=int(last_active),
+            )
+        else:
+            if self.active_graph.has_edge(u, v, key=edge_key):
+                try:
+                    self.active_graph.remove_edge(u, v, key=edge_key)
+                except Exception:
+                    pass
+
+    def _graph_to_triplets(self, graph: nx.MultiDiGraph) -> List[Tuple[str, str, str]]:
+        trips: List[Tuple[str, str, str]] = []
+        for u, v, key, data in graph.edges(keys=True, data=True):
+            rel = data.get("relation") or key
+            trips.append((u, rel, v))
+        return trips
+
     def _is_generic_relation(self, label: str) -> bool:
         norm = self._normalize_label(label)
         return norm in self.GENERIC_RELATION_LABELS
@@ -507,6 +601,28 @@ class AMoCv4:
         if not self._is_verb_relation(label):
             return False
         return True
+
+    def _normalize_endpoint_text(self, text: str, is_subject: bool) -> Optional[str]:
+        if not text:
+            return None
+        doc = self.spacy_nlp(text)
+        if not doc:
+            return None
+        allowed_subject = {"NOUN", "PROPN", "PRON"}
+        allowed_object = {"NOUN", "PROPN", "PRON", "ADJ"}
+        for tok in doc:
+            if not getattr(tok, "is_alpha", False):
+                continue
+            pos = tok.pos_
+            if is_subject and pos not in allowed_subject:
+                continue
+            if not is_subject and pos not in allowed_object:
+                continue
+            lemma = (getattr(tok, "lemma_", "") or "").strip().lower()
+            if not lemma or lemma in self.spacy_nlp.Defaults.stop_words:
+                continue
+            return lemma
+        return None
 
     def _has_edge_between(self, a: Node, b: Node) -> bool:
         for edge in self.graph.edges:
@@ -566,8 +682,19 @@ class AMoCv4:
         new_nodes: Optional[List[str]] = None,
         only_active: bool = False,
         largest_component_only: bool = False,
+        mode: str = "sentence_active",
+        triplets_override: Optional[List[Tuple[str, str, str]]] = None,
     ) -> None:
-        triplets = self._graph_edges_to_triplets(only_active=only_active)
+        # Route per-sentence plots into mode-specific subfolders for clarity.
+        plot_dir = output_dir
+        if output_dir and mode in {"sentence_active", "sentence_cumulative"}:
+            subdir = "active" if mode == "sentence_active" else "cummulative"
+            plot_dir = os.path.join(output_dir, subdir)
+        triplets = (
+            triplets_override
+            if triplets_override is not None
+            else self._graph_edges_to_triplets(only_active=only_active)
+        )
         age_for_filename = self.persona_age if self.persona_age is not None else -1
         try:
             saved_path = plot_amoc_triplets(
@@ -580,8 +707,12 @@ class AMoCv4:
                 model_name=self.model_name,
                 age=age_for_filename,
                 blue_nodes=highlight_nodes,
-                output_dir=output_dir,
-                step_tag=f"sent{sentence_index+1}",
+                output_dir=plot_dir,
+                step_tag=(
+                    f"sent{sentence_index+1}_{mode}"
+                    if mode
+                    else f"sent{sentence_index+1}"
+                ),
                 sentence_text=sentence_text,
                 deactivated_concepts=deactivated_concepts,
                 new_nodes=new_nodes,
@@ -661,11 +792,17 @@ class AMoCv4:
 
         prev_sentences: list[str] = []
         current_sentence = ""
-        self._sentence_triplets: list[
-            tuple[int, str, str, str, str, bool]
-        ] = []  # sentence_idx, sentence_text, subj, rel, obj, active
+        self._sentence_triplets: list[tuple[int, str, str, str, str, bool, bool]] = (
+            []
+        )  # sentence_idx, sentence_text, subj, rel, obj, active, anchor_kept
         for i, (sent, resolved_text, original_text) in enumerate(resolved_sentences):
+            # Working-memory projection is rebuilt each sentence.
+            self.active_graph = nx.MultiDiGraph()
             self._current_sentence_index = i + 1
+            self._current_sentence_text = original_text
+            self._anchor_drop_log: list[tuple[int, str, str, str, str]] = (
+                []
+            )  # sent_idx, sent_text, subj, rel, obj
             nodes_before_sentence = set(self.graph.nodes)
             logging.info("Processing sentence %d: %s", i, resolved_text)
             if i == 0:
@@ -775,6 +912,10 @@ class AMoCv4:
                     # Unpack
                     subj, rel, obj = relationship
 
+                    subj = self._normalize_endpoint_text(subj, is_subject=True) or None
+                    obj = self._normalize_endpoint_text(obj, is_subject=False) or None
+                    if subj is None or obj is None:
+                        continue
                     # Validate subject/object strings
                     if not subj or not obj:
                         continue
@@ -804,14 +945,14 @@ class AMoCv4:
                     )
 
                     dest_node = self.get_node_from_new_relationship(
-                        relationship[2],
+                        obj,
                         graph_active_nodes,
                         current_sentence_text_based_nodes,
                         current_sentence_text_based_words,
                         node_source=NodeSource.TEXT_BASED,
                         create_node=True,
                     )
-                    edge_label = relationship[1].replace("(edge)", "").strip()
+                    edge_label = rel.replace("(edge)", "").strip()
                     if not self._is_valid_relation_label(edge_label):
                         continue
                     if source_node is None or dest_node is None:
@@ -905,6 +1046,7 @@ class AMoCv4:
                 for n in (set(self.graph.nodes) - nodes_before_sentence)
                 if n.node_source == NodeSource.INFERENCE_BASED
             }
+            # Refresh active projection for this step
             self._record_sentence_activation(
                 sentence_id=sentence_id,
                 explicit_nodes=current_sentence_text_based_nodes,
@@ -944,6 +1086,7 @@ class AMoCv4:
             self._prev_active_nodes_for_plot = current_active_nodes
 
             if plot_after_each_sentence:
+                # Active (salience) view
                 self._plot_graph_snapshot(
                     sentence_index=i,
                     sentence_text=sent.text,
@@ -953,6 +1096,21 @@ class AMoCv4:
                     new_nodes=new_nodes_for_plot,
                     only_active=True,
                     largest_component_only=largest_component_only,
+                    mode="sentence_active",
+                    triplets_override=self._graph_to_triplets(self.active_graph),
+                )
+                # Cumulative memory view
+                self._plot_graph_snapshot(
+                    sentence_index=i,
+                    sentence_text=sent.text,
+                    output_dir=graphs_output_dir,
+                    highlight_nodes=highlight_nodes,
+                    deactivated_concepts=deactivated_concepts,
+                    new_nodes=new_nodes_for_plot,
+                    only_active=False,
+                    largest_component_only=largest_component_only,
+                    mode="sentence_cumulative",
+                    triplets_override=self._graph_to_triplets(self.cumulative_graph),
                 )
 
             # Capture triplets for this sentence (all edges, with current active flag)
@@ -965,6 +1123,21 @@ class AMoCv4:
                         edge.label,
                         edge.dest_node.get_text_representer(),
                         edge.active,
+                        True,  # anchor_kept
+                    )
+                )
+            for sent_idx, sent_text, subj, rel, obj in getattr(
+                self, "_anchor_drop_log", []
+            ):
+                self._sentence_triplets.append(
+                    (
+                        sent_idx,
+                        sent_text,
+                        subj,
+                        rel,
+                        obj,
+                        False,  # inactive/not added
+                        False,  # anchor_kept flag
                     )
                 )
 
@@ -997,19 +1170,25 @@ class AMoCv4:
         )
         logging.info("AMoC activation matrix:\n%s", matrix.to_string())
         # Collect final active triplets
-        final_triplets = [
-            (
-                edge.source_node.get_text_representer(),
-                edge.label,
-                edge.dest_node.get_text_representer(),
-                edge.active,
-                edge.created_at_sentence if edge.created_at_sentence is not None else -1,
+        final_triplets = []
+        for u, v, key, data in self.active_graph.edges(keys=True, data=True):
+            introduced = data.get("introduced_at_sentence", -1)
+            last_active = data.get("last_active_sentence", -1)
+            rel = data.get("relation") or key
+            final_triplets.append(
+                (
+                    u,
+                    rel,
+                    v,
+                    True,
+                    introduced,
+                    last_active,
+                )
             )
-            for edge in self.graph.edges
-            if edge.active
-        ]
 
-        return final_triplets, self._sentence_triplets
+        cumulative_triplets = self._graph_to_triplets(self.cumulative_graph)
+
+        return final_triplets, self._sentence_triplets, cumulative_triplets
 
     def infer_new_relationships_step_0(
         self, sent: Span
@@ -1145,6 +1324,7 @@ class AMoCv4:
                 for i in selected:
                     edges[i - 1].forget_score = self.edge_forget
                     edges[i - 1].active = True
+                    self._record_edge_in_graphs(edges[i - 1], self._current_sentence_index)
         else:
             # Legacy behavior from the original paper code: trust the LLM indices,
             # reactivate them, and fade everything else not newly added.
@@ -1160,11 +1340,13 @@ class AMoCv4:
             for i in selected:
                 edges[i - 1].forget_score = self.edge_forget
                 edges[i - 1].active = True
+                self._record_edge_in_graphs(edges[i - 1], self._current_sentence_index)
 
         # Fade away edges that were not selected and are not newly added
         for j in range(1, len(edges) + 1):
             if j not in selected and edges[j - 1] not in newly_added_edges:
                 edges[j - 1].fade_away()
+                self._record_edge_in_graphs(edges[j - 1], self._current_sentence_index)
 
     def init_graph(self, sent: Span) -> None:
         current_sentence_text_based_nodes, current_sentence_text_based_words = (
@@ -1193,9 +1375,13 @@ class AMoCv4:
                 relationship[2], str
             ):
                 continue
+            norm_subj = self._normalize_endpoint_text(relationship[0], is_subject=True)
+            norm_obj = self._normalize_endpoint_text(relationship[2], is_subject=False)
+            if norm_subj is None or norm_obj is None:
+                continue
             if not self._passes_attachment_constraint(
-                relationship[0],
-                relationship[2],
+                norm_subj,
+                norm_obj,
                 current_sentence_text_based_words,
                 current_sentence_text_based_nodes,
                 list(self.graph.nodes),
@@ -1203,14 +1389,14 @@ class AMoCv4:
             ):
                 continue
             source_node = self.get_node_from_text(
-                relationship[0],
+                norm_subj,
                 current_sentence_text_based_nodes,
                 current_sentence_text_based_words,
                 node_source=NodeSource.TEXT_BASED,
                 create_node=True,
             )
             dest_node = self.get_node_from_text(
-                relationship[2],
+                norm_obj,
                 current_sentence_text_based_nodes,
                 current_sentence_text_based_words,
                 node_source=NodeSource.TEXT_BASED,
@@ -1244,6 +1430,10 @@ class AMoCv4:
                 relationship[2], str
             ):
                 continue
+            norm_subj = self._normalize_endpoint_text(relationship[0], is_subject=True)
+            norm_obj = self._normalize_endpoint_text(relationship[2], is_subject=False)
+            if norm_subj is None or norm_obj is None:
+                continue
             if not (
                 self._appears_in_story(relationship[0])
                 or self._appears_in_story(relationship[2])
@@ -1263,14 +1453,14 @@ class AMoCv4:
             if subj_type is None or obj_type is None:
                 continue
             source_node = self.get_node_from_text(
-                relationship[0],
+                norm_subj,
                 current_sentence_text_based_nodes,
                 current_sentence_text_based_words,
                 node_source=NodeSource.INFERENCE_BASED,
                 create_node=False,
             )
             dest_node = self.get_node_from_text(
-                relationship[2],
+                norm_obj,
                 current_sentence_text_based_nodes,
                 current_sentence_text_based_words,
                 node_source=NodeSource.INFERENCE_BASED,
@@ -1318,6 +1508,10 @@ class AMoCv4:
                 relationship[2], str
             ):
                 continue
+            norm_subj = self._normalize_endpoint_text(relationship[0], is_subject=True)
+            norm_obj = self._normalize_endpoint_text(relationship[2], is_subject=False)
+            if norm_subj is None or norm_obj is None:
+                continue
             if not (
                 self._appears_in_story(relationship[0])
                 or self._appears_in_story(relationship[2])
@@ -1337,7 +1531,7 @@ class AMoCv4:
             if subj_type is None or obj_type is None:
                 continue
             source_node = self.get_node_from_new_relationship(
-                relationship[0],
+                norm_subj,
                 active_graph_nodes,
                 curr_sentences_nodes,
                 curr_sentences_words,
@@ -1345,7 +1539,7 @@ class AMoCv4:
                 create_node=False,
             )
             dest_node = self.get_node_from_new_relationship(
-                relationship[2],
+                norm_obj,
                 active_graph_nodes,
                 curr_sentences_nodes,
                 curr_sentences_words,

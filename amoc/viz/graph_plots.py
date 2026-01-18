@@ -674,7 +674,15 @@ def plot_amoc_triplets(
     if persona_line:
         sup_lines.append(f"Persona: {persona_line}")
     if sentence_text:
-        sup_lines.append(f"Sentence: {_normalize_title_line(sentence_text, max_len=220)}")
+        sentence_line = _normalize_title_line(sentence_text, max_len=220)
+        if step_tag and "sent" in step_tag:
+            # Extract sentence index from step_tag if present (e.g., sent3_active)
+            import re as _re
+
+            m = _re.search(r"sent(\d+)", step_tag)
+            if m:
+                sentence_line = f"  {m.group(1)}: {sentence_line}"
+        sup_lines.append(f"Sentence: {sentence_line}")
     if deactivated_concepts is not None:
         if deactivated_concepts:
             sup_lines.append(

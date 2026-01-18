@@ -59,6 +59,7 @@ SENTENCE_CSV_HEADERS = [
     "object",
     "regime",
     "active",
+    "anchor_kept",
 ]
 
 
@@ -206,7 +207,7 @@ def process_persona_csv(
                 )
 
                 try:
-                    final_triplets, sentence_triplets = engine.run(
+                    final_triplets, sentence_triplets, cumulative_triplets = engine.run(
                         persona_text=persona_text,
                         age_refined=age_refined_int,
                         replace_pronouns=replace_pronouns,
@@ -222,9 +223,12 @@ def process_persona_csv(
 
                     records = []
                     for trip in final_triplets:
-                        # Support legacy 3/4-tuple and new 5-tuple with sentence index
+                        # Support legacy 3/4-tuple and new 6-tuple with intro/last-active
                         sentence_idx = -1
-                        if len(trip) == 5:
+                        if len(trip) == 6:
+                            s, r, o, active, introduced_at, last_active = trip
+                            sentence_idx = introduced_at
+                        elif len(trip) == 5:
                             s, r, o, active, sentence_idx = trip
                         elif len(trip) == 4:
                             s, r, o, active = trip
@@ -253,8 +257,8 @@ def process_persona_csv(
 
                     sentence_records = []
                     for trip in sentence_triplets:
-                        if len(trip) == 6:
-                            sent_idx, sent_text, s, r, o, active = trip
+                        if len(trip) == 7:
+                            sent_idx, sent_text, s, r, o, active, anchor_kept = trip
                         else:
                             # fallback: skip malformed
                             continue
@@ -272,6 +276,7 @@ def process_persona_csv(
                                 "object": o,
                                 "regime": regime,
                                 "active": bool(active),
+                                "anchor_kept": bool(anchor_kept),
                             }
                         )
 
@@ -302,6 +307,24 @@ def process_persona_csv(
                         )
 
                     if sentence_records:
+                        seen_sent = set()
+                        deduped_sent = []
+                        for rec in sentence_records:
+                            key = (
+                                rec["sentence_index"],
+                                rec["sentence_text"],
+                                rec["subject"],
+                                rec["relation"],
+                                rec["object"],
+                                rec["active"],
+                                rec["anchor_kept"],
+                            )
+                            if key in seen_sent:
+                                continue
+                            seen_sent.add(key)
+                            deduped_sent.append(rec)
+                        sentence_records = deduped_sent
+
                         pd.DataFrame(sentence_records).to_csv(
                             sentence_output_path,
                             mode="a",
@@ -318,23 +341,26 @@ def process_persona_csv(
                     save_checkpoint(ckpt_path, ckpt)
 
                     if plot_final_graph and records:
-                        triplets_for_plot = [
-                            (rec["subject"], rec["relation"], rec["object"])
-                            for rec in records
-                            if include_inactive_edges or rec.get("active", True)
-                        ]
-                        if triplets_for_plot:
+                        # Use cumulative graph for final plot to show full memory
+                        trips = cumulative_triplets
+                        if not trips:
+                            trips = [
+                                (rec["subject"], rec["relation"], rec["object"])
+                                for rec in records
+                                if include_inactive_edges or rec.get("active", True)
+                            ]
+                        if trips:
                             plot_dir = graphs_output_dir or os.path.join(
                                 OUTPUT_ANALYSIS_DIR, "graphs"
                             )
                             plot_amoc_triplets(
-                                triplets=triplets_for_plot,
+                                triplets=trips,
                                 persona=persona_text,
                                 model_name=model_name,
                                 age=age_refined_int,
                                 blue_nodes=highlight_nodes,
                                 output_dir=plot_dir,
-                                step_tag="final",
+                                step_tag="cumulative_graph_final",
                                 largest_component_only=plot_largest_component_only,
                             )
 
