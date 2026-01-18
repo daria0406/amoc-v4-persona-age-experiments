@@ -92,6 +92,10 @@ def process_persona_csv(
     plot_final_graph: bool = False,
     plot_largest_component_only: bool = False,
     include_inactive_edges: bool = False,
+    strict_reactivate_function: bool = True,
+    strict_attachament_constraint: bool = True,
+    single_anchor_hub: bool = True,
+    edge_forget: Optional[int] = None,
 ) -> None:
     short_filename = os.path.basename(filename)
     print(f"\n=== Processing File (chunk): {short_filename} ===")
@@ -186,6 +190,11 @@ def process_persona_csv(
                         plot_after_each_sentence=plot_after_each_sentence,
                         graphs_output_dir=graphs_output_dir,
                         highlight_nodes=highlight_nodes,
+                        largest_component_only=plot_largest_component_only,
+                        strict_reactivate_function=strict_reactivate_function,
+                        strict_attachament_constraint=strict_attachament_constraint,
+                        single_anchor_hub=single_anchor_hub,
+                        edge_forget=edge_forget,
                     )
 
                     records = []

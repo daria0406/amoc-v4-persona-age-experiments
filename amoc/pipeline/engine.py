@@ -33,6 +33,11 @@ class AgeAwareAMoCEngine:
         plot_after_each_sentence: bool = False,
         graphs_output_dir: str | None = None,
         highlight_nodes: Optional[Iterable[str]] = None,
+        largest_component_only: bool = False,
+        strict_reactivate_function: bool = True,
+        strict_attachament_constraint: bool = True,
+        single_anchor_hub: bool = True,
+        edge_forget: Optional[int] = None,
     ) -> List[Tuple[str, str, str]]:
 
         try:
@@ -50,11 +55,14 @@ class AgeAwareAMoCEngine:
             max_new_concepts=MAX_NEW_CONCEPTS,
             max_new_properties=MAX_NEW_PROPERTIES,
             context_length=CONTEXT_LENGTH,
-            edge_forget=EDGE_FORGET,
+            edge_forget=edge_forget if edge_forget is not None else EDGE_FORGET,
             nr_relevant_edges=NR_RELEVANT_EDGES,
             spacy_nlp=self.spacy_nlp,
             debug=DEBUG,
             persona_age=age_refined_int,
+            strict_reactivate_function=strict_reactivate_function,
+            strict_attachament_constraint=strict_attachament_constraint,
+            single_anchor_hub=single_anchor_hub,
         )
         return list(
             amoc.analyze(
@@ -62,5 +70,6 @@ class AgeAwareAMoCEngine:
                 plot_after_each_sentence=plot_after_each_sentence,
                 graphs_output_dir=graphs_output_dir,
                 highlight_nodes=highlight_nodes,
+                largest_component_only=largest_component_only,
             )
         )

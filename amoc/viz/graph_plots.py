@@ -594,51 +594,56 @@ def plot_amoc_triplets(
         (u, v) for u, v in G.edges() if (v, u) in G.edges()
     }
 
-    # Draw all edges as straight lines; stagger reciprocal labels along the same
-    # line to avoid overlap while keeping the geometry straight.
-    grouped: Dict[str, List[Tuple[str, str]]] = {"plain": [], "recip_a": [], "recip_b": []}
-    for u, v in G.edges():
-        if (u, v) in reciprocals:
-            if u < v:
-                grouped["recip_a"].append((u, v))
-            else:
-                grouped["recip_b"].append((u, v))
-        else:
-            grouped["plain"].append((u, v))
+    # Draw all edges as straight lines; for reciprocal pairs, place labels on
+    # opposite sides of the segment (using a perpendicular offset) to avoid
+    # overlap while keeping the geometry straight.
+    nx.draw_networkx_edges(
+        G,
+        pos,
+        edgelist=list(G.edges()),
+        edge_color="black",
+        arrows=True,
+        arrowsize=16,
+        width=1.3,
+        connectionstyle="arc3,rad=0.0",
+        ax=ax,
+    )
 
-    for key, edgelist in grouped.items():
-        if not edgelist:
+    def _label_offset(u: str, v: str) -> Tuple[float, float]:
+        x1, y1 = pos[u]
+        x2, y2 = pos[v]
+        dx, dy = x2 - x1, y2 - y1
+        dist = math.hypot(dx, dy)
+        if dist < 1e-6:
+            return (x1 + x2) * 0.5, (y1 + y2) * 0.5
+        # Perpendicular unit vector
+        nx_ = -dy / dist
+        ny_ = dx / dist
+        base = dist * 0.035  # tighter offset so labels hug the edge
+        # For reciprocals, push labels to opposite sides and stagger along the edge.
+        if (u, v) in reciprocals:
+            sign = 1.0 if u < v else -1.0
+            t = 0.58 if u < v else 0.42
+        else:
+            sign = 0.0
+            t = 0.5
+        mx = x1 * (1.0 - t) + x2 * t
+        my = y1 * (1.0 - t) + y2 * t
+        return mx + sign * base * nx_, my + sign * base * ny_
+
+    for u, v in G.edges():
+        if (u, v) not in edge_labels:
             continue
-        label_pos = 0.5
-        if key == "recip_a":
-            label_pos = 0.42
-        elif key == "recip_b":
-            label_pos = 0.58
-        nx.draw_networkx_edges(
-            G,
-            pos,
-            edgelist=edgelist,
-            edge_color="black",
-            arrows=True,
-            arrowsize=16,
-            width=1.3,
-            connectionstyle="arc3,rad=0.0",
-            ax=ax,
-        )
-        nx.draw_networkx_edge_labels(
-            G,
-            pos,
-            edge_labels={
-                (u, v): _pretty_text(edge_labels[(u, v)])
-                for (u, v) in edgelist
-                if (u, v) in edge_labels
-            },
-            font_color="darkred",
-            font_size=9,
-            label_pos=label_pos,
+        lx, ly = _label_offset(u, v)
+        ax.text(
+            lx,
+            ly,
+            _pretty_text(edge_labels[(u, v)]),
+            fontsize=9,
+            color="darkred",
+            ha="center",
+            va="center",
             bbox=dict(facecolor="white", edgecolor="none", pad=0.2),
-            connectionstyle="arc3,rad=0.0",
-            ax=ax,
         )
 
     node_labels = {n: _pretty_text(n) for n in G.nodes()}

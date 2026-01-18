@@ -91,7 +91,53 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
     p.add_argument(
         "--plot-largest-component-only",
         action="store_true",
-        help="When plotting final graph, keep only the largest connected component (default: plot all).",
+        dest="plot_largest_component_only",
+        help="Keep only the largest connected component when plotting.",
+    )
+    p.add_argument(
+        "--plot-all-components",
+        action="store_false",
+        dest="plot_largest_component_only",
+        help="Plot all connected components (default).",
+    )
+    p.set_defaults(plot_largest_component_only=False)
+
+    p.add_argument(
+        "--strict-reactivate-function",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "Use the stricter reactivation logic (default). Disable to use the legacy "
+            "reactivation behavior from the original paper code."
+        ),
+    )
+
+    p.add_argument(
+        "--strict-attachament-constraint",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "When enabled (default), new edges must touch the current sentence AND "
+            "the active neighborhood and anchor. Disable to allow edges that touch "
+            "either the current sentence or the active neighborhood (still anchored)."
+        ),
+    )
+
+    p.add_argument(
+        "--single-anchor-hub",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "Keep a single anchor hub that every edge must touch (default). "
+            "Disable to allow the anchor set to grow when touched."
+        ),
+    )
+
+    p.add_argument(
+        "--edge-forget",
+        type=int,
+        default=None,
+        help="Override edge forget score (default uses value from amoc.config.constants).",
     )
 
     p.add_argument(
@@ -182,6 +228,10 @@ def main(argv: List[str]) -> None:
                 plot_final_graph=args.plot_final_graph,
                 plot_largest_component_only=args.plot_largest_component_only,
                 include_inactive_edges=args.include_inactive_edges,
+                strict_reactivate_function=args.strict_reactivate_function,
+                strict_attachament_constraint=args.strict_attachament_constraint,
+                single_anchor_hub=args.single_anchor_hub,
+                edge_forget=args.edge_forget,
             )
     finally:
         elapsed = time.time() - total_start

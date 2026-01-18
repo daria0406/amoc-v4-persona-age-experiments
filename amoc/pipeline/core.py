@@ -40,6 +40,7 @@ class AMoCv4:
         "contain",
         "part_of",
         "associated_with",
+        "is associated with",
         "|eot id|",
         "refers to",
         "is an",
@@ -64,6 +65,9 @@ class AMoCv4:
         spacy_nlp,
         debug: bool = False,
         persona_age: Optional[int] = None,
+        strict_reactivate_function: bool = True,
+        strict_attachament_constraint: bool = True,
+        single_anchor_hub: bool = True,
     ) -> None:
         self.persona = persona_description
         self.story_text = story_text
@@ -96,6 +100,9 @@ class AMoCv4:
         self._viz_positions: dict[str, tuple[float, float]] = {}
         self._recently_deactivated_nodes_for_inference: set[Node] = set()
         self._anchor_nodes: set[Node] = set()
+        self.strict_reactivate_function = strict_reactivate_function
+        self.strict_attachament_constraint = strict_attachament_constraint
+        self.single_anchor_hub = single_anchor_hub
 
     def _node_token_for_matrix(self, node: Node) -> str:
         return (node.get_text_representer() or "").strip().lower()
@@ -360,7 +367,12 @@ class AMoCv4:
             or obj_key in anchor_lemma_keys
         )
 
-        return touches_sentence and touches_active and attaches_anchor
+        if self.strict_attachament_constraint:
+            return touches_sentence and touches_active and attaches_anchor
+        # Relaxed guard: allow edges that touch either the current sentence OR
+        # the active neighborhood, but still require they attach to the anchor
+        # (once seeded) so the graph stays connected.
+        return attaches_anchor and (touches_sentence or touches_active)
 
     def _add_edge(
         self, source_node: Node, dest_node: Node, label: str, edge_forget: int
@@ -368,7 +380,10 @@ class AMoCv4:
         # Keep the graph as a single connected component: once seeded, at least
         # one endpoint of every new edge must already exist in the graph.
         if self.graph.nodes:
-            if source_node not in self.graph.nodes and dest_node not in self.graph.nodes:
+            if (
+                source_node not in self.graph.nodes
+                and dest_node not in self.graph.nodes
+            ):
                 return None
 
         # Enforce anchor connectivity: if an anchor exists, at least one endpoint
@@ -380,10 +395,16 @@ class AMoCv4:
 
         edge = self.graph.add_edge(source_node, dest_node, label, edge_forget)
         if edge:
-            # Seed anchor on the very first edge, or grow it when touched.
+            # Seed anchor on the very first edge. If single-anchor mode is on,
+            # keep only the initial hub; otherwise grow the anchor set when touched.
             if not self._anchor_nodes:
-                self._anchor_nodes.update({source_node, dest_node})
-            elif source_node in self._anchor_nodes or dest_node in self._anchor_nodes:
+                if self.single_anchor_hub:
+                    self._anchor_nodes = {source_node}
+                else:
+                    self._anchor_nodes.update({source_node, dest_node})
+            elif not self.single_anchor_hub and (
+                source_node in self._anchor_nodes or dest_node in self._anchor_nodes
+            ):
                 self._anchor_nodes.update({source_node, dest_node})
         return edge
 
@@ -569,6 +590,7 @@ class AMoCv4:
         graphs_output_dir: Optional[str] = None,
         highlight_nodes: Optional[Iterable[str]] = None,
         matrix_suffix: Optional[str] = None,
+        largest_component_only: bool = False,
     ) -> List[Tuple[str, str, str]]:
         if not hasattr(self, "_amoc_matrix_records"):
             self._amoc_matrix_records = []
@@ -910,7 +932,7 @@ class AMoCv4:
                     deactivated_concepts=deactivated_concepts,
                     new_nodes=new_nodes_for_plot,
                     only_active=True,
-                    largest_component_only=False,
+                    largest_component_only=largest_component_only,
                 )
 
         # save score matrix
@@ -1056,32 +1078,49 @@ class AMoCv4:
         raw_indices = self.client.get_relevant_edges(
             edges_text, prev_sentences_text, self.persona
         )
-        valid_indices: List[int] = []
-        for idx in raw_indices:
-            try:
-                i = int(idx)
-            except Exception:
-                continue
-            if 1 <= i <= len(edges):
-                valid_indices.append(i)
 
-        valid_indices = valid_indices[: self.nr_relevant_edges]
-        active_node_set = set(active_nodes)
-        if not valid_indices:
-            # Fallback (no LLM indices): keep only edges that are already active
-            # AND stay within the current active-node neighborhood, plus newly added.
-            selected = set()
-            for idx, edge in enumerate(edges, start=1):
-                if edge in newly_added_edges:
-                    selected.add(idx)
-                elif (
-                    edge.active
-                    and edge.source_node in active_node_set
-                    and edge.dest_node in active_node_set
-                ):
-                    selected.add(idx)
+        if self.strict_reactivate_function:
+            valid_indices: List[int] = []
+            for idx in raw_indices:
+                try:
+                    i = int(idx)
+                except Exception:
+                    continue
+                if 1 <= i <= len(edges):
+                    valid_indices.append(i)
+
+            valid_indices = valid_indices[: self.nr_relevant_edges]
+            active_node_set = set(active_nodes)
+            if not valid_indices:
+                # Fallback (no LLM indices): keep only edges that are already active
+                # AND stay within the current active-node neighborhood, plus newly added.
+                selected = set()
+                for idx, edge in enumerate(edges, start=1):
+                    if edge in newly_added_edges:
+                        selected.add(idx)
+                    elif (
+                        edge.active
+                        and edge.source_node in active_node_set
+                        and edge.dest_node in active_node_set
+                    ):
+                        selected.add(idx)
+            else:
+                selected = set(valid_indices)
+                for i in selected:
+                    edges[i - 1].forget_score = self.edge_forget
+                    edges[i - 1].active = True
         else:
-            selected = set(valid_indices)
+            # Legacy behavior from the original paper code: trust the LLM indices,
+            # reactivate them, and fade everything else not newly added.
+            legacy_indices: List[int] = []
+            for idx in raw_indices[: self.nr_relevant_edges]:
+                try:
+                    i = int(idx)
+                except Exception:
+                    continue
+                if 1 <= i <= len(edges):
+                    legacy_indices.append(i)
+            selected = set(legacy_indices)
             for i in selected:
                 edges[i - 1].forget_score = self.edge_forget
                 edges[i - 1].active = True
