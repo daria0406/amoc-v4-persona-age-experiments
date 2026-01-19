@@ -162,12 +162,20 @@ def process_persona_csv(
     # 3. Process per model
     for model_name, engine in engines.items():
         safe_model_name = model_name.replace(":", "-").replace("/", "-")
-        output_filename = f"model_{safe_model_name}_triplets_{short_filename}"
-        output_path = output_dir / output_filename
+        cumulative_dir = output_dir / "cumulative"
+        cumulative_dir.mkdir(parents=True, exist_ok=True)
+        cumulative_output_filename = (
+            f"model_{safe_model_name}_cumulative_triplets_{short_filename}"
+        )
+        cumulative_output_path = cumulative_dir / cumulative_output_filename
+        active_dir = output_dir / "active"
+        active_dir.mkdir(parents=True, exist_ok=True)
         sentence_output_filename = (
             f"model_{safe_model_name}_sentence_triplets_{short_filename}"
         )
-        sentence_output_path = output_dir / sentence_output_filename
+        sentence_output_path = active_dir / sentence_output_filename
+        final_output_filename = f"model_{safe_model_name}_final_triplets_{short_filename}"
+        final_output_path = output_dir / final_output_filename
 
         ckpt_path = get_checkpoint_path(
             output_dir=str(output_dir),
@@ -181,16 +189,22 @@ def process_persona_csv(
         personas_processed = ckpt.get("personas_processed", 0)
 
         print(f"[Model] {model_name}")
-        print(f"  → Output: {output_path}")
+        print(f"  → Cumulative Output: {cumulative_output_path}")
+        print(f"  → Per-sentence Output: {sentence_output_path}")
+        print(f"  → Final active Output: {final_output_path}")
         print(f"  → Checkpoint: {ckpt_path}")
 
-        if not output_path.exists():
+        if not cumulative_output_path.exists():
             pd.DataFrame([], columns=CSV_HEADERS).to_csv(
-                output_path, index=False, encoding="utf-8"
+                cumulative_output_path, index=False, encoding="utf-8"
             )
         if not sentence_output_path.exists():
             pd.DataFrame([], columns=SENTENCE_CSV_HEADERS).to_csv(
                 sentence_output_path, index=False, encoding="utf-8"
+            )
+        if not final_output_path.exists():
+            pd.DataFrame([], columns=CSV_HEADERS).to_csv(
+                final_output_path, index=False, encoding="utf-8"
             )
 
         start_model_time = time.time()
@@ -298,13 +312,40 @@ def process_persona_csv(
                             deduped.append(rec)
                         records = deduped
 
-                        pd.DataFrame(records).to_csv(
-                            output_path,
-                            mode="a",
-                            header=False,
-                            index=False,
-                            encoding="utf-8",
-                        )
+                    if cumulative_triplets:
+                        cum_records = []
+                        for s, r, o in cumulative_triplets:
+                            s, r, o = repair_triplet(s, r, o)
+                            cum_records.append(
+                                {
+                                    "original_index": row_idx,
+                                    "age_refined": age_refined_int,
+                                    "persona_text": persona_text,
+                                    "model_name": model_name,
+                                    "subject": s,
+                                    "relation": r,
+                                    "object": o,
+                                    "sentence_index": -1,
+                                    "regime": regime,
+                                    "active": True,
+                                }
+                            )
+                        seen_cum = set()
+                        deduped_cum = []
+                        for rec in cum_records:
+                            key = (rec["subject"], rec["relation"], rec["object"])
+                            if key in seen_cum:
+                                continue
+                            seen_cum.add(key)
+                            deduped_cum.append(rec)
+                        if deduped_cum:
+                            pd.DataFrame(deduped_cum).to_csv(
+                                cumulative_output_path,
+                                mode="a",
+                                header=False,
+                                index=False,
+                                encoding="utf-8",
+                            )
 
                     if sentence_records:
                         seen_sent = set()
@@ -332,6 +373,63 @@ def process_persona_csv(
                             index=False,
                             encoding="utf-8",
                         )
+
+                    # After processing all sentences for this persona, write final active edges
+                    if final_triplets:
+                        final_records = []
+                        for trip in final_triplets:
+                            # Expect shape (s, r, o, active, introduced_at, last_active)
+                            if len(trip) == 6:
+                                s, r, o, active, introduced_at, last_active = trip
+                            elif len(trip) == 4:
+                                s, r, o, active = trip
+                                introduced_at = -1
+                                last_active = -1
+                            else:
+                                # Skip malformed
+                                continue
+                            if not active:
+                                continue
+                            s, r, o = repair_triplet(s, r, o)
+                            final_records.append(
+                                {
+                                    "original_index": row_idx,
+                                    "age_refined": age_refined_int,
+                                    "persona_text": persona_text,
+                                    "model_name": model_name,
+                                    "subject": s,
+                                    "relation": r,
+                                    "object": o,
+                                    "sentence_index": int(last_active)
+                                    if last_active is not None
+                                    else -1,
+                                    "regime": regime,
+                                    "active": True,
+                                }
+                            )
+                        if final_records:
+                            seen_final = set()
+                            deduped_final = []
+                            for rec in final_records:
+                                key = (
+                                    rec["subject"],
+                                    rec["relation"],
+                                    rec["object"],
+                                    rec["sentence_index"],
+                                )
+                                if key in seen_final:
+                                    continue
+                                seen_final.add(key)
+                                deduped_final.append(rec)
+                            if deduped_final:
+                                pd.DataFrame(deduped_final).to_csv(
+                                    final_output_path,
+                                    mode="a",
+                                    header=False,
+                                    index=False,
+                                    encoding="utf-8",
+                                )
+
 
                     personas_processed += 1
                     processed_indices.add(row_idx)

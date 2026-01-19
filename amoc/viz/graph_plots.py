@@ -130,6 +130,7 @@ def _enforce_minimum_spacing(
     pad_px: float = 8.0,
     scale_step: float = 1.06,
     max_iter: int = 140,
+    freeze_nodes: Optional[set[str]] = None,
 ) -> None:
     if len(pos) < 2:
         return
@@ -142,6 +143,8 @@ def _enforce_minimum_spacing(
             return
         # Radial scale (keep angles) until node circles no longer overlap.
         for node, (x, y) in list(pos.items()):
+            if freeze_nodes and node in freeze_nodes:
+                continue
             if hub is not None and node == hub:
                 continue
             pos[node] = (x * scale_step, y * scale_step)
@@ -310,8 +313,12 @@ def plot_amoc_triplets(
     sentence_text: str = "",
     deactivated_concepts: Optional[List[str]] = None,
     new_nodes: Optional[List[str]] = None,
+    explicit_nodes: Optional[Iterable[str]] = None,
+    salient_nodes: Optional[Iterable[str]] = None,
+    inactive_nodes: Optional[Iterable[str]] = None,
     positions: Optional[Dict[str, Tuple[float, float]]] = None,
     avoid_edge_overlap: bool = True,
+    active_edges: Optional[set[Tuple[str, str]]] = None,
 ) -> str:
     blue_nodes = set(blue_nodes) if blue_nodes is not None else set(DEFAULT_BLUE_NODES)
     out_dir = output_dir or os.path.join(OUTPUT_ANALYSIS_DIR, "graphs")
@@ -333,6 +340,7 @@ def plot_amoc_triplets(
     G = nx.DiGraph()
     edge_labels: Dict[Tuple[str, str], str] = {}
     duplicate_edges: set[Tuple[str, str]] = set()
+    active_edge_set = active_edges or set()
     for src, rel, dst in triplets:
         src = str(src).strip()
         dst = str(dst).strip()
@@ -346,8 +354,11 @@ def plot_amoc_triplets(
         G.add_edge(u, v)
         edge_labels[(u, v)] = rel
 
-    # Remove isolates, optionally keep only largest component
-    G.remove_nodes_from(list(nx.isolates(G)))
+    # Remove isolates, optionally keep only largest component, removed it to keep the
+    if "sentence" in (step_tag or "") and active_edge_set:
+        # Only remove nodes that are neither incident to active edges nor memory
+        nodes_with_edges = {u for e in G.edges() for u in e}
+        G.remove_nodes_from([n for n in G.nodes() if n not in nodes_with_edges])
     if G.number_of_nodes() == 0:
         return save_path
     components = list(nx.connected_components(G.to_undirected()))
@@ -365,6 +376,7 @@ def plot_amoc_triplets(
     fixed_pos: Dict[str, Tuple[float, float]] = {
         node: position_cache[node] for node in nodes if node in position_cache
     }
+    fixed_nodes = set(fixed_pos.keys())
     hub: Optional[str] = None
 
     max_label_len = max((len(_pretty_text(n)) for n in nodes), default=0)
@@ -575,7 +587,15 @@ def plot_amoc_triplets(
     if avoid_edge_overlap:
         _push_nodes_off_edges(fig, ax, pos, list(G.edges()))
     _enforce_minimum_spacing(
-        fig, ax, pos, hub, node_size=3800, pad_px=8.0, scale_step=1.06, max_iter=140
+        fig,
+        ax,
+        pos,
+        hub,
+        node_size=3800,
+        pad_px=8.0,
+        scale_step=1.06,
+        max_iter=140,
+        freeze_nodes=fixed_nodes,
     )
     if avoid_edge_overlap:
         _push_nodes_off_edges(fig, ax, pos, list(G.edges()))
@@ -594,6 +614,18 @@ def plot_amoc_triplets(
         (u, v) for u, v in G.edges() if (v, u) in G.edges()
     }
 
+    # styling to distinguish between
+    edge_colors = []
+    edge_widths = []
+
+    for u, v in G.edges():
+        if (u, v) in active_edge_set:
+            edge_colors.append("black")
+            edge_widths.append(1.3)
+        else:
+            edge_colors.append("#cccccc")
+            edge_widths.append(0.8)
+
     # Draw all edges as straight lines; for reciprocal pairs, place labels on
     # opposite sides of the segment (using a perpendicular offset) to avoid
     # overlap while keeping the geometry straight.
@@ -601,10 +633,10 @@ def plot_amoc_triplets(
         G,
         pos,
         edgelist=list(G.edges()),
-        edge_color="black",
+        edge_color=edge_colors,
         arrows=True,
         arrowsize=16,
-        width=1.3,
+        width=edge_widths,
         connectionstyle="arc3,rad=0.0",
         ax=ax,
     )
@@ -619,7 +651,7 @@ def plot_amoc_triplets(
         # Perpendicular unit vector
         nx_ = -dy / dist
         ny_ = dx / dist
-        base = dist * 0.012  # very small perpendicular offset so labels hug the edge
+        base = 0.0  # place label on the edge axis (no perpendicular shift)
         # For reciprocals, push labels to opposite sides and stagger along the edge.
         if (u, v) in reciprocals:
             sign = 1.0 if u < v else -1.0
@@ -667,6 +699,14 @@ def plot_amoc_triplets(
             cleaned = cleaned[: max_len - 3].rstrip() + "..."
         return cleaned
 
+    def _format_nodes_line(label: str, nodes: Optional[Iterable[str]]) -> Optional[str]:
+        if nodes is None:
+            return None
+        cleaned = [_pretty_text(n) for n in nodes if n]
+        if not cleaned:
+            return f"{label}: none"
+        return f"{label}: " + ", ".join(cleaned)
+
     title_persona = (persona[:150] + "...") if len(persona) > 150 else persona
     ax.set_title(f"AMoC Knowledge Graph: {model_name}", size=20, pad=20)
     sup_lines = []
@@ -681,23 +721,23 @@ def plot_amoc_triplets(
 
             m = _re.search(r"sent(\d+)", step_tag)
             if m:
-                sentence_line = f"  {m.group(1)}: {sentence_line}"
-        sup_lines.append(f"Sentence: {sentence_line}")
-    if deactivated_concepts is not None:
-        if deactivated_concepts:
-            sup_lines.append(
-                "Deactivated nodes: "
-                + ", ".join(_pretty_text(c) for c in deactivated_concepts)
-            )
-        else:
-            sup_lines.append("Deactivated nodes: none")
-    if new_nodes is not None:
-        if new_nodes:
-            sup_lines.append(
-                "New nodes: " + ", ".join(_pretty_text(n) for n in new_nodes)
-            )
-        else:
-            sup_lines.append("New nodes: none")
+                sentence_line = f"{m.group(1)}: {sentence_line}"
+        sup_lines.append(f"Sentence {sentence_line}")
+    inactive_for_title = (
+        inactive_nodes if inactive_nodes is not None else deactivated_concepts
+    )
+    for label, items in [
+        ("Inactive nodes (retained in memory)", inactive_for_title),
+        ("Carry-over from previous sentences", salient_nodes),
+        ("Explicit this sentence", explicit_nodes),
+    ]:
+        line = _format_nodes_line(label, items)
+        if line:
+            sup_lines.append(line)
+    if explicit_nodes is None and salient_nodes is None:
+        fallback = _format_nodes_line("Active this sentence", new_nodes)
+        if fallback:
+            sup_lines.append(fallback)
     plt.suptitle(
         "\n".join(sup_lines),
         y=0.98,

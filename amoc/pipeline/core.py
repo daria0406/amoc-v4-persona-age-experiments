@@ -110,6 +110,9 @@ class AMoCv4:
         self.active_graph = nx.MultiDiGraph()
         # Stable triplet introduction index: (subj, rel, obj) -> introduced_at_sentence
         self._triplet_intro: dict[tuple[str, str, str], int] = {}
+        # Append-only cumulative records (one row per active episode)
+        self._cumulative_triplet_records: list[dict] = []
+        self._fixed_hub = None
 
     def _node_token_for_matrix(self, node: Node) -> str:
         return (node.get_text_representer() or "").strip().lower()
@@ -333,6 +336,10 @@ class AMoCv4:
         graph_active_nodes: List[Node],
         graph_active_edge_nodes: Optional[set[Node]] = None,
     ) -> bool:
+        # When the flag is off, allow all edges (no connectivity/anchor checks).
+        if not self.strict_attachament_constraint:
+            return True
+
         # Connectivity constraint: avoid introducing edges that would form a new
         # disconnected component. Accept an edge only if it (a) touches the current
         # sentence and (b) attaches to a node already in the active graph (or, if
@@ -377,13 +384,10 @@ class AMoCv4:
             or subj_key in anchor_lemma_keys
             or obj_key in anchor_lemma_keys
         )
+        memory_lemma_keys = {tuple(n.lemmas) for n in self.graph.nodes}
+        touches_memory = subj_key in memory_lemma_keys or obj_key in memory_lemma_keys
 
-        if self.strict_attachament_constraint:
-            return touches_sentence and touches_active and attaches_anchor
-        # Relaxed guard: allow edges that touch either the current sentence OR
-        # the active neighborhood, but still require they attach to the anchor
-        # (once seeded) so the graph stays connected.
-        return attaches_anchor and (touches_sentence or touches_active)
+        return touches_active or touches_memory
 
     def _add_edge(
         self,
@@ -393,37 +397,22 @@ class AMoCv4:
         edge_forget: int,
         created_at_sentence: Optional[int] = None,
     ) -> Optional[Edge]:
-        # Keep the graph as a single connected component: once seeded, at least
-        # one endpoint of every new edge must already exist in the graph.
-        if self.graph.nodes:
-            if (
-                source_node not in self.graph.nodes
-                and dest_node not in self.graph.nodes
-            ):
-                return None
-
-        # Enforce anchor connectivity: if an anchor exists, at least one endpoint
-        # must be in it. Otherwise, reject.
-        if self._anchor_nodes and not (
-            source_node in self._anchor_nodes or dest_node in self._anchor_nodes
-        ):
-            # Anchor constraint failure: log and drop
-            self._anchor_drop_log.append(
-                (
-                    self._current_sentence_index or -1,
-                    self._current_sentence_text,
-                    source_node.get_text_representer(),
-                    label,
-                    dest_node.get_text_representer(),
-                )
-            )
-            return None
+        # Enforce ONLY connectivity, not anchoring
+        if self.strict_attachament_constraint:
+            # Prevent creation of disconnected components
+            if self.graph.nodes:
+                if (
+                    source_node not in self.graph.nodes
+                    and dest_node not in self.graph.nodes
+                ):
+                    return None
 
         use_sentence = (
             created_at_sentence
             if created_at_sentence is not None
             else getattr(self, "_current_sentence_index", None)
         )
+
         edge = self.graph.add_edge(
             source_node,
             dest_node,
@@ -431,6 +420,7 @@ class AMoCv4:
             edge_forget,
             created_at_sentence=use_sentence,
         )
+
         if edge:
             trip_id = (
                 edge.source_node.get_text_representer(),
@@ -441,18 +431,9 @@ class AMoCv4:
                 self._triplet_intro[trip_id] = (
                     use_sentence if use_sentence is not None else -1
                 )
+
             self._record_edge_in_graphs(edge, self._current_sentence_index)
-            # Seed anchor on the very first edge. If single-anchor mode is on,
-            # keep only the initial hub; otherwise grow the anchor set when touched.
-            if not self._anchor_nodes:
-                if self.single_anchor_hub:
-                    self._anchor_nodes = {source_node}
-                else:
-                    self._anchor_nodes.update({source_node, dest_node})
-            elif not self.single_anchor_hub and (
-                source_node in self._anchor_nodes or dest_node in self._anchor_nodes
-            ):
-                self._anchor_nodes.update({source_node, dest_node})
+
         return edge
 
     def reset_graph(self) -> None:
@@ -519,34 +500,25 @@ class AMoCv4:
         u, v, lbl = self._edge_key(edge)
         introduced = self._triplet_intro.get((u, lbl, v))
         if introduced is None:
-            introduced = edge.created_at_sentence if edge.created_at_sentence is not None else -1
-        self._triplet_intro[(u, lbl, v)] = int(introduced)
-
-        # Only update last_active when the edge is currently active in this sentence.
-        existing_last_active = None
-        edge_key = f"{lbl}__introduced_{introduced}"
-        if self.cumulative_graph.has_edge(u, v, key=edge_key):
-            existing_last_active = self.cumulative_graph[u][v][edge_key].get("last_active_sentence")
-        last_active = existing_last_active
-        if edge.active and sentence_idx is not None:
-            last_active = sentence_idx
-        edge_key = f"{lbl}__introduced_{introduced}"
-        # Cumulative memory (never removed)
-        if self.cumulative_graph.has_edge(u, v, key=edge_key):
-            # Update attributes if already present
-            data = self.cumulative_graph[u][v][edge_key]
-            if data.get("introduced_at_sentence", introduced) == -1:
-                data["introduced_at_sentence"] = introduced
-            data["last_active_sentence"] = last_active
-        else:
-            self.cumulative_graph.add_edge(
-                u,
-                v,
-                key=edge_key,
-                relation=lbl,
-                introduced_at_sentence=int(introduced),
-                last_active_sentence=int(last_active),
+            introduced = (
+                edge.created_at_sentence if edge.created_at_sentence is not None else -1
             )
+        self._triplet_intro[(u, lbl, v)] = int(introduced)
+        edge_key = f"{lbl}__introduced_{introduced}"
+
+        # Append-only cumulative record: one row per state observation when we touch an edge.
+        if sentence_idx is not None:
+            self._cumulative_triplet_records.append(
+                {
+                    "subject": u,
+                    "relation": lbl,
+                    "object": v,
+                    "introduced_at": int(introduced),
+                    "last_active": int(sentence_idx),
+                    "currently_active": bool(edge.active),
+                }
+            )
+
         # Active projection (salience)
         if edge.active:
             self.active_graph.add_edge(
@@ -555,7 +527,9 @@ class AMoCv4:
                 key=edge_key,
                 relation=lbl,
                 introduced_at_sentence=int(introduced),
-                last_active_sentence=int(last_active),
+                last_active_sentence=int(
+                    sentence_idx if sentence_idx is not None else -1
+                ),
             )
         else:
             if self.active_graph.has_edge(u, v, key=edge_key):
@@ -569,6 +543,22 @@ class AMoCv4:
         for u, v, key, data in graph.edges(keys=True, data=True):
             rel = data.get("relation") or key
             trips.append((u, rel, v))
+        return trips
+
+    def _cumulative_triplets_upto(
+        self, sentence_idx: Optional[int] = None
+    ) -> List[Tuple[str, str, str]]:
+        trips = []
+        for edge in self.graph.edges:
+            if not edge.label:
+                continue
+            trips.append(
+                (
+                    edge.source_node.get_text_representer(),
+                    edge.label,
+                    edge.dest_node.get_text_representer(),
+                )
+            )
         return trips
 
     def _is_generic_relation(self, label: str) -> bool:
@@ -678,12 +668,14 @@ class AMoCv4:
         sentence_text: str,
         output_dir: Optional[str],
         highlight_nodes: Optional[Iterable[str]],
-        deactivated_concepts: Optional[List[str]] = None,
-        new_nodes: Optional[List[str]] = None,
         only_active: bool = False,
         largest_component_only: bool = False,
         mode: str = "sentence_active",
         triplets_override: Optional[List[Tuple[str, str, str]]] = None,
+        active_edges: Optional[set[tuple[str, str]]] = None,
+        explicit_nodes: Optional[List[str]] = None,
+        salient_nodes: Optional[List[str]] = None,
+        inactive_nodes: Optional[List[str]] = None,
     ) -> None:
         # Route per-sentence plots into mode-specific subfolders for clarity.
         plot_dir = output_dir
@@ -714,10 +706,12 @@ class AMoCv4:
                     else f"sent{sentence_index+1}"
                 ),
                 sentence_text=sentence_text,
-                deactivated_concepts=deactivated_concepts,
-                new_nodes=new_nodes,
+                inactive_nodes=inactive_nodes,
+                explicit_nodes=explicit_nodes,
+                salient_nodes=salient_nodes,
                 largest_component_only=largest_component_only,
                 positions=self._viz_positions,
+                active_edges=active_edges,
             )
             if triplets:
                 logging.info(
@@ -741,9 +735,10 @@ class AMoCv4:
     ) -> List[Tuple[str, str, str]]:
         if not hasattr(self, "_amoc_matrix_records"):
             self._amoc_matrix_records = []
-        # Always start each analyze run with a fresh layout cache so plots begin
-        # from a clean radial arrangement.
-        self._viz_positions = {}
+        # Initialize persistent visualization positions ONCE per analyze run.
+        # These positions must remain stable across sentences.
+        if not hasattr(self, "_viz_positions") or self._viz_positions is None:
+            self._viz_positions = {}
         self._cumulative_deactivated_nodes_for_plot = set()
         self._prev_active_nodes_for_plot = set()
 
@@ -1055,9 +1050,7 @@ class AMoCv4:
 
             current_active_nodes = self._get_nodes_with_active_edges()
             if i == 0:
-                deactivated_concepts = None
                 recently_deactivated_nodes: set[Node] = set()
-                new_nodes_for_plot = None
             else:
                 appeared = current_active_nodes - self._prev_active_nodes_for_plot
                 gone = self._prev_active_nodes_for_plot - current_active_nodes
@@ -1065,16 +1058,33 @@ class AMoCv4:
                 self._cumulative_deactivated_nodes_for_plot.difference_update(
                     current_active_nodes
                 )
-                deactivated_concepts = sorted(
+                recently_deactivated_nodes = set(gone)
+            inactive_nodes_for_plot = sorted(
+                filter(
+                    None,
                     {
                         node.get_text_representer()
                         for node in self._cumulative_deactivated_nodes_for_plot
-                    }
+                    },
                 )
-                recently_deactivated_nodes = set(gone)
-                new_nodes_for_plot = sorted(
-                    {node.get_text_representer() for node in appeared}
+            )
+            explicit_nodes_for_plot = sorted(
+                filter(
+                    None,
+                    {
+                        node.get_text_representer()
+                        for node in current_sentence_text_based_nodes
+                    },
                 )
+            )
+            salient_nodes_for_plot = sorted(
+                {
+                    node.get_text_representer()
+                    for node in current_active_nodes
+                    if node.get_text_representer()
+                }
+                - set(explicit_nodes_for_plot)
+            )
             # Only keep the deactivated set for targeted inference when the
             # attachment constraint is enforced.
             if self.ENFORCE_ATTACHMENT_CONSTRAINT:
@@ -1092,12 +1102,14 @@ class AMoCv4:
                     sentence_text=sent.text,
                     output_dir=graphs_output_dir,
                     highlight_nodes=highlight_nodes,
-                    deactivated_concepts=deactivated_concepts,
-                    new_nodes=new_nodes_for_plot,
+                    inactive_nodes=inactive_nodes_for_plot,
+                    explicit_nodes=explicit_nodes_for_plot,
+                    salient_nodes=salient_nodes_for_plot,
                     only_active=True,
                     largest_component_only=largest_component_only,
                     mode="sentence_active",
                     triplets_override=self._graph_to_triplets(self.active_graph),
+                    active_edges={(u, v) for u, v in self.active_graph.edges()},
                 )
                 # Cumulative memory view
                 self._plot_graph_snapshot(
@@ -1105,12 +1117,23 @@ class AMoCv4:
                     sentence_text=sent.text,
                     output_dir=graphs_output_dir,
                     highlight_nodes=highlight_nodes,
-                    deactivated_concepts=deactivated_concepts,
-                    new_nodes=new_nodes_for_plot,
+                    inactive_nodes=inactive_nodes_for_plot,
+                    explicit_nodes=explicit_nodes_for_plot,
+                    salient_nodes=salient_nodes_for_plot,
                     only_active=False,
                     largest_component_only=largest_component_only,
                     mode="sentence_cumulative",
-                    triplets_override=self._graph_to_triplets(self.cumulative_graph),
+                    triplets_override=self._cumulative_triplets_upto(
+                        self._current_sentence_index
+                    ),
+                    active_edges={
+                        (
+                            edge.source_node.get_text_representer(),
+                            edge.dest_node.get_text_representer(),
+                        )
+                        for edge in self.graph.edges
+                        if edge.active
+                    },
                 )
 
             # Capture triplets for this sentence (all edges, with current active flag)
@@ -1186,7 +1209,7 @@ class AMoCv4:
                 )
             )
 
-        cumulative_triplets = self._graph_to_triplets(self.cumulative_graph)
+        cumulative_triplets = self._cumulative_triplets_upto(None)
 
         return final_triplets, self._sentence_triplets, cumulative_triplets
 
@@ -1290,63 +1313,73 @@ class AMoCv4:
         edges_text, edges = self.graph.get_edges_str(
             self.graph.nodes, only_active=False
         )
+        # Non-strict mode: accumulate salience monotonically (no fading/pruning).
+        if not self.strict_reactivate_function:
+            for edge in edges:
+                edge.active = True
+                edge.forget_score = self.edge_forget
+                self._record_edge_in_graphs(edge, self._current_sentence_index)
+            return
+
         raw_indices = self.client.get_relevant_edges(
             edges_text, prev_sentences_text, self.persona
         )
 
-        if self.strict_reactivate_function:
-            valid_indices: List[int] = []
-            for idx in raw_indices:
-                try:
-                    i = int(idx)
-                except Exception:
-                    continue
-                if 1 <= i <= len(edges):
-                    valid_indices.append(i)
+        valid_indices: List[int] = []
+        for idx in raw_indices:
+            try:
+                i = int(idx)
+            except Exception:
+                continue
+            if 1 <= i <= len(edges):
+                valid_indices.append(i)
 
-            valid_indices = valid_indices[: self.nr_relevant_edges]
-            active_node_set = set(active_nodes)
-            if not valid_indices:
-                # Fallback (no LLM indices): keep only edges that are already active
-                # AND stay within the current active-node neighborhood, plus newly added.
-                selected = set()
-                for idx, edge in enumerate(edges, start=1):
-                    if edge in newly_added_edges:
-                        selected.add(idx)
-                    elif (
-                        edge.active
-                        and edge.source_node in active_node_set
-                        and edge.dest_node in active_node_set
-                    ):
-                        selected.add(idx)
-            else:
-                selected = set(valid_indices)
-                for i in selected:
-                    edges[i - 1].forget_score = self.edge_forget
-                    edges[i - 1].active = True
-                    self._record_edge_in_graphs(edges[i - 1], self._current_sentence_index)
+        valid_indices = valid_indices[: self.nr_relevant_edges]
+        active_node_set = set(active_nodes)
+        if not valid_indices:
+            # Fallback (no LLM indices): keep only edges that are already active
+            # AND stay within the current active-node neighborhood, plus newly added.
+            selected = set()
+            for idx, edge in enumerate(edges, start=1):
+                if edge in newly_added_edges:
+                    selected.add(idx)
+                elif (
+                    edge.active
+                    and edge.source_node in active_node_set
+                    and edge.dest_node in active_node_set
+                ):
+                    selected.add(idx)
         else:
-            # Legacy behavior from the original paper code: trust the LLM indices,
-            # reactivate them, and fade everything else not newly added.
-            legacy_indices: List[int] = []
-            for idx in raw_indices[: self.nr_relevant_edges]:
-                try:
-                    i = int(idx)
-                except Exception:
-                    continue
-                if 1 <= i <= len(edges):
-                    legacy_indices.append(i)
-            selected = set(legacy_indices)
+            selected = set(valid_indices)
             for i in selected:
                 edges[i - 1].forget_score = self.edge_forget
                 edges[i - 1].active = True
                 self._record_edge_in_graphs(edges[i - 1], self._current_sentence_index)
 
-        # Fade away edges that were not selected and are not newly added
+        # Preserve connectivity in the active projection.
+        # If deactivating an edge would disconnect active nodes,
+        # keep it active as a low-salience bridge (paper-consistent).
+        def _active_subgraph_connected():
+            G = nx.Graph()
+            for e in edges:
+                if e.active:
+                    G.add_edge(e.source_node, e.dest_node)
+            for n in active_nodes:
+                G.add_node(n)
+            return nx.is_connected(G) if G.number_of_nodes() > 1 else True
+
+        # Non-salient memory edges (AMoC-consistent):
+        # Keep edges in memory but mark them inactive.
         for j in range(1, len(edges) + 1):
+            edge = edges[j - 1]
             if j not in selected and edges[j - 1] not in newly_added_edges:
-                edges[j - 1].fade_away()
-                self._record_edge_in_graphs(edges[j - 1], self._current_sentence_index)
+                edge.active = False
+
+                if not _active_subgraph_connected():
+                    edge.active = True  # keep as bridge
+                    edge.forget_score = 0  # lowest salience
+                else:
+                    self._record_edge_in_graphs(edge, self._current_sentence_index)
 
     def init_graph(self, sent: Span) -> None:
         current_sentence_text_based_nodes, current_sentence_text_based_words = (

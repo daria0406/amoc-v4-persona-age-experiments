@@ -37,7 +37,5 @@ bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
     --plot-after-each-sentence \
     --output-dir "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/small_example_output" \
     --file "${INPUT_FILE}" \
-    --no-strict-reactivate-function \
-    --no-strict-attachament-constraint \
-    --single-anchor-hub
-    --edge-forget 3
+    --strict-reactivate-function \
+    --strict-attachament-constraint 

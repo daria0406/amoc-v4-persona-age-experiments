@@ -126,7 +126,7 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
     p.add_argument(
         "--single-anchor-hub",
         action=argparse.BooleanOptionalAction,
-        default=True,
+        default=False,
         help=(
             "Keep a single anchor hub that every edge must touch (default). "
             "Disable to allow the anchor set to grow when touched."
