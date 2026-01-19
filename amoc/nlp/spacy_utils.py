@@ -42,14 +42,6 @@ def get_concept_lemmas(nlp, concept: str) -> List[str]:
 
 
 def canonicalize_node_text(nlp, text: str) -> str:
-    """
-    Canonicalize a node string into a single token to reduce phrase variants.
-
-    Examples:
-    - "young knight" -> "knight"
-    - "the kingdom" -> "kingdom"
-    - "princesses" -> "princess"
-    """
     if not isinstance(text, str):
         text = str(text)
     text = text.strip()

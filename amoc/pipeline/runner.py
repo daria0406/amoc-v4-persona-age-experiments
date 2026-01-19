@@ -249,6 +249,7 @@ def process_persona_csv(
                         single_anchor_hub=single_anchor_hub,
                         story_text=story_text,
                         edge_forget=edge_forget,
+                        matrix_dir_base=str(output_dir),
                     )
 
                     records = []

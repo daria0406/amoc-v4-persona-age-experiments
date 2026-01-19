@@ -75,9 +75,10 @@ def main():
     print(df_stats_all.groupby("regime").size())
     print(df_stats_all.shape)
     # Save raw stats as a CSV (not a directory) to avoid clashing with the output dir
-    df_stats_all.to_csv(
-        os.path.join(args.input_dir, "persona_stats_raw.csv"), index=False
-    )
+    stats_dir = os.path.join(args.input_dir, "run_statistics")
+    os.makedirs(stats_dir, exist_ok=True)
+
+    df_stats_all.to_csv(os.path.join(stats_dir, "persona_stats_raw.csv"), index=False)
     # trimming by quantiles
     df_trimmed = quantile_trim(
         df_stats_all,

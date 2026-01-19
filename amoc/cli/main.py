@@ -23,6 +23,7 @@ from amoc.config import (
 from amoc.pipeline.runner import process_persona_csv
 from amoc.analysis.statistics import run_statistical_analysis
 from amoc.nlp import load_spacy
+from amoc.nlp.highlights import blue_nodes_from_text
 
 
 # ==========================================
@@ -217,6 +218,10 @@ def main(argv: List[str]) -> None:
     total_start = time.time()
 
     story_text = args.story_text if args.story_text is not None else STORY_TEXT
+    story_is_default = (story_text or "").strip() == (STORY_TEXT or "").strip()
+    highlight_nodes = (
+        BLUE_NODES if story_is_default else blue_nodes_from_text(story_text, spacy_nlp)
+    )
 
     if args.output_dir:
         os.makedirs(args.output_dir, exist_ok=True)
@@ -239,7 +244,7 @@ def main(argv: List[str]) -> None:
                 resume_only=args.resume_only,
                 plot_after_each_sentence=args.plot_after_each_sentence,
                 graphs_output_dir=os.path.join(OUTPUT_ANALYSIS_DIR, "graphs"),
-                highlight_nodes=BLUE_NODES,
+                highlight_nodes=highlight_nodes,
                 plot_final_graph=args.plot_final_graph,
                 plot_largest_component_only=args.plot_largest_component_only,
                 include_inactive_edges=args.include_inactive_edges,

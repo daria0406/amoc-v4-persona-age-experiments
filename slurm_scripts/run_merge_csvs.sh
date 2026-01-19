@@ -1,4 +1,16 @@
 #!/bin/bash
+#SBATCH --job-name=amoc_merge_triplets
+#SBATCH --partition=dgxa100
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=16G
+#SBATCH --time=00:30:00
+#SBATCH --output=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%j.out
+#SBATCH --error=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%j.err
+
+
 set -euo pipefail
 
 SIF_IMAGE="/export/projects/nlp/containers/daria-vllm.sif"

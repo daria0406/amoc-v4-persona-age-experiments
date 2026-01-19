@@ -1,13 +1,15 @@
 import os
 import pandas as pd
 from typing import List
+import re
 
 
 def find_triplet_files(input_dir: str, safe_tag: str) -> List[str]:
     return [
         os.path.join(input_dir, f)
         for f in os.listdir(input_dir)
-        if f.lower().startswith(f"model_{safe_tag.lower()}_triplets_")
+        if f.lower().startswith(f"model_{safe_tag.lower()}")
+        and "_final_triplets_" in f.lower()
         and f.lower().endswith(".csv")
     ]
 

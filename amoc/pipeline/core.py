@@ -69,9 +69,11 @@ class AMoCv4:
         strict_reactivate_function: bool = True,
         strict_attachament_constraint: bool = True,
         single_anchor_hub: bool = True,
+        matrix_dir_base: Optional[str] = None,
     ) -> None:
         self.persona = persona_description
         self.story_text = story_text
+        self.matrix_dir_base = matrix_dir_base or OUTPUT_ANALYSIS_DIR
         self.client = vllm_client
         self.model_name = vllm_client.model_name
         self.persona_age = persona_age
@@ -1178,6 +1180,13 @@ class AMoCv4:
 
         # save score matrix
         df = pd.DataFrame(self._amoc_matrix_records)
+        # Collapse duplicate token/sentence entries by mean to avoid pivot errors.
+        if not df.empty:
+            df = (
+                df.groupby(["token", "sentence"], as_index=False)["score"]
+                .mean()
+                .astype({"token": str})
+            )
         matrix = (
             df.pivot(index="token", columns="sentence", values="score")
             .sort_index()
@@ -1200,7 +1209,7 @@ class AMoCv4:
             story_row.iloc[0, 0] = self.story_text
             matrix = pd.concat([story_row, matrix])
 
-        matrix_dir = os.path.join(OUTPUT_ANALYSIS_DIR, "matrix")
+        matrix_dir = os.path.join(self.matrix_dir_base, "matrix")
         os.makedirs(matrix_dir, exist_ok=True)
         safe_model = _sanitize_filename_component(self.model_name, max_len=60)
         safe_persona = _sanitize_filename_component(self.persona, max_len=60)

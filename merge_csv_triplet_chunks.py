@@ -10,11 +10,10 @@ import re
 from pathlib import Path
 from typing import Dict, List, Tuple
 import pandas as pd
+from typing import Optional
 
-INPUT_DIR = (
-    "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/"
-)
-OUTPUT_DIR = "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/merged_files"
+INPUT_DIR = "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/10_example_output"
+OUTPUT_DIR = "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/10_example_output/merged_files"
 
 KNOWN_REGIMES = {"primary", "secondary", "highschool", "high_school", "university"}
 
@@ -33,7 +32,9 @@ def parse_model_and_regime(filename: str) -> Tuple[str, str]:
     return model, regime
 
 
-def merge_chunks(input_dir: Path, output_dir: Path, regime_filter: str | None) -> None:
+def merge_chunks(
+    input_dir: Path, output_dir: Path, regime_filter: Optional[str]
+) -> None:
     csv_files = sorted(input_dir.glob("model_*_triplets_*.csv"))
     if not csv_files:
         raise RuntimeError(f"No triplet CSV files found in {input_dir}")
