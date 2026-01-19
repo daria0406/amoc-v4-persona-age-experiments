@@ -38,6 +38,7 @@ class AgeAwareAMoCEngine:
         strict_attachament_constraint: bool = True,
         single_anchor_hub: bool = True,
         edge_forget: Optional[int] = None,
+        story_text: Optional[str] = None,
     ) -> List[Tuple[str, str, str]]:
 
         try:
@@ -49,7 +50,7 @@ class AgeAwareAMoCEngine:
 
         amoc = AMoCv4(
             persona_description=persona_description,
-            story_text=STORY_TEXT,
+            story_text=story_text if story_text is not None else STORY_TEXT,
             vllm_client=self.vllm_client,
             max_distance_from_active_nodes=MAX_DISTANCE_FROM_ACTIVE_NODES,
             max_new_concepts=MAX_NEW_CONCEPTS,

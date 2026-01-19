@@ -787,9 +787,11 @@ class AMoCv4:
 
         prev_sentences: list[str] = []
         current_sentence = ""
-        self._sentence_triplets: list[tuple[int, str, str, str, str, bool, bool]] = (
+        self._sentence_triplets: list[
+            tuple[int, str, str, str, str, bool, bool, int]
+        ] = (
             []
-        )  # sentence_idx, sentence_text, subj, rel, obj, active, anchor_kept
+        )  # sentence_idx, sentence_text, subj, rel, obj, active, anchor_kept, introduced_at
         for i, (sent, resolved_text, original_text) in enumerate(resolved_sentences):
             # Working-memory projection is rebuilt each sentence.
             self.active_graph = nx.MultiDiGraph()
@@ -1138,6 +1140,14 @@ class AMoCv4:
 
             # Capture triplets for this sentence (all edges, with current active flag)
             for edge in self.graph.edges:
+                intro = self._triplet_intro.get(
+                    (
+                        edge.source_node.get_text_representer(),
+                        edge.label,
+                        edge.dest_node.get_text_representer(),
+                    ),
+                    edge.created_at_sentence if edge.created_at_sentence else -1,
+                )
                 self._sentence_triplets.append(
                     (
                         self._current_sentence_index,
@@ -1147,6 +1157,7 @@ class AMoCv4:
                         edge.dest_node.get_text_representer(),
                         edge.active,
                         True,  # anchor_kept
+                        int(intro),
                     )
                 )
             for sent_idx, sent_text, subj, rel, obj in getattr(
@@ -1161,6 +1172,7 @@ class AMoCv4:
                         obj,
                         False,  # inactive/not added
                         False,  # anchor_kept flag
+                        -1,  # introduced_at unknown/unused for dropped anchors
                     )
                 )
 
@@ -1180,6 +1192,13 @@ class AMoCv4:
             .sort_values(by=["max", "sum", "token"], ascending=[False, False, True])
         )
         matrix = matrix.loc[ordering.index]
+        # Prepend full story text as first row for traceability.
+        if len(matrix.columns) > 0:
+            story_row = pd.DataFrame(
+                [{col: "" for col in matrix.columns}], index=["story_text"]
+            )
+            story_row.iloc[0, 0] = self.story_text
+            matrix = pd.concat([story_row, matrix])
 
         matrix_dir = os.path.join(OUTPUT_ANALYSIS_DIR, "matrix")
         os.makedirs(matrix_dir, exist_ok=True)
@@ -1224,7 +1243,15 @@ class AMoCv4:
                 )
             )
 
-        cumulative_triplets = self._cumulative_triplets_upto(None)
+        cumulative_triplets = []
+        for edge in self.graph.edges:
+            subj = edge.source_node.get_text_representer()
+            obj = edge.dest_node.get_text_representer()
+            rel = edge.label
+            intro = self._triplet_intro.get((subj, rel, obj))
+            if intro is None:
+                intro = edge.created_at_sentence if edge.created_at_sentence else -1
+            cumulative_triplets.append((subj, rel, obj, int(intro)))
 
         return final_triplets, self._sentence_triplets, cumulative_triplets
 

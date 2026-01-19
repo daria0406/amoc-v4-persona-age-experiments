@@ -38,11 +38,13 @@ CSV_HEADERS = [
     "original_index",
     "age_refined",
     "persona_text",
+    "story_text",
     "model_name",
     "subject",
     "relation",
     "object",
     "sentence_index",
+    "introduced_at",
     "regime",
     "active",
 ]
@@ -51,8 +53,10 @@ SENTENCE_CSV_HEADERS = [
     "original_index",
     "age_refined",
     "persona_text",
+    "story_text",
     "model_name",
     "sentence_index",
+    "introduced_at",
     "sentence_text",
     "subject",
     "relation",
@@ -93,6 +97,13 @@ def repair_triplet(e1: str, e2: str, e3: str):
     return e1, e2, e3
 
 
+def story_snippet(story_text: Optional[str], max_words: int = 5) -> str:
+    if not story_text:
+        return ""
+    words = str(story_text).split()
+    return " ".join(words[:max_words])
+
+
 def process_persona_csv(
     filename: str,
     model_names: List[str],
@@ -112,9 +123,11 @@ def process_persona_csv(
     strict_attachament_constraint: bool = True,
     single_anchor_hub: bool = True,
     edge_forget: Optional[int] = None,
+    story_text: Optional[str] = None,
 ) -> None:
     short_filename = os.path.basename(filename)
     print(f"\n=== Processing File (chunk): {short_filename} ===")
+    story_excerpt = story_snippet(story_text)
 
     # --- Path normalization (CRITICAL FIX) ---
     output_dir = Path(output_dir)
@@ -174,7 +187,9 @@ def process_persona_csv(
             f"model_{safe_model_name}_sentence_triplets_{short_filename}"
         )
         sentence_output_path = active_dir / sentence_output_filename
-        final_output_filename = f"model_{safe_model_name}_final_triplets_{short_filename}"
+        final_output_filename = (
+            f"model_{safe_model_name}_final_triplets_{short_filename}"
+        )
         final_output_path = output_dir / final_output_filename
 
         ckpt_path = get_checkpoint_path(
@@ -232,6 +247,7 @@ def process_persona_csv(
                         strict_reactivate_function=strict_reactivate_function,
                         strict_attachament_constraint=strict_attachament_constraint,
                         single_anchor_hub=single_anchor_hub,
+                        story_text=story_text,
                         edge_forget=edge_forget,
                     )
 
@@ -257,13 +273,16 @@ def process_persona_csv(
                                 "original_index": row_idx,
                                 "age_refined": age_refined_int,
                                 "persona_text": persona_text,
+                                "story_text": story_excerpt,
                                 "model_name": model_name,
                                 "subject": s,
                                 "relation": r,
                                 "object": o,
-                                "sentence_index": int(sentence_idx)
-                                if sentence_idx is not None
-                                else -1,
+                                "sentence_index": (
+                                    int(sentence_idx)
+                                    if sentence_idx is not None
+                                    else -1
+                                ),
                                 "regime": regime,
                                 "active": bool(active),
                             }
@@ -271,8 +290,17 @@ def process_persona_csv(
 
                     sentence_records = []
                     for trip in sentence_triplets:
-                        if len(trip) == 7:
-                            sent_idx, sent_text, s, r, o, active, anchor_kept = trip
+                        if len(trip) == 8:
+                            (
+                                sent_idx,
+                                sent_text,
+                                s,
+                                r,
+                                o,
+                                active,
+                                anchor_kept,
+                                introduced_at,
+                            ) = trip
                         else:
                             # fallback: skip malformed
                             continue
@@ -282,8 +310,10 @@ def process_persona_csv(
                                 "original_index": row_idx,
                                 "age_refined": age_refined_int,
                                 "persona_text": persona_text,
+                                "story_text": story_excerpt,
                                 "model_name": model_name,
                                 "sentence_index": int(sent_idx),
+                                "introduced_at": int(introduced_at),
                                 "sentence_text": sent_text,
                                 "subject": s,
                                 "relation": r,
@@ -314,18 +344,24 @@ def process_persona_csv(
 
                     if cumulative_triplets:
                         cum_records = []
-                        for s, r, o in cumulative_triplets:
+                        for trip in cumulative_triplets:
+                            if len(trip) == 4:
+                                s, r, o, introduced_at = trip
+                            else:
+                                continue
                             s, r, o = repair_triplet(s, r, o)
                             cum_records.append(
                                 {
                                     "original_index": row_idx,
                                     "age_refined": age_refined_int,
                                     "persona_text": persona_text,
+                                    "story_text": story_excerpt,
                                     "model_name": model_name,
                                     "subject": s,
                                     "relation": r,
                                     "object": o,
                                     "sentence_index": -1,
+                                    "introduced_at": int(introduced_at),
                                     "regime": regime,
                                     "active": True,
                                 }
@@ -344,6 +380,7 @@ def process_persona_csv(
                                 mode="a",
                                 header=False,
                                 index=False,
+                                columns=CSV_HEADERS,
                                 encoding="utf-8",
                             )
 
@@ -371,6 +408,7 @@ def process_persona_csv(
                             mode="a",
                             header=False,
                             index=False,
+                            columns=SENTENCE_CSV_HEADERS,
                             encoding="utf-8",
                         )
 
@@ -396,13 +434,17 @@ def process_persona_csv(
                                     "original_index": row_idx,
                                     "age_refined": age_refined_int,
                                     "persona_text": persona_text,
+                                    "story_text": story_excerpt,
                                     "model_name": model_name,
                                     "subject": s,
                                     "relation": r,
                                     "object": o,
-                                    "sentence_index": int(last_active)
-                                    if last_active is not None
-                                    else -1,
+                                    "sentence_index": (
+                                        int(last_active)
+                                        if last_active is not None
+                                        else -1
+                                    ),
+                                    "introduced_at": int(introduced_at),
                                     "regime": regime,
                                     "active": True,
                                 }
@@ -427,9 +469,9 @@ def process_persona_csv(
                                     mode="a",
                                     header=False,
                                     index=False,
+                                    columns=CSV_HEADERS,
                                     encoding="utf-8",
                                 )
-
 
                     personas_processed += 1
                     processed_indices.add(row_idx)
@@ -440,7 +482,11 @@ def process_persona_csv(
 
                     if plot_final_graph and records:
                         # Use cumulative graph for final plot to show full memory
-                        trips = cumulative_triplets
+                        trips = [
+                            (t[0], t[1], t[2])
+                            for t in cumulative_triplets
+                            if len(t) >= 3
+                        ]
                         if not trips:
                             trips = [
                                 (rec["subject"], rec["relation"], rec["object"])

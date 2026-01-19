@@ -13,7 +13,13 @@ os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
 os.environ["HF_HOME"] = "/export/projects/nlp/.cache"
 
 # --- AMoC imports ---
-from amoc.config import INPUT_DIR, OUTPUT_DIR, OUTPUT_ANALYSIS_DIR, BLUE_NODES
+from amoc.config import (
+    INPUT_DIR,
+    OUTPUT_DIR,
+    OUTPUT_ANALYSIS_DIR,
+    BLUE_NODES,
+    STORY_TEXT,
+)
 from amoc.pipeline.runner import process_persona_csv
 from amoc.analysis.statistics import run_statistical_analysis
 from amoc.nlp import load_spacy
@@ -163,6 +169,13 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
         help="Path to a single persona CSV chunk file to process.",
     )
 
+    p.add_argument(
+        "--story-text",
+        type=str,
+        default=None,
+        help="Override the default AMoC story text; defaults to configured STORY_TEXT when omitted.",
+    )
+
     return p.parse_args(argv)
 
 
@@ -203,6 +216,8 @@ def main(argv: List[str]) -> None:
 
     total_start = time.time()
 
+    story_text = args.story_text if args.story_text is not None else STORY_TEXT
+
     if args.output_dir:
         os.makedirs(args.output_dir, exist_ok=True)
         output_dir = args.output_dir
@@ -232,6 +247,7 @@ def main(argv: List[str]) -> None:
                 strict_attachament_constraint=args.strict_attachament_constraint,
                 single_anchor_hub=args.single_anchor_hub,
                 edge_forget=args.edge_forget,
+                story_text=story_text,
             )
     finally:
         elapsed = time.time() - total_start

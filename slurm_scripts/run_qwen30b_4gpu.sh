@@ -33,6 +33,9 @@ echo "Processing chunk file: ${INPUT_FILE}"
 bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
     --models "Qwen/Qwen3-30B-A3B-Instruct-2507" \
     --tp 2 \
-    --plot-final-graph \
-    --include-inactive-edges \
-    --file "${INPUT_FILE}"
+    --max-rows 10 \
+    --plot-after-each-sentence \
+    --output-dir "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/10_example_output" \
+    --file "${INPUT_FILE}" \
+    --strict-reactivate-function \
+    --strict-attachament-constraint 
