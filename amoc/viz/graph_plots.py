@@ -388,17 +388,23 @@ def plot_amoc_triplets(
     else:
         UG = G
 
-        # Single-hub radial layout (hub centered) to match the desired look.
-        if fixed_pos:
-            # Keep the previously-centered node as the hub when possible so
-            # existing nodes never jump when the graph changes.
-            hub = min(
-                fixed_pos.keys(),
-                key=lambda n: math.hypot(fixed_pos[n][0], fixed_pos[n][1]),
-            )
+        # Single-hub radial layout (hub centered) to keep the nodes at fixed positions
+        if (
+            positions is not None
+            and "__HUB__" in positions
+            and positions["__HUB__"] in nodes
+        ):
+            hub = positions["__HUB__"]
         else:
             hub_candidates = [n for n in nodes if n in blue_nodes] or nodes
             hub = max(hub_candidates, key=lambda n: (UG.degree(n), str(n)))
+            if positions is not None:
+                positions["__HUB__"] = hub
+
+        pos[hub] = (0.0, 0.0)
+        freeze_nodes = set(fixed_nodes)
+        if hub is not None:
+            freeze_nodes.add(hub)
 
         levels = nx.single_source_shortest_path_length(UG, hub)
         max_level = max(levels.values(), default=0)
@@ -624,7 +630,7 @@ def plot_amoc_triplets(
             edge_widths.append(1.3)
         else:
             edge_colors.append("#cccccc")
-            edge_widths.append(0.8)
+            edge_widths.append(1.2)
 
     # Draw all edges as straight lines; for reciprocal pairs, place labels on
     # opposite sides of the segment (using a perpendicular offset) to avoid
@@ -711,6 +717,7 @@ def plot_amoc_triplets(
     ax.set_title(f"AMoC Knowledge Graph: {model_name}", size=20, pad=20)
     sup_lines = []
     persona_line = _normalize_title_line(title_persona, max_len=180)
+    sentence_idx = None
     if persona_line:
         sup_lines.append(f"Persona: {persona_line}")
     if sentence_text:
@@ -721,15 +728,21 @@ def plot_amoc_triplets(
 
             m = _re.search(r"sent(\d+)", step_tag)
             if m:
-                sentence_line = f"{m.group(1)}: {sentence_line}"
+                sentence_idx = int(m.group(1))
+                sentence_line = f"{sentence_idx}: {sentence_line}"
         sup_lines.append(f"Sentence {sentence_line}")
     inactive_for_title = (
         inactive_nodes if inactive_nodes is not None else deactivated_concepts
     )
+    if inactive_for_title is not None:
+        sup_lines.append("\n")
     for label, items in [
-        ("Inactive nodes (retained in memory)", inactive_for_title),
-        ("Carry-over from previous sentences", salient_nodes),
         ("Explicit this sentence", explicit_nodes),
+        (
+            "Carry-over from previous sentences",
+            salient_nodes if (sentence_idx is not None and sentence_idx > 1) else None,
+        ),
+        ("Inactive nodes (retained in memory)", inactive_for_title),
     ]:
         line = _format_nodes_line(label, items)
         if line:

@@ -1171,6 +1171,15 @@ class AMoCv4:
             .sort_index()
             .fillna(0.0)
         )
+        # Order rows by salience: highest peak activation first, then total activation.
+        salience_max = matrix.max(axis=1)
+        salience_sum = matrix.sum(axis=1)
+        ordering = (
+            salience_max.to_frame("max")
+            .assign(sum=salience_sum)
+            .sort_values(by=["max", "sum", "token"], ascending=[False, False, True])
+        )
+        matrix = matrix.loc[ordering.index]
 
         matrix_dir = os.path.join(OUTPUT_ANALYSIS_DIR, "matrix")
         os.makedirs(matrix_dir, exist_ok=True)
@@ -1192,20 +1201,26 @@ class AMoCv4:
             matrix_path,
         )
         logging.info("AMoC activation matrix:\n%s", matrix.to_string())
-        # Collect final active triplets
+        # Collect final active triplets: edges active after the final sentence.
+        final_sentence_idx = getattr(self, "_current_sentence_index", None)
         final_triplets = []
-        for u, v, key, data in self.active_graph.edges(keys=True, data=True):
-            introduced = data.get("introduced_at_sentence", -1)
-            last_active = data.get("last_active_sentence", -1)
-            rel = data.get("relation") or key
+        for edge in self.graph.edges:
+            if not edge.active:
+                continue
+            subj = edge.source_node.get_text_representer()
+            obj = edge.dest_node.get_text_representer()
+            rel = edge.label
+            intro = self._triplet_intro.get((subj, rel, obj))
+            if intro is None:
+                intro = edge.created_at_sentence if edge.created_at_sentence else -1
             final_triplets.append(
                 (
-                    u,
+                    subj,
                     rel,
-                    v,
+                    obj,
                     True,
-                    introduced,
-                    last_active,
+                    int(intro),
+                    int(final_sentence_idx) if final_sentence_idx is not None else -1,
                 )
             )
 
