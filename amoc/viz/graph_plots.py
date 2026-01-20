@@ -320,6 +320,26 @@ def plot_amoc_triplets(
     avoid_edge_overlap: bool = True,
     active_edges: Optional[set[Tuple[str, str]]] = None,
 ) -> str:
+
+    def expand_by_anchor(
+        G_full: nx.Graph,
+        G_snapshot: nx.Graph,
+        anchors: set[str],
+        hops: int = 2,
+    ) -> nx.Graph:
+        nodes_to_keep = set(G_snapshot.nodes())
+
+        for anchor in anchors:
+            if anchor not in G_full:
+                continue
+
+            reachable = nx.single_source_shortest_path_length(
+                G_full, anchor, cutoff=hops
+            )
+            nodes_to_keep |= set(reachable.keys())
+
+        return G_full.subgraph(nodes_to_keep).copy()
+
     blue_nodes = set(blue_nodes) if blue_nodes is not None else set(DEFAULT_BLUE_NODES)
     out_dir = output_dir or os.path.join(OUTPUT_ANALYSIS_DIR, "graphs")
     os.makedirs(out_dir, exist_ok=True)
@@ -341,6 +361,8 @@ def plot_amoc_triplets(
     edge_labels: Dict[Tuple[str, str], str] = {}
     duplicate_edges: set[Tuple[str, str]] = set()
     active_edge_set = active_edges or set()
+    # Build full graph before filtering for anchoring purposes.
+    G_full = nx.DiGraph()
     for src, rel, dst in triplets:
         src = str(src).strip()
         dst = str(dst).strip()
@@ -352,7 +374,9 @@ def plot_amoc_triplets(
             duplicate_edges.add((u, v))
             continue
         G.add_edge(u, v)
+        G_full.add_edge(u, v)
         edge_labels[(u, v)] = rel
+        edge_labels[(v, u)] = rel  # allow undirected lookups
 
     # Remove isolates, optionally keep only largest component, removed it to keep the
     if "sentence" in (step_tag or "") and active_edge_set:
@@ -365,6 +389,23 @@ def plot_amoc_triplets(
     if largest_component_only and components:
         largest = max(components, key=len)
         G = G.subgraph(largest).copy()
+
+    # SENTENCE ANCHORING    ----------------------------
+    anchors: set[str] = set()
+    if explicit_nodes:
+        anchors |= {n for n in explicit_nodes if n in G_full}
+    if not anchors:
+        anchors = {n for n in G.nodes() if G.degree(n) > 0}
+    if not anchors and G_full.nodes:
+        anchors = {next(iter(G_full.nodes()))}
+    G_draw = expand_by_anchor(
+        G_full=G_full.to_undirected(),
+        G_snapshot=G.to_undirected(),
+        anchors=anchors,
+        hops=2,
+    )
+    G = G_draw
+    # --------------------------------------
 
     fig, ax = plt.subplots(figsize=(22, 18))
 

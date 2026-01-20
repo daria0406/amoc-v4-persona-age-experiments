@@ -103,6 +103,7 @@ class AMoCv4:
         self._viz_positions: dict[str, tuple[float, float]] = {}
         self._recently_deactivated_nodes_for_inference: set[Node] = set()
         self._anchor_nodes: set[Node] = set()
+        self._explicit_nodes_current_sentence: set[Node] = set()
         self.strict_reactivate_function = strict_reactivate_function
         self.strict_attachament_constraint = strict_attachament_constraint
         self.single_anchor_hub = single_anchor_hub
@@ -403,9 +404,14 @@ class AMoCv4:
         if self.strict_attachament_constraint:
             # Prevent creation of disconnected components
             if self.graph.nodes:
+                attachable = (
+                    self._get_nodes_with_active_edges()
+                    | self._anchor_nodes
+                    | getattr(self, "_explicit_nodes_current_sentence", set())
+                )
                 if (
-                    source_node not in self.graph.nodes
-                    and dest_node not in self.graph.nodes
+                    source_node not in attachable
+                    and dest_node not in attachable
                 ):
                     return None
 
@@ -484,7 +490,16 @@ class AMoCv4:
             if edge.active:
                 active_nodes.add(edge.source_node)
                 active_nodes.add(edge.dest_node)
-        return active_nodes
+        # Ensure explicit nodes are always considered attachable.
+        return active_nodes | getattr(self, "_explicit_nodes_current_sentence", set())
+
+    def _can_attach(self, node: Node) -> bool:
+        attachable = (
+            self._get_nodes_with_active_edges()
+            | self._anchor_nodes
+            | getattr(self, "_explicit_nodes_current_sentence", set())
+        )
+        return node in attachable
 
     def _normalize_label(self, label: str) -> str:
         norm = (label or "").strip().lower()
@@ -803,6 +818,7 @@ class AMoCv4:
                 []
             )  # sent_idx, sent_text, subj, rel, obj
             nodes_before_sentence = set(self.graph.nodes)
+            self._explicit_nodes_current_sentence = set()
             logging.info("Processing sentence %d: %s", i, resolved_text)
             if i == 0:
                 current_sentence = sent
@@ -814,6 +830,9 @@ class AMoCv4:
                     current_sentence_text_based_words,
                 ) = self.get_senteces_text_based_nodes(
                     [sent], create_unexistent_nodes=True
+                )
+                self._explicit_nodes_current_sentence = set(
+                    current_sentence_text_based_nodes
                 )
                 inferred_concept_relationships, inferred_property_relationships = (
                     self.infer_new_relationships_step_0(sent)
@@ -842,6 +861,9 @@ class AMoCv4:
                     self.get_senteces_text_based_nodes(
                         [current_sentence], create_unexistent_nodes=True
                     )
+                )
+                self._explicit_nodes_current_sentence = set(
+                    current_sentence_text_based_nodes
                 )
 
                 current_all_text = resolved_text
@@ -1053,6 +1075,15 @@ class AMoCv4:
             )
 
             current_active_nodes = self._get_nodes_with_active_edges()
+            if (
+                self.active_graph.number_of_nodes() > 1
+                and not nx.is_connected(nx.Graph(self.active_graph))
+            ):
+                logging.error(
+                    "Active graph disconnected at sentence %s for persona '%s'",
+                    sentence_id,
+                    self.persona,
+                )
             if i == 0:
                 recently_deactivated_nodes: set[Node] = set()
             else:
