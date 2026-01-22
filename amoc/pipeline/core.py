@@ -7,6 +7,11 @@ from spacy.tokens import Span, Token
 import networkx as nx
 
 from amoc.graph import Graph, Node, Edge, NodeType, NodeSource
+from amoc.graph.per_sentence_graph import (
+    PerSentenceGraph,
+    PerSentenceGraphBuilder,
+    build_per_sentence_graph,
+)
 from amoc.viz.graph_plots import plot_amoc_triplets
 from amoc.llm.vllm_client import VLLMClient
 from amoc.nlp.spacy_utils import (
@@ -116,9 +121,41 @@ class AMoCv4:
         # Append-only cumulative records (one row per active episode)
         self._cumulative_triplet_records: list[dict] = []
         self._fixed_hub = None
+        # Per-sentence graph view (rebuilt each sentence for isolation)
+        self._per_sentence_view: Optional[PerSentenceGraph] = None
 
     def _node_token_for_matrix(self, node: Node) -> str:
         return (node.get_text_representer() or "").strip().lower()
+
+    def _build_per_sentence_view(
+        self, explicit_nodes: List[Node], sentence_index: int
+    ) -> Optional[PerSentenceGraph]:
+        if not self.strict_attachament_constraint:
+            self._per_sentence_view = None
+            return None
+
+        self._per_sentence_view = build_per_sentence_graph(
+            cumulative_graph=self.graph,
+            explicit_nodes=explicit_nodes,
+            max_distance=self.max_distance_from_active_nodes,
+            anchor_nodes=self._anchor_nodes,
+            sentence_index=sentence_index,
+        )
+        return self._per_sentence_view
+
+    def _get_attachable_nodes_for_sentence(self) -> set[Node]:
+        if self._per_sentence_view is not None:
+            return (
+                set(self._per_sentence_view.explicit_nodes)
+                | set(self._per_sentence_view.carryover_nodes)
+                | set(self._per_sentence_view.anchor_nodes)
+            )
+        # Fallback when no per-sentence view exists yet
+        return (
+            self._explicit_nodes_current_sentence
+            | self._anchor_nodes
+            | self._get_nodes_with_active_edges()
+        )
 
     def _distances_from_sources_active_edges(
         self, sources: set[Node], max_distance: int
@@ -339,61 +376,55 @@ class AMoCv4:
         graph_active_nodes: List[Node],
         graph_active_edge_nodes: Optional[set[Node]] = None,
     ) -> bool:
-        # Connectivity constraint: avoid introducing edges that would form a new
-        # disconnected component. Accept an edge only if it (a) touches the current
-        # sentence and (b) attaches to a node already in the active graph (or, if
-        # no edges are active, any existing node in the graph). This guard is always
-        # enforced to keep the graph as a single component, regardless of the flag.
-
-        active_edge_nodes = graph_active_edge_nodes or set()
-        active_nodes_pool: set[Node] = set(graph_active_nodes) | active_edge_nodes
-        anchor_nodes = self._anchor_nodes
-
-        # If the graph is empty, allow seeding.
+        # If the graph is empty, allow seeding (first edges bootstrap the graph)
         if not self.graph.nodes:
             return True
 
-        # If no active edges exist, fall back to the current anchor to keep
-        # connectivity. If the anchor is empty (pre-seed), we allow the first edge.
-        if not active_edge_nodes:
-            active_nodes_pool |= anchor_nodes
-
+        # Canonicalize and get lemma keys
         subject = canonicalize_node_text(self.spacy_nlp, subject)
         obj = canonicalize_node_text(self.spacy_nlp, obj)
 
         def _lemma_key(text: str) -> tuple[str, ...]:
             return tuple(get_concept_lemmas(self.spacy_nlp, text))
 
-        sentence_lemma_keys = {tuple(n.lemmas) for n in current_sentence_nodes}
-        active_lemma_keys = {tuple(n.lemmas) for n in active_nodes_pool}
-        anchor_lemma_keys = {tuple(n.lemmas) for n in anchor_nodes}
-
         subj_key = _lemma_key(subject)
         obj_key = _lemma_key(obj)
 
-        touches_sentence = (
-            subject in current_sentence_words
-            or obj in current_sentence_words
-            or subj_key in sentence_lemma_keys
-            or obj_key in sentence_lemma_keys
-        )
-        touches_active = subj_key in active_lemma_keys or obj_key in active_lemma_keys
-        attaches_anchor = (
-            not anchor_lemma_keys
-            or subj_key in anchor_lemma_keys
-            or obj_key in anchor_lemma_keys
-        )
+        # Check memory connection (used in permissive mode)
         memory_lemma_keys = {tuple(n.lemmas) for n in self.graph.nodes}
         touches_memory = subj_key in memory_lemma_keys or obj_key in memory_lemma_keys
 
-        # Enforce connectivity: at least one endpoint must touch the existing graph.
-        # touches_sentence alone is not sufficient as it doesn't guarantee connectivity.
+        # PERMISSIVE MODE: only require memory connection
         if not self.strict_attachament_constraint:
             return touches_memory
 
-        # In strict mode, require connection to active nodes or existing memory.
-        # This ensures the graph remains connected.
-        return touches_active or touches_memory
+        # STRICT MODE: enforce structural connectivity guarantee
+        # Build the attachable set: nodes that can be endpoints of new edges
+        active_edge_nodes = graph_active_edge_nodes or set()
+        attachable_nodes: set[Node] = (
+            set(current_sentence_nodes)  # Explicit: always attachable
+            | set(graph_active_nodes)     # Carry-over: active neighborhood
+            | active_edge_nodes           # Nodes with active edges
+            | self._anchor_nodes          # Anchors: connectivity guarantors
+        )
+
+        # Build lemma key sets for efficient lookup
+        attachable_lemma_keys = {tuple(n.lemmas) for n in attachable_nodes}
+        sentence_lemma_keys = {tuple(n.lemmas) for n in current_sentence_nodes}
+
+        # At least one endpoint must be in the attachable set
+        subj_attachable = (
+            subj_key in attachable_lemma_keys
+            or subj_key in sentence_lemma_keys
+            or subject in current_sentence_words
+        )
+        obj_attachable = (
+            obj_key in attachable_lemma_keys
+            or obj_key in sentence_lemma_keys
+            or obj in current_sentence_words
+        )
+
+        return subj_attachable or obj_attachable
 
     def _add_edge(
         self,
@@ -403,14 +434,14 @@ class AMoCv4:
         edge_forget: int,
         created_at_sentence: Optional[int] = None,
     ) -> Optional[Edge]:
-        # Enforce strict connectivity: edges must connect to the current main component
-        # (anchors preferred) or current explicit nodes. Fragmentation check is removed.
+        # STRICT MODE: enforce structural connectivity guarantee
         if self.strict_attachament_constraint and self.graph.edges:
+            # Build the current main component
             G = nx.Graph()
             for e in self.graph.edges:
                 G.add_edge(e.source_node, e.dest_node)
 
-            # Find the main component (the one containing anchor nodes)
+            # Find the main component (containing anchor nodes)
             main_component: set[Node] = set()
             for comp in nx.connected_components(G):
                 if any(n in self._anchor_nodes for n in comp):
@@ -420,11 +451,14 @@ class AMoCv4:
             if not main_component and G.number_of_nodes() > 0:
                 main_component = max(nx.connected_components(G), key=len)
 
+            # Build the attachable set: structural guarantee of connectivity
             attachable = (
                 main_component
                 | self._anchor_nodes
                 | getattr(self, "_explicit_nodes_current_sentence", set())
             )
+
+            # At least one endpoint must be attachable
             if source_node not in attachable and dest_node not in attachable:
                 return None
 
@@ -700,6 +734,159 @@ class AMoCv4:
                 return True
         return False
 
+    def _fill_missing_edge_labels(self, context: str = "") -> None:
+        edges_to_remove = []
+        for edge in self.graph.edges:
+            if not edge.label or not edge.label.strip():
+                subj = edge.source_node.get_text_representer()
+                obj = edge.dest_node.get_text_representer()
+                try:
+                    label = self.client.get_edge_label(
+                        subj, obj, context or self._current_sentence_text, self.persona
+                    )
+                    if label and label.strip() and self._is_valid_relation_label(label):
+                        edge.label = label
+                    else:
+                        edges_to_remove.append(edge)
+                except Exception:
+                    edges_to_remove.append(edge)
+        # Remove edges that couldn't get valid labels
+        for edge in edges_to_remove:
+            if edge in self.graph.edges:
+                self.graph.edges.remove(edge)
+                logging.warning(
+                    "Removed edge without valid label: %s -> %s",
+                    edge.source_node.get_text_representer(),
+                    edge.dest_node.get_text_representer(),
+                )
+
+    def _ensure_triplets_have_labels(
+        self, triplets: List[Tuple[str, str, str]], context: str = ""
+    ) -> List[Tuple[str, str, str]]:
+        result = []
+        for subj, rel, obj in triplets:
+            if not rel or not rel.strip():
+                # Try to get a valid label from LLM
+                try:
+                    rel = self.client.get_edge_label(
+                        subj, obj, context or self._current_sentence_text, self.persona
+                    )
+                except Exception:
+                    rel = None
+                # Skip triplet if no valid label (no "relates to" fallback)
+                if not rel or not rel.strip():
+                    logging.warning(
+                        "Skipping triplet without valid label: %s -> %s", subj, obj
+                    )
+                    continue
+            result.append((subj, rel, obj))
+        return result
+
+    def _select_hub_node(self, explicit_nodes: List[Node]) -> Optional[Node]:
+        """
+        Select a hub node from explicit nodes.
+        Prefers CONCEPT nodes over PROPERTY nodes, then by degree.
+        """
+        if not explicit_nodes:
+            return None
+
+        # Use fixed hub if set (for consistent layout across sentences)
+        if self._fixed_hub is not None and self._fixed_hub in explicit_nodes:
+            return self._fixed_hub
+
+        # Prefer CONCEPT nodes over PROPERTY nodes
+        concepts = [n for n in explicit_nodes if n.node_type == NodeType.CONCEPT]
+        candidates = concepts if concepts else explicit_nodes
+
+        # Among candidates, pick the one with highest degree (most connected)
+        def node_degree(n: Node) -> int:
+            return sum(1 for e in self.graph.edges if e.source_node == n or e.dest_node == n)
+
+        hub = max(candidates, key=lambda n: (node_degree(n), n.get_text_representer()))
+
+        # Set as fixed hub for layout consistency
+        if self._fixed_hub is None:
+            self._fixed_hub = hub
+
+        return hub
+
+    def _ensure_explicit_nodes_connected(
+        self,
+        explicit_nodes: List[Node],
+        sentence_text: str,
+    ) -> List[Edge]:
+        """
+        Ensure all explicit nodes are connected via a hub-anchored topology.
+
+        1. Select a hub node from explicit nodes
+        2. Ensure all other explicit nodes connect to the hub (directly or via other explicit nodes)
+        3. This guarantees the explicit subgraph is always connected
+        """
+        added_edges = []
+        if len(explicit_nodes) < 2:
+            return added_edges
+
+        hub = self._select_hub_node(explicit_nodes)
+        if hub is None:
+            return added_edges
+
+        # Build connectivity graph among explicit nodes
+        explicit_set = set(explicit_nodes)
+
+        def is_connected_to_hub(node: Node, visited: set) -> bool:
+            if node == hub:
+                return True
+            if node in visited:
+                return False
+            visited.add(node)
+            for edge in self.graph.edges:
+                if edge.source_node == node and edge.dest_node in explicit_set:
+                    if is_connected_to_hub(edge.dest_node, visited):
+                        return True
+                if edge.dest_node == node and edge.source_node in explicit_set:
+                    if is_connected_to_hub(edge.source_node, visited):
+                        return True
+            return False
+
+        # For each explicit node not connected to hub, create an edge to hub
+        for node in explicit_nodes:
+            if node == hub:
+                continue
+
+            # Check if already connected to hub via other explicit nodes
+            if is_connected_to_hub(node, set()):
+                continue
+
+            # Not connected - try to get a valid label from LLM
+            subj = node.get_text_representer()
+            obj = hub.get_text_representer()
+
+            try:
+                label = self.client.get_edge_label(subj, obj, sentence_text, self.persona)
+            except Exception:
+                label = None
+
+            # Only add edge if we got a valid label (no "relates to" fallback)
+            if not label or not label.strip() or not self._is_valid_relation_label(label):
+                logging.warning(
+                    "Skipping hub edge %s -> %s: no valid label from LLM",
+                    subj,
+                    obj,
+                )
+                continue
+
+            edge = self._add_edge(node, hub, label, self.edge_forget)
+            if edge:
+                added_edges.append(edge)
+                logging.info(
+                    "Hub-anchored edge: %s -[%s]-> %s (hub)",
+                    subj,
+                    label,
+                    obj,
+                )
+
+        return added_edges
+
     def _find_node_by_text(
         self, text: str, candidates: Iterable[Node]
     ) -> Optional[Node]:
@@ -908,6 +1095,11 @@ class AMoCv4:
                 self.add_inferred_relationships_to_graph_step_0(
                     inferred_property_relationships, NodeType.PROPERTY, sent
                 )
+                # Ensure explicit nodes from the sentence are connected
+                self._ensure_explicit_nodes_connected(
+                    current_sentence_text_based_nodes,
+                    resolved_text,
+                )
                 # Enforce connectivity for first sentence - remove any disconnected edges
                 self._enforce_graph_connectivity()
                 self._restrict_active_to_current_explicit(
@@ -1095,6 +1287,14 @@ class AMoCv4:
                     added_edges,
                 )
 
+                # Ensure explicit nodes from the sentence are connected
+                # This catches relationships the LLM might miss
+                explicit_edges = self._ensure_explicit_nodes_connected(
+                    current_sentence_text_based_nodes,
+                    current_all_text,
+                )
+                added_edges.extend(explicit_edges)
+
                 if self.ENFORCE_ATTACHMENT_CONSTRAINT:
                     targeted_edges = self._infer_edges_to_recently_deactivated(
                         current_sentence_text_based_nodes,
@@ -1140,6 +1340,30 @@ class AMoCv4:
                 for n in (set(self.graph.nodes) - nodes_before_sentence)
                 if n.node_source == NodeSource.INFERENCE_BASED
             }
+
+            # BUILD PER-SENTENCE VIEW (only when strict mode is enabled)
+            # When enabled, enforces:
+            # - Only explicit + carry-over nodes are visible
+            # - Inactive nodes are completely excluded
+            # - Only edges where BOTH endpoints are active are included
+            # - The graph is guaranteed connected (or empty)
+            per_sentence_view = self._build_per_sentence_view(
+                explicit_nodes=current_sentence_text_based_nodes,
+                sentence_index=sentence_id,
+            )
+
+            # Log per-sentence view invariants for debugging (only in strict mode)
+            if self.debug and per_sentence_view is not None:
+                logging.info(
+                    "Per-sentence view for sentence %d: "
+                    "%d explicit, %d carry-over, %d active edges, connected=%s",
+                    sentence_id,
+                    len(per_sentence_view.explicit_nodes),
+                    len(per_sentence_view.carryover_nodes),
+                    len(per_sentence_view.active_edges),
+                    per_sentence_view.is_connected,
+                )
+
             # Refresh active projection for this step
             self._record_sentence_activation(
                 sentence_id=sentence_id,
@@ -1148,6 +1372,20 @@ class AMoCv4:
             )
 
             current_active_nodes = self._get_nodes_with_active_edges()
+
+            # Connectivity check using per-sentence view (only in strict mode)
+            if (
+                per_sentence_view is not None
+                and not per_sentence_view.is_empty
+                and not per_sentence_view.is_connected
+            ):
+                logging.error(
+                    "Per-sentence graph disconnected at sentence %s for persona '%s' "
+                    "(this should not happen with strict-attachment-constraint enabled)",
+                    sentence_id,
+                    self.persona,
+                )
+            # Legacy active_graph check (for backwards compatibility)
             if self.active_graph.number_of_nodes() > 1 and not nx.is_connected(
                 nx.Graph(self.active_graph)
             ):
@@ -1166,32 +1404,69 @@ class AMoCv4:
                     current_active_nodes
                 )
                 recently_deactivated_nodes = set(gone)
-            inactive_nodes_for_plot = sorted(
-                filter(
-                    None,
-                    {
-                        node.get_text_representer()
-                        for node in self._cumulative_deactivated_nodes_for_plot
-                    },
+            # Use per-sentence view for node categorization (constraint-first design)
+            # This ensures inactive nodes are properly excluded from all outputs
+            if self._per_sentence_view is not None:
+                # Explicit nodes from per-sentence view (guaranteed present)
+                explicit_nodes_for_plot = sorted(
+                    filter(
+                        None,
+                        {
+                            node.get_text_representer()
+                            for node in self._per_sentence_view.explicit_nodes
+                        },
+                    )
                 )
-            )
-            explicit_nodes_for_plot = sorted(
-                filter(
-                    None,
-                    {
-                        node.get_text_representer()
-                        for node in current_sentence_text_based_nodes
-                    },
+                # Carry-over nodes (salient) from per-sentence view
+                salient_nodes_for_plot = sorted(
+                    filter(
+                        None,
+                        {
+                            node.get_text_representer()
+                            for node in self._per_sentence_view.carryover_nodes
+                        },
+                    )
                 )
-            )
-            salient_nodes_for_plot = sorted(
-                {
+                # Inactive nodes: all cumulative nodes NOT in the per-sentence active set
+                all_cumulative_node_texts = {
                     node.get_text_representer()
-                    for node in current_active_nodes
+                    for node in self.graph.nodes
                     if node.get_text_representer()
                 }
-                - set(explicit_nodes_for_plot)
-            )
+                active_node_texts = (
+                    set(explicit_nodes_for_plot) | set(salient_nodes_for_plot)
+                )
+                inactive_nodes_for_plot = sorted(
+                    all_cumulative_node_texts - active_node_texts
+                )
+            else:
+                # Fallback to legacy behavior if no per-sentence view
+                inactive_nodes_for_plot = sorted(
+                    filter(
+                        None,
+                        {
+                            node.get_text_representer()
+                            for node in self._cumulative_deactivated_nodes_for_plot
+                        },
+                    )
+                )
+                explicit_nodes_for_plot = sorted(
+                    filter(
+                        None,
+                        {
+                            node.get_text_representer()
+                            for node in current_sentence_text_based_nodes
+                        },
+                    )
+                )
+                salient_nodes_for_plot = sorted(
+                    {
+                        node.get_text_representer()
+                        for node in current_active_nodes
+                        if node.get_text_representer()
+                    }
+                    - set(explicit_nodes_for_plot)
+                )
             # Only keep the deactivated set for targeted inference when the
             # attachment constraint is enforced.
             if self.ENFORCE_ATTACHMENT_CONSTRAINT:
@@ -1203,22 +1478,51 @@ class AMoCv4:
             self._prev_active_nodes_for_plot = current_active_nodes
 
             if plot_after_each_sentence:
-                # Active (salience) view
+                # Fill in any missing edge labels before plotting
+                self._fill_missing_edge_labels(original_text)
+
+                # Active (salience) view - use per-sentence view for clean isolation
+                # This guarantees only edges with BOTH endpoints active are shown
+                active_triplets = (
+                    self._per_sentence_view.get_triplets()
+                    if self._per_sentence_view is not None
+                    else self._graph_to_triplets(self.active_graph)
+                )
+                # Ensure all triplets have labels
+                active_triplets = self._ensure_triplets_have_labels(
+                    active_triplets, original_text
+                )
+                active_edge_pairs = (
+                    {
+                        (
+                            edge.source_node.get_text_representer(),
+                            edge.dest_node.get_text_representer(),
+                        )
+                        for edge in self._per_sentence_view.active_edges
+                    }
+                    if self._per_sentence_view is not None
+                    else {(u, v) for u, v in self.active_graph.edges()}
+                )
+
                 self._plot_graph_snapshot(
                     sentence_index=i,
                     sentence_text=sent.text,
                     output_dir=graphs_output_dir,
                     highlight_nodes=highlight_nodes,
-                    inactive_nodes=inactive_nodes_for_plot,
+                    inactive_nodes=None,  # Do not display inactive nodes in active view
                     explicit_nodes=explicit_nodes_for_plot,
                     salient_nodes=salient_nodes_for_plot,
                     only_active=True,
                     largest_component_only=largest_component_only,
                     mode="sentence_active",
-                    triplets_override=self._graph_to_triplets(self.active_graph),
-                    active_edges={(u, v) for u, v in self.active_graph.edges()},
+                    triplets_override=active_triplets,
+                    active_edges=active_edge_pairs,
                 )
                 # Cumulative memory view
+                cumulative_triplets = self._ensure_triplets_have_labels(
+                    self._cumulative_triplets_upto(self._current_sentence_index),
+                    original_text,
+                )
                 self._plot_graph_snapshot(
                     sentence_index=i,
                     sentence_text=sent.text,
@@ -1230,9 +1534,7 @@ class AMoCv4:
                     only_active=False,
                     largest_component_only=largest_component_only,
                     mode="sentence_cumulative",
-                    triplets_override=self._cumulative_triplets_upto(
-                        self._current_sentence_index
-                    ),
+                    triplets_override=cumulative_triplets,
                     active_edges={
                         (
                             edge.source_node.get_text_representer(),

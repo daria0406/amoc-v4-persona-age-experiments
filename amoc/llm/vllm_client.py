@@ -187,3 +187,17 @@ class VLLMClient:
     def resolve_pronouns(self, text, persona):
         prompt = REPLACE_PRONOUNS_PROMPT + text
         return self.call_vllm(prompt, persona)
+
+    def get_edge_label(self, subject: str, obj: str, context: str, persona: str) -> str:
+        prompt = (
+            f"Given these two concepts: '{subject}' and '{obj}'\n"
+            f"And this context: {context}\n\n"
+            f"What is the most appropriate verb or action that connects '{subject}' to '{obj}'?\n"
+            f"Respond with ONLY a single verb phrase (e.g., 'rides', 'lives in', 'belongs to').\n"
+            f"If no clear relationship exists, respond with 'relates to'."
+        )
+        response = self.call_vllm(prompt, persona)
+        label = response.strip().strip('"').strip("'").lower()
+        if not label or len(label) > 50:
+            return "relates to"
+        return label
