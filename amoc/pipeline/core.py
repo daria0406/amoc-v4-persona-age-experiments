@@ -339,10 +339,6 @@ class AMoCv4:
         graph_active_nodes: List[Node],
         graph_active_edge_nodes: Optional[set[Node]] = None,
     ) -> bool:
-        # When the flag is off, allow all edges (no connectivity/anchor checks).
-        if not self.strict_attachament_constraint:
-            return True
-
         # Connectivity constraint: avoid introducing edges that would form a new
         # disconnected component. Accept an edge only if it (a) touches the current
         # sentence and (b) attaches to a node already in the active graph (or, if
@@ -390,6 +386,13 @@ class AMoCv4:
         memory_lemma_keys = {tuple(n.lemmas) for n in self.graph.nodes}
         touches_memory = subj_key in memory_lemma_keys or obj_key in memory_lemma_keys
 
+        # Enforce connectivity: at least one endpoint must touch the existing graph.
+        # touches_sentence alone is not sufficient as it doesn't guarantee connectivity.
+        if not self.strict_attachament_constraint:
+            return touches_memory
+
+        # In strict mode, require connection to active nodes or existing memory.
+        # This ensures the graph remains connected.
         return touches_active or touches_memory
 
     def _add_edge(
@@ -400,20 +403,30 @@ class AMoCv4:
         edge_forget: int,
         created_at_sentence: Optional[int] = None,
     ) -> Optional[Edge]:
-        # Enforce ONLY connectivity, not anchoring
-        if self.strict_attachament_constraint:
-            # Prevent creation of disconnected components
-            if self.graph.nodes:
-                attachable = (
-                    self._get_nodes_with_active_edges()
-                    | self._anchor_nodes
-                    | getattr(self, "_explicit_nodes_current_sentence", set())
-                )
-                if (
-                    source_node not in attachable
-                    and dest_node not in attachable
-                ):
-                    return None
+        # Enforce strict connectivity: edges must connect to the current main component
+        # (anchors preferred) or current explicit nodes. Fragmentation check is removed.
+        if self.strict_attachament_constraint and self.graph.edges:
+            G = nx.Graph()
+            for e in self.graph.edges:
+                G.add_edge(e.source_node, e.dest_node)
+
+            # Find the main component (the one containing anchor nodes)
+            main_component: set[Node] = set()
+            for comp in nx.connected_components(G):
+                if any(n in self._anchor_nodes for n in comp):
+                    main_component |= comp
+
+            # If no anchor-containing component, use largest component
+            if not main_component and G.number_of_nodes() > 0:
+                main_component = max(nx.connected_components(G), key=len)
+
+            attachable = (
+                main_component
+                | self._anchor_nodes
+                | getattr(self, "_explicit_nodes_current_sentence", set())
+            )
+            if source_node not in attachable and dest_node not in attachable:
+                return None
 
         use_sentence = (
             created_at_sentence
@@ -448,9 +461,57 @@ class AMoCv4:
         self.graph = Graph()
         self._anchor_nodes = set()
 
+    def _enforce_graph_connectivity(self) -> None:
+        if not self.graph.edges:
+            return
+
+        # Build graph from all edges
+        G = nx.Graph()
+        for e in self.graph.edges:
+            G.add_edge(e.source_node, e.dest_node, edge=e)
+
+        if G.number_of_nodes() <= 1:
+            return
+
+        # Find the main component (containing anchor nodes)
+        components = list(nx.connected_components(G))
+        if len(components) <= 1:
+            return  # Already connected
+
+        main_component: set[Node] = set()
+        for comp in components:
+            if any(n in self._anchor_nodes for n in comp):
+                main_component = comp
+                break
+
+        # If no anchor-containing component, use the largest
+        if not main_component:
+            main_component = max(components, key=len)
+
+        # Remove edges not in the main component
+        edges_to_remove = []
+        for e in self.graph.edges:
+            if e.source_node not in main_component or e.dest_node not in main_component:
+                edges_to_remove.append(e)
+
+        for e in edges_to_remove:
+            self.graph.edges.remove(e)
+            logging.debug(
+                "Removed disconnected edge: %s -[%s]-> %s",
+                e.source_node.get_text_representer(),
+                e.label,
+                e.dest_node.get_text_representer(),
+            )
+
+        # Update anchor nodes to only include nodes in the main component
+        self._anchor_nodes = self._anchor_nodes & main_component
+
     def resolve_pronouns(self, text: str) -> str:
         resolved = self.client.resolve_pronouns(text, self.persona)
         if not isinstance(resolved, str) or not resolved.strip():
+            return text
+        low = resolved.lower()
+        if "does not mention any pronouns" in low or "no pronouns to replace" in low:
             return text
         return resolved
 
@@ -834,6 +895,9 @@ class AMoCv4:
                 self._explicit_nodes_current_sentence = set(
                     current_sentence_text_based_nodes
                 )
+                # Populate _anchor_nodes from first sentence's explicit nodes
+                # to ensure connectivity checks have a valid anchor set
+                self._anchor_nodes = set(current_sentence_text_based_nodes)
                 inferred_concept_relationships, inferred_property_relationships = (
                     self.infer_new_relationships_step_0(sent)
                 )
@@ -844,6 +908,8 @@ class AMoCv4:
                 self.add_inferred_relationships_to_graph_step_0(
                     inferred_property_relationships, NodeType.PROPERTY, sent
                 )
+                # Enforce connectivity for first sentence - remove any disconnected edges
+                self._enforce_graph_connectivity()
                 self._restrict_active_to_current_explicit(
                     current_sentence_text_based_nodes
                 )
@@ -1053,6 +1119,13 @@ class AMoCv4:
                 self.graph.set_nodes_score_based_on_distance_from_active_nodes(
                     current_sentence_text_based_nodes
                 )
+                # Update anchor nodes to include current explicit nodes and
+                # nodes with active edges to maintain connectivity across sentences
+                self._anchor_nodes = (
+                    self._anchor_nodes
+                    | set(current_sentence_text_based_nodes)
+                    | self._get_nodes_with_active_edges()
+                )
 
             if self.debug:
                 logging.info(
@@ -1075,9 +1148,8 @@ class AMoCv4:
             )
 
             current_active_nodes = self._get_nodes_with_active_edges()
-            if (
-                self.active_graph.number_of_nodes() > 1
-                and not nx.is_connected(nx.Graph(self.active_graph))
+            if self.active_graph.number_of_nodes() > 1 and not nx.is_connected(
+                nx.Graph(self.active_graph)
             ):
                 logging.error(
                     "Active graph disconnected at sentence %s for persona '%s'",
@@ -1401,6 +1473,8 @@ class AMoCv4:
                 edge.active = True
                 edge.forget_score = self.edge_forget
                 self._record_edge_in_graphs(edge, self._current_sentence_index)
+            # Enforce connectivity even in non-strict mode
+            self._enforce_graph_connectivity()
             return
 
         raw_indices = self.client.get_relevant_edges(
@@ -1419,18 +1493,27 @@ class AMoCv4:
         valid_indices = valid_indices[: self.nr_relevant_edges]
         active_node_set = set(active_nodes)
         if not valid_indices:
-            # Fallback (no LLM indices): keep only edges that are already active
-            # AND stay within the current active-node neighborhood, plus newly added.
+            # Improved fallback edge selection: keep edges that are newly added,
+            # or active edges that touch at least one active/anchor node.
+            # Uses only connected nodes to prevent selecting disconnected edges.
             selected = set()
+            connected_nodes = active_node_set | self._anchor_nodes
+            connected_lemma_keys = {tuple(n.lemmas) for n in connected_nodes}
             for idx, edge in enumerate(edges, start=1):
                 if edge in newly_added_edges:
                     selected.add(idx)
-                elif (
-                    edge.active
-                    and edge.source_node in active_node_set
-                    and edge.dest_node in active_node_set
-                ):
-                    selected.add(idx)
+                elif edge.active:
+                    # Check both direct membership and lemma matching
+                    source_connected = (
+                        edge.source_node in connected_nodes
+                        or tuple(edge.source_node.lemmas) in connected_lemma_keys
+                    )
+                    dest_connected = (
+                        edge.dest_node in connected_nodes
+                        or tuple(edge.dest_node.lemmas) in connected_lemma_keys
+                    )
+                    if source_connected or dest_connected:
+                        selected.add(idx)
         else:
             selected = set(valid_indices)
             for i in selected:
@@ -1460,8 +1543,13 @@ class AMoCv4:
                 if not _active_subgraph_connected():
                     edge.active = True  # keep as bridge
                     edge.forget_score = 0  # lowest salience
+                    # Record bridge edges in active_graph to prevent disconnection in plots
+                    self._record_edge_in_graphs(edge, self._current_sentence_index)
                 else:
                     self._record_edge_in_graphs(edge, self._current_sentence_index)
+
+        # Final connectivity sweep - ensure the entire graph remains connected
+        self._enforce_graph_connectivity()
 
     def init_graph(self, sent: Span) -> None:
         current_sentence_text_based_nodes, current_sentence_text_based_words = (

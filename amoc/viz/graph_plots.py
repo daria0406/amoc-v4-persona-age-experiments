@@ -327,16 +327,38 @@ def plot_amoc_triplets(
         anchors: set[str],
         hops: int = 2,
     ) -> nx.Graph:
+        # Only expand within connected components that contain anchors
+        # to prevent pulling in disconnected parts of the graph
         nodes_to_keep = set(G_snapshot.nodes())
 
+        # Find all connected components in G_full
+        if G_full.number_of_nodes() == 0:
+            return G_full.subgraph(nodes_to_keep).copy()
+
+        # Get the connected component(s) containing at least one anchor
+        anchor_components: set[frozenset[str]] = set()
+        for component in nx.connected_components(G_full):
+            component_set = frozenset(component)
+            if any(anchor in component_set for anchor in anchors):
+                anchor_components.add(component_set)
+
+        # Only consider nodes from components that contain anchors
+        valid_nodes = set()
+        for comp in anchor_components:
+            valid_nodes |= set(comp)
+
+        # Now expand from anchors, but only within valid components
         for anchor in anchors:
             if anchor not in G_full:
+                continue
+            if anchor not in valid_nodes:
                 continue
 
             reachable = nx.single_source_shortest_path_length(
                 G_full, anchor, cutoff=hops
             )
-            nodes_to_keep |= set(reachable.keys())
+            # Only keep reachable nodes that are in valid components
+            nodes_to_keep |= set(reachable.keys()) & valid_nodes
 
         return G_full.subgraph(nodes_to_keep).copy()
 
@@ -378,11 +400,33 @@ def plot_amoc_triplets(
         edge_labels[(u, v)] = rel
         edge_labels[(v, u)] = rel  # allow undirected lookups
 
+    # Inject explicit / salient / inactive nodes so they are retained even if isolated.
+    def _inject_nodes(nodes):
+        if not nodes:
+            return
+        for node in nodes:
+            if not node:
+                continue
+            if node not in G:
+                G.add_node(node)
+            if node not in G_full:
+                G_full.add_node(node)
+
+    _inject_nodes(explicit_nodes)
+    _inject_nodes(salient_nodes)
+    _inject_nodes(inactive_nodes)
+
     # Remove isolates, optionally keep only largest component, removed it to keep the
     if "sentence" in (step_tag or "") and active_edge_set:
-        # Only remove nodes that are neither incident to active edges nor memory
+        # Only remove nodes that are neither incident to active edges nor provided anchors
         nodes_with_edges = {u for e in G.edges() for u in e}
-        G.remove_nodes_from([n for n in G.nodes() if n not in nodes_with_edges])
+        nodes_to_keep = (
+            nodes_with_edges
+            | set(explicit_nodes or [])
+            | set(salient_nodes or [])
+            | set(inactive_nodes or [])
+        )
+        G.remove_nodes_from([n for n in G.nodes() if n not in nodes_to_keep])
     if G.number_of_nodes() == 0:
         return save_path
     components = list(nx.connected_components(G.to_undirected()))
@@ -404,6 +448,26 @@ def plot_amoc_triplets(
         anchors=anchors,
         hops=2,
     )
+    G = G_draw
+    # Bridge components for visualization so all provided nodes appear connected.
+    components_draw = list(nx.connected_components(G_draw))
+    if len(components_draw) > 1:
+        anchor_node = None
+        for candidate in (explicit_nodes or []):
+            if candidate in G_draw:
+                anchor_node = candidate
+                break
+        if anchor_node is None and components_draw:
+            anchor_node = next(iter(components_draw[0]))
+        if anchor_node is not None:
+            for comp in components_draw:
+                if anchor_node in comp:
+                    continue
+                rep = next(iter(comp))
+                G_draw.add_edge(anchor_node, rep)
+                edge_labels[(anchor_node, rep)] = edge_labels.get(
+                    (anchor_node, rep), ""
+                )
     G = G_draw
     # --------------------------------------
 

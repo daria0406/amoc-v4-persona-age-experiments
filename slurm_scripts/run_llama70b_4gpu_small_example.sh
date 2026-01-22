@@ -35,5 +35,7 @@ bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
     --tp 4 \
     --max-rows 1 \
     --plot-after-each-sentence \
-    --output-dir "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/small_example_output" \
-    --file "${INPUT_FILE}"
+    --output-dir "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/small_example_output_llama" \
+    --file "${INPUT_FILE}" \
+    --strict-reactivate-function \
+    --strict-attachament-constraint 
