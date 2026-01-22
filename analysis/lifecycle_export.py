@@ -1,9 +1,3 @@
-"""Lifecycle snapshot utilities for per-sentence triplet logs.
-
-This module is additive and does not modify extraction or plotting. It derives
-state-centric snapshots from the existing per-sentence event CSVs.
-"""
-
 from __future__ import annotations
 
 import os
@@ -13,11 +7,6 @@ import pandas as pd
 
 
 def lifecycle_snapshot(df: pd.DataFrame, sentence_idx: int) -> pd.DataFrame:
-    """
-    Given the per-sentence triplet event log and a sentence index S,
-    return a lifecycle snapshot table for S with columns:
-    subject, relation, object, introduced_at, last_active, currently_active.
-    """
     if "sentence_index" not in df.columns:
         raise ValueError("Input DataFrame must contain 'sentence_index'.")
     if not {"subject", "relation", "object", "active"}.issubset(df.columns):
@@ -67,13 +56,6 @@ def lifecycle_snapshot(df: pd.DataFrame, sentence_idx: int) -> pd.DataFrame:
 def validate_snapshot(
     df_events: pd.DataFrame, df_snapshot: pd.DataFrame, sentence_idx: int
 ) -> None:
-    """
-    Assert that:
-    - Every currently_active == True row corresponds to an active edge in the
-      per-sentence CSV at sentence_idx.
-    - introduced_at <= last_active <= sentence_idx (when last_active is not None).
-    Raises ValueError on violations.
-    """
     events_at_s = df_events[df_events["sentence_index"] == sentence_idx]
     actives_at_s = {
         (row["subject"], row["relation"], row["object"])
@@ -104,10 +86,6 @@ def validate_snapshot(
 def export_lifecycle_snapshots(
     csv_path: str, out_dir: str, sentence_indices: List[int]
 ) -> None:
-    """
-    Load per-sentence triplet events from csv_path and export lifecycle
-    snapshots for the provided sentence indices to out_dir.
-    """
     os.makedirs(out_dir, exist_ok=True)
     df_events = pd.read_csv(csv_path)
     if "sentence_index" not in df_events.columns:
