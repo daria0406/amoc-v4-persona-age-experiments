@@ -7,6 +7,11 @@ from spacy.tokens import Span, Token
 import networkx as nx
 
 from amoc.graph import Graph, Node, Edge, NodeType, NodeSource
+from amoc.graph.per_sentence_graph import (
+    PerSentenceGraph,
+    PerSentenceGraphBuilder,
+    build_per_sentence_graph,
+)
 from amoc.viz.graph_plots import plot_amoc_triplets
 from amoc.llm.vllm_client import VLLMClient
 from amoc.nlp.spacy_utils import (
@@ -52,14 +57,6 @@ class AMoCv4:
     ACTIVATION_MAX_DISTANCE = 2
     RELATION_BLACKLIST = {"describes", "is_at_stake"}
 
-    # Labels acceptable ONLY for hub-anchoring edges (relaxed validation)
-    HUB_EDGE_ACCEPTABLE_LABELS = {
-        "is",
-        "has",
-        "describes",
-        "characterizes",
-    }
-
     def __init__(
         self,
         persona_description: str,
@@ -78,7 +75,6 @@ class AMoCv4:
         strict_attachament_constraint: bool = True,
         single_anchor_hub: bool = True,
         matrix_dir_base: Optional[str] = None,
-        llm_fallback: bool = True,
     ) -> None:
         self.persona = persona_description
         self.story_text = story_text
@@ -116,7 +112,6 @@ class AMoCv4:
         self.strict_reactivate_function = strict_reactivate_function
         self.strict_attachament_constraint = strict_attachament_constraint
         self.single_anchor_hub = single_anchor_hub
-        self.llm_fallback = llm_fallback  # Policy D: Use LLM to infer edges when needed
         self._current_sentence_text: str = ""
         # Separate memory (cumulative) vs salience (active) graphs for auditing.
         self.cumulative_graph = nx.MultiDiGraph()
@@ -126,24 +121,41 @@ class AMoCv4:
         # Append-only cumulative records (one row per active episode)
         self._cumulative_triplet_records: list[dict] = []
         self._fixed_hub = None
-        # Track current hub for visualization (blue node) per Invariant 3.0
-        self._current_hub: Optional[Node] = None
-        # Store hub-anchored edge explanations for current sentence (for plot subtitle)
-        self._hub_edge_explanations: List[str] = []
-        # Track connectivity failures for explicit diagnostics per Invariant 3.4
-        self._connectivity_failures: List[Tuple[str, str, str]] = []
-
-        # =====================================================================
-        # Per-Sentence Tracking for 1-to-1 Node List <-> Triplet Correlation
-        # =====================================================================
-        # Structure: {sentence_idx: {"explicit_nodes": [...], "carryover_nodes": [...],
-        #             "inactive_nodes": [...], "triplets": [...]}}
-        self._per_sentence_breakdown: dict[int, dict] = {}
-        # Log of per-sentence diagnostics for debugging
-        self._per_sentence_diagnostics: list[dict] = []
+        # Per-sentence graph view (rebuilt each sentence for isolation)
+        self._per_sentence_view: Optional[PerSentenceGraph] = None
 
     def _node_token_for_matrix(self, node: Node) -> str:
         return (node.get_text_representer() or "").strip().lower()
+
+    def _build_per_sentence_view(
+        self, explicit_nodes: List[Node], sentence_index: int
+    ) -> Optional[PerSentenceGraph]:
+        if not self.strict_attachament_constraint:
+            self._per_sentence_view = None
+            return None
+
+        self._per_sentence_view = build_per_sentence_graph(
+            cumulative_graph=self.graph,
+            explicit_nodes=explicit_nodes,
+            max_distance=self.max_distance_from_active_nodes,
+            anchor_nodes=self._anchor_nodes,
+            sentence_index=sentence_index,
+        )
+        return self._per_sentence_view
+
+    def _get_attachable_nodes_for_sentence(self) -> set[Node]:
+        if self._per_sentence_view is not None:
+            return (
+                set(self._per_sentence_view.explicit_nodes)
+                | set(self._per_sentence_view.carryover_nodes)
+                | set(self._per_sentence_view.anchor_nodes)
+            )
+        # Fallback when no per-sentence view exists yet
+        return (
+            self._explicit_nodes_current_sentence
+            | self._anchor_nodes
+            | self._get_nodes_with_active_edges()
+        )
 
     def _distances_from_sources_active_edges(
         self, sources: set[Node], max_distance: int
@@ -364,61 +376,55 @@ class AMoCv4:
         graph_active_nodes: List[Node],
         graph_active_edge_nodes: Optional[set[Node]] = None,
     ) -> bool:
-        # Connectivity constraint: avoid introducing edges that would form a new
-        # disconnected component. Accept an edge only if it (a) touches the current
-        # sentence and (b) attaches to a node already in the active graph (or, if
-        # no edges are active, any existing node in the graph). This guard is always
-        # enforced to keep the graph as a single component, regardless of the flag.
-
-        active_edge_nodes = graph_active_edge_nodes or set()
-        active_nodes_pool: set[Node] = set(graph_active_nodes) | active_edge_nodes
-        anchor_nodes = self._anchor_nodes
-
-        # If the graph is empty, allow seeding.
+        # If the graph is empty, allow seeding (first edges bootstrap the graph)
         if not self.graph.nodes:
             return True
 
-        # If no active edges exist, fall back to the current anchor to keep
-        # connectivity. If the anchor is empty (pre-seed), we allow the first edge.
-        if not active_edge_nodes:
-            active_nodes_pool |= anchor_nodes
-
+        # Canonicalize and get lemma keys
         subject = canonicalize_node_text(self.spacy_nlp, subject)
         obj = canonicalize_node_text(self.spacy_nlp, obj)
 
         def _lemma_key(text: str) -> tuple[str, ...]:
             return tuple(get_concept_lemmas(self.spacy_nlp, text))
 
-        sentence_lemma_keys = {tuple(n.lemmas) for n in current_sentence_nodes}
-        active_lemma_keys = {tuple(n.lemmas) for n in active_nodes_pool}
-        anchor_lemma_keys = {tuple(n.lemmas) for n in anchor_nodes}
-
         subj_key = _lemma_key(subject)
         obj_key = _lemma_key(obj)
 
-        touches_sentence = (
-            subject in current_sentence_words
-            or obj in current_sentence_words
-            or subj_key in sentence_lemma_keys
-            or obj_key in sentence_lemma_keys
-        )
-        touches_active = subj_key in active_lemma_keys or obj_key in active_lemma_keys
-        attaches_anchor = (
-            not anchor_lemma_keys
-            or subj_key in anchor_lemma_keys
-            or obj_key in anchor_lemma_keys
-        )
+        # Check memory connection (used in permissive mode)
         memory_lemma_keys = {tuple(n.lemmas) for n in self.graph.nodes}
         touches_memory = subj_key in memory_lemma_keys or obj_key in memory_lemma_keys
 
-        # Enforce connectivity: at least one endpoint must touch the existing graph.
-        # touches_sentence alone is not sufficient as it doesn't guarantee connectivity.
+        # PERMISSIVE MODE: only require memory connection
         if not self.strict_attachament_constraint:
             return touches_memory
 
-        # In strict mode, require connection to active nodes or existing memory.
-        # This ensures the graph remains connected.
-        return touches_active or touches_memory
+        # STRICT MODE: enforce structural connectivity guarantee
+        # Build the attachable set: nodes that can be endpoints of new edges
+        active_edge_nodes = graph_active_edge_nodes or set()
+        attachable_nodes: set[Node] = (
+            set(current_sentence_nodes)  # Explicit: always attachable
+            | set(graph_active_nodes)     # Carry-over: active neighborhood
+            | active_edge_nodes           # Nodes with active edges
+            | self._anchor_nodes          # Anchors: connectivity guarantors
+        )
+
+        # Build lemma key sets for efficient lookup
+        attachable_lemma_keys = {tuple(n.lemmas) for n in attachable_nodes}
+        sentence_lemma_keys = {tuple(n.lemmas) for n in current_sentence_nodes}
+
+        # At least one endpoint must be in the attachable set
+        subj_attachable = (
+            subj_key in attachable_lemma_keys
+            or subj_key in sentence_lemma_keys
+            or subject in current_sentence_words
+        )
+        obj_attachable = (
+            obj_key in attachable_lemma_keys
+            or obj_key in sentence_lemma_keys
+            or obj in current_sentence_words
+        )
+
+        return subj_attachable or obj_attachable
 
     def _add_edge(
         self,
@@ -427,63 +433,33 @@ class AMoCv4:
         label: str,
         edge_forget: int,
         created_at_sentence: Optional[int] = None,
-        force: bool = False,
     ) -> Optional[Edge]:
-        """
-        Add an edge to the graph following the original AMoC v4 paper approach.
-
-        Per Invariant 3.2: Edges may be verbs or adjectives - no strict POS validation.
-        Per Invariant 3.4: Only empty/unlabeled edges are forbidden.
-
-        The original AMoC v4 paper (old_code.py lines 134-141) adds edges with
-        minimal validation. Strict POS-based validation was causing over-rejection
-        of valid LLM labels.
-
-        Args:
-            force: When True, bypass attachment constraints. Used for fallback edges
-                   in safety nets to guarantee connectivity (Requirement #3).
-        """
-        # Per Invariant 3.4: Reject only empty/missing labels (even with force=True)
-        if not label or not isinstance(label, str) or not label.strip():
-            logging.debug(
-                "Rejected edge with empty/missing label: %s -[%s]-> %s",
-                source_node.get_text_representer() if source_node else "None",
-                label,
-                dest_node.get_text_representer() if dest_node else "None",
-            )
-            return None
-
-        # Optional attachment constraint for maintaining connectivity
-        # When force=True, bypass this check (used for safety net fallback edges)
-        #
-        # FIX 2 (INVARIANT 1): Backbone edges MUST bypass attachment filtering
-        # If EITHER endpoint is an explicit node, the edge is ALWAYS allowed
-        # This guarantees explicit backbone connectivity is never blocked
-        explicit_nodes = getattr(self, "_explicit_nodes_current_sentence", set())
-        is_backbone_edge = source_node in explicit_nodes or dest_node in explicit_nodes
-
-        if (
-            self.strict_attachament_constraint
-            and self.graph.edges
-            and not force
-            and not is_backbone_edge
-        ):
+        # STRICT MODE: enforce structural connectivity guarantee
+        if self.strict_attachament_constraint and self.graph.edges:
+            # Build the current main component
             G = nx.Graph()
             for e in self.graph.edges:
                 G.add_edge(e.source_node, e.dest_node)
 
-            # Attachable: existing graph nodes + anchors + current explicit nodes
-            existing_nodes = set(G.nodes())
-            attachable = existing_nodes | self._anchor_nodes | explicit_nodes
+            # Find the main component (containing anchor nodes)
+            main_component: set[Node] = set()
+            for comp in nx.connected_components(G):
+                if any(n in self._anchor_nodes for n in comp):
+                    main_component |= comp
 
-            # Only reject if BOTH endpoints are completely disconnected
+            # If no anchor-containing component, use largest component
+            if not main_component and G.number_of_nodes() > 0:
+                main_component = max(nx.connected_components(G), key=len)
+
+            # Build the attachable set: structural guarantee of connectivity
+            attachable = (
+                main_component
+                | self._anchor_nodes
+                | getattr(self, "_explicit_nodes_current_sentence", set())
+            )
+
+            # At least one endpoint must be attachable
             if source_node not in attachable and dest_node not in attachable:
-                logging.debug(
-                    "Rejected disconnected edge: %s -[%s]-> %s",
-                    source_node.get_text_representer(),
-                    label,
-                    dest_node.get_text_representer(),
-                )
                 return None
 
         use_sentence = (
@@ -519,733 +495,9 @@ class AMoCv4:
         self.graph = Graph()
         self._anchor_nodes = set()
 
-    def _enforce_global_graph_invariants(self) -> None:
-        """
-        FINAL GLOBAL INVARIANT CHECK (NO REPAIR).
-
-        Validates that the ACTIVE semantic graph is connected.
-        Structural edges are ignored.
-        Raises if violated.
-        """
-        G = nx.Graph()
-
-        for edge in self.graph.edges:
-            if edge.metadata.get("structural"):
-                continue
-            if not edge.active:
-                continue
-            G.add_edge(edge.source_node, edge.dest_node)
-
-        nodes = list(G.nodes)
-        if len(nodes) <= 1:
-            return
-
-        if not nx.is_connected(G):
-            components = list(nx.connected_components(G))
-            raise RuntimeError(
-                "GLOBAL CONNECTIVITY VIOLATION: "
-                f"{len(components)} semantic components detected: "
-                f"{[len(c) for c in components]}"
-            )
-
-    def _validate_global_graph_invariants(self) -> list[str]:
-        """
-        Pure validator. Semantic connectivity ONLY.
-        Structural edges are ignored.
-        """
-        violations = []
-
-        G = nx.Graph()
-        for edge in self.graph.edges:
-            if edge.metadata.get("structural"):
-                continue
-            if not edge.active:
-                continue
-            G.add_edge(edge.source_node, edge.dest_node)
-
-        nodes = list(G.nodes)
-        if len(nodes) <= 1:
-            return []
-
-        if not nx.is_connected(G):
-            components = list(nx.connected_components(G))
-            violations.append(
-                f"Semantic graph disconnected: {len(components)} components "
-                f"with sizes {[len(c) for c in components]}"
-            )
-
-        return violations
-
-    def _validate_graph_csv_fidelity(
-        self, final_triplets: List[Tuple], csv_triplets: List[Tuple]
-    ) -> bool:
-        """
-        Validate that the final graph matches the CSV exactly.
-
-        This ensures 1:1 correspondence between graph edges and CSV rows.
-        Returns True if fidelity holds, False otherwise.
-        """
-        # Normalize triplets for comparison (subject, relation, object)
-        graph_set = {(t[0], t[1], t[2]) for t in final_triplets}
-        csv_set = {(t[0], t[1], t[2]) for t in csv_triplets if len(t) >= 3}
-
-        # Check for discrepancies
-        in_graph_not_csv = graph_set - csv_set
-        in_csv_not_graph = csv_set - graph_set
-
-        if in_graph_not_csv or in_csv_not_graph:
-            if in_graph_not_csv:
-                logging.error(
-                    "GRAPH-CSV FIDELITY VIOLATION: %d edges in graph but not in CSV: %s",
-                    len(in_graph_not_csv),
-                    list(in_graph_not_csv)[:5],
-                )
-            if in_csv_not_graph:
-                logging.error(
-                    "GRAPH-CSV FIDELITY VIOLATION: %d edges in CSV but not in graph: %s",
-                    len(in_csv_not_graph),
-                    list(in_csv_not_graph)[:5],
-                )
-            return False
-
-        logging.info(
-            "GRAPH-CSV FIDELITY VALIDATED: %d triplets match exactly",
-            len(graph_set),
-        )
-        return True
-
-    def _ensure_displayed_nodes_connected(
-        self,
-        displayed_node_names: list[str],
-        sentence_text: str,
-        force_node: bool = False,
-    ) -> None:
-        if len(displayed_node_names) <= 1:
-            return
-
-        G = nx.Graph()
-
-        for edge in self.graph.edges:
-            if edge.metadata.get("structural") and not force_node:
-                continue
-            if not edge.active:
-                continue
-
-            s = edge.source_node.get_text_representer()
-            d = edge.dest_node.get_text_representer()
-            if s in displayed_node_names and d in displayed_node_names:
-                G.add_edge(s, d)
-
-        for n in displayed_node_names:
-            G.add_node(n)
-
-        if nx.is_connected(G):
-            return
-
-        hub = self._current_hub or self._fixed_hub
-        hub_name = hub.get_text_representer() if hub else "UNKNOWN"
-
-        components = list(nx.connected_components(G))
-        disconnected = [list(c) for c in components if hub_name not in c]
-
-        msg = (
-            f"DISPLAY CONNECTIVITY VIOLATION at sentence {self._current_sentence_index}: "
-            f"{len(disconnected)} components disconnected from hub '{hub_name}'. "
-            f"Components: {disconnected}"
-        )
-
-        logging.error(msg)
-
-        if self.debug:
-            raise RuntimeError(msg)
-
-    def _get_filtered_triplets_for_displayed(
-        self,
-        displayed_node_names: list[str],
-        *,
-        force_node: bool = False,
-    ) -> list[tuple[str, str, str]]:
-        displayed_set = set(displayed_node_names)
-        filtered: list[tuple[str, str, str]] = []
-
-        for edge in self.graph.edges:
-            # Skip inactive edges always
-            if not edge.active:
-                continue
-
-            # Skip empty labels always
-            if not edge.label or not edge.label.strip():
-                continue
-
-            # Structural edges:
-            if edge.metadata.get("structural"):
-                if not force_node:
-                    continue  # normal mode: hidden
-                # force_node=True → allowed for display
-
-            src = edge.source_node.get_text_representer()
-            dst = edge.dest_node.get_text_representer()
-
-            if src in displayed_set and dst in displayed_set:
-                filtered.append((src, edge.label, dst))
-
-        return filtered
-
-    def _explicit_backbone_has_path(self, explicit_nodes: List[Node]) -> bool:
-        if len(explicit_nodes) <= 1:
-            return True
-
-        explicit_set = set(explicit_nodes)
-        G = nx.Graph()
-
-        for node in explicit_set:
-            G.add_node(node)
-
-        for edge in self.graph.edges:
-            # IMPORTANT: structural edges do NOT count semantically
-            if edge.metadata.get("structural"):
-                continue
-            if edge.source_node in explicit_set and edge.dest_node in explicit_set:
-                G.add_edge(edge.source_node, edge.dest_node)
-
-        return nx.is_connected(G)
-
-    def _select_hub_node(self, explicit_nodes: List[Node]) -> Optional[Node]:
-        """
-        Select the hub node per Invariant 3.0.
-
-        INVARIANT 3.0 (Hub Node Invariant - Foundational, Non-Negotiable):
-        - Every per-sentence graph always has at least one hub node
-        - The hub node is explicitly designated
-        - The hub node is visually represented as a blue node
-        - There is no valid per-sentence graph without a hub node
-
-        Returns None only if explicit_nodes is empty (no graph to build).
-        """
-        if not explicit_nodes:
-            logging.warning(
-                "INVARIANT 3.0: No explicit nodes provided - cannot select hub"
-            )
-            return None
-
-        # Use fixed hub if already set and still in explicit nodes
-        if self._fixed_hub is not None and self._fixed_hub in explicit_nodes:
-            self._current_hub = self._fixed_hub
-            return self._fixed_hub
-
-        # Prefer CONCEPT nodes as hub candidates
-        concepts = [n for n in explicit_nodes if n.node_type == NodeType.CONCEPT]
-        candidates = concepts if concepts else explicit_nodes
-
-        def node_degree(n: Node) -> int:
-            return sum(
-                1 for e in self.graph.edges if e.source_node == n or e.dest_node == n
-            )
-
-        # Select highest-degree node (ties broken by name for determinism)
-        hub = max(candidates, key=lambda n: (node_degree(n), n.get_text_representer()))
-
-        # Fix the hub for subsequent sentences
-        if self._fixed_hub is None:
-            self._fixed_hub = hub
-
-        # Track current hub for visualization (blue node)
-        self._current_hub = hub
-
-        logging.info(
-            "INVARIANT 3.0: Hub node selected: '%s' (degree=%d)",
-            hub.get_text_representer(),
-            node_degree(hub),
-        )
-        return hub
-
-    def get_hub_node_name(self) -> Optional[str]:
-        """
-        Get the current hub node's text representation for visualization.
-
-        Per Invariant 3.0: The hub node is visually represented as a blue node.
-        """
-        if self._current_hub is not None:
-            return self._current_hub.get_text_representer()
-        if self._fixed_hub is not None:
-            return self._fixed_hub.get_text_representer()
-        return None
-
-    # Maximum retry attempts for hub edge label generation (Req #3: hard enforcement)
-    MAX_HUB_EDGE_RETRIES = 1
-
-    def _ensure_explicit_backbone_connected(
-        self,
-        explicit_nodes: List[Node],
-        sentence_text: str,
-        force_node: bool = False,
-    ) -> Tuple[List[Edge], List[Tuple[str, str, str]]]:
-        """
-        HARD REQUIREMENT:
-        Every explicit node MUST have a DIRECT edge to the hub.
-        No paths. No excuses. Guaranteed.
-        """
-        added_edges: List[Edge] = []
-        failures: List[Tuple[str, str, str]] = []
-
-        if len(explicit_nodes) < 2:
-            return added_edges, failures
-
-        hub = self._select_hub_node(explicit_nodes)
-        if hub is None:
-            raise RuntimeError("Explicit backbone enforcement failed: no hub")
-
-        def has_direct_edge(node: Node) -> bool:
-            for e in self.graph.edges:
-                if (e.source_node == node and e.dest_node == hub) or (
-                    e.source_node == hub and e.dest_node == node
-                ):
-                    return True
-            return False
-
-        explicit_names = [n.get_text_representer() for n in explicit_nodes]
-
-        for node in explicit_nodes:
-            if node == hub:
-                continue
-            if has_direct_edge(node):
-                continue
-
-            subj = node.get_text_representer()
-            obj = hub.get_text_representer()
-
-            label = None
-            explanation = ""
-
-            # Try LLM once
-            try:
-                result = self.client.get_edge_label_with_explanation(
-                    subj, obj, sentence_text, explicit_names, self.persona
-                )
-                label = result.get("label", "")
-                explanation = result.get("explanation", "")
-                if not self._is_valid_hub_edge_label(label):
-                    label = None
-            except Exception:
-                label = None
-
-            # HARD fallback
-            if not label:
-                label = self._generate_fallback_hub_label(node, hub, sentence_text)
-                explanation = "Fallback label used to guarantee explicit backbone"
-
-                if self.debug:
-                    raise RuntimeError(
-                        f"BACKBONE FALLBACK USED (debug): {subj} -> {obj}"
-                    )
-
-            hardened_label = f"structural::{label}"
-            edge = self._add_edge(
-                node,
-                hub,
-                hardened_label,
-                self.edge_forget,
-                force=True,
-            )
-
-            if edge:
-                edge.metadata["structural"] = True
-                edge.active = True
-                added_edges.append(edge)
-                if explanation:
-                    self._hub_edge_explanations.append(
-                        f"{subj} -> {obj}: {explanation}"
-                    )
-            else:
-                failures.append((subj, obj, "edge creation failed"))
-
-        if failures:
-            logging.error(
-                "EXPLICIT BACKBONE FAILURE: %s",
-                failures,
-            )
-
-        return added_edges, failures
-
-    def _generate_fallback_hub_label(
-        self, node: Node, hub: Node, sentence_text: str
-    ) -> str:
-        """
-        Generate a context-appropriate fallback label for hub connection.
-
-        Used when LLM fails to generate a valid label after MAX_HUB_EDGE_RETRIES.
-        This ensures Requirement #3 (hard connectivity enforcement) is satisfied.
-        """
-        node_type = node.node_type
-        hub_type = hub.node_type
-
-        # Use node types to generate semantically appropriate labels
-        if node_type == NodeType.PROPERTY:
-            return "describes"
-        elif hub_type == NodeType.PROPERTY:
-            return "has_property"
-        else:
-            # Both are CONCEPT nodes - use a general but meaningful relation
-            # Try to infer from sentence context
-            node_text = node.get_text_representer().lower()
-            hub_text = hub.get_text_representer().lower()
-
-            # Check for common patterns in the sentence
-            sentence_lower = sentence_text.lower()
-            if f"{node_text}" in sentence_lower and f"{hub_text}" in sentence_lower:
-                # Both mentioned in sentence - they're contextually related
-                return "relates_to"
-            else:
-                return "associated_with"
-
-    def verify_connectivity_invariants(
-        self,
-        explicit_nodes: List[Node],
-        sentence_index: int,
-    ) -> List[Tuple[str, str, str]]:
-        """
-        Post-processing verification of connectivity invariants.
-
-        Per Requirement #2: Every explicit node must have at least one labeled
-        edge DIRECTLY connecting it to a hub node (not just path connectivity).
-
-        INVARIANT 3.4: If connectivity fails, emit explicit diagnostics.
-
-        Returns list of (node_name, hub_name, reason) for any disconnected nodes.
-        """
-        if len(explicit_nodes) < 2:
-            return []
-
-        hub = self._select_hub_node(explicit_nodes)
-        if hub is None:
-            logging.error(
-                "INVARIANT 3.0 VIOLATION: No hub node for sentence %d",
-                sentence_index,
-            )
-            return [("N/A", "N/A", "No hub node could be selected")]
-
-        hub_name = hub.get_text_representer()
-        disconnected: List[Tuple[str, str, str]] = []
-
-        def has_direct_edge_to_hub(node: Node) -> bool:
-            """Check for DIRECT edge to hub per Requirement #2."""
-            for edge in self.graph.edges:
-                if (edge.source_node == node and edge.dest_node == hub) or (
-                    edge.source_node == hub and edge.dest_node == node
-                ):
-                    return True
-            return False
-
-        # Check DIRECT edge to hub for each explicit node (Requirement #2)
-        for node in explicit_nodes:
-            if node == hub:
-                continue
-            if not has_direct_edge_to_hub(node):
-                node_name = node.get_text_representer()
-                disconnected.append(
-                    (node_name, hub_name, "No DIRECT edge to hub (Req #2)")
-                )
-
-        # INVARIANT 3.4: Emit explicit diagnostics
-        if disconnected:
-            logging.error(
-                "REQUIREMENT #2 VIOLATION for sentence %d: "
-                "%d explicit nodes have no DIRECT edge to hub '%s': %s",
-                sentence_index,
-                len(disconnected),
-                hub_name,
-                ", ".join(n for n, _, _ in disconnected),
-            )
-
-        return disconnected
-
-    def _filter_inferred_for_attachment(
-        self,
-        relationship: Tuple[str, str, str],
-        explicit_nodes: List[Node],
-        explicit_words: List[str],
-    ) -> bool:
-        if not self.strict_attachament_constraint:
-            return True
-        subj, rel, obj = relationship
-        explicit_lemma_keys = {tuple(n.lemmas) for n in explicit_nodes}
-        explicit_word_set = {w.lower() for w in explicit_words}
-
-        def _lemma_key(text: str) -> tuple[str, ...]:
-            return tuple(get_concept_lemmas(self.spacy_nlp, text))
-
-        subj_key = _lemma_key(subj)
-        obj_key = _lemma_key(obj)
-        subj_is_explicit = (
-            subj.lower() in explicit_word_set or subj_key in explicit_lemma_keys
-        )
-        obj_is_explicit = (
-            obj.lower() in explicit_word_set or obj_key in explicit_lemma_keys
-        )
-        return subj_is_explicit or obj_is_explicit
-
-    def _build_per_sentence_view(
-        self,
-        explicit_nodes: List[Node],
-        max_distance: int,
-    ) -> Tuple[set[Node], set[Edge]]:
-        explicit_set = set(explicit_nodes)
-        distances = self._distances_from_sources_active_edges(
-            explicit_set, max_distance
-        )
-        active_nodes = set(distances.keys())
-        active_edges: set[Edge] = set()
-        for edge in self.graph.edges:
-            if not edge.active:
-                continue
-            if edge.source_node in active_nodes and edge.dest_node in active_nodes:
-                active_edges.add(edge)
-        return active_nodes, active_edges
-
-    def _validate_per_sentence_connectivity(
-        self,
-        active_nodes: set[Node],
-        active_edges: set[Edge],
-        sentence_id: int,
-    ) -> bool:
-        if len(active_nodes) <= 1:
-            return True
-        G = nx.Graph()
-        for node in active_nodes:
-            G.add_node(node)
-        for edge in active_edges:
-            G.add_edge(edge.source_node, edge.dest_node)
-        if not nx.is_connected(G):
-            logging.error(
-                "Per-sentence graph DISCONNECTED at sentence %d (strict mode)",
-                sentence_id,
-            )
-            return False
-        return True
-
-    # =========================================================================
-    # END REDESIGNED STRICT ATTACHMENT CONSTRAINT
-    # =========================================================================
-
-    # =========================================================================
-    # PER-SENTENCE TRACKING FOR 1-TO-1 CORRELATION
-    # =========================================================================
-
-    def _record_per_sentence_breakdown(
-        self,
-        sentence_idx: int,
-        sentence_text: str,
-        explicit_nodes: List[Node],
-        max_distance: int,
-    ) -> dict:
-        """
-        Record per-sentence breakdown with 1-to-1 correlation between
-        node lists and triplets.
-
-        Per Professor's requirement #5: There should be 1-to-1 correlation
-        between explicit, carry-over and inactive list to the triplets
-        that are produced per sentence.
-
-        Returns:
-            Dictionary with explicit_nodes, carryover_nodes, inactive_nodes,
-            and their corresponding triplets.
-        """
-        explicit_set = set(explicit_nodes)
-
-        # BFS to find carry-over nodes (reachable via active edges)
-        distances = self._distances_from_sources_active_edges(
-            explicit_set, max_distance
-        )
-        carryover_nodes = [
-            n for n in distances.keys() if n not in explicit_set and distances[n] > 0
-        ]
-
-        # All active nodes in the per-sentence view
-        active_node_set = set(distances.keys())
-
-        # Inactive nodes: nodes in the graph not reachable from explicit
-        inactive_nodes = [n for n in self.graph.nodes if n not in active_node_set]
-
-        # Get triplets for each category
-        def _get_triplets_for_nodes(node_set: set[Node]) -> List[Tuple[str, str, str]]:
-            """Get triplets where BOTH endpoints are in the node set."""
-            triplets = []
-            for edge in self.graph.edges:
-                if edge.source_node in node_set and edge.dest_node in node_set:
-                    if edge.label and edge.label.strip():
-                        triplets.append(
-                            (
-                                edge.source_node.get_text_representer(),
-                                edge.label,
-                                edge.dest_node.get_text_representer(),
-                            )
-                        )
-            return triplets
-
-        def _get_triplets_touching_nodes(
-            node_set: set[Node],
-        ) -> List[Tuple[str, str, str]]:
-            """Get active triplets where AT LEAST ONE endpoint is in the node set."""
-            triplets = []
-            for edge in self.graph.edges:
-                if not edge.active:
-                    continue
-                if edge.source_node in node_set or edge.dest_node in node_set:
-                    if edge.label and edge.label.strip():
-                        triplets.append(
-                            (
-                                edge.source_node.get_text_representer(),
-                                edge.label,
-                                edge.dest_node.get_text_representer(),
-                            )
-                        )
-            return triplets
-
-        # Triplets for explicit nodes (backbone)
-        explicit_triplets = _get_triplets_for_nodes(explicit_set)
-
-        # Triplets involving carry-over nodes
-        carryover_set = set(carryover_nodes)
-        carryover_triplets = _get_triplets_touching_nodes(carryover_set)
-
-        # All active triplets in the per-sentence view
-        active_triplets = _get_triplets_for_nodes(active_node_set)
-
-        # Record breakdown
-        breakdown = {
-            "sentence_idx": sentence_idx,
-            "sentence_text": sentence_text,
-            "explicit_nodes": [n.get_text_representer() for n in explicit_nodes],
-            "explicit_node_count": len(explicit_nodes),
-            "carryover_nodes": [n.get_text_representer() for n in carryover_nodes],
-            "carryover_node_count": len(carryover_nodes),
-            "inactive_nodes": [n.get_text_representer() for n in inactive_nodes],
-            "inactive_node_count": len(inactive_nodes),
-            "explicit_triplets": explicit_triplets,
-            "explicit_triplet_count": len(explicit_triplets),
-            "carryover_triplets": carryover_triplets,
-            "carryover_triplet_count": len(carryover_triplets),
-            "active_triplets": active_triplets,
-            "active_triplet_count": len(active_triplets),
-            "hub_node": self.get_hub_node_name(),
-        }
-
-        # Store in tracking structure
-        self._per_sentence_breakdown[sentence_idx] = breakdown
-
-        # Log detailed diagnostics
-        logging.info(
-            "[Sentence %d] BREAKDOWN - Explicit: %d nodes, %d triplets | "
-            "Carry-over: %d nodes, %d triplets | Inactive: %d nodes | Hub: %s",
-            sentence_idx,
-            breakdown["explicit_node_count"],
-            breakdown["explicit_triplet_count"],
-            breakdown["carryover_node_count"],
-            breakdown["carryover_triplet_count"],
-            breakdown["inactive_node_count"],
-            breakdown["hub_node"] or "None",
-        )
-
-        # Check connectivity invariant
-        if len(explicit_nodes) > 1:
-            if not self._explicit_backbone_has_path(explicit_nodes):
-                logging.error(
-                    "[Sentence %d] CONNECTIVITY FAILURE: Explicit backbone is disconnected!",
-                    sentence_idx,
-                )
-                breakdown["connectivity_ok"] = False
-            else:
-                breakdown["connectivity_ok"] = True
-                logging.info(
-                    "[Sentence %d] CONNECTIVITY OK: All explicit nodes connected",
-                    sentence_idx,
-                )
-        else:
-            breakdown["connectivity_ok"] = True
-
-        return breakdown
-
-    def get_per_sentence_breakdown(self) -> dict[int, dict]:
-        """
-        Get the complete per-sentence breakdown for analysis.
-
-        Returns:
-            Dictionary mapping sentence_idx to breakdown info with
-            explicit, carry-over, inactive nodes and their triplets.
-        """
-        return self._per_sentence_breakdown
-
-    def print_connectivity_report(self) -> str:
-        """
-        Print a comprehensive connectivity report for all sentences.
-
-        This satisfies the professor's requirement for explicit diagnostics
-        about triplet connectivity per sentence.
-
-        Returns:
-            String report of connectivity status.
-        """
-        lines = []
-        lines.append("=" * 70)
-        lines.append("CONNECTIVITY REPORT - Per-Sentence Triplet Analysis")
-        lines.append("=" * 70)
-
-        total_sentences = len(self._per_sentence_breakdown)
-        connected_sentences = 0
-        disconnected_sentences = []
-
-        for sent_idx in sorted(self._per_sentence_breakdown.keys()):
-            breakdown = self._per_sentence_breakdown[sent_idx]
-            connectivity_ok = breakdown.get("connectivity_ok", True)
-
-            if connectivity_ok:
-                connected_sentences += 1
-                status = "✓ CONNECTED"
-            else:
-                disconnected_sentences.append(sent_idx)
-                status = "✗ DISCONNECTED"
-
-            lines.append(f"\nSentence {sent_idx}: {status}")
-            lines.append(f"  Text: {breakdown['sentence_text'][:60]}...")
-            lines.append(f"  Hub: {breakdown['hub_node'] or 'None'}")
-            lines.append(
-                f"  Explicit nodes: {breakdown['explicit_node_count']} "
-                f"({', '.join(breakdown['explicit_nodes'][:5])}{'...' if len(breakdown['explicit_nodes']) > 5 else ''})"
-            )
-            lines.append(f"  Explicit triplets: {breakdown['explicit_triplet_count']}")
-            lines.append(f"  Carry-over nodes: {breakdown['carryover_node_count']}")
-            lines.append(f"  Inactive nodes: {breakdown['inactive_node_count']}")
-            lines.append(
-                f"  Total active triplets: {breakdown['active_triplet_count']}"
-            )
-
-        lines.append("\n" + "=" * 70)
-        lines.append("SUMMARY")
-        lines.append("=" * 70)
-        lines.append(f"Total sentences: {total_sentences}")
-        lines.append(f"Connected: {connected_sentences}/{total_sentences}")
-        if disconnected_sentences:
-            lines.append(f"DISCONNECTED sentences: {disconnected_sentences}")
-            lines.append(
-                "WARNING: Some sentences have disconnected explicit backbones!"
-            )
-        else:
-            lines.append("All sentences have connected explicit backbones.")
-
-        if self._connectivity_failures:
-            lines.append(
-                f"\nConnectivity failures logged: {len(self._connectivity_failures)}"
-            )
-            for subj, obj, reason in self._connectivity_failures[:10]:  # Show first 10
-                lines.append(f"  - {subj} -> {obj}: {reason}")
-
-        report = "\n".join(lines)
-        logging.info(report)
-        return report
-
-    # =========================================================================
-    # END PER-SENTENCE TRACKING
-    # =========================================================================
+    def _enforce_graph_connectivity(self) -> None:
+        # No-op: do not prune edges after addition; connectivity is enforced at add time.
+        return
 
     def resolve_pronouns(self, text: str) -> str:
         resolved = self.client.resolve_pronouns(text, self.persona)
@@ -1261,8 +513,6 @@ class AMoCv4:
     ) -> List[Tuple[str, str, str]]:
         triplets: List[Tuple[str, str, str]] = []
         for edge in self.graph.edges:
-            if edge.metadata.get("structural"):
-                continue  # NEVER expose structural edges semantically
             if only_active and not edge.active:
                 continue
             if not edge.label or not str(edge.label).strip():
@@ -1323,8 +573,7 @@ class AMoCv4:
         if not lbl or not lbl.strip():
             logging.warning(
                 "Skipping recording edge with empty label: %s -> %s",
-                u,
-                v,
+                u, v,
             )
             return
         introduced = self._triplet_intro.get((u, lbl, v))
@@ -1393,52 +642,6 @@ class AMoCv4:
             )
         return trips
 
-    def _sync_active_graph(self) -> None:
-        """
-        Synchronize active_graph with the main graph.
-
-        Ensures all active edges in self.graph are also present in self.active_graph.
-        This is a safety net to catch any edges that were created but not properly
-        recorded in the active projection.
-        """
-        current_sentence = getattr(self, "_current_sentence_index", 0)
-        synced_count = 0
-
-        for edge in self.graph.edges:
-            if not edge.active:
-                continue
-            if not edge.label or not edge.label.strip():
-                continue
-
-            u = edge.source_node.get_text_representer()
-            v = edge.dest_node.get_text_representer()
-            lbl = edge.label
-
-            introduced = self._triplet_intro.get((u, lbl, v))
-            if introduced is None:
-                introduced = (
-                    edge.created_at_sentence if edge.created_at_sentence else -1
-                )
-            edge_key = f"{lbl}__introduced_{introduced}"
-
-            # Check if edge already exists in active_graph
-            if not self.active_graph.has_edge(u, v, key=edge_key):
-                self.active_graph.add_edge(
-                    u,
-                    v,
-                    key=edge_key,
-                    relation=lbl,
-                    introduced_at_sentence=int(introduced),
-                    last_active_sentence=int(current_sentence),
-                )
-                synced_count += 1
-
-        if synced_count > 0:
-            logging.info(
-                "SYNC: Added %d missing edges to active_graph",
-                synced_count,
-            )
-
     def _is_generic_relation(self, label: str) -> bool:
         norm = self._normalize_label(label)
         return norm in self.GENERIC_RELATION_LABELS
@@ -1447,14 +650,19 @@ class AMoCv4:
         norm = self._normalize_label(label)
         return norm in self.RELATION_BLACKLIST
 
-    def _is_valid_relation_label(self, label: str) -> bool:
-        """
-        Validate edge labels following the original AMoC v4 paper approach.
+    def _is_verb_relation(self, label: str) -> bool:
+        doc = self.spacy_nlp(label)
+        has_verb = False
+        for tok in doc:
+            if not getattr(tok, "is_alpha", False):
+                continue
+            if tok.pos_ in {"ADJ", "NOUN", "PROPN", "ADV"}:
+                return False
+            if tok.pos_ in {"VERB", "AUX"}:
+                has_verb = True
+        return has_verb
 
-        The original paper (old_code.py) uses minimal validation - only checking
-        for non-empty labels. This simplified approach accepts any non-empty,
-        non-generic label from the LLM.
-        """
+    def _is_valid_relation_label(self, label: str) -> bool:
         # Explicitly handle None, empty string, and whitespace-only labels
         if not label or not isinstance(label, str):
             return False
@@ -1465,13 +673,9 @@ class AMoCv4:
             return False
         if self._is_blacklisted_relation(label_stripped):
             return False
-        # Following original paper: accept any non-generic label from LLM
-        return True
-
-    def _is_valid_hub_edge_label(self, label: str) -> bool:
-        if not label or not label.strip():
+        if not self._is_verb_relation(label_stripped):
             return False
-        return self._normalize_label(label) in self.HUB_EDGE_ACCEPTABLE_LABELS
+        return True
 
     def _normalize_endpoint_text(self, text: str, is_subject: bool) -> Optional[str]:
         if not text:
@@ -1557,10 +761,6 @@ class AMoCv4:
         explicit_nodes: Optional[List[str]] = None,
         salient_nodes: Optional[List[str]] = None,
         inactive_nodes: Optional[List[str]] = None,
-        inactive_nodes_for_title: Optional[List[str]] = None,
-        hub_edge_explanations: Optional[List[str]] = None,
-        show_all_edges: bool = True,
-        force: bool = False,
     ) -> None:
         # Route per-sentence plots into mode-specific subfolders for clarity.
         plot_dir = output_dir
@@ -1573,32 +773,7 @@ class AMoCv4:
             else self._graph_edges_to_triplets(only_active=only_active)
         )
         age_for_filename = self.persona_age if self.persona_age is not None else -1
-
-        # Per Invariant 3.0: Hub node must be visually represented as blue
-        # Per Paper Figures 2-6: ALL text-based (explicit) nodes must be blue
-        blue_node_set = set(highlight_nodes) if highlight_nodes else set()
-        hub_name = self.get_hub_node_name()
-        if hub_name:
-            blue_node_set.add(hub_name)
-        # Add ALL explicit nodes (TEXT_BASED) to blue_node_set per paper requirement
-        if explicit_nodes:
-            blue_node_set.update(explicit_nodes)
-        # Also include salient (carry-over) nodes as blue since they were text-based
-        if salient_nodes:
-            blue_node_set.update(salient_nodes)
-
         try:
-            # Ensure connectivity for displayed nodes (mutation-only)
-            displayed_node_set = set(explicit_nodes or []) | set(salient_nodes or [])
-            if displayed_node_set:
-                self._ensure_displayed_nodes_connected(
-                    list(displayed_node_set),
-                    sentence_text,
-                    force_node=force,
-                )
-            self._viz_positions = {
-                k: v for k, v in self._viz_positions.items() if k in displayed_node_set
-            }
             saved_path = plot_amoc_triplets(
                 triplets=(
                     self._graph_edges_to_triplets(only_active=True)
@@ -1608,7 +783,7 @@ class AMoCv4:
                 persona=self.persona,
                 model_name=self.model_name,
                 age=age_for_filename,
-                blue_nodes=blue_node_set,
+                blue_nodes=highlight_nodes,
                 output_dir=plot_dir,
                 step_tag=(
                     f"sent{sentence_index+1}_{mode}"
@@ -1617,14 +792,11 @@ class AMoCv4:
                 ),
                 sentence_text=sentence_text,
                 inactive_nodes=inactive_nodes,
-                inactive_nodes_for_title=inactive_nodes_for_title,
                 explicit_nodes=explicit_nodes,
                 salient_nodes=salient_nodes,
                 largest_component_only=largest_component_only,
                 positions=self._viz_positions,
                 active_edges=active_edges,
-                hub_edge_explanations=hub_edge_explanations,
-                show_all_edges=show_all_edges,
             )
             if triplets:
                 logging.info(
@@ -1645,16 +817,7 @@ class AMoCv4:
         highlight_nodes: Optional[Iterable[str]] = None,
         matrix_suffix: Optional[str] = None,
         largest_component_only: bool = False,
-        force_node: bool = False,
     ) -> List[Tuple[str, str, str]]:
-
-        def _filter_to_plotted(
-            nodes: Optional[list[str]], plotted: set[str]
-        ) -> list[str]:
-            if not nodes:
-                return []
-            return sorted(n for n in nodes if n in plotted)
-
         if not hasattr(self, "_amoc_matrix_records"):
             self._amoc_matrix_records = []
         # Initialize persistent visualization positions ONCE per analyze run.
@@ -1683,19 +846,6 @@ class AMoCv4:
                 if overlap > best_overlap:
                     best_overlap = overlap
                     best_sent = sent.text.strip()
-
-            # CRITICAL: Require minimum overlap to avoid LLM hallucinations
-            # If overlap is too low, the LLM returned garbage - use original text
-            min_required_overlap = max(1, len(orig_tokens) // 3)  # At least 1/3 overlap
-            if best_overlap < min_required_overlap:
-                logging.warning(
-                    "resolve_pronouns returned low overlap (%d/%d): rejecting '%s' for original '%s'",
-                    best_overlap,
-                    len(orig_tokens),
-                    (best_sent or cleaned)[:50],
-                    orig_text[:50],
-                )
-                return orig_text
 
             chosen = best_sent or cleaned
 
@@ -1737,15 +887,10 @@ class AMoCv4:
             )  # sent_idx, sent_text, subj, rel, obj
             nodes_before_sentence = set(self.graph.nodes)
             self._explicit_nodes_current_sentence = set()
-            self._hub_edge_explanations = []  # Clear explanations for new sentence
             logging.info("Processing sentence %d: %s", i, resolved_text)
             if i == 0:
                 current_sentence = sent
                 prev_sentences.append(resolved_text)
-
-                # ============================================================
-                # STEP 1: Build Explicit Backbone (Section 3.1.2 Steps 1a-1c)
-                # ============================================================
                 self.init_graph(sent)
 
                 (
@@ -1754,38 +899,24 @@ class AMoCv4:
                 ) = self.get_senteces_text_based_nodes(
                     [sent], create_unexistent_nodes=True
                 )
-
                 self._explicit_nodes_current_sentence = set(
                     current_sentence_text_based_nodes
                 )
+                # Populate _anchor_nodes from first sentence's explicit nodes
+                # to ensure connectivity checks have a valid anchor set
                 self._anchor_nodes = set(current_sentence_text_based_nodes)
-
-                self._ensure_explicit_backbone_connected(
-                    current_sentence_text_based_nodes,
-                    resolved_text,
-                    force_node=force_node,
-                )
-                # ============================================================
-                # STEP 2: Inference Enrichment (Section 3.1.2 Steps 2a-2c)
-                # ============================================================
                 inferred_concept_relationships, inferred_property_relationships = (
                     self.infer_new_relationships_step_0(sent)
                 )
 
                 self.add_inferred_relationships_to_graph_step_0(
-                    inferred_concept_relationships,
-                    NodeType.CONCEPT,
-                    sent,
-                    current_sentence_text_based_nodes,
-                    current_sentence_text_based_words,
+                    inferred_concept_relationships, NodeType.CONCEPT, sent
                 )
                 self.add_inferred_relationships_to_graph_step_0(
-                    inferred_property_relationships,
-                    NodeType.PROPERTY,
-                    sent,
-                    current_sentence_text_based_nodes,
-                    current_sentence_text_based_words,
+                    inferred_property_relationships, NodeType.PROPERTY, sent
                 )
+                # Enforce connectivity for first sentence - remove any disconnected edges
+                self._enforce_graph_connectivity()
                 self._restrict_active_to_current_explicit(
                     current_sentence_text_based_nodes
                 )
@@ -1807,20 +938,6 @@ class AMoCv4:
                 self._explicit_nodes_current_sentence = set(
                     current_sentence_text_based_nodes
                 )
-
-                hub_edges, backbone_failures = self._ensure_explicit_backbone_connected(
-                    current_sentence_text_based_nodes,
-                    resolved_text,
-                    force_node=force_node,
-                )
-                added_edges.extend(hub_edges)
-
-                if backbone_failures:
-                    logging.error(
-                        "BACKBONE FAILURES at sentence %d: %s",
-                        i + 1,
-                        backbone_failures,
-                    )
 
                 current_all_text = resolved_text
                 # Step 3: build active subgraph using only explicit (text-based) nodes.
@@ -1945,10 +1062,8 @@ class AMoCv4:
                     )
                     if potential_new_edge:
                         added_edges.append(potential_new_edge)
-                # =====================================================
-                # STEP 2: Inference Enrichment (Section 3.1.2 Steps 2a-2c)
-                # Inferences MUST attach to explicit backbone
-                # =====================================================
+
+                # infer new relationships logic...
                 inferred_concept_relationships, inferred_property_relationships = (
                     self.infer_new_relationships(
                         current_all_text,
@@ -2032,6 +1147,30 @@ class AMoCv4:
                 for n in (set(self.graph.nodes) - nodes_before_sentence)
                 if n.node_source == NodeSource.INFERENCE_BASED
             }
+
+            # BUILD PER-SENTENCE VIEW (only when strict mode is enabled)
+            # When enabled, enforces:
+            # - Only explicit + carry-over nodes are visible
+            # - Inactive nodes are completely excluded
+            # - Only edges where BOTH endpoints are active are included
+            # - The graph is guaranteed connected (or empty)
+            per_sentence_view = self._build_per_sentence_view(
+                explicit_nodes=current_sentence_text_based_nodes,
+                sentence_index=sentence_id,
+            )
+
+            # Log per-sentence view invariants for debugging (only in strict mode)
+            if self.debug and per_sentence_view is not None:
+                logging.info(
+                    "Per-sentence view for sentence %d: "
+                    "%d explicit, %d carry-over, %d active edges, connected=%s",
+                    sentence_id,
+                    len(per_sentence_view.explicit_nodes),
+                    len(per_sentence_view.carryover_nodes),
+                    len(per_sentence_view.active_edges),
+                    per_sentence_view.is_connected,
+                )
+
             # Refresh active projection for this step
             self._record_sentence_activation(
                 sentence_id=sentence_id,
@@ -2040,6 +1179,20 @@ class AMoCv4:
             )
 
             current_active_nodes = self._get_nodes_with_active_edges()
+
+            # Connectivity check using per-sentence view (only in strict mode)
+            if (
+                per_sentence_view is not None
+                and not per_sentence_view.is_empty
+                and not per_sentence_view.is_connected
+            ):
+                logging.error(
+                    "Per-sentence graph disconnected at sentence %s for persona '%s' "
+                    "(this should not happen with strict-attachment-constraint enabled)",
+                    sentence_id,
+                    self.persona,
+                )
+            # Legacy active_graph check (for backwards compatibility)
             if self.active_graph.number_of_nodes() > 1 and not nx.is_connected(
                 nx.Graph(self.active_graph)
             ):
@@ -2048,18 +1201,6 @@ class AMoCv4:
                     sentence_id,
                     self.persona,
                 )
-
-            # =====================================================
-            # Record per-sentence breakdown for 1-to-1 correlation
-            # (Professor requirement #5)
-            # =====================================================
-            self._record_per_sentence_breakdown(
-                sentence_idx=sentence_id,
-                sentence_text=original_text,
-                explicit_nodes=current_sentence_text_based_nodes,
-                max_distance=self.max_distance_from_active_nodes,
-            )
-
             if i == 0:
                 recently_deactivated_nodes: set[Node] = set()
             else:
@@ -2070,50 +1211,68 @@ class AMoCv4:
                     current_active_nodes
                 )
                 recently_deactivated_nodes = set(gone)
-            # Only show inactive nodes that have at least one edge in the active graph
-            # This prevents disconnected "floating" nodes that violate connectivity
-            active_graph_nodes = set(self.active_graph.nodes())
-            inactive_nodes_for_plot = sorted(
-                filter(
-                    None,
-                    {
-                        node.get_text_representer()
-                        for node in self._cumulative_deactivated_nodes_for_plot
-                        if node.get_text_representer() in active_graph_nodes
-                    },
+            # Use per-sentence view for node categorization (constraint-first design)
+            # This ensures inactive nodes are properly excluded from all outputs
+            if self._per_sentence_view is not None:
+                # Explicit nodes from per-sentence view (guaranteed present)
+                explicit_nodes_for_plot = sorted(
+                    filter(
+                        None,
+                        {
+                            node.get_text_representer()
+                            for node in self._per_sentence_view.explicit_nodes
+                        },
+                    )
                 )
-            )
-            explicit_nodes_for_plot = sorted(
-                filter(
-                    None,
-                    {
-                        node.get_text_representer()
-                        for node in current_sentence_text_based_nodes
-                    },
-                )
-            )
-            # CRITICAL: salient_nodes = carry-over from PREVIOUS sentences only
-            # For sentence 1: NO carry-over (empty list)
-            # For sentence 2+: nodes that were active in previous sentence AND still active now
-            if i == 0:
-                # First sentence has no carry-over
-                salient_nodes_for_plot = []
-            else:
-                # Carry-over = (prev active) ∩ (current active) - explicit
-                prev_active_names = {
-                    n.get_text_representer()
-                    for n in self._prev_active_nodes_for_plot
-                    if n.get_text_representer()
-                }
-                current_active_names = {
-                    n.get_text_representer()
-                    for n in current_active_nodes
-                    if n.get_text_representer()
-                }
-                # Only include nodes that were active before AND are still active
-                carryover_names = prev_active_names & current_active_names
+                # Carry-over nodes (salient) from per-sentence view
                 salient_nodes_for_plot = sorted(
-                    carryover_names - set(explicit_nodes_for_plot)
+                    filter(
+                        None,
+                        {
+                            node.get_text_representer()
+                            for node in self._per_sentence_view.carryover_nodes
+                        },
+                    )
+                )
+                # Inactive nodes: all cumulative nodes NOT in the per-sentence active set
+                all_cumulative_node_texts = {
+                    node.get_text_representer()
+                    for node in self.graph.nodes
+                    if node.get_text_representer()
+                }
+                active_node_texts = (
+                    set(explicit_nodes_for_plot) | set(salient_nodes_for_plot)
+                )
+                inactive_nodes_for_plot = sorted(
+                    all_cumulative_node_texts - active_node_texts
+                )
+            else:
+                # Fallback to legacy behavior if no per-sentence view
+                inactive_nodes_for_plot = sorted(
+                    filter(
+                        None,
+                        {
+                            node.get_text_representer()
+                            for node in self._cumulative_deactivated_nodes_for_plot
+                        },
+                    )
+                )
+                explicit_nodes_for_plot = sorted(
+                    filter(
+                        None,
+                        {
+                            node.get_text_representer()
+                            for node in current_sentence_text_based_nodes
+                        },
+                    )
+                )
+                salient_nodes_for_plot = sorted(
+                    {
+                        node.get_text_representer()
+                        for node in current_active_nodes
+                        if node.get_text_representer()
+                    }
+                    - set(explicit_nodes_for_plot)
                 )
             # Only keep the deactivated set for targeted inference when the
             # attachment constraint is enforced.
@@ -2125,142 +1284,63 @@ class AMoCv4:
                 self._recently_deactivated_nodes_for_inference = set()
             self._prev_active_nodes_for_plot = current_active_nodes
 
-            # Sync active_graph with main graph to ensure all active edges are present
-            self._sync_active_graph()
-
-            # FIX 1: Removed FINAL SAFETY NET - _ensure_displayed_nodes_connected
-            # in the plotting section handles connectivity for visualization.
-            # No duplicated safety net logic.
-
-            def _nodes_from_triplets(
-                triplets: list[tuple[str, str, str]],
-            ) -> set[str]:
-                nodes = set()
-                for s, _, o in triplets:
-                    nodes.add(s)
-                    nodes.add(o)
-                return nodes
-
             if plot_after_each_sentence:
-                display_force = bool(force_node)
-                # STEP 0: start from semantic candidates only
-                candidate_displayed_nodes = set(explicit_nodes_for_plot) | set(
-                    salient_nodes_for_plot
+                # Active (salience) view - use per-sentence view for clean isolation
+                # This guarantees only edges with BOTH endpoints active are shown
+                active_triplets = (
+                    self._per_sentence_view.get_triplets()
+                    if self._per_sentence_view is not None
+                    else self._graph_to_triplets(self.active_graph)
                 )
-
-                # STEP 1: semantic-only triplets among candidates
-                filtered_triplets = self._get_filtered_triplets_for_displayed(
-                    list(candidate_displayed_nodes),
-                    force_node=display_force,
-                )
-
-                # STEP 2: displayed nodes are EXACTLY those in triplets
-                displayed_nodes = sorted(_nodes_from_triplets(filtered_triplets))
-
-                # STEP 3: hard-filter title lists
-                displayed_set = set(displayed_nodes)
-
-                explicit_nodes_for_plot = _filter_to_plotted(
-                    explicit_nodes_for_plot, displayed_set
-                )
-                salient_nodes_for_plot = _filter_to_plotted(
-                    salient_nodes_for_plot, displayed_set
-                )
-                inactive_nodes_for_plot = _filter_to_plotted(
-                    inactive_nodes_for_plot, displayed_set
-                )
-
-                # DEBUG INSTRUMENTATION (TASK 3): Sentence-local assertion BEFORE repair
-                # This catches upstream failures before _ensure_displayed_nodes_connected masks them
-                if self.debug:
-                    pre_repair_violations = self.verify_connectivity_invariants(
-                        current_sentence_text_based_nodes,
-                        sentence_index=i + 1,
-                    )
-                    if pre_repair_violations:
-                        raise RuntimeError(
-                            f"SENTENCE {i + 1} PRE-REPAIR CONNECTIVITY VIOLATION (debug mode): "
-                            f"{len(pre_repair_violations)} nodes disconnected from hub BEFORE "
-                            f"sentence-local repair. Violations: "
-                            f"{[f'{n} -> {h}: {r}' for n, h, r in pre_repair_violations[:5]]}"
+                active_edge_pairs = (
+                    {
+                        (
+                            edge.source_node.get_text_representer(),
+                            edge.dest_node.get_text_representer(),
                         )
-
-                # STEP 2: Get filtered triplets AFTER connectivity repair
-                if force_node:
-                    displayed_nodes = sorted(
-                        set(displayed_nodes) | set(explicit_nodes_for_plot)
-                    )
-                filtered_triplets = self._get_filtered_triplets_for_displayed(
-                    displayed_nodes,
-                    force_node=display_force,
+                        for edge in self._per_sentence_view.active_edges
+                    }
+                    if self._per_sentence_view is not None
+                    else {(u, v) for u, v in self.active_graph.edges()}
                 )
 
-                # INVARIANT ENFORCEMENT: Every displayed node MUST have ≥1 edge
-                # No silent pass-through - this is a hard error
-                if len(displayed_nodes) > 1:
-                    nodes_in_triplets = set()
-                    for src, _, dst in filtered_triplets:
-                        nodes_in_triplets.add(src)
-                        nodes_in_triplets.add(dst)
-                    missing_nodes = set(displayed_nodes) - nodes_in_triplets
-                    if missing_nodes:
-                        raise RuntimeError(
-                            f"INVARIANT VIOLATION: {len(missing_nodes)} displayed nodes have no edges "
-                            f"after all enforcement attempts: {list(missing_nodes)[:5]}. "
-                            f"This violates 'every explicit node has ≥1 edge' requirement."
-                        )
-
-                # Build active edge set from filtered triplets
-                active_edges_set = {(t[0], t[2]) for t in filtered_triplets}
-
-                # Active (salience) view - ONLY displayed nodes, ONLY edges between them
                 self._plot_graph_snapshot(
                     sentence_index=i,
                     sentence_text=sent.text,
                     output_dir=graphs_output_dir,
                     highlight_nodes=highlight_nodes,
-                    inactive_nodes=[],  # Do NOT display inactive nodes in graph
-                    inactive_nodes_for_title=inactive_nodes_for_plot,  # List in title only
+                    inactive_nodes=inactive_nodes_for_plot,
                     explicit_nodes=explicit_nodes_for_plot,
                     salient_nodes=salient_nodes_for_plot,
                     only_active=True,
                     largest_component_only=largest_component_only,
                     mode="sentence_active",
-                    triplets_override=filtered_triplets,  # ONLY edges between displayed nodes
-                    active_edges=active_edges_set,
-                    hub_edge_explanations=(
-                        self._hub_edge_explanations
-                        if self._hub_edge_explanations
-                        else None
-                    ),
-                    show_all_edges=True,
-                    force=force_node,
+                    triplets_override=active_triplets,
+                    active_edges=active_edge_pairs,
                 )
-
-                # Cumulative memory view uses same displayed nodes
-                # (connectivity already repaired above)
-                cumulative_triplets = self._get_filtered_triplets_for_displayed(
-                    displayed_nodes,
-                    force_node=display_force,
-                )
-                cumul_active_edges = {(t[0], t[2]) for t in cumulative_triplets}
-
+                # Cumulative memory view
                 self._plot_graph_snapshot(
                     sentence_index=i,
                     sentence_text=sent.text,
                     output_dir=graphs_output_dir,
                     highlight_nodes=highlight_nodes,
-                    inactive_nodes=[],  # Do NOT display inactive nodes in graph
-                    inactive_nodes_for_title=inactive_nodes_for_plot,  # List in title only
+                    inactive_nodes=inactive_nodes_for_plot,
                     explicit_nodes=explicit_nodes_for_plot,
                     salient_nodes=salient_nodes_for_plot,
                     only_active=False,
                     largest_component_only=largest_component_only,
                     mode="sentence_cumulative",
-                    triplets_override=cumulative_triplets,  # ONLY edges between displayed nodes
-                    active_edges=cumul_active_edges,
-                    show_all_edges=True,
-                    force=force_node,
+                    triplets_override=self._cumulative_triplets_upto(
+                        self._current_sentence_index
+                    ),
+                    active_edges={
+                        (
+                            edge.source_node.get_text_representer(),
+                            edge.dest_node.get_text_representer(),
+                        )
+                        for edge in self.graph.edges
+                        if edge.active
+                    },
                 )
 
             # Capture triplets for this sentence (all edges, with current active flag)
@@ -2352,46 +1432,15 @@ class AMoCv4:
             matrix_path,
         )
         logging.info("AMoC activation matrix:\n%s", matrix.to_string())
-
-        # FINAL CONNECTIVITY ENFORCEMENT: Ensure all nodes are connected before returning
-        # This is the last chance to repair any dangling or disconnected nodes
-        logging.info(
-            "FINAL PASS: Enforcing graph connectivity before collecting triplets"
-        )
-        self._sync_active_graph()
-
-        # DEBUG INSTRUMENTATION (TASK 2): Disable global repair in debug mode
-        # This prevents the global safety net from masking upstream failures
-        if not self.debug:
-            self._enforce_global_graph_invariants()
-        else:
-            logging.warning(
-                "DEBUG MODE: Skipping _enforce_global_graph_invariants() - "
-                "upstream failures will NOT be repaired"
-            )
-
-        # Validate connectivity invariants (FIX 6: Must pass or raise)
-        violations = self._validate_global_graph_invariants()
-        if violations:
-            raise RuntimeError(
-                "Final graph invariant violation:\n" + "\n".join(violations)
-            )
-
         # Collect final active triplets: edges active after the final sentence.
-        # DEDUPLICATE: Final triplets must have no duplicates (user requirement)
         final_sentence_idx = getattr(self, "_current_sentence_index", None)
         final_triplets = []
-        seen_triplets: set[tuple[str, str, str]] = set()
         for edge in self.graph.edges:
             if not edge.active:
                 continue
             subj = edge.source_node.get_text_representer()
             obj = edge.dest_node.get_text_representer()
             rel = edge.label
-            triplet_key = (subj, rel, obj)
-            if triplet_key in seen_triplets:
-                continue  # Skip duplicates
-            seen_triplets.add(triplet_key)
             intro = self._triplet_intro.get((subj, rel, obj))
             if intro is None:
                 intro = edge.created_at_sentence if edge.created_at_sentence else -1
@@ -2415,13 +1464,6 @@ class AMoCv4:
             if intro is None:
                 intro = edge.created_at_sentence if edge.created_at_sentence else -1
             cumulative_triplets.append((subj, rel, obj, int(intro)))
-
-        # Print connectivity report for explicit diagnostics (Professor requirement #3)
-        self.print_connectivity_report()
-
-        # FIX 6: Final validation - ensure graph matches expected triplets
-        # The fidelity check compares final graph state to cumulative triplets
-        # (already validated by invariant enforcement above)
 
         return final_triplets, self._sentence_triplets, cumulative_triplets
 
@@ -2522,94 +1564,92 @@ class AMoCv4:
         prev_sentences_text: str,
         newly_added_edges: List[Edge],
     ) -> None:
-
-        edges_text, graph_edges = self.graph.get_edges_str(
+        edges_text, edges = self.graph.get_edges_str(
             self.graph.nodes, only_active=False
         )
-
-        # Structural edges ALWAYS stay active
-        for edge in graph_edges:
-            if edge.metadata.get("structural"):
-                edge.active = True
-                edge.forget_score = self.edge_forget
-
-        structural_edges = {e for e in graph_edges if e.metadata.get("structural")}
-
+        # Non-strict mode: accumulate salience monotonically (no fading/pruning).
         if not self.strict_reactivate_function:
-            for edge in graph_edges:
+            for edge in edges:
                 edge.active = True
                 edge.forget_score = self.edge_forget
                 self._record_edge_in_graphs(edge, self._current_sentence_index)
+            # Enforce connectivity even in non-strict mode
+            self._enforce_graph_connectivity()
             return
 
         raw_indices = self.client.get_relevant_edges(
             edges_text, prev_sentences_text, self.persona
         )
 
-        selected_edge_indices: list[int] = []
+        valid_indices: List[int] = []
         for idx in raw_indices:
             try:
                 i = int(idx)
             except Exception:
                 continue
-            if 1 <= i <= len(graph_edges):
-                if not graph_edges[i - 1].metadata.get("structural"):
-                    selected_edge_indices.append(i)
+            if 1 <= i <= len(edges):
+                valid_indices.append(i)
 
-        selected_edge_indices = selected_edge_indices[: self.nr_relevant_edges]
-
+        valid_indices = valid_indices[: self.nr_relevant_edges]
         active_node_set = set(active_nodes)
-        selected: set[int] = set()
-
-        if not selected_edge_indices:
+        if not valid_indices:
+            # Improved fallback edge selection: keep edges that are newly added,
+            # or active edges that touch at least one active/anchor node.
+            # Uses only connected nodes to prevent selecting disconnected edges.
+            selected = set()
             connected_nodes = active_node_set | self._anchor_nodes
             connected_lemma_keys = {tuple(n.lemmas) for n in connected_nodes}
-
-            for idx, edge in enumerate(graph_edges, start=1):
-                if edge.metadata.get("structural"):
-                    continue
+            for idx, edge in enumerate(edges, start=1):
                 if edge in newly_added_edges:
                     selected.add(idx)
                 elif edge.active:
-                    src_ok = (
+                    # Check both direct membership and lemma matching
+                    source_connected = (
                         edge.source_node in connected_nodes
                         or tuple(edge.source_node.lemmas) in connected_lemma_keys
                     )
-                    dst_ok = (
+                    dest_connected = (
                         edge.dest_node in connected_nodes
                         or tuple(edge.dest_node.lemmas) in connected_lemma_keys
                     )
-                    if src_ok or dst_ok:
+                    if source_connected or dest_connected:
                         selected.add(idx)
         else:
-            selected = set(selected_edge_indices)
+            selected = set(valid_indices)
+            for i in selected:
+                edges[i - 1].forget_score = self.edge_forget
+                edges[i - 1].active = True
+                self._record_edge_in_graphs(edges[i - 1], self._current_sentence_index)
 
-        for i in selected:
-            edge = graph_edges[i - 1]
-            edge.active = True
-            edge.forget_score = self.edge_forget
-            self._record_edge_in_graphs(edge, self._current_sentence_index)
-
-        def _active_subgraph_connected() -> bool:
+        # Preserve connectivity in the active projection.
+        # If deactivating an edge would disconnect active nodes,
+        # keep it active as a low-salience bridge (paper-consistent).
+        def _active_subgraph_connected():
             G = nx.Graph()
-            for e in graph_edges:
-                if e.active and not e.metadata.get("structural"):
+            for e in edges:
+                if e.active:
                     G.add_edge(e.source_node, e.dest_node)
             for n in active_nodes:
                 G.add_node(n)
             return nx.is_connected(G) if G.number_of_nodes() > 1 else True
 
-        selected_edges = {graph_edges[i - 1] for i in selected}
-
-        for edge in graph_edges:
-            if edge in structural_edges:
-                continue
-            if edge not in newly_added_edges and edge not in selected_edges:
+        # Non-salient memory edges (AMoC-consistent):
+        # Keep edges in memory but mark them inactive.
+        for j in range(1, len(edges) + 1):
+            edge = edges[j - 1]
+            if j not in selected and edges[j - 1] not in newly_added_edges:
                 edge.active = False
+
                 if not _active_subgraph_connected():
-                    edge.active = True
-                    edge.forget_score = 0
-                self._record_edge_in_graphs(edge, self._current_sentence_index)
+                    edge.active = True  # keep as bridge
+                    edge.forget_score = 0  # lowest salience
+                    # Record bridge edges in active_graph to prevent disconnection in plots
+                    self._record_edge_in_graphs(edge, self._current_sentence_index)
+                else:
+                    self._record_edge_in_graphs(edge, self._current_sentence_index)
+
+        # Final connectivity sweep - ensure the entire graph remains connected
+        self._enforce_graph_connectivity()
 
     def init_graph(self, sent: Span) -> None:
         current_sentence_text_based_nodes, current_sentence_text_based_words = (
@@ -2677,41 +1717,12 @@ class AMoCv4:
         inferred_relationships: List[Tuple[str, str, str]],
         node_type: NodeType,
         sent: Span,
-        explicit_nodes: Optional[List[Node]] = None,
-        explicit_words: Optional[List[str]] = None,
     ) -> None:
-        """Add inferred relationships for first sentence using hub-first radial attachment.
-
-        Two-pass approach:
-        1. First pass: Add relationships where at least one endpoint is explicit (hub-attached)
-        2. Second pass: Add remaining relationships only if they connect to already-added inferred nodes
-        """
         current_sentence_text_based_nodes, current_sentence_text_based_words = (
             self.get_senteces_text_based_nodes([sent], create_unexistent_nodes=False)
         )
-        # Use provided explicit nodes or fall back to extracted ones
-        filter_explicit_nodes = explicit_nodes or current_sentence_text_based_nodes
-        filter_explicit_words = explicit_words or current_sentence_text_based_words
-
-        # Track nodes added during inference for second-pass attachment
-        inference_connected_nodes: set[Node] = set()
-        explicit_lemma_keys = {tuple(n.lemmas) for n in filter_explicit_nodes}
-        explicit_word_set = {w.lower() for w in filter_explicit_words}
-
-        def _lemma_key(text: str) -> tuple[str, ...]:
-            return tuple(get_concept_lemmas(self.spacy_nlp, text))
-
-        def _is_explicit(text: str) -> bool:
-            return (
-                text.lower() in explicit_word_set
-                or _lemma_key(text) in explicit_lemma_keys
-            )
-
-        # Separate relationships into hub-attached vs inferred-only
-        hub_attached: List[Tuple[str, str, str]] = []
-        inferred_only: List[Tuple[str, str, str]] = []
-
         for relationship in inferred_relationships:
+            # print(relationship)
             if len(relationship) != 3:
                 continue
             if not relationship[0] or not relationship[2]:
@@ -2722,26 +1733,15 @@ class AMoCv4:
                 relationship[2], str
             ):
                 continue
-
-            subj_is_explicit = _is_explicit(relationship[0])
-            obj_is_explicit = _is_explicit(relationship[2])
-
-            if subj_is_explicit or obj_is_explicit:
-                hub_attached.append(relationship)
-            else:
-                inferred_only.append(relationship)
-
-        def _process_relationship(relationship: Tuple[str, str, str]) -> Optional[Edge]:
-            """Process a single relationship and return the edge if created."""
             norm_subj = self._normalize_endpoint_text(relationship[0], is_subject=True)
             norm_obj = self._normalize_endpoint_text(relationship[2], is_subject=False)
             if norm_subj is None or norm_obj is None:
-                return None
+                continue
             if not (
                 self._appears_in_story(relationship[0])
                 or self._appears_in_story(relationship[2])
             ):
-                return None
+                continue
             if not self._passes_attachment_constraint(
                 relationship[0],
                 relationship[2],
@@ -2750,11 +1750,11 @@ class AMoCv4:
                 list(self.graph.nodes),
                 self._get_nodes_with_active_edges(),
             ):
-                return None
+                continue
             subj, subj_type = self._canonicalize_and_classify_node_text(relationship[0])
             obj, obj_type = self._canonicalize_and_classify_node_text(relationship[2])
             if subj_type is None or obj_type is None:
-                return None
+                continue
             source_node = self.get_node_from_text(
                 norm_subj,
                 current_sentence_text_based_nodes,
@@ -2771,7 +1771,7 @@ class AMoCv4:
             )
             edge_label = relationship[1].replace("(edge)", "").strip()
             if not self._is_valid_relation_label(edge_label):
-                return None
+                continue
             if source_node is None:
                 source_node = self.graph.add_or_get_node(
                     get_concept_lemmas(self.spacy_nlp, subj),
@@ -2779,6 +1779,7 @@ class AMoCv4:
                     subj_type,
                     NodeSource.INFERENCE_BASED,
                 )
+
             if dest_node is None:
                 dest_node = self.graph.add_or_get_node(
                     get_concept_lemmas(self.spacy_nlp, obj),
@@ -2786,58 +1787,8 @@ class AMoCv4:
                     obj_type,
                     NodeSource.INFERENCE_BASED,
                 )
-            return self._add_edge(source_node, dest_node, edge_label, self.edge_forget)
 
-        # =====================================================
-        # PASS 1: Hub-attached relationships (explicit backbone connected)
-        # =====================================================
-        logging.debug(
-            "Step 0 Pass 1: Processing %d hub-attached inferences", len(hub_attached)
-        )
-        for relationship in hub_attached:
-            edge = _process_relationship(relationship)
-            if edge:
-                inference_connected_nodes.add(edge.source_node)
-                inference_connected_nodes.add(edge.dest_node)
-
-        # =====================================================
-        # PASS 2: Inferred-only relationships (must attach to Pass 1 nodes)
-        # =====================================================
-        if not self.strict_attachament_constraint:
-            # In non-strict mode, process all inferred-only relationships
-            logging.debug(
-                "Step 0 Pass 2 (non-strict): Processing %d inferred-only relationships",
-                len(inferred_only),
-            )
-            for relationship in inferred_only:
-                _process_relationship(relationship)
-        else:
-            # In strict mode, only accept if one endpoint connects to inference_connected_nodes
-            logging.debug(
-                "Step 0 Pass 2 (strict): Processing %d inferred-only relationships",
-                len(inferred_only),
-            )
-            inference_lemma_keys = {tuple(n.lemmas) for n in inference_connected_nodes}
-
-            for relationship in inferred_only:
-                subj_key = _lemma_key(relationship[0])
-                obj_key = _lemma_key(relationship[2])
-                attaches_to_inference = (
-                    subj_key in inference_lemma_keys or obj_key in inference_lemma_keys
-                )
-                if not attaches_to_inference:
-                    logging.debug(
-                        "Rejected inferred-only (no attachment to backbone-connected inference): %s",
-                        relationship,
-                    )
-                    continue
-                edge = _process_relationship(relationship)
-                if edge:
-                    # Update connected nodes for potential further chaining
-                    inference_connected_nodes.add(edge.source_node)
-                    inference_connected_nodes.add(edge.dest_node)
-                    inference_lemma_keys.add(tuple(edge.source_node.lemmas))
-                    inference_lemma_keys.add(tuple(edge.dest_node.lemmas))
+            self._add_edge(source_node, dest_node, edge_label, self.edge_forget)
 
     def add_inferred_relationships_to_graph(
         self,
@@ -2848,33 +1799,8 @@ class AMoCv4:
         active_graph_nodes: List[Node],
         added_edges: List[Edge],
     ) -> None:
-        """Add inferred relationships using hub-first radial attachment.
-
-        Two-pass approach:
-        1. First pass: Add relationships where at least one endpoint is explicit (hub-attached)
-        2. Second pass: Add remaining relationships only if they connect to already-added inferred nodes
-        """
-        # Track nodes added during inference for second-pass attachment
-        inference_connected_nodes: set[Node] = set()
-
-        # Pre-process relationships to validate and categorize
-        explicit_lemma_keys = {tuple(n.lemmas) for n in curr_sentences_nodes}
-        explicit_word_set = {w.lower() for w in curr_sentences_words}
-
-        def _lemma_key(text: str) -> tuple[str, ...]:
-            return tuple(get_concept_lemmas(self.spacy_nlp, text))
-
-        def _is_explicit(text: str) -> bool:
-            return (
-                text.lower() in explicit_word_set
-                or _lemma_key(text) in explicit_lemma_keys
-            )
-
-        # Separate relationships into hub-attached vs inferred-only
-        hub_attached: List[Tuple[str, str, str]] = []
-        inferred_only: List[Tuple[str, str, str]] = []
-
         for relationship in inferred_relationships:
+            # print(relationship)
             if len(relationship) != 3:
                 continue
             if not relationship[0] or not relationship[2]:
@@ -2885,26 +1811,15 @@ class AMoCv4:
                 relationship[2], str
             ):
                 continue
-
-            subj_is_explicit = _is_explicit(relationship[0])
-            obj_is_explicit = _is_explicit(relationship[2])
-
-            if subj_is_explicit or obj_is_explicit:
-                hub_attached.append(relationship)
-            else:
-                inferred_only.append(relationship)
-
-        def _process_relationship(relationship: Tuple[str, str, str]) -> Optional[Edge]:
-            """Process a single relationship and return the edge if created."""
             norm_subj = self._normalize_endpoint_text(relationship[0], is_subject=True)
             norm_obj = self._normalize_endpoint_text(relationship[2], is_subject=False)
             if norm_subj is None or norm_obj is None:
-                return None
+                continue
             if not (
                 self._appears_in_story(relationship[0])
                 or self._appears_in_story(relationship[2])
             ):
-                return None
+                continue
             if not self._passes_attachment_constraint(
                 relationship[0],
                 relationship[2],
@@ -2913,11 +1828,11 @@ class AMoCv4:
                 active_graph_nodes,
                 self._get_nodes_with_active_edges(),
             ):
-                return None
+                continue
             subj, subj_type = self._canonicalize_and_classify_node_text(relationship[0])
             obj, obj_type = self._canonicalize_and_classify_node_text(relationship[2])
             if subj_type is None or obj_type is None:
-                return None
+                continue
             source_node = self.get_node_from_new_relationship(
                 norm_subj,
                 active_graph_nodes,
@@ -2936,7 +1851,7 @@ class AMoCv4:
             )
             edge_label = relationship[1].replace("(edge)", "").strip()
             if not self._is_valid_relation_label(edge_label):
-                return None
+                continue
             if source_node is None:
                 source_node = self.graph.add_or_get_node(
                     get_concept_lemmas(self.spacy_nlp, subj),
@@ -2944,6 +1859,7 @@ class AMoCv4:
                     subj_type,
                     NodeSource.INFERENCE_BASED,
                 )
+
             if dest_node is None:
                 dest_node = self.graph.add_or_get_node(
                     get_concept_lemmas(self.spacy_nlp, obj),
@@ -2951,62 +1867,12 @@ class AMoCv4:
                     obj_type,
                     NodeSource.INFERENCE_BASED,
                 )
-            return self._add_edge(source_node, dest_node, edge_label, self.edge_forget)
 
-        # =====================================================
-        # PASS 1: Hub-attached relationships (explicit backbone connected)
-        # =====================================================
-        logging.debug(
-            "Pass 1: Processing %d hub-attached inferences", len(hub_attached)
-        )
-        for relationship in hub_attached:
-            edge = _process_relationship(relationship)
-            if edge:
-                added_edges.append(edge)
-                inference_connected_nodes.add(edge.source_node)
-                inference_connected_nodes.add(edge.dest_node)
-
-        # =====================================================
-        # PASS 2: Inferred-only relationships (must attach to Pass 1 nodes)
-        # =====================================================
-        if not self.strict_attachament_constraint:
-            # In non-strict mode, process all inferred-only relationships
-            logging.debug(
-                "Pass 2 (non-strict): Processing %d inferred-only relationships",
-                len(inferred_only),
+            potential_edge = self._add_edge(
+                source_node, dest_node, edge_label, self.edge_forget
             )
-            for relationship in inferred_only:
-                edge = _process_relationship(relationship)
-                if edge:
-                    added_edges.append(edge)
-        else:
-            # In strict mode, only accept if one endpoint connects to inference_connected_nodes
-            logging.debug(
-                "Pass 2 (strict): Processing %d inferred-only relationships",
-                len(inferred_only),
-            )
-            inference_lemma_keys = {tuple(n.lemmas) for n in inference_connected_nodes}
-
-            for relationship in inferred_only:
-                subj_key = _lemma_key(relationship[0])
-                obj_key = _lemma_key(relationship[2])
-                attaches_to_inference = (
-                    subj_key in inference_lemma_keys or obj_key in inference_lemma_keys
-                )
-                if not attaches_to_inference:
-                    logging.debug(
-                        "Rejected inferred-only (no attachment to backbone-connected inference): %s",
-                        relationship,
-                    )
-                    continue
-                edge = _process_relationship(relationship)
-                if edge:
-                    added_edges.append(edge)
-                    # Update connected nodes for potential further chaining
-                    inference_connected_nodes.add(edge.source_node)
-                    inference_connected_nodes.add(edge.dest_node)
-                    inference_lemma_keys.add(tuple(edge.source_node.lemmas))
-                    inference_lemma_keys.add(tuple(edge.dest_node.lemmas))
+            if potential_edge:
+                added_edges.append(potential_edge)
 
     def get_node_from_text(
         self,
