@@ -453,17 +453,47 @@ def process_persona_csv(
                         if final_records:
                             seen_final = set()
                             deduped_final = []
+
                             for rec in final_records:
                                 key = (
+                                    rec["original_index"],
                                     rec["subject"],
                                     rec["relation"],
                                     rec["object"],
-                                    rec["sentence_index"],
+                                    rec["introduced_at"],
                                 )
                                 if key in seen_final:
                                     continue
                                 seen_final.add(key)
                                 deduped_final.append(rec)
+
+                            if final_output_path.exists():
+                                existing = pd.read_csv(final_output_path)
+                                existing_keys = set(
+                                    zip(
+                                        existing["original_index"],
+                                        existing["subject"],
+                                        existing["relation"],
+                                        existing["object"],
+                                        existing["introduced_at"],
+                                    )
+                                )
+                            else:
+                                existing_keys = set()
+
+                            deduped_final = [
+                                rec
+                                for rec in deduped_final
+                                if (
+                                    rec["original_index"],
+                                    rec["subject"],
+                                    rec["relation"],
+                                    rec["object"],
+                                    rec["introduced_at"],
+                                )
+                                not in existing_keys
+                            ]
+
                             if deduped_final:
                                 pd.DataFrame(deduped_final).to_csv(
                                     final_output_path,

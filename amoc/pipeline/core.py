@@ -81,6 +81,7 @@ class AMoCv4:
         strict_attachament_constraint: bool = True,
         single_anchor_hub: bool = True,
         matrix_dir_base: Optional[str] = None,
+        llm_fallback: bool = False,
     ) -> None:
         self.persona = persona_description
         self.story_text = story_text
@@ -118,6 +119,7 @@ class AMoCv4:
         self.strict_reactivate_function = strict_reactivate_function
         self.strict_attachament_constraint = strict_attachament_constraint
         self.single_anchor_hub = single_anchor_hub
+        self.llm_fallback = llm_fallback  # Policy D: Use LLM to infer edges when needed
         self._current_sentence_text: str = ""
         # Separate memory (cumulative) vs salience (active) graphs for auditing.
         self.cumulative_graph = nx.MultiDiGraph()
@@ -1647,11 +1649,41 @@ class AMoCv4:
                         for node in current_sentence_text_based_nodes:
                             if node in connected_to_hub:
                                 continue
-                            # Use simple labels that won't be rejected
-                            if node.node_type == NodeType.PROPERTY:
-                                label = "describes"
+
+                            # POLICY D: Use LLM inference when llm_fallback=True
+                            if self.llm_fallback:
+                                explicit_node_names = [
+                                    n.get_text_representer()
+                                    for n in current_sentence_text_based_nodes
+                                ]
+                                result = self.client.get_edge_label_with_explanation(
+                                    node.get_text_representer(),
+                                    hub.get_text_representer(),
+                                    resolved_text,
+                                    explicit_node_names,
+                                    self.persona,
+                                )
+                                label = result.get("label", "").strip()
+                                explanation = result.get("explanation", "")
+                                if label and self._is_valid_relation_label(label):
+                                    if explanation:
+                                        self._hub_edge_explanations.append(
+                                            f"{node.get_text_representer()} → {hub.get_text_representer()}: {explanation}"
+                                        )
+                                else:
+                                    # LLM failed, use simple fallback
+                                    label = (
+                                        "describes"
+                                        if node.node_type == NodeType.PROPERTY
+                                        else "relates to"
+                                    )
                             else:
-                                label = "relates to"
+                                # Simple fallback labels (no LLM call)
+                                if node.node_type == NodeType.PROPERTY:
+                                    label = "describes"
+                                else:
+                                    label = "relates to"
+
                             edge = self.graph.add_edge(
                                 node,
                                 hub,
@@ -1858,11 +1890,42 @@ class AMoCv4:
                             for node in current_sentence_text_based_nodes:
                                 if node in connected_to_hub:
                                     continue
-                                label = (
-                                    "describes"
-                                    if node.node_type == NodeType.PROPERTY
-                                    else "relates to"
-                                )
+
+                                # POLICY D: Use LLM inference when llm_fallback=True
+                                if self.llm_fallback:
+                                    explicit_node_names = [
+                                        n.get_text_representer()
+                                        for n in current_sentence_text_based_nodes
+                                    ]
+                                    result = self.client.get_edge_label_with_explanation(
+                                        node.get_text_representer(),
+                                        hub.get_text_representer(),
+                                        resolved_text,
+                                        explicit_node_names,
+                                        self.persona,
+                                    )
+                                    label = result.get("label", "").strip()
+                                    explanation = result.get("explanation", "")
+                                    if label and self._is_valid_relation_label(label):
+                                        if explanation:
+                                            self._hub_edge_explanations.append(
+                                                f"{node.get_text_representer()} → {hub.get_text_representer()}: {explanation}"
+                                            )
+                                    else:
+                                        # LLM failed, use simple fallback
+                                        label = (
+                                            "describes"
+                                            if node.node_type == NodeType.PROPERTY
+                                            else "relates to"
+                                        )
+                                else:
+                                    # Simple fallback labels (no LLM call)
+                                    label = (
+                                        "describes"
+                                        if node.node_type == NodeType.PROPERTY
+                                        else "relates to"
+                                    )
+
                                 edge = self.graph.add_edge(
                                     node,
                                     hub,
@@ -2044,8 +2107,9 @@ class AMoCv4:
             self._prev_active_nodes_for_plot = current_active_nodes
 
             if plot_after_each_sentence:
-                # For the final sentence, show all edges to match CSV output
-                # is_final_sentence = i == len(resolved_sentences) - 1
+                # POLICY A: Edge Preservation - show ALL active triplets for every sentence
+                # This ensures 1:1 correspondence between CSV triplets and plot edges
+                # No hop-based filtering, no anchor pruning in visualization
                 # Active (salience) view
                 self._plot_graph_snapshot(
                     sentence_index=i,
