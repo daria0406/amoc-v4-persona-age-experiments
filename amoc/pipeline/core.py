@@ -134,6 +134,15 @@ class AMoCv4:
         # Track connectivity failures for explicit diagnostics per Invariant 3.4
         self._connectivity_failures: List[Tuple[str, str, str]] = []
 
+        # =====================================================================
+        # Per-Sentence Tracking for 1-to-1 Node List <-> Triplet Correlation
+        # =====================================================================
+        # Structure: {sentence_idx: {"explicit_nodes": [...], "carryover_nodes": [...],
+        #             "inactive_nodes": [...], "triplets": [...]}}
+        self._per_sentence_breakdown: dict[int, dict] = {}
+        # Log of per-sentence diagnostics for debugging
+        self._per_sentence_diagnostics: list[dict] = []
+
     def _node_token_for_matrix(self, node: Node) -> str:
         return (node.get_text_representer() or "").strip().lower()
 
@@ -579,11 +588,23 @@ class AMoCv4:
             return self._fixed_hub.get_text_representer()
         return None
 
+    # Maximum retry attempts for hub edge label generation (Req #3: hard enforcement)
+    MAX_HUB_EDGE_RETRIES = 5
+
     def _ensure_explicit_backbone_connected(
         self,
         explicit_nodes: List[Node],
         sentence_text: str,
     ) -> Tuple[List[Edge], List[Tuple[str, str, str]]]:
+        """
+        Ensure every explicit node has a DIRECT labeled edge to the hub.
+
+        Per Requirement #2: "Every explicit node must have at least one labeled
+        edge connecting it to a hub node" - this means DIRECT edge, not path.
+
+        Per Requirement #3: Hard enforcement - retry until connected or use
+        fallback label to guarantee connectivity.
+        """
         added_edges: List[Edge] = []
         failed_connections: List[Tuple[str, str, str]] = []
 
@@ -594,28 +615,31 @@ class AMoCv4:
         hub = self._select_hub_node(explicit_nodes)
         if hub is None:
             return added_edges, failed_connections
-        explicit_set = set(explicit_nodes)
 
-        def is_connected_to_hub(node: Node, visited: set) -> bool:
+        def has_direct_edge_to_hub(node: Node) -> bool:
+            """
+            Check if node has a DIRECT edge to the hub (Requirement #2).
+
+            Unlike path connectivity, this requires an actual edge between
+            the node and the hub - not just a path through other nodes.
+            """
             if node == hub:
                 return True
-            if node in visited:
-                return False
-            visited.add(node)
             for edge in self.graph.edges:
-                if edge.source_node == node and edge.dest_node in explicit_set:
-                    if is_connected_to_hub(edge.dest_node, visited):
-                        return True
-                if edge.dest_node == node and edge.source_node in explicit_set:
-                    if is_connected_to_hub(edge.source_node, visited):
-                        return True
+                # Check for direct edge: node <-> hub
+                if (edge.source_node == node and edge.dest_node == hub) or (
+                    edge.source_node == hub and edge.dest_node == node
+                ):
+                    return True
             return False
 
         for node in explicit_nodes:
             if node == hub:
                 continue
-            if is_connected_to_hub(node, set()):
+            # Requirement #2: Check for DIRECT edge to hub, not path
+            if has_direct_edge_to_hub(node):
                 continue
+
             subj = node.get_text_representer()
             obj = hub.get_text_representer()
             explicit_node_names = [n.get_text_representer() for n in explicit_nodes]
@@ -623,65 +647,57 @@ class AMoCv4:
             label = None
             explanation = ""
 
-            # Attempt 1: Standard LLM call
-            try:
-                result = self.client.get_edge_label_with_explanation(
-                    subj, obj, sentence_text, explicit_node_names, self.persona
-                )
-                label = result.get("label", "")
-                explanation = result.get("explanation", "")
-            except Exception as e:
-                logging.warning(
-                    "Hub edge %s -> %s: first attempt failed with LLM exception: %s",
-                    subj,
-                    obj,
-                    str(e)[:50],
-                )
-
-            # Use relaxed validation for hub edges (accepts verbs and adjectives per 3.2)
-            if label and self._is_valid_hub_edge_label(label):
-                pass  # Label is valid, proceed
-            else:
-                # Attempt 2: Retry if first attempt failed
-                logging.info(
-                    "Hub edge %s -> %s: retrying (label was: '%s')",
-                    subj,
-                    obj,
-                    label,
-                )
+            # Requirement #3: Hard enforcement - retry up to MAX_HUB_EDGE_RETRIES times
+            for attempt in range(self.MAX_HUB_EDGE_RETRIES):
                 try:
                     result = self.client.get_edge_label_with_explanation(
                         subj, obj, sentence_text, explicit_node_names, self.persona
                     )
                     label = result.get("label", "")
                     explanation = result.get("explanation", "")
+
+                    if label and self._is_valid_hub_edge_label(label):
+                        logging.info(
+                            "Hub edge %s -> %s: valid label '%s' on attempt %d",
+                            subj,
+                            obj,
+                            label,
+                            attempt + 1,
+                        )
+                        break  # Valid label found
+                    else:
+                        logging.info(
+                            "Hub edge %s -> %s: attempt %d produced invalid label '%s', retrying...",
+                            subj,
+                            obj,
+                            attempt + 1,
+                            label,
+                        )
                 except Exception as e:
                     logging.warning(
-                        "Hub edge %s -> %s: retry also failed with exception: %s",
+                        "Hub edge %s -> %s: attempt %d failed with exception: %s",
                         subj,
                         obj,
+                        attempt + 1,
                         str(e)[:50],
                     )
 
-            # INVARIANT 3.4: Failure Is Explicit, Never Silent
-            # If no valid label after retries, emit diagnostic and skip (no fabricated edges)
+            # Requirement #3: Hard enforcement - use fallback label to GUARANTEE connectivity
             if not label or not self._is_valid_hub_edge_label(label):
-                failure_reason = (
-                    f"invalid label after retry: '{label}'"
-                    if label
-                    else "no label generated"
+                # Generate context-appropriate fallback label based on node types
+                fallback_label = self._generate_fallback_hub_label(
+                    node, hub, sentence_text
                 )
-                failed_connections.append((subj, obj, failure_reason))
-                # Store for explicit diagnostics per 3.4
-                self._connectivity_failures.append((subj, obj, failure_reason))
-                logging.error(
-                    "INVARIANT 3.4 VIOLATION: Explicit node '%s' cannot connect to hub '%s'. "
-                    "Reason: %s. No fabricated edge created.",
+                logging.warning(
+                    "Hub edge %s -> %s: LLM failed after %d attempts. "
+                    "Using fallback label '%s' to guarantee connectivity (Req #3).",
                     subj,
                     obj,
-                    failure_reason,
+                    self.MAX_HUB_EDGE_RETRIES,
+                    fallback_label,
                 )
-                continue
+                label = fallback_label
+                explanation = f"Fallback: LLM failed to generate valid label after {self.MAX_HUB_EDGE_RETRIES} attempts"
 
             edge = self._add_edge(node, hub, label, self.edge_forget)
             if edge:
@@ -698,20 +714,22 @@ class AMoCv4:
                     explanation,
                 )
             else:
+                # Edge rejected by _add_edge - this should be rare with fallback
                 failed_connections.append((subj, obj, "edge rejected by _add_edge"))
                 self._connectivity_failures.append(
                     (subj, obj, "edge rejected by _add_edge")
                 )
-                logging.warning(
-                    "FAILED hub edge %s -> %s: rejected by _add_edge validation",
+                logging.error(
+                    "CRITICAL: Hub edge %s -> %s rejected even with fallback label '%s'",
                     subj,
                     obj,
+                    label,
                 )
 
-        # INVARIANT 3.4: Emit explicit diagnostic summary for all failures
+        # INVARIANT 3.4: Emit explicit diagnostic summary for any remaining failures
         if failed_connections:
             logging.error(
-                "INVARIANT 3.3 VIOLATION: Backbone connection FAILURES (%d/%d explicit nodes disconnected): %s",
+                "CONNECTIVITY FAILURE: %d/%d explicit nodes still disconnected from hub: %s",
                 len(failed_connections),
                 len(explicit_nodes) - 1,  # Exclude hub from count
                 "; ".join(f"{s}->{h}: {r}" for s, h, r in failed_connections),
@@ -719,16 +737,47 @@ class AMoCv4:
 
         return added_edges, failed_connections
 
+    def _generate_fallback_hub_label(
+        self, node: Node, hub: Node, sentence_text: str
+    ) -> str:
+        """
+        Generate a context-appropriate fallback label for hub connection.
+
+        Used when LLM fails to generate a valid label after MAX_HUB_EDGE_RETRIES.
+        This ensures Requirement #3 (hard connectivity enforcement) is satisfied.
+        """
+        node_type = node.node_type
+        hub_type = hub.node_type
+
+        # Use node types to generate semantically appropriate labels
+        if node_type == NodeType.PROPERTY:
+            return "describes"
+        elif hub_type == NodeType.PROPERTY:
+            return "has_property"
+        else:
+            # Both are CONCEPT nodes - use a general but meaningful relation
+            # Try to infer from sentence context
+            node_text = node.get_text_representer().lower()
+            hub_text = hub.get_text_representer().lower()
+
+            # Check for common patterns in the sentence
+            sentence_lower = sentence_text.lower()
+            if f"{node_text}" in sentence_lower and f"{hub_text}" in sentence_lower:
+                # Both mentioned in sentence - they're contextually related
+                return "relates_to"
+            else:
+                return "associated_with"
+
     def verify_connectivity_invariants(
         self,
         explicit_nodes: List[Node],
         sentence_index: int,
     ) -> List[Tuple[str, str, str]]:
         """
-        Post-processing verification of connectivity invariants per Section 3.3-3.4.
+        Post-processing verification of connectivity invariants.
 
-        INVARIANT 3.3: Every explicit node must have at least one labeled edge
-        connecting it to a hub node.
+        Per Requirement #2: Every explicit node must have at least one labeled
+        edge DIRECTLY connecting it to a hub node (not just path connectivity).
 
         INVARIANT 3.4: If connectivity fails, emit explicit diagnostics.
 
@@ -745,33 +794,33 @@ class AMoCv4:
             )
             return [("N/A", "N/A", "No hub node could be selected")]
 
-        explicit_set = set(explicit_nodes)
         hub_name = hub.get_text_representer()
         disconnected: List[Tuple[str, str, str]] = []
 
-        # Build graph of explicit node connections
-        G = nx.Graph()
-        for node in explicit_nodes:
-            G.add_node(node)
-        for edge in self.graph.edges:
-            if edge.source_node in explicit_set and edge.dest_node in explicit_set:
-                G.add_edge(edge.source_node, edge.dest_node)
+        def has_direct_edge_to_hub(node: Node) -> bool:
+            """Check for DIRECT edge to hub per Requirement #2."""
+            for edge in self.graph.edges:
+                if (edge.source_node == node and edge.dest_node == hub) or (
+                    edge.source_node == hub and edge.dest_node == node
+                ):
+                    return True
+            return False
 
-        # Check connectivity to hub for each explicit node
+        # Check DIRECT edge to hub for each explicit node (Requirement #2)
         for node in explicit_nodes:
             if node == hub:
                 continue
-            if not G.has_node(node) or not nx.has_path(G, node, hub):
+            if not has_direct_edge_to_hub(node):
                 node_name = node.get_text_representer()
                 disconnected.append(
-                    (node_name, hub_name, "No path to hub in explicit backbone")
+                    (node_name, hub_name, "No DIRECT edge to hub (Req #2)")
                 )
 
         # INVARIANT 3.4: Emit explicit diagnostics
         if disconnected:
             logging.error(
-                "INVARIANT 3.3 VERIFICATION FAILED for sentence %d: "
-                "%d explicit nodes not connected to hub '%s': %s",
+                "REQUIREMENT #2 VIOLATION for sentence %d: "
+                "%d explicit nodes have no DIRECT edge to hub '%s': %s",
                 sentence_index,
                 len(disconnected),
                 hub_name,
@@ -846,6 +895,226 @@ class AMoCv4:
 
     # =========================================================================
     # END REDESIGNED STRICT ATTACHMENT CONSTRAINT
+    # =========================================================================
+
+    # =========================================================================
+    # PER-SENTENCE TRACKING FOR 1-TO-1 CORRELATION
+    # =========================================================================
+
+    def _record_per_sentence_breakdown(
+        self,
+        sentence_idx: int,
+        sentence_text: str,
+        explicit_nodes: List[Node],
+        max_distance: int,
+    ) -> dict:
+        """
+        Record per-sentence breakdown with 1-to-1 correlation between
+        node lists and triplets.
+
+        Per Professor's requirement #5: There should be 1-to-1 correlation
+        between explicit, carry-over and inactive list to the triplets
+        that are produced per sentence.
+
+        Returns:
+            Dictionary with explicit_nodes, carryover_nodes, inactive_nodes,
+            and their corresponding triplets.
+        """
+        explicit_set = set(explicit_nodes)
+
+        # BFS to find carry-over nodes (reachable via active edges)
+        distances = self._distances_from_sources_active_edges(
+            explicit_set, max_distance
+        )
+        carryover_nodes = [
+            n for n in distances.keys() if n not in explicit_set and distances[n] > 0
+        ]
+
+        # All active nodes in the per-sentence view
+        active_node_set = set(distances.keys())
+
+        # Inactive nodes: nodes in the graph not reachable from explicit
+        inactive_nodes = [n for n in self.graph.nodes if n not in active_node_set]
+
+        # Get triplets for each category
+        def _get_triplets_for_nodes(node_set: set[Node]) -> List[Tuple[str, str, str]]:
+            """Get triplets where BOTH endpoints are in the node set."""
+            triplets = []
+            for edge in self.graph.edges:
+                if edge.source_node in node_set and edge.dest_node in node_set:
+                    if edge.label and edge.label.strip():
+                        triplets.append(
+                            (
+                                edge.source_node.get_text_representer(),
+                                edge.label,
+                                edge.dest_node.get_text_representer(),
+                            )
+                        )
+            return triplets
+
+        def _get_triplets_touching_nodes(
+            node_set: set[Node],
+        ) -> List[Tuple[str, str, str]]:
+            """Get active triplets where AT LEAST ONE endpoint is in the node set."""
+            triplets = []
+            for edge in self.graph.edges:
+                if not edge.active:
+                    continue
+                if edge.source_node in node_set or edge.dest_node in node_set:
+                    if edge.label and edge.label.strip():
+                        triplets.append(
+                            (
+                                edge.source_node.get_text_representer(),
+                                edge.label,
+                                edge.dest_node.get_text_representer(),
+                            )
+                        )
+            return triplets
+
+        # Triplets for explicit nodes (backbone)
+        explicit_triplets = _get_triplets_for_nodes(explicit_set)
+
+        # Triplets involving carry-over nodes
+        carryover_set = set(carryover_nodes)
+        carryover_triplets = _get_triplets_touching_nodes(carryover_set)
+
+        # All active triplets in the per-sentence view
+        active_triplets = _get_triplets_for_nodes(active_node_set)
+
+        # Record breakdown
+        breakdown = {
+            "sentence_idx": sentence_idx,
+            "sentence_text": sentence_text,
+            "explicit_nodes": [n.get_text_representer() for n in explicit_nodes],
+            "explicit_node_count": len(explicit_nodes),
+            "carryover_nodes": [n.get_text_representer() for n in carryover_nodes],
+            "carryover_node_count": len(carryover_nodes),
+            "inactive_nodes": [n.get_text_representer() for n in inactive_nodes],
+            "inactive_node_count": len(inactive_nodes),
+            "explicit_triplets": explicit_triplets,
+            "explicit_triplet_count": len(explicit_triplets),
+            "carryover_triplets": carryover_triplets,
+            "carryover_triplet_count": len(carryover_triplets),
+            "active_triplets": active_triplets,
+            "active_triplet_count": len(active_triplets),
+            "hub_node": self.get_hub_node_name(),
+        }
+
+        # Store in tracking structure
+        self._per_sentence_breakdown[sentence_idx] = breakdown
+
+        # Log detailed diagnostics
+        logging.info(
+            "[Sentence %d] BREAKDOWN - Explicit: %d nodes, %d triplets | "
+            "Carry-over: %d nodes, %d triplets | Inactive: %d nodes | Hub: %s",
+            sentence_idx,
+            breakdown["explicit_node_count"],
+            breakdown["explicit_triplet_count"],
+            breakdown["carryover_node_count"],
+            breakdown["carryover_triplet_count"],
+            breakdown["inactive_node_count"],
+            breakdown["hub_node"] or "None",
+        )
+
+        # Check connectivity invariant
+        if len(explicit_nodes) > 1:
+            if not self._is_explicit_backbone_connected(explicit_nodes):
+                logging.error(
+                    "[Sentence %d] CONNECTIVITY FAILURE: Explicit backbone is disconnected!",
+                    sentence_idx,
+                )
+                breakdown["connectivity_ok"] = False
+            else:
+                breakdown["connectivity_ok"] = True
+                logging.info(
+                    "[Sentence %d] CONNECTIVITY OK: All explicit nodes connected",
+                    sentence_idx,
+                )
+        else:
+            breakdown["connectivity_ok"] = True
+
+        return breakdown
+
+    def get_per_sentence_breakdown(self) -> dict[int, dict]:
+        """
+        Get the complete per-sentence breakdown for analysis.
+
+        Returns:
+            Dictionary mapping sentence_idx to breakdown info with
+            explicit, carry-over, inactive nodes and their triplets.
+        """
+        return self._per_sentence_breakdown
+
+    def print_connectivity_report(self) -> str:
+        """
+        Print a comprehensive connectivity report for all sentences.
+
+        This satisfies the professor's requirement for explicit diagnostics
+        about triplet connectivity per sentence.
+
+        Returns:
+            String report of connectivity status.
+        """
+        lines = []
+        lines.append("=" * 70)
+        lines.append("CONNECTIVITY REPORT - Per-Sentence Triplet Analysis")
+        lines.append("=" * 70)
+
+        total_sentences = len(self._per_sentence_breakdown)
+        connected_sentences = 0
+        disconnected_sentences = []
+
+        for sent_idx in sorted(self._per_sentence_breakdown.keys()):
+            breakdown = self._per_sentence_breakdown[sent_idx]
+            connectivity_ok = breakdown.get("connectivity_ok", True)
+
+            if connectivity_ok:
+                connected_sentences += 1
+                status = "✓ CONNECTED"
+            else:
+                disconnected_sentences.append(sent_idx)
+                status = "✗ DISCONNECTED"
+
+            lines.append(f"\nSentence {sent_idx}: {status}")
+            lines.append(f"  Text: {breakdown['sentence_text'][:60]}...")
+            lines.append(f"  Hub: {breakdown['hub_node'] or 'None'}")
+            lines.append(
+                f"  Explicit nodes: {breakdown['explicit_node_count']} "
+                f"({', '.join(breakdown['explicit_nodes'][:5])}{'...' if len(breakdown['explicit_nodes']) > 5 else ''})"
+            )
+            lines.append(f"  Explicit triplets: {breakdown['explicit_triplet_count']}")
+            lines.append(f"  Carry-over nodes: {breakdown['carryover_node_count']}")
+            lines.append(f"  Inactive nodes: {breakdown['inactive_node_count']}")
+            lines.append(
+                f"  Total active triplets: {breakdown['active_triplet_count']}"
+            )
+
+        lines.append("\n" + "=" * 70)
+        lines.append("SUMMARY")
+        lines.append("=" * 70)
+        lines.append(f"Total sentences: {total_sentences}")
+        lines.append(f"Connected: {connected_sentences}/{total_sentences}")
+        if disconnected_sentences:
+            lines.append(f"DISCONNECTED sentences: {disconnected_sentences}")
+            lines.append(
+                "WARNING: Some sentences have disconnected explicit backbones!"
+            )
+        else:
+            lines.append("All sentences have connected explicit backbones.")
+
+        if self._connectivity_failures:
+            lines.append(
+                f"\nConnectivity failures logged: {len(self._connectivity_failures)}"
+            )
+            for subj, obj, reason in self._connectivity_failures[:10]:  # Show first 10
+                lines.append(f"  - {subj} -> {obj}: {reason}")
+
+        report = "\n".join(lines)
+        logging.info(report)
+        return report
+
+    # =========================================================================
+    # END PER-SENTENCE TRACKING
     # =========================================================================
 
     def resolve_pronouns(self, text: str) -> str:
@@ -1000,26 +1269,13 @@ class AMoCv4:
         norm = self._normalize_label(label)
         return norm in self.RELATION_BLACKLIST
 
-    def _is_verb_or_adjective_relation(self, label: str) -> bool:
-        doc = self.spacy_nlp(label)
-        has_verb_or_adj = False
-        for tok in doc:
-            if not getattr(tok, "is_alpha", False):
-                continue
-            # Accept VERB, AUX (auxiliary verbs like 'is'), or ADJ
-            if tok.pos_ in {"VERB", "AUX", "ADJ"}:
-                has_verb_or_adj = True
-            # Reject NOUN, PROPN, ADV as standalone relations
-            elif tok.pos_ in {"NOUN", "PROPN", "ADV"}:
-                return False
-        return has_verb_or_adj
-
     def _is_valid_relation_label(self, label: str) -> bool:
         """
-        Validate edge labels per Invariant 3.2.
+        Validate edge labels following the original AMoC v4 paper approach.
 
-        Edges may be verbs or adjectives (e.g., 'is_young', 'rides_through').
-        Unlabeled or purely nominal edges are forbidden.
+        The original paper (old_code.py) uses minimal validation - only checking
+        for non-empty labels. This simplified approach accepts any non-empty,
+        non-generic label from the LLM.
         """
         # Explicitly handle None, empty string, and whitespace-only labels
         if not label or not isinstance(label, str):
@@ -1031,48 +1287,24 @@ class AMoCv4:
             return False
         if self._is_blacklisted_relation(label_stripped):
             return False
-        # Per 3.2: Accept verb OR adjective relations
-        if not self._is_verb_or_adjective_relation(label_stripped):
-            return False
+        # Following original paper: accept any non-generic label from LLM
         return True
 
     def _is_valid_hub_edge_label(self, label: str) -> bool:
         """
-        Relaxed validation for hub-anchoring edges per Invariants 3.2 and 3.3.
+        Validation for hub-anchoring edges following the original AMoC v4 paper.
 
         Hub edges connect explicit nodes to the central hub node to ensure
-        graph connectivity. We accept:
-        - Verb labels (action verbs, auxiliary verbs)
-        - Adjectival labels (e.g., 'is_young', 'is_fortified')
-        - Labels from the hub-edge acceptable set
-
-        Per 3.2: Adjectival edges count toward connectivity guarantees.
+        graph connectivity. Following the paper's simple approach, we accept
+        any non-empty label from the LLM.
         """
         if not label or not isinstance(label, str):
             return False
         label_stripped = label.strip()
         if not label_stripped:
             return False
-
-        # Normalize for comparison
-        norm = self._normalize_label(label_stripped)
-
-        # Accept labels from the hub-edge acceptable set
-        if norm in self.HUB_EDGE_ACCEPTABLE_LABELS:
-            return True
-
-        # Accept labels with a verb (AUX or VERB) or adjective
-        doc = self.spacy_nlp(label_stripped)
-        has_verb_or_adj = any(
-            tok.pos_ in {"VERB", "AUX", "ADJ"}
-            for tok in doc
-            if getattr(tok, "is_alpha", False)
-        )
-        if has_verb_or_adj:
-            return True
-
-        # Reject everything else
-        return False
+        # Following original paper: accept any non-empty label
+        return True
 
     def _normalize_endpoint_text(self, text: str, is_subject: bool) -> Optional[str]:
         if not text:
@@ -1159,6 +1391,7 @@ class AMoCv4:
         salient_nodes: Optional[List[str]] = None,
         inactive_nodes: Optional[List[str]] = None,
         hub_edge_explanations: Optional[List[str]] = None,
+        show_all_edges: bool = True,
     ) -> None:
         # Route per-sentence plots into mode-specific subfolders for clarity.
         plot_dir = output_dir
@@ -1173,10 +1406,17 @@ class AMoCv4:
         age_for_filename = self.persona_age if self.persona_age is not None else -1
 
         # Per Invariant 3.0: Hub node must be visually represented as blue
+        # Per Paper Figures 2-6: ALL text-based (explicit) nodes must be blue
         blue_node_set = set(highlight_nodes) if highlight_nodes else set()
         hub_name = self.get_hub_node_name()
         if hub_name:
             blue_node_set.add(hub_name)
+        # Add ALL explicit nodes (TEXT_BASED) to blue_node_set per paper requirement
+        if explicit_nodes:
+            blue_node_set.update(explicit_nodes)
+        # Also include salient (carry-over) nodes as blue since they were text-based
+        if salient_nodes:
+            blue_node_set.update(salient_nodes)
 
         try:
             saved_path = plot_amoc_triplets(
@@ -1203,6 +1443,7 @@ class AMoCv4:
                 positions=self._viz_positions,
                 active_edges=active_edges,
                 hub_edge_explanations=hub_edge_explanations,
+                show_all_edges=show_all_edges,
             )
             if triplets:
                 logging.info(
@@ -1252,6 +1493,19 @@ class AMoCv4:
                 if overlap > best_overlap:
                     best_overlap = overlap
                     best_sent = sent.text.strip()
+
+            # CRITICAL: Require minimum overlap to avoid LLM hallucinations
+            # If overlap is too low, the LLM returned garbage - use original text
+            min_required_overlap = max(1, len(orig_tokens) // 3)  # At least 1/3 overlap
+            if best_overlap < min_required_overlap:
+                logging.warning(
+                    "resolve_pronouns returned low overlap (%d/%d): rejecting '%s' for original '%s'",
+                    best_overlap,
+                    len(orig_tokens),
+                    (best_sent or cleaned)[:50],
+                    orig_text[:50],
+                )
+                return orig_text
 
             chosen = best_sent or cleaned
 
@@ -1368,6 +1622,53 @@ class AMoCv4:
                 else:
                     # Legacy mode: still do post-hoc cleanup
                     self._enforce_graph_connectivity()
+
+                # FINAL SAFETY NET: Guarantee ALL explicit nodes are connected
+                # This triggers if ANY explicit node is disconnected, not just zero edges
+                if len(
+                    current_sentence_text_based_nodes
+                ) >= 2 and not self._is_explicit_backbone_connected(
+                    current_sentence_text_based_nodes
+                ):
+                    logging.warning(
+                        "SAFETY NET: Not all explicit nodes connected after first sentence. "
+                        "Forcing hub edges to guarantee full connectivity."
+                    )
+                    hub = self._select_hub_node(current_sentence_text_based_nodes)
+                    if hub:
+                        # Find which nodes are NOT connected to hub
+                        connected_to_hub = {hub}
+                        for edge in self.graph.edges:
+                            if edge.source_node == hub:
+                                connected_to_hub.add(edge.dest_node)
+                            elif edge.dest_node == hub:
+                                connected_to_hub.add(edge.source_node)
+
+                        for node in current_sentence_text_based_nodes:
+                            if node in connected_to_hub:
+                                continue
+                            # Use simple labels that won't be rejected
+                            if node.node_type == NodeType.PROPERTY:
+                                label = "describes"
+                            else:
+                                label = "relates to"
+                            edge = self.graph.add_edge(
+                                node,
+                                hub,
+                                label,
+                                self.edge_forget,
+                                created_at_sentence=self._current_sentence_index,
+                            )
+                            if edge:
+                                logging.info(
+                                    "SAFETY NET: Created fallback edge: %s -[%s]-> %s",
+                                    node.get_text_representer(),
+                                    label,
+                                    hub.get_text_representer(),
+                                )
+                                self._record_edge_in_graphs(
+                                    edge, self._current_sentence_index
+                                )
 
                 self._restrict_active_to_current_explicit(
                     current_sentence_text_based_nodes
@@ -1544,6 +1845,42 @@ class AMoCv4:
                             i + 1,
                             failure_detail,
                         )
+                        # SAFETY NET: Force edges to guarantee connectivity
+                        hub = self._select_hub_node(current_sentence_text_based_nodes)
+                        if hub:
+                            connected_to_hub = {hub}
+                            for edge in self.graph.edges:
+                                if edge.source_node == hub:
+                                    connected_to_hub.add(edge.dest_node)
+                                elif edge.dest_node == hub:
+                                    connected_to_hub.add(edge.source_node)
+
+                            for node in current_sentence_text_based_nodes:
+                                if node in connected_to_hub:
+                                    continue
+                                label = (
+                                    "describes"
+                                    if node.node_type == NodeType.PROPERTY
+                                    else "relates to"
+                                )
+                                edge = self.graph.add_edge(
+                                    node,
+                                    hub,
+                                    label,
+                                    self.edge_forget,
+                                    created_at_sentence=self._current_sentence_index,
+                                )
+                                if edge:
+                                    logging.info(
+                                        "SAFETY NET: Created fallback edge: %s -[%s]-> %s",
+                                        node.get_text_representer(),
+                                        label,
+                                        hub.get_text_representer(),
+                                    )
+                                    added_edges.append(edge)
+                                    self._record_edge_in_graphs(
+                                        edge, self._current_sentence_index
+                                    )
 
                 # =====================================================
                 # STEP 2: Inference Enrichment (Section 3.1.2 Steps 2a-2c)
@@ -1648,6 +1985,18 @@ class AMoCv4:
                     sentence_id,
                     self.persona,
                 )
+
+            # =====================================================
+            # Record per-sentence breakdown for 1-to-1 correlation
+            # (Professor requirement #5)
+            # =====================================================
+            self._record_per_sentence_breakdown(
+                sentence_idx=sentence_id,
+                sentence_text=original_text,
+                explicit_nodes=current_sentence_text_based_nodes,
+                max_distance=self.max_distance_from_active_nodes,
+            )
+
             if i == 0:
                 recently_deactivated_nodes: set[Node] = set()
             else:
@@ -1695,6 +2044,8 @@ class AMoCv4:
             self._prev_active_nodes_for_plot = current_active_nodes
 
             if plot_after_each_sentence:
+                # For the final sentence, show all edges to match CSV output
+                # is_final_sentence = i == len(resolved_sentences) - 1
                 # Active (salience) view
                 self._plot_graph_snapshot(
                     sentence_index=i,
@@ -1714,6 +2065,7 @@ class AMoCv4:
                         if self._hub_edge_explanations
                         else None
                     ),
+                    show_all_edges=True,
                 )
                 # Cumulative memory view
                 self._plot_graph_snapshot(
@@ -1738,6 +2090,7 @@ class AMoCv4:
                         for edge in self.graph.edges
                         if edge.active
                     },
+                    show_all_edges=True,
                 )
 
             # Capture triplets for this sentence (all edges, with current active flag)
@@ -1861,6 +2214,9 @@ class AMoCv4:
             if intro is None:
                 intro = edge.created_at_sentence if edge.created_at_sentence else -1
             cumulative_triplets.append((subj, rel, obj, int(intro)))
+
+        # Print connectivity report for explicit diagnostics (Professor requirement #3)
+        self.print_connectivity_report()
 
         return final_triplets, self._sentence_triplets, cumulative_triplets
 

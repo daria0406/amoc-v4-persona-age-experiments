@@ -320,6 +320,7 @@ def plot_amoc_triplets(
     avoid_edge_overlap: bool = True,
     active_edges: Optional[set[Tuple[str, str]]] = None,
     hub_edge_explanations: Optional[List[str]] = None,
+    show_all_edges: bool = False,
 ) -> str:
 
     def expand_by_anchor(
@@ -448,20 +449,22 @@ def plot_amoc_triplets(
             G = G.subgraph(nodes_to_keep).copy()
 
     # SENTENCE ANCHORING    ----------------------------
-    anchors: set[str] = set()
-    if explicit_nodes:
-        anchors |= {n for n in explicit_nodes if n in G_full}
-    if not anchors:
-        anchors = {n for n in G.nodes() if G.degree(n) > 0}
-    if not anchors and G_full.nodes:
-        anchors = {next(iter(G_full.nodes()))}
-    G_draw = expand_by_anchor(
-        G_full=G_full.to_undirected(),
-        G_snapshot=G.to_undirected(),
-        anchors=anchors,
-        hops=2,
-    )
-    G = G_draw
+    # When show_all_edges=True, skip hop-based filtering to show ALL triplets
+    if not show_all_edges:
+        anchors: set[str] = set()
+        if explicit_nodes:
+            anchors |= {n for n in explicit_nodes if n in G_full}
+        if not anchors:
+            anchors = {n for n in G.nodes() if G.degree(n) > 0}
+        if not anchors and G_full.nodes:
+            anchors = {next(iter(G_full.nodes()))}
+        G_draw = expand_by_anchor(
+            G_full=G_full.to_undirected(),
+            G_snapshot=G.to_undirected(),
+            anchors=anchors,
+            hops=2,
+        )
+        G = G_draw
     # --------------------------------------
 
     fig, ax = plt.subplots(figsize=(22, 18))
@@ -507,12 +510,18 @@ def plot_amoc_triplets(
         levels = nx.single_source_shortest_path_length(UG, hub)
         max_level = max(levels.values(), default=0)
 
-        # Include disconnected nodes (if any) on an outer ring.
+        # Include disconnected nodes (if any) on outer rings.
+        # Distribute them across multiple rings to prevent overlap when many exist.
         unreachable = sorted([n for n in nodes if n not in levels and n != hub])
         if unreachable:
-            max_level += 1
-            for node in unreachable:
-                levels[node] = max_level
+            # Calculate how many nodes can fit per ring without overlap
+            # Assume ~6 nodes per ring for comfortable spacing
+            nodes_per_ring = max(4, min(8, len(unreachable) // 2 + 1))
+            num_extra_rings = (len(unreachable) + nodes_per_ring - 1) // nodes_per_ring
+            for idx, node in enumerate(unreachable):
+                ring_offset = idx // nodes_per_ring
+                levels[node] = max_level + 1 + ring_offset
+            max_level += num_extra_rings
 
         ring_step = max(12.0, target_min_dist * 1.55)
         radii: Dict[int, float] = {}
@@ -703,6 +712,33 @@ def plot_amoc_triplets(
     )
     if avoid_edge_overlap:
         _push_nodes_off_edges(fig, ax, pos, list(G.edges()))
+
+    # FINAL COLLISION FIX: Ensure no overlapping nodes by spreading them out
+    # This is a last-resort fix for cases where the above algorithms fail
+    _set_axes_limits(ax, pos)
+    required_dist = _node_required_center_distance_data(fig, ax, node_size=3800, pad_px=10.0)
+    for _ in range(50):  # Limited iterations for final pass
+        collision_found = False
+        nodes_list = list(pos.keys())
+        for i, n1 in enumerate(nodes_list):
+            x1, y1 = pos[n1]
+            for n2 in nodes_list[i + 1:]:
+                x2, y2 = pos[n2]
+                dist = math.hypot(x2 - x1, y2 - y1)
+                if dist < required_dist and dist > 1e-6:
+                    # Push apart along the line connecting them
+                    collision_found = True
+                    dx, dy = x2 - x1, y2 - y1
+                    norm = math.hypot(dx, dy)
+                    dx, dy = dx / norm, dy / norm
+                    push = (required_dist - dist) * 0.55
+                    # Only move non-frozen, non-hub nodes
+                    if n1 != hub and n1 not in fixed_nodes:
+                        pos[n1] = (x1 - dx * push, y1 - dy * push)
+                    if n2 != hub and n2 not in fixed_nodes:
+                        pos[n2] = (x2 + dx * push, y2 + dy * push)
+        if not collision_found:
+            break
 
     nx.draw_networkx_nodes(
         G,
