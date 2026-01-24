@@ -319,6 +319,7 @@ def plot_amoc_triplets(
     positions: Optional[Dict[str, Tuple[float, float]]] = None,
     avoid_edge_overlap: bool = True,
     active_edges: Optional[set[Tuple[str, str]]] = None,
+    hub_edge_explanations: Optional[List[str]] = None,
 ) -> str:
 
     def expand_by_anchor(
@@ -856,6 +857,13 @@ def plot_amoc_triplets(
         fallback = _format_nodes_line("Active this sentence", new_nodes)
         if fallback:
             sup_lines.append(fallback)
+    # Add hub edge explanations if provided (when explicit nodes needed hub-anchoring)
+    if hub_edge_explanations:
+        sup_lines.append("\n")
+        sup_lines.append("Hub-anchored connections (LLM explanation):")
+        for explanation in hub_edge_explanations[:3]:  # Limit to 3 to avoid clutter
+            truncated = (explanation[:120] + "...") if len(explanation) > 120 else explanation
+            sup_lines.append(f"  • {truncated}")
     plt.suptitle(
         "\n".join(sup_lines),
         y=0.98,

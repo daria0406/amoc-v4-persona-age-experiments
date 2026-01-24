@@ -17,6 +17,7 @@ from amoc.prompts.amoc_prompts import (
     GENERATE_NEW_INFERRED_RELATIONSHIPS_FIRST_SENTENCE_PROMPT,
     SELECT_RELEVANT_EDGES_PROMPT,
     REPLACE_PRONOUNS_PROMPT,
+    HUB_EDGE_LABEL_WITH_EXPLANATION_PROMPT,
 )
 
 
@@ -187,3 +188,37 @@ class VLLMClient:
     def resolve_pronouns(self, text, persona):
         prompt = REPLACE_PRONOUNS_PROMPT + text
         return self.call_vllm(prompt, persona)
+
+    def get_edge_label(
+        self, node_a: str, node_b: str, sentence_text: str, persona: str
+    ) -> str:
+        result = self.get_edge_label_with_explanation(
+            node_a, node_b, sentence_text, [], persona
+        )
+        return result.get("label", "")
+
+    def get_edge_label_with_explanation(
+        self,
+        node_a: str,
+        node_b: str,
+        sentence_text: str,
+        explicit_nodes: List[str],
+        persona: str,
+    ) -> Dict[str, str]:
+        explicit_nodes_str = (
+            ", ".join(explicit_nodes) if explicit_nodes else f"{node_a}, {node_b}"
+        )
+        prompt = HUB_EDGE_LABEL_WITH_EXPLANATION_PROMPT.format(
+            explicit_nodes=explicit_nodes_str,
+            node_a=node_a,
+            node_b=node_b,
+            sentence_text=sentence_text,
+        )
+        response = self.call_vllm(prompt, persona)
+        result = parse_for_dict(response)
+        if not isinstance(result, dict):
+            return {"label": "", "explanation": ""}
+        return {
+            "label": result.get("label", ""),
+            "explanation": result.get("explanation", ""),
+        }

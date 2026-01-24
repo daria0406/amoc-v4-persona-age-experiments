@@ -116,6 +116,8 @@ class AMoCv4:
         # Append-only cumulative records (one row per active episode)
         self._cumulative_triplet_records: list[dict] = []
         self._fixed_hub = None
+        # Store hub-anchored edge explanations for current sentence (for plot subtitle)
+        self._hub_edge_explanations: List[str] = []
 
     def _node_token_for_matrix(self, node: Node) -> str:
         return (node.get_text_representer() or "").strip().lower()
@@ -403,6 +405,16 @@ class AMoCv4:
         edge_forget: int,
         created_at_sentence: Optional[int] = None,
     ) -> Optional[Edge]:
+        # STRICT LABEL VALIDATION: Reject unlabeled/invalid edges as final safety net
+        if not self._is_valid_relation_label(label):
+            logging.debug(
+                "Rejected edge with invalid/empty label: %s -[%s]-> %s",
+                source_node.get_text_representer() if source_node else "None",
+                label,
+                dest_node.get_text_representer() if dest_node else "None",
+            )
+            return None
+
         # Enforce strict connectivity: edges must connect to the current main component
         # (anchors preferred) or current explicit nodes. Fragmentation check is removed.
         if self.strict_attachament_constraint and self.graph.edges:
@@ -505,6 +517,213 @@ class AMoCv4:
 
         # Update anchor nodes to only include nodes in the main component
         self._anchor_nodes = self._anchor_nodes & main_component
+
+    # =========================================================================
+    # REDESIGNED STRICT ATTACHMENT CONSTRAINT - TWO-STEP CONSTRUCTION
+    # Aligned with AMoC v4 Paper Section 3.1.2
+    # =========================================================================
+
+    def _is_explicit_backbone_connected(self, explicit_nodes: List[Node]) -> bool:
+        if len(explicit_nodes) <= 1:
+            return True
+        G = nx.Graph()
+        explicit_set = set(explicit_nodes)
+        for node in explicit_nodes:
+            G.add_node(node)
+        for edge in self.graph.edges:
+            if edge.source_node in explicit_set and edge.dest_node in explicit_set:
+                G.add_edge(edge.source_node, edge.dest_node)
+        return nx.is_connected(G)
+
+    def _select_hub_node(self, explicit_nodes: List[Node]) -> Optional[Node]:
+        if not explicit_nodes:
+            return None
+        if self._fixed_hub is not None and self._fixed_hub in explicit_nodes:
+            return self._fixed_hub
+        concepts = [n for n in explicit_nodes if n.node_type == NodeType.CONCEPT]
+        candidates = concepts if concepts else explicit_nodes
+        def node_degree(n: Node) -> int:
+            return sum(1 for e in self.graph.edges if e.source_node == n or e.dest_node == n)
+        hub = max(candidates, key=lambda n: (node_degree(n), n.get_text_representer()))
+        if self._fixed_hub is None:
+            self._fixed_hub = hub
+        return hub
+
+    def _ensure_explicit_backbone_connected(
+        self,
+        explicit_nodes: List[Node],
+        sentence_text: str,
+    ) -> Tuple[List[Edge], List[Tuple[str, str, str]]]:
+        """Ensure explicit backbone is connected via hub-anchored edges.
+
+        Returns:
+            Tuple of (added_edges, failed_connections) where failed_connections
+            is a list of (source, hub, reason) tuples for edges that couldn't be formed.
+        """
+        added_edges: List[Edge] = []
+        failed_connections: List[Tuple[str, str, str]] = []
+
+        if len(explicit_nodes) < 2:
+            return added_edges, failed_connections
+        if not self.strict_attachament_constraint:
+            return added_edges, failed_connections
+        hub = self._select_hub_node(explicit_nodes)
+        if hub is None:
+            return added_edges, failed_connections
+        explicit_set = set(explicit_nodes)
+
+        def is_connected_to_hub(node: Node, visited: set) -> bool:
+            if node == hub:
+                return True
+            if node in visited:
+                return False
+            visited.add(node)
+            for edge in self.graph.edges:
+                if edge.source_node == node and edge.dest_node in explicit_set:
+                    if is_connected_to_hub(edge.dest_node, visited):
+                        return True
+                if edge.dest_node == node and edge.source_node in explicit_set:
+                    if is_connected_to_hub(edge.source_node, visited):
+                        return True
+            return False
+
+        for node in explicit_nodes:
+            if node == hub:
+                continue
+            if is_connected_to_hub(node, set()):
+                continue
+            subj = node.get_text_representer()
+            obj = hub.get_text_representer()
+            explicit_node_names = [n.get_text_representer() for n in explicit_nodes]
+            try:
+                result = self.client.get_edge_label_with_explanation(
+                    subj, obj, sentence_text, explicit_node_names, self.persona
+                )
+                label = result.get("label", "")
+                explanation = result.get("explanation", "")
+            except Exception as e:
+                label = None
+                explanation = ""
+                failed_connections.append((subj, obj, f"LLM error: {str(e)[:50]}"))
+                logging.warning(
+                    "FAILED hub edge %s -> %s: LLM exception",
+                    subj,
+                    obj,
+                )
+                continue
+            if not label or not label.strip():
+                failed_connections.append((subj, obj, "empty label from LLM"))
+                logging.warning(
+                    "FAILED hub edge %s -> %s: empty label from LLM",
+                    subj,
+                    obj,
+                )
+                continue
+            if not self._is_valid_relation_label(label):
+                failed_connections.append((subj, obj, f"invalid label: {label}"))
+                logging.warning(
+                    "FAILED hub edge %s -> %s: invalid label '%s'",
+                    subj,
+                    obj,
+                    label,
+                )
+                continue
+            edge = self._add_edge(node, hub, label, self.edge_forget)
+            if edge:
+                added_edges.append(edge)
+                if explanation:
+                    self._hub_edge_explanations.append(
+                        f"{subj} -> {obj}: {explanation}"
+                    )
+                logging.info(
+                    "Hub-anchored edge: %s -[%s]-> %s (hub) | Explanation: %s",
+                    subj,
+                    label,
+                    obj,
+                    explanation,
+                )
+            else:
+                failed_connections.append((subj, obj, "edge rejected by _add_edge"))
+                logging.warning(
+                    "FAILED hub edge %s -> %s: rejected by _add_edge validation",
+                    subj,
+                    obj,
+                )
+
+        # Log summary of failures if any
+        if failed_connections:
+            logging.error(
+                "Backbone connection FAILURES (%d/%d): %s",
+                len(failed_connections),
+                len(explicit_nodes) - 1,  # Exclude hub from count
+                "; ".join(f"{s}->{h}: {r}" for s, h, r in failed_connections),
+            )
+
+        return added_edges, failed_connections
+
+    def _filter_inferred_for_attachment(
+        self,
+        relationship: Tuple[str, str, str],
+        explicit_nodes: List[Node],
+        explicit_words: List[str],
+    ) -> bool:
+        if not self.strict_attachament_constraint:
+            return True
+        subj, rel, obj = relationship
+        explicit_lemma_keys = {tuple(n.lemmas) for n in explicit_nodes}
+        explicit_word_set = {w.lower() for w in explicit_words}
+        def _lemma_key(text: str) -> tuple[str, ...]:
+            return tuple(get_concept_lemmas(self.spacy_nlp, text))
+        subj_key = _lemma_key(subj)
+        obj_key = _lemma_key(obj)
+        subj_is_explicit = (
+            subj.lower() in explicit_word_set or subj_key in explicit_lemma_keys
+        )
+        obj_is_explicit = (
+            obj.lower() in explicit_word_set or obj_key in explicit_lemma_keys
+        )
+        return subj_is_explicit or obj_is_explicit
+
+    def _build_per_sentence_view(
+        self,
+        explicit_nodes: List[Node],
+        max_distance: int,
+    ) -> Tuple[set[Node], set[Edge]]:
+        explicit_set = set(explicit_nodes)
+        distances = self._distances_from_sources_active_edges(explicit_set, max_distance)
+        active_nodes = set(distances.keys())
+        active_edges: set[Edge] = set()
+        for edge in self.graph.edges:
+            if not edge.active:
+                continue
+            if edge.source_node in active_nodes and edge.dest_node in active_nodes:
+                active_edges.add(edge)
+        return active_nodes, active_edges
+
+    def _validate_per_sentence_connectivity(
+        self,
+        active_nodes: set[Node],
+        active_edges: set[Edge],
+        sentence_id: int,
+    ) -> bool:
+        if len(active_nodes) <= 1:
+            return True
+        G = nx.Graph()
+        for node in active_nodes:
+            G.add_node(node)
+        for edge in active_edges:
+            G.add_edge(edge.source_node, edge.dest_node)
+        if not nx.is_connected(G):
+            logging.error(
+                "Per-sentence graph DISCONNECTED at sentence %d (strict mode)",
+                sentence_id,
+            )
+            return False
+        return True
+
+    # =========================================================================
+    # END REDESIGNED STRICT ATTACHMENT CONSTRAINT
+    # =========================================================================
 
     def resolve_pronouns(self, text: str) -> str:
         resolved = self.client.resolve_pronouns(text, self.persona)
@@ -754,6 +973,7 @@ class AMoCv4:
         explicit_nodes: Optional[List[str]] = None,
         salient_nodes: Optional[List[str]] = None,
         inactive_nodes: Optional[List[str]] = None,
+        hub_edge_explanations: Optional[List[str]] = None,
     ) -> None:
         # Route per-sentence plots into mode-specific subfolders for clarity.
         plot_dir = output_dir
@@ -790,6 +1010,7 @@ class AMoCv4:
                 largest_component_only=largest_component_only,
                 positions=self._viz_positions,
                 active_edges=active_edges,
+                hub_edge_explanations=hub_edge_explanations,
             )
             if triplets:
                 logging.info(
@@ -880,10 +1101,15 @@ class AMoCv4:
             )  # sent_idx, sent_text, subj, rel, obj
             nodes_before_sentence = set(self.graph.nodes)
             self._explicit_nodes_current_sentence = set()
+            self._hub_edge_explanations = []  # Clear explanations for new sentence
             logging.info("Processing sentence %d: %s", i, resolved_text)
             if i == 0:
                 current_sentence = sent
                 prev_sentences.append(resolved_text)
+
+                # ============================================================
+                # STEP 1: Build Explicit Backbone (Section 3.1.2 Steps 1a-1c)
+                # ============================================================
                 self.init_graph(sent)
 
                 (
@@ -896,20 +1122,59 @@ class AMoCv4:
                     current_sentence_text_based_nodes
                 )
                 # Populate _anchor_nodes from first sentence's explicit nodes
-                # to ensure connectivity checks have a valid anchor set
                 self._anchor_nodes = set(current_sentence_text_based_nodes)
+
+                # Ensure explicit backbone is connected (hub-anchored if needed)
+                if self.strict_attachament_constraint:
+                    backbone_failures: List[Tuple[str, str, str]] = []
+                    if not self._is_explicit_backbone_connected(
+                        current_sentence_text_based_nodes
+                    ):
+                        _, backbone_failures = self._ensure_explicit_backbone_connected(
+                            current_sentence_text_based_nodes,
+                            resolved_text,
+                        )
+                    # Validate Step 1 result
+                    if not self._is_explicit_backbone_connected(
+                        current_sentence_text_based_nodes
+                    ):
+                        failure_detail = (
+                            f" Failures: {backbone_failures}" if backbone_failures else ""
+                        )
+                        logging.error(
+                            "Step 1 FAILED: Explicit backbone disconnected at sentence 1.%s",
+                            failure_detail,
+                        )
+
+                # ============================================================
+                # STEP 2: Inference Enrichment (Section 3.1.2 Steps 2a-2c)
+                # ============================================================
                 inferred_concept_relationships, inferred_property_relationships = (
                     self.infer_new_relationships_step_0(sent)
                 )
 
                 self.add_inferred_relationships_to_graph_step_0(
-                    inferred_concept_relationships, NodeType.CONCEPT, sent
+                    inferred_concept_relationships,
+                    NodeType.CONCEPT,
+                    sent,
+                    current_sentence_text_based_nodes,
+                    current_sentence_text_based_words,
                 )
                 self.add_inferred_relationships_to_graph_step_0(
-                    inferred_property_relationships, NodeType.PROPERTY, sent
+                    inferred_property_relationships,
+                    NodeType.PROPERTY,
+                    sent,
+                    current_sentence_text_based_nodes,
+                    current_sentence_text_based_words,
                 )
-                # Enforce connectivity for first sentence - remove any disconnected edges
-                self._enforce_graph_connectivity()
+
+                # Validate connectivity (no post-hoc repair in strict mode)
+                if self.strict_attachament_constraint:
+                    self._enforce_graph_connectivity()
+                else:
+                    # Legacy mode: still do post-hoc cleanup
+                    self._enforce_graph_connectivity()
+
                 self._restrict_active_to_current_explicit(
                     current_sentence_text_based_nodes
                 )
@@ -1056,7 +1321,36 @@ class AMoCv4:
                     if potential_new_edge:
                         added_edges.append(potential_new_edge)
 
-                # infer new relationships logic...
+                # =====================================================
+                # STEP 1 VALIDATION: Ensure explicit backbone is connected
+                # =====================================================
+                if self.strict_attachament_constraint:
+                    backbone_failures: List[Tuple[str, str, str]] = []
+                    if not self._is_explicit_backbone_connected(
+                        current_sentence_text_based_nodes
+                    ):
+                        hub_edges, backbone_failures = self._ensure_explicit_backbone_connected(
+                            current_sentence_text_based_nodes,
+                            resolved_text,
+                        )
+                        added_edges.extend(hub_edges)
+                    # Validate Step 1 result
+                    if not self._is_explicit_backbone_connected(
+                        current_sentence_text_based_nodes
+                    ):
+                        failure_detail = (
+                            f" Failures: {backbone_failures}" if backbone_failures else ""
+                        )
+                        logging.error(
+                            "Step 1 FAILED: Explicit backbone disconnected at sentence %d.%s",
+                            i + 1,
+                            failure_detail,
+                        )
+
+                # =====================================================
+                # STEP 2: Inference Enrichment (Section 3.1.2 Steps 2a-2c)
+                # Inferences MUST attach to explicit backbone
+                # =====================================================
                 inferred_concept_relationships, inferred_property_relationships = (
                     self.infer_new_relationships(
                         current_all_text,
@@ -1217,6 +1511,7 @@ class AMoCv4:
                     mode="sentence_active",
                     triplets_override=self._graph_to_triplets(self.active_graph),
                     active_edges={(u, v) for u, v in self.active_graph.edges()},
+                    hub_edge_explanations=self._hub_edge_explanations if self._hub_edge_explanations else None,
                 )
                 # Cumulative memory view
                 self._plot_graph_snapshot(
@@ -1617,31 +1912,66 @@ class AMoCv4:
         inferred_relationships: List[Tuple[str, str, str]],
         node_type: NodeType,
         sent: Span,
+        explicit_nodes: Optional[List[Node]] = None,
+        explicit_words: Optional[List[str]] = None,
     ) -> None:
+        """Add inferred relationships for first sentence using hub-first radial attachment.
+
+        Two-pass approach:
+        1. First pass: Add relationships where at least one endpoint is explicit (hub-attached)
+        2. Second pass: Add remaining relationships only if they connect to already-added inferred nodes
+        """
         current_sentence_text_based_nodes, current_sentence_text_based_words = (
             self.get_senteces_text_based_nodes([sent], create_unexistent_nodes=False)
         )
+        # Use provided explicit nodes or fall back to extracted ones
+        filter_explicit_nodes = explicit_nodes or current_sentence_text_based_nodes
+        filter_explicit_words = explicit_words or current_sentence_text_based_words
+
+        # Track nodes added during inference for second-pass attachment
+        inference_connected_nodes: set[Node] = set()
+        explicit_lemma_keys = {tuple(n.lemmas) for n in filter_explicit_nodes}
+        explicit_word_set = {w.lower() for w in filter_explicit_words}
+
+        def _lemma_key(text: str) -> tuple[str, ...]:
+            return tuple(get_concept_lemmas(self.spacy_nlp, text))
+
+        def _is_explicit(text: str) -> bool:
+            return text.lower() in explicit_word_set or _lemma_key(text) in explicit_lemma_keys
+
+        # Separate relationships into hub-attached vs inferred-only
+        hub_attached: List[Tuple[str, str, str]] = []
+        inferred_only: List[Tuple[str, str, str]] = []
+
         for relationship in inferred_relationships:
-            # print(relationship)
             if len(relationship) != 3:
                 continue
             if not relationship[0] or not relationship[2]:
                 continue
             if relationship[0] == relationship[2]:
                 continue
-            if not isinstance(relationship[0], str) or not isinstance(
-                relationship[2], str
-            ):
+            if not isinstance(relationship[0], str) or not isinstance(relationship[2], str):
                 continue
+
+            subj_is_explicit = _is_explicit(relationship[0])
+            obj_is_explicit = _is_explicit(relationship[2])
+
+            if subj_is_explicit or obj_is_explicit:
+                hub_attached.append(relationship)
+            else:
+                inferred_only.append(relationship)
+
+        def _process_relationship(relationship: Tuple[str, str, str]) -> Optional[Edge]:
+            """Process a single relationship and return the edge if created."""
             norm_subj = self._normalize_endpoint_text(relationship[0], is_subject=True)
             norm_obj = self._normalize_endpoint_text(relationship[2], is_subject=False)
             if norm_subj is None or norm_obj is None:
-                continue
+                return None
             if not (
                 self._appears_in_story(relationship[0])
                 or self._appears_in_story(relationship[2])
             ):
-                continue
+                return None
             if not self._passes_attachment_constraint(
                 relationship[0],
                 relationship[2],
@@ -1650,11 +1980,11 @@ class AMoCv4:
                 list(self.graph.nodes),
                 self._get_nodes_with_active_edges(),
             ):
-                continue
+                return None
             subj, subj_type = self._canonicalize_and_classify_node_text(relationship[0])
             obj, obj_type = self._canonicalize_and_classify_node_text(relationship[2])
             if subj_type is None or obj_type is None:
-                continue
+                return None
             source_node = self.get_node_from_text(
                 norm_subj,
                 current_sentence_text_based_nodes,
@@ -1671,7 +2001,7 @@ class AMoCv4:
             )
             edge_label = relationship[1].replace("(edge)", "").strip()
             if not self._is_valid_relation_label(edge_label):
-                continue
+                return None
             if source_node is None:
                 source_node = self.graph.add_or_get_node(
                     get_concept_lemmas(self.spacy_nlp, subj),
@@ -1679,7 +2009,6 @@ class AMoCv4:
                     subj_type,
                     NodeSource.INFERENCE_BASED,
                 )
-
             if dest_node is None:
                 dest_node = self.graph.add_or_get_node(
                     get_concept_lemmas(self.spacy_nlp, obj),
@@ -1687,8 +2016,50 @@ class AMoCv4:
                     obj_type,
                     NodeSource.INFERENCE_BASED,
                 )
+            return self._add_edge(source_node, dest_node, edge_label, self.edge_forget)
 
-            self._add_edge(source_node, dest_node, edge_label, self.edge_forget)
+        # =====================================================
+        # PASS 1: Hub-attached relationships (explicit backbone connected)
+        # =====================================================
+        logging.debug("Step 0 Pass 1: Processing %d hub-attached inferences", len(hub_attached))
+        for relationship in hub_attached:
+            edge = _process_relationship(relationship)
+            if edge:
+                inference_connected_nodes.add(edge.source_node)
+                inference_connected_nodes.add(edge.dest_node)
+
+        # =====================================================
+        # PASS 2: Inferred-only relationships (must attach to Pass 1 nodes)
+        # =====================================================
+        if not self.strict_attachament_constraint:
+            # In non-strict mode, process all inferred-only relationships
+            logging.debug("Step 0 Pass 2 (non-strict): Processing %d inferred-only relationships", len(inferred_only))
+            for relationship in inferred_only:
+                _process_relationship(relationship)
+        else:
+            # In strict mode, only accept if one endpoint connects to inference_connected_nodes
+            logging.debug("Step 0 Pass 2 (strict): Processing %d inferred-only relationships", len(inferred_only))
+            inference_lemma_keys = {tuple(n.lemmas) for n in inference_connected_nodes}
+
+            for relationship in inferred_only:
+                subj_key = _lemma_key(relationship[0])
+                obj_key = _lemma_key(relationship[2])
+                attaches_to_inference = (
+                    subj_key in inference_lemma_keys or obj_key in inference_lemma_keys
+                )
+                if not attaches_to_inference:
+                    logging.debug(
+                        "Rejected inferred-only (no attachment to backbone-connected inference): %s",
+                        relationship,
+                    )
+                    continue
+                edge = _process_relationship(relationship)
+                if edge:
+                    # Update connected nodes for potential further chaining
+                    inference_connected_nodes.add(edge.source_node)
+                    inference_connected_nodes.add(edge.dest_node)
+                    inference_lemma_keys.add(tuple(edge.source_node.lemmas))
+                    inference_lemma_keys.add(tuple(edge.dest_node.lemmas))
 
     def add_inferred_relationships_to_graph(
         self,
@@ -1699,27 +2070,58 @@ class AMoCv4:
         active_graph_nodes: List[Node],
         added_edges: List[Edge],
     ) -> None:
+        """Add inferred relationships using hub-first radial attachment.
+
+        Two-pass approach:
+        1. First pass: Add relationships where at least one endpoint is explicit (hub-attached)
+        2. Second pass: Add remaining relationships only if they connect to already-added inferred nodes
+        """
+        # Track nodes added during inference for second-pass attachment
+        inference_connected_nodes: set[Node] = set()
+
+        # Pre-process relationships to validate and categorize
+        explicit_lemma_keys = {tuple(n.lemmas) for n in curr_sentences_nodes}
+        explicit_word_set = {w.lower() for w in curr_sentences_words}
+
+        def _lemma_key(text: str) -> tuple[str, ...]:
+            return tuple(get_concept_lemmas(self.spacy_nlp, text))
+
+        def _is_explicit(text: str) -> bool:
+            return text.lower() in explicit_word_set or _lemma_key(text) in explicit_lemma_keys
+
+        # Separate relationships into hub-attached vs inferred-only
+        hub_attached: List[Tuple[str, str, str]] = []
+        inferred_only: List[Tuple[str, str, str]] = []
+
         for relationship in inferred_relationships:
-            # print(relationship)
             if len(relationship) != 3:
                 continue
             if not relationship[0] or not relationship[2]:
                 continue
             if relationship[0] == relationship[2]:
                 continue
-            if not isinstance(relationship[0], str) or not isinstance(
-                relationship[2], str
-            ):
+            if not isinstance(relationship[0], str) or not isinstance(relationship[2], str):
                 continue
+
+            subj_is_explicit = _is_explicit(relationship[0])
+            obj_is_explicit = _is_explicit(relationship[2])
+
+            if subj_is_explicit or obj_is_explicit:
+                hub_attached.append(relationship)
+            else:
+                inferred_only.append(relationship)
+
+        def _process_relationship(relationship: Tuple[str, str, str]) -> Optional[Edge]:
+            """Process a single relationship and return the edge if created."""
             norm_subj = self._normalize_endpoint_text(relationship[0], is_subject=True)
             norm_obj = self._normalize_endpoint_text(relationship[2], is_subject=False)
             if norm_subj is None or norm_obj is None:
-                continue
+                return None
             if not (
                 self._appears_in_story(relationship[0])
                 or self._appears_in_story(relationship[2])
             ):
-                continue
+                return None
             if not self._passes_attachment_constraint(
                 relationship[0],
                 relationship[2],
@@ -1728,11 +2130,11 @@ class AMoCv4:
                 active_graph_nodes,
                 self._get_nodes_with_active_edges(),
             ):
-                continue
+                return None
             subj, subj_type = self._canonicalize_and_classify_node_text(relationship[0])
             obj, obj_type = self._canonicalize_and_classify_node_text(relationship[2])
             if subj_type is None or obj_type is None:
-                continue
+                return None
             source_node = self.get_node_from_new_relationship(
                 norm_subj,
                 active_graph_nodes,
@@ -1751,7 +2153,7 @@ class AMoCv4:
             )
             edge_label = relationship[1].replace("(edge)", "").strip()
             if not self._is_valid_relation_label(edge_label):
-                continue
+                return None
             if source_node is None:
                 source_node = self.graph.add_or_get_node(
                     get_concept_lemmas(self.spacy_nlp, subj),
@@ -1759,7 +2161,6 @@ class AMoCv4:
                     subj_type,
                     NodeSource.INFERENCE_BASED,
                 )
-
             if dest_node is None:
                 dest_node = self.graph.add_or_get_node(
                     get_concept_lemmas(self.spacy_nlp, obj),
@@ -1767,12 +2168,54 @@ class AMoCv4:
                     obj_type,
                     NodeSource.INFERENCE_BASED,
                 )
+            return self._add_edge(source_node, dest_node, edge_label, self.edge_forget)
 
-            potential_edge = self._add_edge(
-                source_node, dest_node, edge_label, self.edge_forget
-            )
-            if potential_edge:
-                added_edges.append(potential_edge)
+        # =====================================================
+        # PASS 1: Hub-attached relationships (explicit backbone connected)
+        # =====================================================
+        logging.debug("Pass 1: Processing %d hub-attached inferences", len(hub_attached))
+        for relationship in hub_attached:
+            edge = _process_relationship(relationship)
+            if edge:
+                added_edges.append(edge)
+                inference_connected_nodes.add(edge.source_node)
+                inference_connected_nodes.add(edge.dest_node)
+
+        # =====================================================
+        # PASS 2: Inferred-only relationships (must attach to Pass 1 nodes)
+        # =====================================================
+        if not self.strict_attachament_constraint:
+            # In non-strict mode, process all inferred-only relationships
+            logging.debug("Pass 2 (non-strict): Processing %d inferred-only relationships", len(inferred_only))
+            for relationship in inferred_only:
+                edge = _process_relationship(relationship)
+                if edge:
+                    added_edges.append(edge)
+        else:
+            # In strict mode, only accept if one endpoint connects to inference_connected_nodes
+            logging.debug("Pass 2 (strict): Processing %d inferred-only relationships", len(inferred_only))
+            inference_lemma_keys = {tuple(n.lemmas) for n in inference_connected_nodes}
+
+            for relationship in inferred_only:
+                subj_key = _lemma_key(relationship[0])
+                obj_key = _lemma_key(relationship[2])
+                attaches_to_inference = (
+                    subj_key in inference_lemma_keys or obj_key in inference_lemma_keys
+                )
+                if not attaches_to_inference:
+                    logging.debug(
+                        "Rejected inferred-only (no attachment to backbone-connected inference): %s",
+                        relationship,
+                    )
+                    continue
+                edge = _process_relationship(relationship)
+                if edge:
+                    added_edges.append(edge)
+                    # Update connected nodes for potential further chaining
+                    inference_connected_nodes.add(edge.source_node)
+                    inference_connected_nodes.add(edge.dest_node)
+                    inference_lemma_keys.add(tuple(edge.source_node.lemmas))
+                    inference_lemma_keys.add(tuple(edge.dest_node.lemmas))
 
     def get_node_from_text(
         self,

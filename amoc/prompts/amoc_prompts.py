@@ -363,3 +363,23 @@ As you can see, they are numbered. Tell me what edges are related to / support /
 Provide them in the following format (a list of numbers):
 [1, 2, 3, ...]
 """
+
+# Prompt for generating edge label with explanation when connecting disconnected explicit nodes
+HUB_EDGE_LABEL_WITH_EXPLANATION_PROMPT = """I am building a knowledge graph from text. I have extracted the following concepts from the sentence:
+{explicit_nodes}
+
+These concepts appear in the sentence but are not directly connected by an edge in my graph.
+I need to connect "{node_a}" to "{node_b}" (the hub concept) to maintain graph connectivity.
+
+The sentence is:
+"{sentence_text}"
+
+Based on the sentence context, provide:
+1. A short relationship label (1-3 words) that describes how "{node_a}" relates to "{node_b}"
+2. A brief explanation (1 sentence) of why this connection makes sense in the context
+
+Respond in this exact JSON format:
+{{
+    "label": "relationship_label",
+    "explanation": "Brief explanation of the connection"
+}}"""
