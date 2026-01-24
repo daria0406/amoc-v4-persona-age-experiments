@@ -52,6 +52,17 @@ class AMoCv4:
     ACTIVATION_MAX_DISTANCE = 2
     RELATION_BLACKLIST = {"describes", "is_at_stake"}
 
+    # Labels acceptable ONLY for hub-anchoring edges (relaxed validation)
+    HUB_EDGE_ACCEPTABLE_LABELS = {
+        "is",
+        "has",
+        "describes",
+        "relates_to",
+        "related_to",
+        "is_related_to",
+        "characterizes",
+    }
+
     def __init__(
         self,
         persona_description: str,
@@ -116,8 +127,12 @@ class AMoCv4:
         # Append-only cumulative records (one row per active episode)
         self._cumulative_triplet_records: list[dict] = []
         self._fixed_hub = None
+        # Track current hub for visualization (blue node) per Invariant 3.0
+        self._current_hub: Optional[Node] = None
         # Store hub-anchored edge explanations for current sentence (for plot subtitle)
         self._hub_edge_explanations: List[str] = []
+        # Track connectivity failures for explicit diagnostics per Invariant 3.4
+        self._connectivity_failures: List[Tuple[str, str, str]] = []
 
     def _node_token_for_matrix(self, node: Node) -> str:
         return (node.get_text_representer() or "").strip().lower()
@@ -405,39 +420,48 @@ class AMoCv4:
         edge_forget: int,
         created_at_sentence: Optional[int] = None,
     ) -> Optional[Edge]:
-        # STRICT LABEL VALIDATION: Reject unlabeled/invalid edges as final safety net
-        if not self._is_valid_relation_label(label):
+        """
+        Add an edge to the graph following the original AMoC v4 paper approach.
+
+        Per Invariant 3.2: Edges may be verbs or adjectives - no strict POS validation.
+        Per Invariant 3.4: Only empty/unlabeled edges are forbidden.
+
+        The original AMoC v4 paper (old_code.py lines 134-141) adds edges with
+        minimal validation. Strict POS-based validation was causing over-rejection
+        of valid LLM labels.
+        """
+        # Per Invariant 3.4: Reject only empty/missing labels
+        if not label or not isinstance(label, str) or not label.strip():
             logging.debug(
-                "Rejected edge with invalid/empty label: %s -[%s]-> %s",
+                "Rejected edge with empty/missing label: %s -[%s]-> %s",
                 source_node.get_text_representer() if source_node else "None",
                 label,
                 dest_node.get_text_representer() if dest_node else "None",
             )
             return None
 
-        # Enforce strict connectivity: edges must connect to the current main component
-        # (anchors preferred) or current explicit nodes. Fragmentation check is removed.
+        # Optional attachment constraint for maintaining connectivity
         if self.strict_attachament_constraint and self.graph.edges:
             G = nx.Graph()
             for e in self.graph.edges:
                 G.add_edge(e.source_node, e.dest_node)
 
-            # Find the main component (the one containing anchor nodes)
-            main_component: set[Node] = set()
-            for comp in nx.connected_components(G):
-                if any(n in self._anchor_nodes for n in comp):
-                    main_component |= comp
-
-            # If no anchor-containing component, use largest component
-            if not main_component and G.number_of_nodes() > 0:
-                main_component = max(nx.connected_components(G), key=len)
-
+            # Attachable: existing graph nodes + anchors + current explicit nodes
+            existing_nodes = set(G.nodes())
             attachable = (
-                main_component
+                existing_nodes
                 | self._anchor_nodes
                 | getattr(self, "_explicit_nodes_current_sentence", set())
             )
+
+            # Only reject if BOTH endpoints are completely disconnected
             if source_node not in attachable and dest_node not in attachable:
+                logging.debug(
+                    "Rejected disconnected edge: %s -[%s]-> %s",
+                    source_node.get_text_representer(),
+                    label,
+                    dest_node.get_text_representer(),
+                )
                 return None
 
         use_sentence = (
@@ -474,49 +498,8 @@ class AMoCv4:
         self._anchor_nodes = set()
 
     def _enforce_graph_connectivity(self) -> None:
-        if not self.graph.edges:
-            return
-
-        # Build graph from all edges
-        G = nx.Graph()
-        for e in self.graph.edges:
-            G.add_edge(e.source_node, e.dest_node, edge=e)
-
-        if G.number_of_nodes() <= 1:
-            return
-
-        # Find the main component (containing anchor nodes)
-        components = list(nx.connected_components(G))
-        if len(components) <= 1:
-            return  # Already connected
-
-        main_component: set[Node] = set()
-        for comp in components:
-            if any(n in self._anchor_nodes for n in comp):
-                main_component = comp
-                break
-
-        # If no anchor-containing component, use the largest
-        if not main_component:
-            main_component = max(components, key=len)
-
-        # Remove edges not in the main component
-        edges_to_remove = []
-        for e in self.graph.edges:
-            if e.source_node not in main_component or e.dest_node not in main_component:
-                edges_to_remove.append(e)
-
-        for e in edges_to_remove:
-            self.graph.edges.remove(e)
-            logging.debug(
-                "Removed disconnected edge: %s -[%s]-> %s",
-                e.source_node.get_text_representer(),
-                e.label,
-                e.dest_node.get_text_representer(),
-            )
-
-        # Update anchor nodes to only include nodes in the main component
-        self._anchor_nodes = self._anchor_nodes & main_component
+        # No-op: do not prune edges after addition; connectivity is enforced at add time.
+        return
 
     # =========================================================================
     # REDESIGNED STRICT ATTACHMENT CONSTRAINT - TWO-STEP CONSTRUCTION
@@ -536,30 +519,71 @@ class AMoCv4:
         return nx.is_connected(G)
 
     def _select_hub_node(self, explicit_nodes: List[Node]) -> Optional[Node]:
+        """
+        Select the hub node per Invariant 3.0.
+
+        INVARIANT 3.0 (Hub Node Invariant - Foundational, Non-Negotiable):
+        - Every per-sentence graph always has at least one hub node
+        - The hub node is explicitly designated
+        - The hub node is visually represented as a blue node
+        - There is no valid per-sentence graph without a hub node
+
+        Returns None only if explicit_nodes is empty (no graph to build).
+        """
         if not explicit_nodes:
+            logging.warning(
+                "INVARIANT 3.0: No explicit nodes provided - cannot select hub"
+            )
             return None
+
+        # Use fixed hub if already set and still in explicit nodes
         if self._fixed_hub is not None and self._fixed_hub in explicit_nodes:
+            self._current_hub = self._fixed_hub
             return self._fixed_hub
+
+        # Prefer CONCEPT nodes as hub candidates
         concepts = [n for n in explicit_nodes if n.node_type == NodeType.CONCEPT]
         candidates = concepts if concepts else explicit_nodes
+
         def node_degree(n: Node) -> int:
-            return sum(1 for e in self.graph.edges if e.source_node == n or e.dest_node == n)
+            return sum(
+                1 for e in self.graph.edges if e.source_node == n or e.dest_node == n
+            )
+
+        # Select highest-degree node (ties broken by name for determinism)
         hub = max(candidates, key=lambda n: (node_degree(n), n.get_text_representer()))
+
+        # Fix the hub for subsequent sentences
         if self._fixed_hub is None:
             self._fixed_hub = hub
+
+        # Track current hub for visualization (blue node)
+        self._current_hub = hub
+
+        logging.info(
+            "INVARIANT 3.0: Hub node selected: '%s' (degree=%d)",
+            hub.get_text_representer(),
+            node_degree(hub),
+        )
         return hub
+
+    def get_hub_node_name(self) -> Optional[str]:
+        """
+        Get the current hub node's text representation for visualization.
+
+        Per Invariant 3.0: The hub node is visually represented as a blue node.
+        """
+        if self._current_hub is not None:
+            return self._current_hub.get_text_representer()
+        if self._fixed_hub is not None:
+            return self._fixed_hub.get_text_representer()
+        return None
 
     def _ensure_explicit_backbone_connected(
         self,
         explicit_nodes: List[Node],
         sentence_text: str,
     ) -> Tuple[List[Edge], List[Tuple[str, str, str]]]:
-        """Ensure explicit backbone is connected via hub-anchored edges.
-
-        Returns:
-            Tuple of (added_edges, failed_connections) where failed_connections
-            is a list of (source, hub, reason) tuples for edges that couldn't be formed.
-        """
         added_edges: List[Edge] = []
         failed_connections: List[Tuple[str, str, str]] = []
 
@@ -595,6 +619,11 @@ class AMoCv4:
             subj = node.get_text_representer()
             obj = hub.get_text_representer()
             explicit_node_names = [n.get_text_representer() for n in explicit_nodes]
+
+            label = None
+            explanation = ""
+
+            # Attempt 1: Standard LLM call
             try:
                 result = self.client.get_edge_label_with_explanation(
                     subj, obj, sentence_text, explicit_node_names, self.persona
@@ -602,32 +631,58 @@ class AMoCv4:
                 label = result.get("label", "")
                 explanation = result.get("explanation", "")
             except Exception as e:
-                label = None
-                explanation = ""
-                failed_connections.append((subj, obj, f"LLM error: {str(e)[:50]}"))
                 logging.warning(
-                    "FAILED hub edge %s -> %s: LLM exception",
+                    "Hub edge %s -> %s: first attempt failed with LLM exception: %s",
                     subj,
                     obj,
+                    str(e)[:50],
                 )
-                continue
-            if not label or not label.strip():
-                failed_connections.append((subj, obj, "empty label from LLM"))
-                logging.warning(
-                    "FAILED hub edge %s -> %s: empty label from LLM",
-                    subj,
-                    obj,
-                )
-                continue
-            if not self._is_valid_relation_label(label):
-                failed_connections.append((subj, obj, f"invalid label: {label}"))
-                logging.warning(
-                    "FAILED hub edge %s -> %s: invalid label '%s'",
+
+            # Use relaxed validation for hub edges (accepts verbs and adjectives per 3.2)
+            if label and self._is_valid_hub_edge_label(label):
+                pass  # Label is valid, proceed
+            else:
+                # Attempt 2: Retry if first attempt failed
+                logging.info(
+                    "Hub edge %s -> %s: retrying (label was: '%s')",
                     subj,
                     obj,
                     label,
                 )
+                try:
+                    result = self.client.get_edge_label_with_explanation(
+                        subj, obj, sentence_text, explicit_node_names, self.persona
+                    )
+                    label = result.get("label", "")
+                    explanation = result.get("explanation", "")
+                except Exception as e:
+                    logging.warning(
+                        "Hub edge %s -> %s: retry also failed with exception: %s",
+                        subj,
+                        obj,
+                        str(e)[:50],
+                    )
+
+            # INVARIANT 3.4: Failure Is Explicit, Never Silent
+            # If no valid label after retries, emit diagnostic and skip (no fabricated edges)
+            if not label or not self._is_valid_hub_edge_label(label):
+                failure_reason = (
+                    f"invalid label after retry: '{label}'"
+                    if label
+                    else "no label generated"
+                )
+                failed_connections.append((subj, obj, failure_reason))
+                # Store for explicit diagnostics per 3.4
+                self._connectivity_failures.append((subj, obj, failure_reason))
+                logging.error(
+                    "INVARIANT 3.4 VIOLATION: Explicit node '%s' cannot connect to hub '%s'. "
+                    "Reason: %s. No fabricated edge created.",
+                    subj,
+                    obj,
+                    failure_reason,
+                )
                 continue
+
             edge = self._add_edge(node, hub, label, self.edge_forget)
             if edge:
                 added_edges.append(edge)
@@ -644,22 +699,86 @@ class AMoCv4:
                 )
             else:
                 failed_connections.append((subj, obj, "edge rejected by _add_edge"))
+                self._connectivity_failures.append(
+                    (subj, obj, "edge rejected by _add_edge")
+                )
                 logging.warning(
                     "FAILED hub edge %s -> %s: rejected by _add_edge validation",
                     subj,
                     obj,
                 )
 
-        # Log summary of failures if any
+        # INVARIANT 3.4: Emit explicit diagnostic summary for all failures
         if failed_connections:
             logging.error(
-                "Backbone connection FAILURES (%d/%d): %s",
+                "INVARIANT 3.3 VIOLATION: Backbone connection FAILURES (%d/%d explicit nodes disconnected): %s",
                 len(failed_connections),
                 len(explicit_nodes) - 1,  # Exclude hub from count
                 "; ".join(f"{s}->{h}: {r}" for s, h, r in failed_connections),
             )
 
         return added_edges, failed_connections
+
+    def verify_connectivity_invariants(
+        self,
+        explicit_nodes: List[Node],
+        sentence_index: int,
+    ) -> List[Tuple[str, str, str]]:
+        """
+        Post-processing verification of connectivity invariants per Section 3.3-3.4.
+
+        INVARIANT 3.3: Every explicit node must have at least one labeled edge
+        connecting it to a hub node.
+
+        INVARIANT 3.4: If connectivity fails, emit explicit diagnostics.
+
+        Returns list of (node_name, hub_name, reason) for any disconnected nodes.
+        """
+        if len(explicit_nodes) < 2:
+            return []
+
+        hub = self._select_hub_node(explicit_nodes)
+        if hub is None:
+            logging.error(
+                "INVARIANT 3.0 VIOLATION: No hub node for sentence %d",
+                sentence_index,
+            )
+            return [("N/A", "N/A", "No hub node could be selected")]
+
+        explicit_set = set(explicit_nodes)
+        hub_name = hub.get_text_representer()
+        disconnected: List[Tuple[str, str, str]] = []
+
+        # Build graph of explicit node connections
+        G = nx.Graph()
+        for node in explicit_nodes:
+            G.add_node(node)
+        for edge in self.graph.edges:
+            if edge.source_node in explicit_set and edge.dest_node in explicit_set:
+                G.add_edge(edge.source_node, edge.dest_node)
+
+        # Check connectivity to hub for each explicit node
+        for node in explicit_nodes:
+            if node == hub:
+                continue
+            if not G.has_node(node) or not nx.has_path(G, node, hub):
+                node_name = node.get_text_representer()
+                disconnected.append(
+                    (node_name, hub_name, "No path to hub in explicit backbone")
+                )
+
+        # INVARIANT 3.4: Emit explicit diagnostics
+        if disconnected:
+            logging.error(
+                "INVARIANT 3.3 VERIFICATION FAILED for sentence %d: "
+                "%d explicit nodes not connected to hub '%s': %s",
+                sentence_index,
+                len(disconnected),
+                hub_name,
+                ", ".join(n for n, _, _ in disconnected),
+            )
+
+        return disconnected
 
     def _filter_inferred_for_attachment(
         self,
@@ -672,8 +791,10 @@ class AMoCv4:
         subj, rel, obj = relationship
         explicit_lemma_keys = {tuple(n.lemmas) for n in explicit_nodes}
         explicit_word_set = {w.lower() for w in explicit_words}
+
         def _lemma_key(text: str) -> tuple[str, ...]:
             return tuple(get_concept_lemmas(self.spacy_nlp, text))
+
         subj_key = _lemma_key(subj)
         obj_key = _lemma_key(obj)
         subj_is_explicit = (
@@ -690,7 +811,9 @@ class AMoCv4:
         max_distance: int,
     ) -> Tuple[set[Node], set[Edge]]:
         explicit_set = set(explicit_nodes)
-        distances = self._distances_from_sources_active_edges(explicit_set, max_distance)
+        distances = self._distances_from_sources_active_edges(
+            explicit_set, max_distance
+        )
         active_nodes = set(distances.keys())
         active_edges: set[Edge] = set()
         for edge in self.graph.edges:
@@ -795,6 +918,14 @@ class AMoCv4:
 
     def _record_edge_in_graphs(self, edge: Edge, sentence_idx: Optional[int]) -> None:
         u, v, lbl = self._edge_key(edge)
+        # Safety check: skip recording edges with empty/whitespace labels
+        if not lbl or not lbl.strip():
+            logging.warning(
+                "Skipping recording edge with empty label: %s -> %s",
+                u,
+                v,
+            )
+            return
         introduced = self._triplet_intro.get((u, lbl, v))
         if introduced is None:
             introduced = (
@@ -839,6 +970,9 @@ class AMoCv4:
         trips: List[Tuple[str, str, str]] = []
         for u, v, key, data in graph.edges(keys=True, data=True):
             rel = data.get("relation") or key
+            # Skip edges with empty/whitespace-only labels
+            if not rel or not str(rel).strip():
+                continue
             trips.append((u, rel, v))
         return trips
 
@@ -866,28 +1000,79 @@ class AMoCv4:
         norm = self._normalize_label(label)
         return norm in self.RELATION_BLACKLIST
 
-    def _is_verb_relation(self, label: str) -> bool:
+    def _is_verb_or_adjective_relation(self, label: str) -> bool:
         doc = self.spacy_nlp(label)
-        has_verb = False
+        has_verb_or_adj = False
         for tok in doc:
             if not getattr(tok, "is_alpha", False):
                 continue
-            if tok.pos_ in {"ADJ", "NOUN", "PROPN", "ADV"}:
+            # Accept VERB, AUX (auxiliary verbs like 'is'), or ADJ
+            if tok.pos_ in {"VERB", "AUX", "ADJ"}:
+                has_verb_or_adj = True
+            # Reject NOUN, PROPN, ADV as standalone relations
+            elif tok.pos_ in {"NOUN", "PROPN", "ADV"}:
                 return False
-            if tok.pos_ in {"VERB", "AUX"}:
-                has_verb = True
-        return has_verb
+        return has_verb_or_adj
 
     def _is_valid_relation_label(self, label: str) -> bool:
-        if not label:
+        """
+        Validate edge labels per Invariant 3.2.
+
+        Edges may be verbs or adjectives (e.g., 'is_young', 'rides_through').
+        Unlabeled or purely nominal edges are forbidden.
+        """
+        # Explicitly handle None, empty string, and whitespace-only labels
+        if not label or not isinstance(label, str):
             return False
-        if self._is_generic_relation(label):
+        label_stripped = label.strip()
+        if not label_stripped:
             return False
-        if self._is_blacklisted_relation(label):
+        if self._is_generic_relation(label_stripped):
             return False
-        if not self._is_verb_relation(label):
+        if self._is_blacklisted_relation(label_stripped):
+            return False
+        # Per 3.2: Accept verb OR adjective relations
+        if not self._is_verb_or_adjective_relation(label_stripped):
             return False
         return True
+
+    def _is_valid_hub_edge_label(self, label: str) -> bool:
+        """
+        Relaxed validation for hub-anchoring edges per Invariants 3.2 and 3.3.
+
+        Hub edges connect explicit nodes to the central hub node to ensure
+        graph connectivity. We accept:
+        - Verb labels (action verbs, auxiliary verbs)
+        - Adjectival labels (e.g., 'is_young', 'is_fortified')
+        - Labels from the hub-edge acceptable set
+
+        Per 3.2: Adjectival edges count toward connectivity guarantees.
+        """
+        if not label or not isinstance(label, str):
+            return False
+        label_stripped = label.strip()
+        if not label_stripped:
+            return False
+
+        # Normalize for comparison
+        norm = self._normalize_label(label_stripped)
+
+        # Accept labels from the hub-edge acceptable set
+        if norm in self.HUB_EDGE_ACCEPTABLE_LABELS:
+            return True
+
+        # Accept labels with a verb (AUX or VERB) or adjective
+        doc = self.spacy_nlp(label_stripped)
+        has_verb_or_adj = any(
+            tok.pos_ in {"VERB", "AUX", "ADJ"}
+            for tok in doc
+            if getattr(tok, "is_alpha", False)
+        )
+        if has_verb_or_adj:
+            return True
+
+        # Reject everything else
+        return False
 
     def _normalize_endpoint_text(self, text: str, is_subject: bool) -> Optional[str]:
         if not text:
@@ -986,6 +1171,13 @@ class AMoCv4:
             else self._graph_edges_to_triplets(only_active=only_active)
         )
         age_for_filename = self.persona_age if self.persona_age is not None else -1
+
+        # Per Invariant 3.0: Hub node must be visually represented as blue
+        blue_node_set = set(highlight_nodes) if highlight_nodes else set()
+        hub_name = self.get_hub_node_name()
+        if hub_name:
+            blue_node_set.add(hub_name)
+
         try:
             saved_path = plot_amoc_triplets(
                 triplets=(
@@ -996,7 +1188,7 @@ class AMoCv4:
                 persona=self.persona,
                 model_name=self.model_name,
                 age=age_for_filename,
-                blue_nodes=highlight_nodes,
+                blue_nodes=blue_node_set,
                 output_dir=plot_dir,
                 step_tag=(
                     f"sent{sentence_index+1}_{mode}"
@@ -1139,7 +1331,9 @@ class AMoCv4:
                         current_sentence_text_based_nodes
                     ):
                         failure_detail = (
-                            f" Failures: {backbone_failures}" if backbone_failures else ""
+                            f" Failures: {backbone_failures}"
+                            if backbone_failures
+                            else ""
                         )
                         logging.error(
                             "Step 1 FAILED: Explicit backbone disconnected at sentence 1.%s",
@@ -1329,9 +1523,11 @@ class AMoCv4:
                     if not self._is_explicit_backbone_connected(
                         current_sentence_text_based_nodes
                     ):
-                        hub_edges, backbone_failures = self._ensure_explicit_backbone_connected(
-                            current_sentence_text_based_nodes,
-                            resolved_text,
+                        hub_edges, backbone_failures = (
+                            self._ensure_explicit_backbone_connected(
+                                current_sentence_text_based_nodes,
+                                resolved_text,
+                            )
                         )
                         added_edges.extend(hub_edges)
                     # Validate Step 1 result
@@ -1339,7 +1535,9 @@ class AMoCv4:
                         current_sentence_text_based_nodes
                     ):
                         failure_detail = (
-                            f" Failures: {backbone_failures}" if backbone_failures else ""
+                            f" Failures: {backbone_failures}"
+                            if backbone_failures
+                            else ""
                         )
                         logging.error(
                             "Step 1 FAILED: Explicit backbone disconnected at sentence %d.%s",
@@ -1511,7 +1709,11 @@ class AMoCv4:
                     mode="sentence_active",
                     triplets_override=self._graph_to_triplets(self.active_graph),
                     active_edges={(u, v) for u, v in self.active_graph.edges()},
-                    hub_edge_explanations=self._hub_edge_explanations if self._hub_edge_explanations else None,
+                    hub_edge_explanations=(
+                        self._hub_edge_explanations
+                        if self._hub_edge_explanations
+                        else None
+                    ),
                 )
                 # Cumulative memory view
                 self._plot_graph_snapshot(
@@ -1937,7 +2139,10 @@ class AMoCv4:
             return tuple(get_concept_lemmas(self.spacy_nlp, text))
 
         def _is_explicit(text: str) -> bool:
-            return text.lower() in explicit_word_set or _lemma_key(text) in explicit_lemma_keys
+            return (
+                text.lower() in explicit_word_set
+                or _lemma_key(text) in explicit_lemma_keys
+            )
 
         # Separate relationships into hub-attached vs inferred-only
         hub_attached: List[Tuple[str, str, str]] = []
@@ -1950,7 +2155,9 @@ class AMoCv4:
                 continue
             if relationship[0] == relationship[2]:
                 continue
-            if not isinstance(relationship[0], str) or not isinstance(relationship[2], str):
+            if not isinstance(relationship[0], str) or not isinstance(
+                relationship[2], str
+            ):
                 continue
 
             subj_is_explicit = _is_explicit(relationship[0])
@@ -2021,7 +2228,9 @@ class AMoCv4:
         # =====================================================
         # PASS 1: Hub-attached relationships (explicit backbone connected)
         # =====================================================
-        logging.debug("Step 0 Pass 1: Processing %d hub-attached inferences", len(hub_attached))
+        logging.debug(
+            "Step 0 Pass 1: Processing %d hub-attached inferences", len(hub_attached)
+        )
         for relationship in hub_attached:
             edge = _process_relationship(relationship)
             if edge:
@@ -2033,12 +2242,18 @@ class AMoCv4:
         # =====================================================
         if not self.strict_attachament_constraint:
             # In non-strict mode, process all inferred-only relationships
-            logging.debug("Step 0 Pass 2 (non-strict): Processing %d inferred-only relationships", len(inferred_only))
+            logging.debug(
+                "Step 0 Pass 2 (non-strict): Processing %d inferred-only relationships",
+                len(inferred_only),
+            )
             for relationship in inferred_only:
                 _process_relationship(relationship)
         else:
             # In strict mode, only accept if one endpoint connects to inference_connected_nodes
-            logging.debug("Step 0 Pass 2 (strict): Processing %d inferred-only relationships", len(inferred_only))
+            logging.debug(
+                "Step 0 Pass 2 (strict): Processing %d inferred-only relationships",
+                len(inferred_only),
+            )
             inference_lemma_keys = {tuple(n.lemmas) for n in inference_connected_nodes}
 
             for relationship in inferred_only:
@@ -2087,7 +2302,10 @@ class AMoCv4:
             return tuple(get_concept_lemmas(self.spacy_nlp, text))
 
         def _is_explicit(text: str) -> bool:
-            return text.lower() in explicit_word_set or _lemma_key(text) in explicit_lemma_keys
+            return (
+                text.lower() in explicit_word_set
+                or _lemma_key(text) in explicit_lemma_keys
+            )
 
         # Separate relationships into hub-attached vs inferred-only
         hub_attached: List[Tuple[str, str, str]] = []
@@ -2100,7 +2318,9 @@ class AMoCv4:
                 continue
             if relationship[0] == relationship[2]:
                 continue
-            if not isinstance(relationship[0], str) or not isinstance(relationship[2], str):
+            if not isinstance(relationship[0], str) or not isinstance(
+                relationship[2], str
+            ):
                 continue
 
             subj_is_explicit = _is_explicit(relationship[0])
@@ -2173,7 +2393,9 @@ class AMoCv4:
         # =====================================================
         # PASS 1: Hub-attached relationships (explicit backbone connected)
         # =====================================================
-        logging.debug("Pass 1: Processing %d hub-attached inferences", len(hub_attached))
+        logging.debug(
+            "Pass 1: Processing %d hub-attached inferences", len(hub_attached)
+        )
         for relationship in hub_attached:
             edge = _process_relationship(relationship)
             if edge:
@@ -2186,14 +2408,20 @@ class AMoCv4:
         # =====================================================
         if not self.strict_attachament_constraint:
             # In non-strict mode, process all inferred-only relationships
-            logging.debug("Pass 2 (non-strict): Processing %d inferred-only relationships", len(inferred_only))
+            logging.debug(
+                "Pass 2 (non-strict): Processing %d inferred-only relationships",
+                len(inferred_only),
+            )
             for relationship in inferred_only:
                 edge = _process_relationship(relationship)
                 if edge:
                     added_edges.append(edge)
         else:
             # In strict mode, only accept if one endpoint connects to inference_connected_nodes
-            logging.debug("Pass 2 (strict): Processing %d inferred-only relationships", len(inferred_only))
+            logging.debug(
+                "Pass 2 (strict): Processing %d inferred-only relationships",
+                len(inferred_only),
+            )
             inference_lemma_keys = {tuple(n.lemmas) for n in inference_connected_nodes}
 
             for relationship in inferred_only:

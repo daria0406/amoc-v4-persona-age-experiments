@@ -390,7 +390,8 @@ def plot_amoc_triplets(
         src = str(src).strip()
         dst = str(dst).strip()
         rel = str(rel).strip()
-        if not src or not dst:
+        # Skip edges with empty/missing nodes OR empty/missing labels
+        if not src or not dst or not rel:
             continue
         u, v = src, dst
         if (u, v) in edge_labels:
@@ -417,23 +418,34 @@ def plot_amoc_triplets(
     _inject_nodes(salient_nodes)
     _inject_nodes(inactive_nodes)
 
-    # Remove isolates, optionally keep only largest component, removed it to keep the
+    # GUARANTEE 1 & 5: Keep ALL explicit/salient/inactive nodes visible.
+    # Do NOT use largest_component_only to hide disconnection issues.
+    # The graph should already be connected through the pipeline's hub-first attachment.
+    anchor_nodes = (
+        set(explicit_nodes or [])
+        | set(salient_nodes or [])
+        | set(inactive_nodes or [])
+    )
+
     if "sentence" in (step_tag or "") and active_edge_set:
         # Only remove nodes that are neither incident to active edges nor provided anchors
         nodes_with_edges = {u for e in G.edges() for u in e}
-        nodes_to_keep = (
-            nodes_with_edges
-            | set(explicit_nodes or [])
-            | set(salient_nodes or [])
-            | set(inactive_nodes or [])
-        )
+        nodes_to_keep = nodes_with_edges | anchor_nodes
         G.remove_nodes_from([n for n in G.nodes() if n not in nodes_to_keep])
+
     if G.number_of_nodes() == 0:
         return save_path
-    components = list(nx.connected_components(G.to_undirected()))
-    if largest_component_only and components:
-        largest = max(components, key=len)
-        G = G.subgraph(largest).copy()
+
+    # GUARANTEE 5: Do NOT apply largest_component_only as a shortcut.
+    # Instead, always include anchor nodes and let the graph show its true connectivity.
+    # This makes disconnection issues visible rather than hidden.
+    if largest_component_only:
+        components = list(nx.connected_components(G.to_undirected()))
+        if components:
+            largest = max(components, key=len)
+            # Always include anchor nodes even if not in largest component
+            nodes_to_keep = largest | anchor_nodes
+            G = G.subgraph(nodes_to_keep).copy()
 
     # SENTENCE ANCHORING    ----------------------------
     anchors: set[str] = set()
@@ -449,26 +461,6 @@ def plot_amoc_triplets(
         anchors=anchors,
         hops=2,
     )
-    G = G_draw
-    # Bridge components for visualization so all provided nodes appear connected.
-    components_draw = list(nx.connected_components(G_draw))
-    if len(components_draw) > 1:
-        anchor_node = None
-        for candidate in (explicit_nodes or []):
-            if candidate in G_draw:
-                anchor_node = candidate
-                break
-        if anchor_node is None and components_draw:
-            anchor_node = next(iter(components_draw[0]))
-        if anchor_node is not None:
-            for comp in components_draw:
-                if anchor_node in comp:
-                    continue
-                rep = next(iter(comp))
-                G_draw.add_edge(anchor_node, rep)
-                edge_labels[(anchor_node, rep)] = edge_labels.get(
-                    (anchor_node, rep), ""
-                )
     G = G_draw
     # --------------------------------------
 

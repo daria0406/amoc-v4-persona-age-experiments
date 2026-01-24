@@ -29,6 +29,8 @@ IMPORTANT CONNECTIVITY CONSTRAINT: Every relationship you output must include:
 
 Do NOT output relationships that only connect new text nodes to other new text nodes if neither side attaches to the existing graph.
 
+HUB-FIRST ATTACHMENT: Among the existing graph nodes, prioritize connections to the node(s) with the LOWEST score (score=0 means most central/hub). Every explicit concept from the current sentence should ideally have at least one relationship connecting it to the most central node (hub) in the graph. If a direct connection to the hub is semantically justified by the text, include it.
+
 List them as a Python list and do not provide additional explanation."""
 
 NEW_RELATIONSHIPS_FOR_FIRST_SENTENCE_PROMPT = """I want to build a knowledge graph using the provided text. The graph should consist of two types of nodes: concept nodes and property nodes. Concepts nodes represent objects or persons from the story and are generally represented by nouns in the text. Property nodes describe the concepts nodes and are generally represented by adjectives in the text. An edge connects a concept to another concept or a concept to a property, and it is described by a relationship between the connected nodes.
@@ -48,6 +50,8 @@ Always base every edge strictly on information that is stated or clearly implied
 
 I want you to tell me the relationships (edges) between the nodes given the text. The text is:
 {text}
+
+HUB CONNECTIVITY: Ensure that the resulting graph is well-connected. Choose one central concept (the one most frequently related to other concepts) as the hub, and ensure that all other explicit nodes have at least one relationship path to this hub. Prioritize direct connections to the hub where semantically justified.
 
 List them as a Python list and do not provide additional explanation."""
 
@@ -111,6 +115,8 @@ Always base every edge strictly on information that is stated or clearly implied
 Create relationships between the nodes from the text and the new concepts and the new properties (as you see fit). The text is:
 {text}
 
+HUB-FIRST ATTACHMENT: When creating inferred relationships, prioritize connections that attach new inferred nodes to the most central explicit node (hub) or to other explicit nodes from the sentence. Inferred nodes should connect to the explicit backbone first, ensuring the graph remains well-connected through the hub.
+
 Provide them in the following format:
 {{
     "concept_relationships": [concept_relation1, concept_relation2, ...],
@@ -162,6 +168,8 @@ Always base every edge strictly on information that is stated or clearly implied
 
 Create relationships between the nodes from the text and the new concepts and the new properties (as you see fit). The text is:
 {text}
+
+HUB-FIRST ATTACHMENT: When creating inferred relationships, prioritize connections that attach new inferred nodes to the most central explicit node (hub) or to other explicit nodes from the sentence. Inferred nodes should connect to the explicit backbone first, ensuring the graph remains well-connected through the hub.
 
 Provide them in the following format:
 {{
@@ -214,6 +222,8 @@ IMPORTANT CONNECTIVITY CONSTRAINT: Every relationship you output must include:
 
 Do NOT output relationships that only connect new text nodes to other new text nodes if neither side attaches to the existing graph.
 
+HUB-FIRST ATTACHMENT: Among the existing graph nodes, prioritize connections to the node(s) with the LOWEST score (score=0 means most central/hub). Every explicit concept from the current sentence should ideally have at least one relationship connecting it to the most central node (hub) in the graph. If a direct connection to the hub is semantically justified by the text, include it.
+
 List them as a Python list and do not provide additional explanation."""
 
 NEW_RELATIONSHIPS_FOR_FIRST_SENTENCE_PROMPT = """I want to build a knowledge graph using the provided text. The graph should consist of two types of nodes: concept nodes and property nodes. Concepts nodes represent objects or persons from the story and are generally represented by nouns in the text. Property nodes describe the concepts nodes and are generally represented by adjectives in the text. An edge connects a concept to another concept or a concept to a property, and it is described by a relationship between the connected nodes.
@@ -233,6 +243,8 @@ Always base every edge strictly on information that is stated or clearly implied
 
 I want you to tell me the relationships (edges) between the nodes given the text. The text is:
 {text}
+
+HUB CONNECTIVITY: Ensure that the resulting graph is well-connected. Choose one central concept (the one most frequently related to other concepts) as the hub, and ensure that all other explicit nodes have at least one relationship path to this hub. Prioritize direct connections to the hub where semantically justified.
 
 List them as a Python list and do not provide additional explanation."""
 
@@ -296,6 +308,8 @@ Always base every edge strictly on information that is stated or clearly implied
 Create relationships between the nodes from the text and the new concepts and the new properties (as you see fit). The text is:
 {text}
 
+HUB-FIRST ATTACHMENT: When creating inferred relationships, prioritize connections that attach new inferred nodes to the most central explicit node (hub) or to other explicit nodes from the sentence. Inferred nodes should connect to the explicit backbone first, ensuring the graph remains well-connected through the hub.
+
 Provide them in the following format:
 {{
     "concept_relationships": [concept_relation1, concept_relation2, ...],
@@ -347,6 +361,8 @@ Always base every edge strictly on information that is stated or clearly implied
 
 Create relationships between the nodes from the text and the new concepts and the new properties (as you see fit). The text is:
 {text}
+
+HUB-FIRST ATTACHMENT: When creating inferred relationships, prioritize connections that attach new inferred nodes to the most central explicit node (hub) or to other explicit nodes from the sentence. Inferred nodes should connect to the explicit backbone first, ensuring the graph remains well-connected through the hub.
 
 Provide them in the following format:
 {{

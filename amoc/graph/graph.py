@@ -61,6 +61,9 @@ class Graph:
     ) -> Optional[Edge]:
         if source_node == dest_node:
             return None
+        # Safety net: reject edges with empty/whitespace-only labels
+        if not label or not isinstance(label, str) or not label.strip():
+            return None
         edge = Edge(
             source_node,
             dest_node,
