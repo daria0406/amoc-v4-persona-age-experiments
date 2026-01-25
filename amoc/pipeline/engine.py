@@ -40,6 +40,7 @@ class AgeAwareAMoCEngine:
         edge_forget: Optional[int] = None,
         story_text: Optional[str] = None,
         matrix_dir_base: Optional[str] = None,
+        force_node: bool = False,
     ) -> List[Tuple[str, str, str]]:
 
         try:
@@ -73,5 +74,6 @@ class AgeAwareAMoCEngine:
             graphs_output_dir=graphs_output_dir,
             highlight_nodes=highlight_nodes,
             largest_component_only=largest_component_only,
+            force_node=force_node,
         )
         return final_triplets, sentence_triplets, cumulative_triplets

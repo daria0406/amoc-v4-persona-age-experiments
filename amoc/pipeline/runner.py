@@ -124,6 +124,7 @@ def process_persona_csv(
     single_anchor_hub: bool = True,
     edge_forget: Optional[int] = None,
     story_text: Optional[str] = None,
+    force_node: bool = False,
 ) -> None:
     short_filename = os.path.basename(filename)
     print(f"\n=== Processing File (chunk): {short_filename} ===")
@@ -250,6 +251,7 @@ def process_persona_csv(
                         story_text=story_text,
                         edge_forget=edge_forget,
                         matrix_dir_base=str(output_dir),
+                        force_node=force_node,
                     )
 
                     records = []
@@ -453,7 +455,6 @@ def process_persona_csv(
                         if final_records:
                             seen_final = set()
                             deduped_final = []
-
                             for rec in final_records:
                                 key = (
                                     rec["original_index"],

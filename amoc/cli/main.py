@@ -253,6 +253,7 @@ def main(argv: List[str]) -> None:
                 single_anchor_hub=args.single_anchor_hub,
                 edge_forget=args.edge_forget,
                 story_text=story_text,
+                force_node=True,
             )
     finally:
         elapsed = time.time() - total_start

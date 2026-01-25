@@ -51,6 +51,7 @@ class Edge:
         self.similarity_threshold = 0.8
         self.embedding: Optional["np.ndarray"] = _maybe_embed(label)
         self.created_at_sentence: Optional[int] = created_at_sentence
+        self.metadata: dict[str, bool] = {}
 
     def fade_away(self) -> None:
         self.forget_score -= 1

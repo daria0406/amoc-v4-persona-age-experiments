@@ -11,7 +11,9 @@ DEFAULT_BLUE_NODES: Iterable[str] = ()
 # LAYOUT POLICY: Option B + D — Sub-Rings as primary, Collision as fallback
 # When nodes at the same hop distance exceed threshold, split into sub-rings
 MAX_NODES_PER_RING = 6  # Split ring if more than this many nodes
-SUB_RING_RADIUS_OFFSET = 0.15  # Small radial offset between sub-rings (fraction of ring_step)
+SUB_RING_RADIUS_OFFSET = (
+    0.15  # Small radial offset between sub-rings (fraction of ring_step)
+)
 MIN_SPACING_PADDING = 0.25  # 25% padding on node diameter for collision detection
 RADIUS_GROWTH_MIN = 1.8  # Minimum allowed radius growth factor
 RADIUS_GROWTH_MAX = 2.2  # Maximum allowed radius growth factor
@@ -100,7 +102,12 @@ def _set_axes_limits(ax, pos: Dict[str, Tuple[float, float]]) -> None:
 
 
 def _node_required_center_distance_data(
-    fig, ax, *, node_size: float, pad_px: float = 6.0, use_percentage_padding: bool = True
+    fig,
+    ax,
+    *,
+    node_size: float,
+    pad_px: float = 6.0,
+    use_percentage_padding: bool = True,
 ) -> float:
     # node_size is matplotlib scatter "s" in points^2 (area).
     # LAYOUT POLICY: Use 25% padding (MIN_SPACING_PADDING) when use_percentage_padding=True
@@ -123,7 +130,10 @@ def _node_required_center_distance_data(
     _, y1 = ax.transData.transform((0.0, 1.0))
     px_per_x = max(1e-6, abs(x1 - x0))
     px_per_y = max(1e-6, abs(y1 - y0))
-    radius_data = max((radius_px + effective_pad_px) / px_per_x, (radius_px + effective_pad_px) / px_per_y)
+    radius_data = max(
+        (radius_px + effective_pad_px) / px_per_x,
+        (radius_px + effective_pad_px) / px_per_y,
+    )
     return 2.0 * radius_data
 
 
@@ -304,7 +314,10 @@ def _split_into_subrings(
         # No split needed - place all on single ring
         if n_nodes == 1:
             angle = level_seed
-            positions[nodes[0]] = (base_radius * math.cos(angle), base_radius * math.sin(angle))
+            positions[nodes[0]] = (
+                base_radius * math.cos(angle),
+                base_radius * math.sin(angle),
+            )
         elif n_nodes == 2:
             spread = 2.0 * math.pi / 3.0  # 120° to avoid straight line
             angles = [
@@ -312,11 +325,17 @@ def _split_into_subrings(
                 _wrap_angle(level_seed + spread / 2.0),
             ]
             for i, node in enumerate(nodes):
-                positions[node] = (base_radius * math.cos(angles[i]), base_radius * math.sin(angles[i]))
+                positions[node] = (
+                    base_radius * math.cos(angles[i]),
+                    base_radius * math.sin(angles[i]),
+                )
         else:
             for idx, node in enumerate(nodes):
                 angle = 2.0 * math.pi * idx / n_nodes + level_seed
-                positions[node] = (base_radius * math.cos(angle), base_radius * math.sin(angle))
+                positions[node] = (
+                    base_radius * math.cos(angle),
+                    base_radius * math.sin(angle),
+                )
         return positions
 
     # Split into sub-rings
@@ -337,7 +356,10 @@ def _split_into_subrings(
 
         for idx, node in enumerate(subring_nodes):
             angle = 2.0 * math.pi * idx / n_subring + subring_seed
-            positions[node] = (subring_radius * math.cos(angle), subring_radius * math.sin(angle))
+            positions[node] = (
+                subring_radius * math.cos(angle),
+                subring_radius * math.sin(angle),
+            )
 
     return positions
 
@@ -396,6 +418,7 @@ def plot_amoc_triplets(
     explicit_nodes: Optional[Iterable[str]] = None,
     salient_nodes: Optional[Iterable[str]] = None,
     inactive_nodes: Optional[Iterable[str]] = None,
+    inactive_nodes_for_title: Optional[Iterable[str]] = None,
     positions: Optional[Dict[str, Tuple[float, float]]] = None,
     avoid_edge_overlap: bool = True,
     active_edges: Optional[set[Tuple[str, str]]] = None,
@@ -416,6 +439,9 @@ def plot_amoc_triplets(
         # Find all connected components in G_full
         if G_full.number_of_nodes() == 0:
             return G_full.subgraph(nodes_to_keep).copy()
+
+        # NOTE: Main connectivity check is done after G is built (lines ~549-560)
+        # This helper only operates on G_full which is always the full graph
 
         # Get the connected component(s) containing at least one anchor
         anchor_components: set[frozenset[str]] = set()
@@ -460,79 +486,88 @@ def plot_amoc_triplets(
     filename = f"amoc_graph_{safe_model}_{safe_persona}_{age}{suffix}.png"
     save_path = os.path.join(out_dir, filename)
 
-    # POLICY A: Edge Preservation with Downgrading
-    # Never delete edges - annotate status instead, style rather than remove
+    # =========================================================================
+    # INVARIANT ENFORCEMENT DOCUMENTATION
+    # =========================================================================
+    #
+    # This plotting function enforces the following strict invariants:
+    #
+    # INVARIANT 1 — No Dangling Nodes:
+    #   Nodes must be derived EXCLUSIVELY from triplets. If a node has no edge,
+    #   it must NOT appear. Connectivity is enforced UPSTREAM in core.py via
+    #   _ensure_explicit_backbone_connected() and _ensure_displayed_nodes_connected().
+    #
+    # INVARIANT 2 — Graph Must Always Be Connected:
+    #   The graph passed here MUST already be connected. Disconnected graphs
+    #   are a hard error, not a layout problem. No visual compensation allowed.
+    #
+    # INVARIANT 3 — Plot Must Match Active Triplet CSV 1:1:
+    #   Every plotted edge must exist in the CSV. No edge invention, no
+    #   "__implicit__" synthesis. Empty relations are SKIPPED, not downgraded.
+    #
+    # DIVISION OF RESPONSIBILITY:
+    #   - core.py: Enforces connectivity, creates edges, handles LLM fallback
+    #   - graph_plots.py: Purely representational, assumes valid input
+    # =========================================================================
+
     G = nx.DiGraph()
     edge_labels: Dict[Tuple[str, str], str] = {}
-    edge_status: Dict[Tuple[str, str], str] = {}  # Track edge status for styling
+    edge_status: Dict[Tuple[str, str], str] = {}
     duplicate_edges: set[Tuple[str, str]] = set()
     active_edge_set = active_edges or set()
-    G_full = nx.DiGraph()
 
     for src, rel, dst in triplets:
         src = str(src).strip()
         dst = str(dst).strip()
         rel = str(rel).strip()
 
-        # POLICY A: Never skip edges - downgrade empty relations to "__implicit__"
+        # INVARIANT 3: Skip triplets with missing nodes or empty relations
+        # Empty relations are NOT downgraded to "__implicit__" - they are skipped
+        # If an edge needs to exist, it must have a valid label from upstream
         if not src or not dst:
-            continue  # Only skip if nodes are missing
-
+            continue
         if not rel:
-            rel = "__implicit__"  # Downgrade instead of delete
+            continue  # INVARIANT 3: No relation synthesis in plotter
 
         u, v = src, dst
         if (u, v) in edge_labels:
             duplicate_edges.add((u, v))
-            # POLICY A: Track duplicate but don't skip - first relation wins visually
             continue
 
+        is_structural = rel.startswith("structural::")
+        clean_rel = rel.replace("structural::", "").strip()
+
         G.add_edge(u, v)
-        G_full.add_edge(u, v)
-        edge_labels[(u, v)] = rel
-        edge_labels[(v, u)] = rel  # allow undirected lookups
-        edge_status[(u, v)] = "implicit" if rel == "__implicit__" else "normal"
 
-    # Inject explicit / salient / inactive nodes so they are retained even if isolated.
-    def _inject_nodes(nodes):
-        if not nodes:
-            return
-        for node in nodes:
-            if not node:
-                continue
-            if node not in G:
-                G.add_node(node)
-            if node not in G_full:
-                G_full.add_node(node)
+        edge_labels[(u, v)] = clean_rel
+        edge_labels[(v, u)] = clean_rel  # undirected lookup
 
-    _inject_nodes(explicit_nodes)
-    _inject_nodes(salient_nodes)
-    _inject_nodes(inactive_nodes)
+        if is_structural:
+            edge_status[(u, v)] = "structural"
+        else:
+            edge_status[(u, v)] = "normal"
 
-    # GUARANTEE 1 & 5: Keep ALL explicit/salient/inactive nodes visible.
-    # Do NOT use largest_component_only to hide disconnection issues.
-    # The graph should already be connected through the pipeline's hub-first attachment.
-    anchor_nodes = (
-        set(explicit_nodes or []) | set(salient_nodes or []) | set(inactive_nodes or [])
-    )
-
-    # POLICY A: Never remove nodes based on edge presence
-    # All anchor nodes (explicit, salient, inactive) are always preserved
-    # Disconnected nodes will be positioned on outer rings for visibility
-
+    # INVARIANT 1: Nodes derived ONLY from triplets - no injection
     if G.number_of_nodes() == 0:
         return save_path
 
-    # GUARANTEE 5: Do NOT apply largest_component_only as a shortcut.
-    # Instead, always include anchor nodes and let the graph show its true connectivity.
-    # This makes disconnection issues visible rather than hidden.
-    if largest_component_only:
-        components = list(nx.connected_components(G.to_undirected()))
-        if components:
-            largest = max(components, key=len)
-            # Always include anchor nodes even if not in largest component
-            nodes_to_keep = largest | anchor_nodes
-            G = G.subgraph(nodes_to_keep).copy()
+    # INVARIANT 2: Hard assertion - graph MUST be connected
+    # Disconnected graphs are a hard error, not a layout problem
+    if G.number_of_nodes() > 1:
+        undirected_G = G.to_undirected()
+        if not nx.is_connected(undirected_G):
+            components = list(nx.connected_components(undirected_G))
+            component_sizes = [len(c) for c in components]
+            raise RuntimeError(
+                f"INVARIANT 2 VIOLATION: Disconnected graph passed to plot_amoc_triplets. "
+                f"Found {len(components)} components with sizes {component_sizes}. "
+                f"Connectivity must be enforced upstream in core.py, not compensated visually."
+            )
+
+    plotted_nodes = set(G.nodes())
+
+    # largest_component_only is now only for backward compatibility
+    # With strict invariants, the graph should always be connected
 
     fig, ax = plt.subplots(figsize=(22, 18))
 
@@ -577,19 +612,6 @@ def plot_amoc_triplets(
         levels = nx.single_source_shortest_path_length(UG, hub)
         max_level = max(levels.values(), default=0)
 
-        # Include disconnected nodes (if any) on outer rings.
-        # Distribute them across multiple rings to prevent overlap when many exist.
-        unreachable = sorted([n for n in nodes if n not in levels and n != hub])
-        if unreachable:
-            # Calculate how many nodes can fit per ring without overlap
-            # Assume ~6 nodes per ring for comfortable spacing
-            nodes_per_ring = max(4, min(8, len(unreachable) // 2 + 1))
-            num_extra_rings = (len(unreachable) + nodes_per_ring - 1) // nodes_per_ring
-            for idx, node in enumerate(unreachable):
-                ring_offset = idx // nodes_per_ring
-                levels[node] = max_level + 1 + ring_offset
-            max_level += num_extra_rings
-
         ring_step = max(12.0, target_min_dist * 1.55)
         radii: Dict[int, float] = {}
 
@@ -605,7 +627,7 @@ def plot_amoc_triplets(
             # Calculate initial radius for bounded growth enforcement
             initial_radius = max(
                 (math.hypot(x, y) for x, y in pos.values() if (x, y) != (0.0, 0.0)),
-                default=ring_step
+                default=ring_step,
             )
             max_allowed_radius = initial_radius * RADIUS_GROWTH_MAX
 
@@ -658,9 +680,13 @@ def plot_amoc_triplets(
                     if existing_angles:
                         # Find largest gap and place sub-rings there
                         avg_existing = sum(existing_angles) / len(existing_angles)
-                        level_seed = _wrap_angle(avg_existing + math.pi)  # Opposite side
+                        level_seed = _wrap_angle(
+                            avg_existing + math.pi
+                        )  # Opposite side
 
-                    subring_positions = _split_into_subrings(ring_new, r, ring_step, level_seed)
+                    subring_positions = _split_into_subrings(
+                        ring_new, r, ring_step, level_seed
+                    )
                     pos.update(subring_positions)
                 else:
                     # Standard gap-filling for small number of new nodes
@@ -668,12 +694,16 @@ def plot_amoc_triplets(
                     existing_angles = {
                         n: _wrap_angle(math.atan2(y, x))
                         for n, (x, y) in pos.items()
-                        if n != hub and levels.get(n) == level and (x != 0.0 or y != 0.0)
+                        if n != hub
+                        and levels.get(n) == level
+                        and (x != 0.0 or y != 0.0)
                     }
                     chosen = _choose_angles_in_gaps(
                         existing_angles=existing_angles,
                         missing_nodes=ring_new,
-                        candidate_count=max(12, len(ring_new) + len(existing_angles) + 6),
+                        candidate_count=max(
+                            12, len(ring_new) + len(existing_angles) + 6
+                        ),
                     )
                     for node in ring_new:
                         angle = chosen.get(node, default_angle)
@@ -785,7 +815,7 @@ def plot_amoc_triplets(
                 # Check if we've hit the radius bound
                 current_max_r = max(
                     (math.hypot(x, y) for x, y in pos.values() if (x, y) != (0.0, 0.0)),
-                    default=0.0
+                    default=0.0,
                 )
                 if current_max_r >= max_allowed_radius:
                     break  # Don't exceed bounded growth
@@ -802,7 +832,10 @@ def plot_amoc_triplets(
             )
             min_dist = _min_pairwise_distance(pos)
             if min_dist > 0 and min_dist < required:
-                factor = min((required / min_dist) * 1.02, RADIUS_GROWTH_MAX / RADIUS_GROWTH_MIN)
+                factor = min(
+                    (required / min_dist) * 1.02,
+                    RADIUS_GROWTH_MAX / RADIUS_GROWTH_MIN,
+                )
                 for node, (x, y) in list(pos.items()):
                     if node == hub:
                         continue
@@ -874,29 +907,33 @@ def plot_amoc_triplets(
         (u, v) for u, v in G.edges() if (v, u) in G.edges()
     }
 
-    # POLICY A: Styling to distinguish between edge types
-    # - Normal active edges: solid black
-    # - Normal inactive edges: solid gray
-    # - Implicit edges (downgraded): dashed, lighter color
     normal_edges = []
     implicit_edges = []
+    structural_edges = []
+
     normal_edge_colors = []
     normal_edge_widths = []
+
     implicit_edge_colors = []
     implicit_edge_widths = []
 
+    structural_edge_colors = []
+    structural_edge_widths = []
+
     for u, v in G.edges():
-        is_implicit = edge_status.get((u, v)) == "implicit"
+        status = edge_status.get((u, v), "normal")
         is_active = (u, v) in active_edge_set
 
-        if is_implicit:
+        if status == "structural":
+            structural_edges.append((u, v))
+            structural_edge_colors.append("green")
+            structural_edge_widths.append(2.5)
+
+        elif status == "implicit":
             implicit_edges.append((u, v))
-            # Implicit edges: dashed, muted colors
-            if is_active:
-                implicit_edge_colors.append("#666699")  # Muted purple for active implicit
-            else:
-                implicit_edge_colors.append("#999999")  # Light gray for inactive implicit
+            implicit_edge_colors.append("#999999" if not is_active else "#666699")
             implicit_edge_widths.append(1.0)
+
         else:
             normal_edges.append((u, v))
             if is_active:
@@ -935,6 +972,20 @@ def plot_amoc_triplets(
             ax=ax,
         )
 
+    if structural_edges:
+        nx.draw_networkx_edges(
+            G,
+            pos,
+            edgelist=structural_edges,
+            edge_color=structural_edge_colors,
+            width=structural_edge_widths,
+            style="dashed",
+            arrows=True,
+            arrowsize=18,
+            connectionstyle="arc3,rad=0.0",
+            ax=ax,
+        )
+
     def _label_offset(u: str, v: str) -> Tuple[float, float]:
         x1, y1 = pos[u]
         x2, y2 = pos[v]
@@ -964,26 +1015,40 @@ def plot_amoc_triplets(
         label_text = edge_labels[(u, v)]
         is_implicit = edge_status.get((u, v)) == "implicit"
 
-        # POLICY A: Style implicit labels differently
-        if is_implicit:
-            # Show implicit edges with italicized "(implicit)" label in muted color
+        status = edge_status.get((u, v), "normal")
+
+        if status == "implicit":
             ax.text(
                 lx,
                 ly,
                 "(implicit)",
-                fontsize=8,
+                fontsize=12,
                 fontstyle="italic",
                 color="#666699",
                 ha="center",
                 va="center",
                 bbox=dict(facecolor="white", edgecolor="none", pad=0.2, alpha=0.8),
             )
+
+        elif status == "structural":
+            ax.text(
+                lx,
+                ly,
+                _pretty_text(label_text),
+                fontsize=12,  # 👈 bigger
+                fontweight="bold",  # 👈 emphasized
+                color="green",
+                ha="center",
+                va="center",
+                bbox=dict(facecolor="white", edgecolor="green", pad=0.25),
+            )
+
         else:
             ax.text(
                 lx,
                 ly,
                 _pretty_text(label_text),
-                fontsize=9,
+                fontsize=12,
                 color="darkred",
                 ha="center",
                 va="center",
@@ -1011,6 +1076,11 @@ def plot_amoc_triplets(
             cleaned = cleaned[: max_len - 3].rstrip() + "..."
         return cleaned
 
+    def _filter_to_plotted(nodes: Optional[Iterable[str]], plotted_nodes: set[str]):
+        if not nodes:
+            return None
+        return [n for n in nodes if n in plotted_nodes]
+
     def _format_nodes_line(label: str, nodes: Optional[Iterable[str]]) -> Optional[str]:
         if nodes is None:
             return None
@@ -1037,18 +1107,31 @@ def plot_amoc_triplets(
                 sentence_idx = int(m.group(1))
                 sentence_line = f"{sentence_idx}: {sentence_line}"
         sup_lines.append(f"Sentence {sentence_line}")
+    # Use inactive_nodes_for_title for title display (separate from rendering)
+    # This allows inactive nodes to appear in title but NOT be rendered in graph
     inactive_for_title = (
-        inactive_nodes if inactive_nodes is not None else deactivated_concepts
+        inactive_nodes_for_title
+        if inactive_nodes_for_title is not None
+        else (inactive_nodes if inactive_nodes is not None else deactivated_concepts)
     )
+
+    explicit_nodes_filtered = _filter_to_plotted(explicit_nodes, plotted_nodes)
+    salient_nodes_filtered = _filter_to_plotted(salient_nodes, plotted_nodes)
+    inactive_nodes_filtered = _filter_to_plotted(inactive_for_title, plotted_nodes)
+
     if inactive_for_title is not None:
         sup_lines.append("\n")
     for label, items in [
-        ("Explicit this sentence", explicit_nodes),
+        ("Explicit this sentence", explicit_nodes_filtered),
         (
             "Carry-over from previous sentences",
-            salient_nodes if (sentence_idx is not None and sentence_idx > 1) else None,
+            (
+                salient_nodes_filtered
+                if (sentence_idx is not None and sentence_idx > 1)
+                else None
+            ),
         ),
-        ("Inactive nodes (retained in memory)", inactive_for_title),
+        ("Inactive nodes (retained in memory)", inactive_nodes_filtered),
     ]:
         line = _format_nodes_line(label, items)
         if line:
