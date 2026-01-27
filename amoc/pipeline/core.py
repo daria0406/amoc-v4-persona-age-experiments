@@ -1594,7 +1594,7 @@ class AMoCv4:
                 self._ensure_displayed_nodes_connected(
                     list(displayed_node_set),
                     sentence_text,
-                    force_node=force_node,
+                    force_node=force,
                 )
             self._viz_positions = {
                 k: v for k, v in self._viz_positions.items() if k in displayed_node_set
