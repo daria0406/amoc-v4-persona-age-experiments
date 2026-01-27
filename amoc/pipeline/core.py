@@ -1974,6 +1974,7 @@ class AMoCv4:
             token.lemma_ not in self.spacy_nlp.Defaults.stop_words
         )
 
+    # get the explicit node
     def get_senteces_text_based_nodes(
         self, previous_sentences: List[Span], create_unexistent_nodes: bool = True
     ) -> Tuple[List[Node], List[str]]:
@@ -1989,14 +1990,14 @@ class AMoCv4:
                     text_based_words.append(word.text)
                 else:
                     if create_unexistent_nodes:
-                        if word.pos_ == "ADJ":
-                            new_node = self.graph.add_or_get_node(
-                                [word.lemma_],
-                                word.text,
-                                NodeType.PROPERTY,
-                                NodeSource.TEXT_BASED,
-                            )
-                        else:
+                        # if word.pos_ == "ADJ":
+                        #     new_node = self.graph.add_or_get_node(
+                        #         [word.lemma_],
+                        #         word.text,
+                        #         NodeType.PROPERTY,
+                        #         NodeSource.TEXT_BASED,
+                        #     )
+                        # else:
                             new_node = self.graph.add_or_get_node(
                                 [word.lemma_],
                                 word.text,
