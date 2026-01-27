@@ -817,6 +817,7 @@ class AMoCv4:
         highlight_nodes: Optional[Iterable[str]] = None,
         matrix_suffix: Optional[str] = None,
         largest_component_only: bool = False,
+        force_node: bool = False,
     ) -> List[Tuple[str, str, str]]:
         if not hasattr(self, "_amoc_matrix_records"):
             self._amoc_matrix_records = []
