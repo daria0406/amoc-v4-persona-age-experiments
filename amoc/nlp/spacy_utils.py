@@ -32,8 +32,43 @@ def is_content_word_and_non_stopword(nlp, token: Token) -> bool:
     )
 
 
+# to revert
 def get_content_words_from_sent(nlp, sent: Span) -> List[Token]:
-    return [token for token in sent if is_content_word_and_non_stopword(nlp, token)]
+    content_words: list[Token] = []
+
+    EXISTENTIAL_VERBS = {
+        "appear",
+        "emerge",
+        "arrive",
+        "materialize",
+        "manifest",
+        "surface",
+        "show",
+        "show_up",
+        "occur",
+    }
+
+    for tok in sent:
+        # --- EXISTENTIAL SUBJECT OVERRIDE ---
+        if (
+            tok.dep_ == "nsubj"
+            and tok.head.pos_ == "VERB"
+            and tok.head.lemma_ in EXISTENTIAL_VERBS
+            and tok.pos_ in {"NOUN", "PROPN"}
+            and tok.lemma_ not in nlp.Defaults.stop_words
+        ):
+            content_words.append(tok)
+            continue
+
+        # --- ORIGINAL AMoC LOGIC ---
+        if (
+            tok.pos_ in {"NOUN", "PROPN", "ADJ"}
+            and tok.dep_ not in {"det", "aux", "punct", "cc"}
+            and tok.lemma_ not in nlp.Defaults.stop_words
+        ):
+            content_words.append(tok)
+
+    return content_words
 
 
 def get_concept_lemmas(nlp, concept: str) -> List[str]:

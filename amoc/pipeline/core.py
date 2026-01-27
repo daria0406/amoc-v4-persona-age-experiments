@@ -403,9 +403,9 @@ class AMoCv4:
         active_edge_nodes = graph_active_edge_nodes or set()
         attachable_nodes: set[Node] = (
             set(current_sentence_nodes)  # Explicit: always attachable
-            | set(graph_active_nodes)     # Carry-over: active neighborhood
-            | active_edge_nodes           # Nodes with active edges
-            | self._anchor_nodes          # Anchors: connectivity guarantors
+            | set(graph_active_nodes)  # Carry-over: active neighborhood
+            | active_edge_nodes  # Nodes with active edges
+            | self._anchor_nodes  # Anchors: connectivity guarantors
         )
 
         # Build lemma key sets for efficient lookup
@@ -573,7 +573,8 @@ class AMoCv4:
         if not lbl or not lbl.strip():
             logging.warning(
                 "Skipping recording edge with empty label: %s -> %s",
-                u, v,
+                u,
+                v,
             )
             return
         introduced = self._triplet_intro.get((u, lbl, v))
@@ -774,6 +775,43 @@ class AMoCv4:
         )
         age_for_filename = self.persona_age if self.persona_age is not None else -1
         try:
+            # --- FIX: ensure every node that may be plotted has a concrete position ---
+            nodes_to_plot = set()
+
+            for u, _, v in triplets:
+                if u:
+                    nodes_to_plot.add(u)
+                if v:
+                    nodes_to_plot.add(v)
+
+            for lst in (inactive_nodes, explicit_nodes, salient_nodes, highlight_nodes):
+                if lst:
+                    nodes_to_plot.update(lst)
+
+            # Assign positions for any missing nodes
+            if nodes_to_plot:
+                # Build a temporary graph only for layout
+                G_tmp = nx.Graph()
+                G_tmp.add_nodes_from(nodes_to_plot)
+
+                # Use existing positions as fixed anchors
+                fixed = {
+                    n: self._viz_positions[n]
+                    for n in nodes_to_plot
+                    if n in self._viz_positions
+                }
+
+                new_pos = nx.spring_layout(
+                    G_tmp,
+                    pos=fixed if fixed else None,
+                    fixed=fixed.keys() if fixed else None,
+                    seed=42,
+                )
+
+                # Merge back into persistent positions
+                self._viz_positions.update(new_pos)
+            # ------------------------------------------------------------------------
+
             saved_path = plot_amoc_triplets(
                 triplets=(
                     self._graph_edges_to_triplets(only_active=True)
@@ -1063,6 +1101,9 @@ class AMoCv4:
                     )
                     if potential_new_edge:
                         added_edges.append(potential_new_edge)
+                        # to revert
+                        self._explicit_nodes_current_sentence.add(source_node)
+                        self._explicit_nodes_current_sentence.add(dest_node)
 
                 # infer new relationships logic...
                 inferred_concept_relationships, inferred_property_relationships = (
@@ -1241,8 +1282,8 @@ class AMoCv4:
                     for node in self.graph.nodes
                     if node.get_text_representer()
                 }
-                active_node_texts = (
-                    set(explicit_nodes_for_plot) | set(salient_nodes_for_plot)
+                active_node_texts = set(explicit_nodes_for_plot) | set(
+                    salient_nodes_for_plot
                 )
                 inactive_nodes_for_plot = sorted(
                     all_cumulative_node_texts - active_node_texts
