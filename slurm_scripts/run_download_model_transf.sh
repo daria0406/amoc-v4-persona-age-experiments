@@ -34,6 +34,7 @@ apptainer exec --nv \
   python "$PROJECT_ROOT/download_model_not_in_cache.py" \
   --model_name "$MODEL_ID"
 
+#python -c "from vllm import LLM; LLM(model='$MODEL_ID', download_dir='/export/projects/nlp/.cache')" 
 
 # # Optional: Unset the variable after use for security
 # unset HUGGING_FACE_HUB_TOKEN

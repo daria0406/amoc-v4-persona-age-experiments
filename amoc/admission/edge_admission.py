@@ -194,6 +194,18 @@ class EdgeAdmission:
             logging.info(f"EDGE_ADMISSION: rejected negation edge label: '{label}'")
             return None
 
+        # Reject floating inferred-to-inferred edges — both nodes must not be inference-based,
+        # as these produce concepts disconnected from the actual text (e.g. "ability relates_to skill")
+        if (
+            source_node.node_source == NodeSource.INFERENCE_BASED
+            and dest_node.node_source == NodeSource.INFERENCE_BASED
+        ):
+            logging.info(
+                f"EDGE_ADMISSION: rejected inferred-to-inferred edge: "
+                f"'{source_node.get_text_representer()}' --{label}--> '{dest_node.get_text_representer()}'"
+            )
+            return None
+
         # If both nodes are explicit in the current sentence, always allow
         explicit_nodes = self._get_explicit_nodes()
         both_explicit = source_node in explicit_nodes and dest_node in explicit_nodes

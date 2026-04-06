@@ -16,6 +16,10 @@ PROJECT_ROOT="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-pe
 CHUNKS_DIR="${PROJECT_ROOT}/personas_dfs/personas_refined_age/chunks"
 STORY_FILE="${1:-}"
 
+# Update transformers INSIDE the container before running
+SIF_IMAGE="/export/projects/nlp/containers/daria-vllm.sif"
+apptainer exec --nv "$SIF_IMAGE" pip install --upgrade transformers
+
 CHUNK_FILES=($(ls ${CHUNKS_DIR}/*.csv | sort))
 NUM_CHUNKS=${#CHUNK_FILES[@]}
 
@@ -42,12 +46,11 @@ if [[ -n "${STORY_FILE}" ]]; then
 fi
 
 bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
-    --models "Qwen/Qwen3-30B-A3B-Instruct-2507" \
+    --models "Qwen/Qwen3.5-122B-A10B" \
     --tp 2 \
     --max-rows 1 \
     --plot-after-each-sentence \
     --output-dir "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/small_example_output" \
     --file "${INPUT_FILE}" \
     --strict-reactivate-function \
-    --strict-attachament-constraint \
     ${STORY_ARG}
