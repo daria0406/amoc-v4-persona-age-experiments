@@ -150,6 +150,11 @@ class Graph:
             return None
         if not label or not isinstance(label, str) or not label.strip():
             return None
+        if (
+            source_node.node_source == NodeSource.INFERENCE_BASED
+            and dest_node.node_source == NodeSource.INFERENCE_BASED
+        ):
+            return None
 
         if inferred:
             source_score = getattr(source_node, "visibility_score", None)

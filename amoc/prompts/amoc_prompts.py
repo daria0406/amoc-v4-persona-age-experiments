@@ -476,6 +476,12 @@ VALIDATION RULES (apply in order):
    Valid: (charlemagne, fought, saxons)
    Invalid: (charlemagne, related to, saxons)
 
+6. NO INFERRED-TO-INFERRED CONNECTIONS:
+   If BOTH the subject AND object are inferred concepts (not explicitly mentioned in the sentence), the triple is INVALID.
+   A concept is "inferred" if it does NOT appear as a word or clear synonym in the sentence.
+   Valid: (charlemagne, is, king) - "charlemagne" and "king" appear in sentence
+   Invalid: (strategic, involves, reader) - neither "strategic" nor "reader" appears in sentence
+
 EXAMPLES:
 Input: (charlemagne, dresses in, beautiful)
 Output: {{"valid": false, "reason": "'dresses in' requires a noun object (what does he wear?)", "corrected_triple": null}}
