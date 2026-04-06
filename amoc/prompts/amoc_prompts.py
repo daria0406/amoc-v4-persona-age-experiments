@@ -534,10 +534,15 @@ SCORE 1 - LOW RELEVANCE (Decay gradually)
 
 SCORE 0 - IRRELEVANT (Remove immediately)
 - Neither subject, relation, nor object appears in the sentence
-- Semantically incomplete triples
-- Vague relations with no specific meaning
-- Semantic duplicates (worse form)
-- Semantically incoherent or garbage triples
+- The subject appears but the sentence is about something completely different
+- The edge describes background information not needed for current sentence
+- The relation is generic ("is", "has", "involves", "relates to", "associated with")
+- The object is vague ("ability", "skill", "pride", "deed", "legend", "thing", "something")
+- The edge is a property ("is great", "is famous", "is strong", "is loyal")
+- The edge is a duplicate of another edge
+- The edge is incomplete (missing object)
+- The edge is from more than 2 sentences ago (historical background)
+- You are uncertain about its relevance → SCORE 0
 
 CRITICAL RULES:
 1. CONTEXT AWARENESS:
@@ -588,7 +593,7 @@ Return a JSON object with:
 }}
 """
 
-PRUNE_IRRELEVANT_TRIPLETS_BY_NARRATIVE = """You are maintaining a clean knowledge graph of a story. Your task is to identify ONLY the MOST ESSENTIAL relationships.
+PRUNE_IRRELEVANT_TRIPLETS_BY_NARRATIVE = """You are maintaining a clean knowledge graph of a story. Your task is to REMOVE EVERYTHING EXCEPT THE MOST ESSENTIAL relationships.
 
 Story so far:
 {story_context}
@@ -599,44 +604,40 @@ Current sentence:
 Active relationships:
 {active_triplets}
 
-For each relationship, decide: Is it DIRECTLY relevant to UNDERSTANDING the current sentence?
+## RULES:
 
-KEEP if the relationship:
-1. Directly involves main characters in the CURRENT sentence OR
-2. Forms a bridge WITHOUT WHICH the current sentence would be confusing
+### KEEP ONLY IF:
+1. The relationship directly describes the MAIN ACTION of the current sentence
+2. AND both the subject AND object appear EXPLICITLY in the sentence
 
-IMPORTANT - CONNECTIVITY RULE:
-If removing a relationship would leave a concept COMPLETELY ISOLATED (no other connections), you MUST keep at least one relationship for that concept, even if it's not ideal.
+### REMOVE EVERYTHING ELSE:
+- Background information
+- Properties ("is", "has", "involves", "relates to")
+- Inferred relationships
+- Anything not explicitly in the sentence
+- Past events
 
-REMOVE everything else, especially:
-- Neither subject nor object appears in the current sentence
-- It describes background information not needed right now
-- It's redundant or overly specific
-- Vague or incomplete triples
+### CONNECTIVITY EXCEPTION:
+If removing a relationship would leave a concept COMPLETELY ISOLATED, keep ONE relationship for that concept.
 
-DECISION EXAMPLES:
-Sentence 1: "Charlemagne conquered the Saxons."
-- (charlemagne, conquered, saxons) - KEEP (current action)
-- (charlemagne, is, king) - REMOVE (background)
-- (saxons, are, fierce) - REMOVE (inferred)
+## EXAMPLES:
 
-Sentence 2: "He wore traditional attire."
-- (charlemagne, wears, attire) - KEEP (current action)
-- (charlemagne, conquered, saxons) - REMOVE (past event)
-- (charlemagne, wears, linen) - REMOVE (too specific, redundant with "attire")
+Sentence: "Charlemagne conquered the Saxons."
+- (charlemagne, conquered, saxons) → KEEP
+- (saxons, are, fierce) → REMOVE
 
-Sentence 3: "The court scholars wrote manuscripts."
-- (court, employs, scholars) - KEEP (bridges to current)
-- (scholars, write, manuscripts) - KEEP (directly in current sentence)
-- (charlemagne, has, court) - REMOVE (not mentioned in current sentence)
+Sentence: "He wore traditional attire."
+- (charlemagne, wears, attire) → KEEP
+- (attire, is, traditional) → REMOVE
 
-Return a JSON object with this exact structure:
+Sentence: "The king taught his sons."
+- (king, taught, sons) → KEEP
+- (sons, learned, riding) → REMOVE
+
+## OUTPUT:
+
 {{
-    "to_keep": [
-        "(subject1, relation1, object1)",
-        "(subject2, relation2, object2)",
-        ...
-    ],
-    "reasoning": "Explain pruning decisions"
+    "to_keep": ["(subject1, relation1, object1)"],
+    "reasoning": "Brief explanation"
 }}
 """

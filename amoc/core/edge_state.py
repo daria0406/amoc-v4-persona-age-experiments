@@ -27,14 +27,7 @@ class NodeActivationEngine:
                 and edge.dest_node == other_edge.dest_node
                 and edge.label.strip().lower() == other_edge.label.strip().lower()
             ):
-                if other_edge.visibility_score <= 0:
-                    other_edge.visibility_score = edge_visibility
-                else:
-                    other_edge.visibility_score = min(
-                        edge_visibility, other_edge.visibility_score + 1
-                    )
-                other_edge.active = True
-                other_edge.mark_as_current_sentence(reset_score=False)
+                other_edge.mark_as_current_sentence(reset_score=True)
                 return other_edge
 
         return None

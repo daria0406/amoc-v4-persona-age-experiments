@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional, List, Set, Dict, Tuple
 from collections import deque
 import networkx as nx
 from amoc.core.node import NodeSource
-from amoc.config.constants import MAX_CARRYOVER, MAX_TRIPLETS
+from amoc.config.constants import MAX_CARRYOVER, MAX_TRIPLETS, REACTIVATION_VISIBILITY
 from dataclasses import dataclass
 
 
@@ -176,11 +176,9 @@ class Decay:
             # SCORE 2: REACTIVATE (from inactive) or DECAY (if active)
             elif score == 2:
                 if edge.visibility_score <= 0:
-                    # Reactivate to full visibility
-                    edge.visibility_score = self._edge_visibility
+                    edge.visibility_score = REACTIVATION_VISIBILITY
                     edge.active = True
                     edge.mark_as_reactivated(reset_score=False)
-                    edge.protected_until_next_sentence = True
                     stats["reactivated"] = stats.get("reactivated", 0) + 1
                 else:
                     # Active edge — still decays by 1 like all other scores
@@ -291,7 +289,7 @@ class Decay:
             return 2
 
     # prune carryover nodes and inferred nodes
-    def apply_pruning(self, prev_sentences, threshold_for_pruning=5, aggressive=False):
+    def apply_pruning(self, prev_sentences, threshold_for_pruning=2, aggressive=True):
         # Get all active edges
         all_active_triplets = []
         edge_to_obj = {}
@@ -364,15 +362,10 @@ class Decay:
                 source_name = edge.source_node.get_text_representer()
                 dest_name = edge.dest_node.get_text_representer()
 
-                # Never prune edges involving explicit nodes
-                if (
-                    source_name in explicit_node_names
-                    or dest_name in explicit_node_names
-                ):
+                # Allow explicit nodes to be pruned (decay handles them)
+                if source_name in explicit_node_names or dest_name in explicit_node_names:
                     explicit_protected += 1
-                    # Explicit edges are protected from pruning entirely
-                    # Semantic decay already handles visibility reduction
-                    continue
+                    # REMOVED: continue - allow pruning to proceed
 
                 # Check if removing would break connectivity
                 if self.can_remove_edge(edge, connectivity_map):
@@ -386,15 +379,15 @@ class Decay:
                         f"vis {old_vis}→0"
                     )
                 else:
-                    # Critical edge - protect it, keep current visibility
+                    # Critical edge - decay it instead of fully protecting
                     protected += 1
-                    # DO NOT decay - just keep as-is
-                    logging.debug(f"protected critical edge: {triplet_str}")
+                    edge.reduce_visibility() 
+                    logging.debug(f"decayed critical edge: {triplet_str}")
 
         logging.info(
             f"pruning: removed {removed} edges, "
-            f"protected {protected} critical edges, "
-            f"protected {explicit_protected} explicit edges"
+            f"decayed {protected} critical edges, "
+            f"explicit edges affected: {explicit_protected}"
         )
 
     # inactivates zombie nodes after pruning and decay
@@ -554,8 +547,8 @@ class Decay:
 
         for edge in chain_edges:
             # Only reinforce if not already at max
-            if edge.visibility_score < self._edge_visibility:
-                edge.visibility_score = self._edge_visibility
+            if edge.visibility_score < REACTIVATION_VISIBILITY:
+                edge.visibility_score = REACTIVATION_VISIBILITY
                 edge.active = True
                 # Only mark as reactivated if it was inactive
                 if not edge.reactivated_this_sentence:
@@ -836,7 +829,7 @@ class Decay:
                 # Only reactivate inactive edges — don't override active visibility
                 if edge.visibility_score <= 0:
                     edge.mark_as_reactivated(
-                        reset_score=False, new_visibility=self._edge_visibility
+                        reset_score=False, new_visibility=REACTIVATION_VISIBILITY
                     )
                 if self._record_edge_fn and (
                     edge.is_asserted() or edge.is_reactivated()
@@ -868,12 +861,12 @@ class Decay:
                 # Only reactivate edges that are inactive (vis=0).
                 # Active edges follow the natural decay curve.
                 if edge.visibility_score <= 0:
-                    edge.visibility_score = self._edge_visibility
+                    edge.visibility_score = 2
                     edge.active = True
                     logging.info(
                         f"REACTIVATE: ({edge.source_node.get_text_representer()}, "
                         f"{edge.label}, {edge.dest_node.get_text_representer()}) "
-                        f"vis 0→{self._edge_visibility}"
+                        f"vis 0→{REACTIVATION_VISIBILITY}"
                     )
                 if edge.is_property_edge():
                     continue
@@ -893,7 +886,7 @@ class Decay:
                 # must apply to ALL edges here, not just LLM-selected ones.
                 if edge.visibility_score <= 0:
                     edge.mark_as_reactivated(
-                        reset_score=False, new_visibility=self._edge_visibility
+                        reset_score=False, new_visibility=REACTIVATION_VISIBILITY
                     )
                 if self._record_edge_fn and (
                     edge.is_asserted() or edge.is_reactivated()
@@ -928,7 +921,7 @@ class Decay:
             edge = edges[i - 1]
             # Only reactivate inactive edges — don't override active visibility
             if edge.visibility_score <= 0:
-                edge.visibility_score = self._edge_visibility
+                edge.visibility_score = 2
                 edge.active = True
             if edge.is_property_edge():
                 if self._record_edge_fn:
@@ -960,7 +953,7 @@ class Decay:
                 # Only reactivate inactive edges — don't override active visibility
                 if edge.visibility_score <= 0:
                     edge.mark_as_reactivated(
-                        reset_score=False, new_visibility=self._edge_visibility
+                        reset_score=False, new_visibility=REACTIVATION_VISIBILITY
                     )
                 if self._record_edge_fn and (
                     edge.is_asserted() or edge.is_reactivated()
@@ -1104,7 +1097,7 @@ class Decay:
         self._last_decay_decisions = self.apply_semantic_edge_decay()
 
         # Then pruning
-        self.apply_pruning(prev_sentences)
+        self.apply_pruning(prev_sentences, aggressive=True)
 
         # Enforce active/visibility invariant
         for edge in self._graph.edges:
