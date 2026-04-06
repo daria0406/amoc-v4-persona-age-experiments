@@ -105,7 +105,7 @@ class TripletRecorderV2:
 
             if edge.visibility_score <= 0:
                 edge_status = "inactive"
-            elif edge.created_at_sentence == sentence_index:
+            elif edge.created_at_sentence == sentence_index and edge.asserted_this_sentence and edge.visibility_score == 2:
                 edge_status = "asserted"
             elif edge.asserted_this_sentence:
                 edge_status = "explicit"
@@ -113,8 +113,6 @@ class TripletRecorderV2:
                 edge_status = "reactivated"
             elif edge.visibility_score == 1:
                 edge_status = "decaying"
-            elif edge.visibility_score >= 2:
-                edge_status = "carryover"
             else:
                 edge_status = "inactive"
 

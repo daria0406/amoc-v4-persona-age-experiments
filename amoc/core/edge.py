@@ -87,6 +87,8 @@ class Edge:
             self.active = self.visibility_score > 0
 
     def mark_as_current_sentence(self, reset_score: bool = True) -> None:
+        if reset_score:
+            self.visibility_score = 2
         logging.info(
             f"MARK ASSERTED: ({self.source_node.get_text_representer()}, "
             f"{self.label}, {self.dest_node.get_text_representer()}) "
