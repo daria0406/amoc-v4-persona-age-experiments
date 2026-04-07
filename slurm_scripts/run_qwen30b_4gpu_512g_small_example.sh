@@ -2,10 +2,9 @@
 #SBATCH --job-name=amoc_qwen_small_example
 #SBATCH --partition=dgxa100
 #SBATCH --nodes=1
-#SBATCH --ntasks=1
-#SBATCH --gres=gpu:tesla_a100:8
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=1TB
+#SBATCH --gres=gpu:tesla_a100:4
+#SBATCH --cpus-per-task=32
+#SBATCH --mem=256GB        
 #SBATCH --array=0-13%2
 #SBATCH --output=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%A_%a.out
 #SBATCH --error=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%A_%a.err
@@ -18,6 +17,7 @@ STORY_FILE="${1:-}"
 
 export HF_HOME="/export/projects/nlp/.cache"
 export TRANSFORMERS_CACHE="$HF_HOME"
+export CUDA_LAUNCH_BLOCKING=1   
 #export CUDA_VISIBLE_DEVICES=0,1,2,3
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
 
@@ -52,8 +52,8 @@ if [[ -n "${STORY_FILE}" ]]; then
 fi
 
 bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
-    --models "Qwen/Qwen3-235B-A22B-Instruct-2507" \
-    --tp 8 \
+    --models "Qwen/Qwen3-235B-A22B-Instruct-2507-FP8" \
+    --tp 4 \
     --max-rows 1 \
     --plot-after-each-sentence \
     --output-dir "${RUN_OUTPUT_DIR}" \

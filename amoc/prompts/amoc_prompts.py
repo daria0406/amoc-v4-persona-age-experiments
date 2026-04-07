@@ -472,7 +472,9 @@ VALIDATION RULES (apply in order):
    Valid: (charlemagne, is, handsome), (attire, is, traditional)
 
 5. AVOID VAGUE RELATIONS:
-   Prefer specific over "related to", "associated with", "involves"
+   Reject any relation that is vague or non-specific:
+   - "relates to", "related to", "associated with", "connected to"
+   - "involves", "concerns", "pertains to", "regarding"
    Valid: (charlemagne, fought, saxons)
    Invalid: (charlemagne, related to, saxons)
 
@@ -520,41 +522,38 @@ Active relationships in the reader's memory:
 {active_triplets}
 
 SCORING GUIDE (0-2):
-
-CRITICAL RULE - HIGHEST PRIORITY:
-For an edge to get SCORE 2, the RELATION or OBJECT must appear EXPLICITLY in the sentence.
-If only the SUBJECT appears, the score CANNOT be 2.
-
-SCORE 2 - RELEVANT (Keep as-is, no decay)
+SCORE 2 - RELEVANT 
+- For an edge to get SCORE 2, the RELATION or OBJECT must appear EXPLICITLY in the sentence. If only the SUBJECT appears, the score CANNOT be 2.
 - The RELATION or OBJECT appears EXACTLY or as a clear synonym in the current sentence
 - Example: For edge (charlemagne, is, king), the sentence MUST contain "king", "monarch", or "ruler"
 - Example: For edge (charlemagne, wears, attire), the sentence MUST contain "attire" or "clothes"
 - The edge directly describes an action or state explicitly mentioned in the current sentence
 - The edge bridges concepts to explicit story elements that appear in the current sentence
 
-SCORE 1 - LOW RELEVANCE (Decay gradually)
+SCORE 1 - LOW RELEVANCE 
 - Only the SUBJECT appears in the sentence, but the RELATION or OBJECT does NOT
-- Example: (charlemagne, is, king) when sentence has "Charlemagne" but not "king" = score 1
-- Generic background information about main characters that is not directly mentioned
-- Minor details from early sentences no longer connected to current narrative
+- The edge is about a main character but not directly referenced
+- The edge is 1-2 sentences old but still contextually related
+- Example: (charlemagne, is, king) when sentence mentions "he" or "Charlemagne" but not "king"
+- Example: (charlemagne, wears, attire) when sentence mentions "dressed" but not specific clothing
 
-SCORE 0 - IRRELEVANT (Remove immediately)
+SCORE 0 - IRRELEVANT 
 - Neither subject, relation, nor object appears in the sentence
-- The subject appears but the sentence is about something completely different
+- The sentence has completely shifted topics
 - The edge describes background information not needed for current sentence
 - The relation is generic ("is", "has", "involves", "relates to", "associated with")
 - The object is vague ("ability", "skill", "pride", "deed", "legend", "thing", "something")
 - The edge is a property ("is great", "is famous", "is strong", "is loyal")
 - The edge is a duplicate of another edge
 - The edge is incomplete (missing object)
-- The edge is from more than 2 sentences ago (historical background)
+- The edge is from more than 2 sentences ago with no reinforcement
 - You are uncertain about its relevance → SCORE 0
 
 CRITICAL RULES:
-1. CONTEXT AWARENESS:
-   - A triple's score can CHANGE based on later context
-   - Example: (pride, relates_to, ability) in sentence 1 with no context = score 0
-   - If sentence 3 discusses how pride affects ability, that same triple becomes score 2
+1. GRADUAL DECAY:
+    - NEVER give score 0 to edges about main characters unless the topic has completely changed
+    - Most edges should get score 1 when they're not directly mentioned
+    - Edges should typically take 1-2 sentences to decay from 2→1→0
 
 2. CONNECTIVITY PROTECTION:
    - NEVER assign score 0 to an edge if removing it would disconnect a node from the graph
@@ -565,9 +564,9 @@ CRITICAL RULES:
 3. DUPLICATE RESOLUTION:
    - When multiple edges represent the same fact, keep only the best form
    - Prefer "is + adjective" over "has + noun" for attributes
-   - Score the worse form as 0 (immediate removal)
+   - Score the worse form as 0 
 
-SCORING EXAMPLES:
+EXAMPLES:
 Context: "The king rode into battle."
 Active triplets:
 - (charlemagne, is, king) → SCORE 2 (Both subject and object implied by context)
@@ -610,24 +609,19 @@ Current sentence:
 Active relationships:
 {active_triplets}
 
-## RULES:
+Keep a relationship if:
+1. It involves a main character mentioned in the current sentence
+2. OR it provides context needed to understand the current sentence
+3. OR removing it would disconnect important concepts
 
-### KEEP ONLY IF:
-1. The relationship directly describes the MAIN ACTION of the current sentence
-2. AND both the subject AND object appear EXPLICITLY in the sentence
+Remove only if:
+- Neither subject nor object appears in or relates to the current sentence
+- The relationship is completely irrelevant to the current topic
 
-### REMOVE EVERYTHING ELSE:
-- Background information
-- Properties ("is", "has", "involves", "relates to")
-- Inferred relationships
-- Anything not explicitly in the sentence
-- Past events
-
-### CONNECTIVITY EXCEPTION:
+Connectivity Exception:
 If removing a relationship would leave a concept COMPLETELY ISOLATED, keep ONE relationship for that concept.
 
-## EXAMPLES:
-
+EXAMPLES:
 Sentence: "Charlemagne conquered the Saxons."
 - (charlemagne, conquered, saxons) → KEEP
 - (saxons, are, fierce) → REMOVE

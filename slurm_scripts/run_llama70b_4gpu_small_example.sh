@@ -12,6 +12,9 @@
 
 set -euo pipefail
 
+export VLLM_ATTENTION_BACKEND=FLASH_ATTN  
+export VLLM_USE_V1=1 
+
 PROJECT_ROOT="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments"
 CHUNKS_DIR="${PROJECT_ROOT}/personas_dfs/personas_refined_age/chunks"
 STORY_FILE="${1:-}"
