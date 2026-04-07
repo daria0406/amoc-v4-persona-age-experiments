@@ -88,8 +88,9 @@ class Inference:
                         self._persona,
                     )
                 )
-                if new_relationships:
-                    logging.info(f"Relationship generation attempt succeeded")
+                if not new_relationships:
+                    continue
+                logging.info(f"Relationship generation attempt succeeded")
                 return (
                     new_relationships["concept_relationships"],
                     new_relationships["property_relationships"],
