@@ -206,7 +206,7 @@ class RelationshipGraphBuilder:
         properties_per_node = defaultdict(int)
 
         for relationship in inferred_relationships:
-            if len(relationship) != 3:
+            if not isinstance(relationship, (list, tuple)) or len(relationship) != 3:
                 continue
             if not relationship[0] or not relationship[2]:
                 continue
@@ -408,7 +408,7 @@ class RelationshipGraphBuilder:
         properties_per_node = defaultdict(int)
 
         for relationship in inferred_relationships:
-            if len(relationship) != 3:
+            if not isinstance(relationship, (list, tuple)) or len(relationship) != 3:
                 continue
             if not relationship[0] or not relationship[2]:
                 continue
