@@ -10,7 +10,7 @@
 #SBATCH --output=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%j.out
 #SBATCH --error=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%j.err
 
-# export HUGGING_FACE_HUB_TOKEN="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"
+export HF_TOKEN_DOWNLOAD="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"
 
 SIF_IMAGE="/export/projects/nlp/containers/daria-vllm.sif"
 PROJECT_ROOT="$HOME/to_transfer/amoc-v4-persona-age-experiments/other_helpers"
@@ -24,9 +24,6 @@ fi
 
 echo "Downloading $MODEL_ID..."
 
-# 2. Call your wrapper, passing the required Python script and its argument.
-echo "Downloading $MODEL_ID..."
-
 apptainer exec --nv \
   -B "$PROJECT_ROOT:$PROJECT_ROOT" \
   -B /export/projects/nlp/.cache:/export/projects/nlp/.cache \
@@ -34,8 +31,5 @@ apptainer exec --nv \
   python "$PROJECT_ROOT/download_model_not_in_cache.py" \
   --model_name "$MODEL_ID"
 
-#python -c "from vllm import LLM; LLM(model='$MODEL_ID', download_dir='/export/projects/nlp/.cache')" 
-
-# # Optional: Unset the variable after use for security
-# unset HUGGING_FACE_HUB_TOKEN
+unset HF_TOKEN_DOWNLOAD
 

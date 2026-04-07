@@ -243,8 +243,8 @@ class Decay:
             if edge.asserted_this_sentence:
                 continue
 
-            if edge.reactivated_this_sentence:
-                continue
+            # if edge.reactivated_this_sentence:
+            #     continue
 
             triplet = f"({edge.source_node.get_text_representer()}, {edge.label}, {edge.dest_node.get_text_representer()})"
             candidate_strings.append(triplet)
@@ -289,7 +289,7 @@ class Decay:
             return 2
 
     # prune carryover nodes and inferred nodes
-    def apply_pruning(self, prev_sentences, threshold_for_pruning=5, aggressive=True, max_nodes=35):
+    def apply_pruning(self, prev_sentences, threshold_for_pruning=5, aggressive=True):
         all_active_triplets = []
         edge_to_obj = {}
 
@@ -299,11 +299,6 @@ class Decay:
             else set()
         )
         explicit_node_names = {node.get_text_representer() for node in explicit_nodes}
-        
-        carryover_nodes = set()
-        for node in self._graph.nodes:
-            if node.active and node not in explicit_nodes:
-                carryover_nodes.add(node)
 
         for edge in self._graph.edges:
             if edge.active:
@@ -316,9 +311,6 @@ class Decay:
 
         current_count = len(all_active_triplets)
         if current_count <= threshold_for_pruning:
-            if self._count_active_nodes() > max_nodes:
-                logging.info(f"pruning: node limit exceeded ({self._count_active_nodes()} > {max_nodes}), forcing aggressive pass")
-                self._force_prune_to_node_limit(max_nodes, explicit_nodes, carryover_nodes)
             return
 
         logging.info(
@@ -387,119 +379,117 @@ class Decay:
             f"decayed {protected} critical edges, "
             f"explicit edges affected: {explicit_protected}"
         )
-        
-        self._force_prune_to_node_limit(max_nodes, explicit_nodes, carryover_nodes)
 
-    def _count_active_nodes(self) -> int:
-        return sum(1 for n in self._graph.nodes if n.active)
+    # def _count_active_nodes(self) -> int:
+    #     return sum(1 for n in self._graph.nodes if n.active)
 
-    def _force_prune_to_node_limit(self, max_nodes: int, explicit_nodes: Set["Node"], carryover_nodes: Set["Node"], recursion_depth: int = 0):
-        max_depth = 5
+    # def _force_prune_to_node_limit(self, max_nodes: int, explicit_nodes: Set["Node"], carryover_nodes: Set["Node"], recursion_depth: int = 0):
+    #     max_depth = 5
         
-        current_nodes = self._count_active_nodes()
+    #     current_nodes = self._count_active_nodes()
         
-        if current_nodes <= max_nodes or recursion_depth >= max_depth:
-            if recursion_depth > 0:
-                logging.info(f"Node limit reached after {recursion_depth} passes: {current_nodes} nodes")
-            return
+    #     if current_nodes <= max_nodes or recursion_depth >= max_depth:
+    #         if recursion_depth > 0:
+    #             logging.info(f"Node limit reached after {recursion_depth} passes: {current_nodes} nodes")
+    #         return
         
-        logging.info(
-            f"NODE LIMIT: {current_nodes} nodes > {max_nodes} (pass {recursion_depth + 1}), "
-            f"targeting carryover + inferred nodes"
-        )
+    #     logging.info(
+    #         f"NODE LIMIT: {current_nodes} nodes > {max_nodes} (pass {recursion_depth + 1}), "
+    #         f"targeting carryover + inferred nodes"
+    #     )
         
-        inferred_nodes = set()
-        for node in self._graph.nodes:
-            if node.active and node.node_source == NodeSource.INFERENCE_BASED:
-                inferred_nodes.add(node)
+    #     inferred_nodes = set()
+    #     for node in self._graph.nodes:
+    #         if node.active and node.node_source == NodeSource.INFERENCE_BASED:
+    #             inferred_nodes.add(node)
         
-        actual_carryover = set()
-        for node in carryover_nodes:
-            if node.active and node not in explicit_nodes and node not in inferred_nodes:
-                actual_carryover.add(node)
+    #     actual_carryover = set()
+    #     for node in carryover_nodes:
+    #         if node.active and node not in explicit_nodes and node not in inferred_nodes:
+    #             actual_carryover.add(node)
         
-        other_nodes = set()
-        for node in self._graph.nodes:
-            if node.active and node not in explicit_nodes and node not in inferred_nodes and node not in actual_carryover:
-                other_nodes.add(node)
+    #     other_nodes = set()
+    #     for node in self._graph.nodes:
+    #         if node.active and node not in explicit_nodes and node not in inferred_nodes and node not in actual_carryover:
+    #             other_nodes.add(node)
         
-        logging.info(
-            f"Node breakdown: {len(inferred_nodes)} inferred, "
-            f"{len(actual_carryover)} carryover, "
-            f"{len(other_nodes)} other, "
-            f"{len(explicit_nodes)} explicit (protected)"
-        )
+    #     logging.info(
+    #         f"Node breakdown: {len(inferred_nodes)} inferred, "
+    #         f"{len(actual_carryover)} carryover, "
+    #         f"{len(other_nodes)} other, "
+    #         f"{len(explicit_nodes)} explicit (protected)"
+    #     )
         
-        excess = current_nodes - max_nodes
+    #     excess = current_nodes - max_nodes
         
-        removal_candidates = []
+    #     removal_candidates = []
         
-        for node in inferred_nodes:
-            removal_candidates.append(("inferred", node))
+    #     for node in inferred_nodes:
+    #         removal_candidates.append(("inferred", node))
         
-        for node in actual_carryover:
-            removal_candidates.append(("carryover", node))
+    #     for node in actual_carryover:
+    #         removal_candidates.append(("carryover", node))
         
-        for node in other_nodes:
-            removal_candidates.append(("other", node))
+    #     for node in other_nodes:
+    #         removal_candidates.append(("other", node))
         
-        scored_candidates = []
-        for priority, node in removal_candidates:
-            score = 0
+    #     scored_candidates = []
+    #     for priority, node in removal_candidates:
+    #         score = 0
             
-            if priority == "inferred":
-                score -= 100
-            elif priority == "carryover":
-                score -= 50
-            else:
-                score -= 10
+    #         if priority == "inferred":
+    #             score -= 100
+    #         elif priority == "carryover":
+    #             score -= 50
+    #         else:
+    #             score -= 10
             
-            active_edges = sum(1 for e in node.edges if e.active)
-            score -= active_edges * 2
+    #         active_edges = sum(1 for e in node.edges if e.active)
+    #         score -= active_edges * 2
             
-            max_vis = max((e.visibility_score for e in node.edges), default=0)
-            score -= max_vis
+    #         max_vis = max((e.visibility_score for e in node.edges), default=0)
+    #         score -= max_vis
             
-            if node.origin_sentence is not None:
-                age = self._current_sentence_index - node.origin_sentence
-                score -= min(age, 20)
+    #         if node.origin_sentence is not None:
+    #             age = self._current_sentence_index - node.origin_sentence
+    #             score -= min(age, 20)
             
-            scored_candidates.append((score, priority, node))
+    #         scored_candidates.append((score, priority, node))
         
-        scored_candidates.sort(key=lambda x: x[0])
+    #     scored_candidates.sort(key=lambda x: x[0])
         
-        removed_nodes = 0
-        removed_edges = 0
+    #     removed_nodes = 0
+    #     removed_edges = 0
         
-        for score, priority, node in scored_candidates[:excess]:
-            if node in explicit_nodes:
-                continue
+    #     for score, priority, node in scored_candidates[:excess]:
+    #         if node in explicit_nodes:
+    #             continue
             
-            edge_count = len(list(node.edges))
+    #         edge_count = len(list(node.edges))
             
-            for edge in list(node.edges):
-                if edge.active:
-                    edge.active = False
-                    edge.visibility_score = 0
-                    removed_edges += 1
-            removed_nodes += 1
+    #         for edge in list(node.edges):
+    #             if edge.active:
+    #                 edge.active = False
+    #                 edge.visibility_score = 0
+    #                 removed_edges += 1
+    #         removed_nodes += 1
             
-            logging.info(
-                f"FORCE PRUNE NODE: {node.get_text_representer()} "
-                f"({priority}, edges={edge_count}, score={score})"
-            )
+    #         logging.info(
+    #             f"FORCE PRUNE NODE: {node.get_text_representer()} "
+    #             f"({priority}, edges={edge_count}, score={score})"
+    #         )
         
-        if removed_nodes > 0:
-            remaining = self._count_active_nodes()
-            logging.info(
-                f"Force pruned {removed_nodes} nodes and {removed_edges} edges. "
-                f"Now at {remaining} active nodes"
-            )
+    #     if removed_nodes > 0:
+    #         remaining = self._count_active_nodes()
+    #         logging.info(
+    #             f"Force pruned {removed_nodes} nodes and {removed_edges} edges. "
+    #             f"Now at {remaining} active nodes"
+    #         )
             
-            if remaining > max_nodes:
-                self._force_prune_to_node_limit(max_nodes, explicit_nodes, carryover_nodes, recursion_depth + 1)
-        else:
-            logging.warning(f"Could not reduce node count below {max_nodes}. Current: {current_nodes}")
+    #         if remaining > max_nodes:
+    #             self._force_prune_to_node_limit(max_nodes, explicit_nodes, carryover_nodes, recursion_depth + 1)
+    #     else:
+    #         logging.warning(f"Could not reduce node count below {max_nodes}. Current: {current_nodes}")
 
     # inactivates zombie nodes after pruning and decay
     def prune_inactive_edgeless_nodes(self) -> List["Node"]:
