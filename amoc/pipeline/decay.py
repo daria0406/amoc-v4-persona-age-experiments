@@ -1,4 +1,6 @@
 import logging
+import csv
+import os
 from typing import TYPE_CHECKING, Optional, List, Set, Dict, Tuple
 from collections import deque
 import networkx as nx
@@ -47,6 +49,8 @@ class Decay:
         self._persona = None
         self._record_edge_fn = None
         self._last_decay_decisions: List[DecayDecision] = []
+        self._full_activation_matrix: Dict[str, List[float]] = {}
+        self._max_sentence_index: int = 0
 
     def set_decay_state_refs(
         self,
@@ -380,117 +384,6 @@ class Decay:
             f"explicit edges affected: {explicit_protected}"
         )
 
-    # def _count_active_nodes(self) -> int:
-    #     return sum(1 for n in self._graph.nodes if n.active)
-
-    # def _force_prune_to_node_limit(self, max_nodes: int, explicit_nodes: Set["Node"], carryover_nodes: Set["Node"], recursion_depth: int = 0):
-    #     max_depth = 5
-        
-    #     current_nodes = self._count_active_nodes()
-        
-    #     if current_nodes <= max_nodes or recursion_depth >= max_depth:
-    #         if recursion_depth > 0:
-    #             logging.info(f"Node limit reached after {recursion_depth} passes: {current_nodes} nodes")
-    #         return
-        
-    #     logging.info(
-    #         f"NODE LIMIT: {current_nodes} nodes > {max_nodes} (pass {recursion_depth + 1}), "
-    #         f"targeting carryover + inferred nodes"
-    #     )
-        
-    #     inferred_nodes = set()
-    #     for node in self._graph.nodes:
-    #         if node.active and node.node_source == NodeSource.INFERENCE_BASED:
-    #             inferred_nodes.add(node)
-        
-    #     actual_carryover = set()
-    #     for node in carryover_nodes:
-    #         if node.active and node not in explicit_nodes and node not in inferred_nodes:
-    #             actual_carryover.add(node)
-        
-    #     other_nodes = set()
-    #     for node in self._graph.nodes:
-    #         if node.active and node not in explicit_nodes and node not in inferred_nodes and node not in actual_carryover:
-    #             other_nodes.add(node)
-        
-    #     logging.info(
-    #         f"Node breakdown: {len(inferred_nodes)} inferred, "
-    #         f"{len(actual_carryover)} carryover, "
-    #         f"{len(other_nodes)} other, "
-    #         f"{len(explicit_nodes)} explicit (protected)"
-    #     )
-        
-    #     excess = current_nodes - max_nodes
-        
-    #     removal_candidates = []
-        
-    #     for node in inferred_nodes:
-    #         removal_candidates.append(("inferred", node))
-        
-    #     for node in actual_carryover:
-    #         removal_candidates.append(("carryover", node))
-        
-    #     for node in other_nodes:
-    #         removal_candidates.append(("other", node))
-        
-    #     scored_candidates = []
-    #     for priority, node in removal_candidates:
-    #         score = 0
-            
-    #         if priority == "inferred":
-    #             score -= 100
-    #         elif priority == "carryover":
-    #             score -= 50
-    #         else:
-    #             score -= 10
-            
-    #         active_edges = sum(1 for e in node.edges if e.active)
-    #         score -= active_edges * 2
-            
-    #         max_vis = max((e.visibility_score for e in node.edges), default=0)
-    #         score -= max_vis
-            
-    #         if node.origin_sentence is not None:
-    #             age = self._current_sentence_index - node.origin_sentence
-    #             score -= min(age, 20)
-            
-    #         scored_candidates.append((score, priority, node))
-        
-    #     scored_candidates.sort(key=lambda x: x[0])
-        
-    #     removed_nodes = 0
-    #     removed_edges = 0
-        
-    #     for score, priority, node in scored_candidates[:excess]:
-    #         if node in explicit_nodes:
-    #             continue
-            
-    #         edge_count = len(list(node.edges))
-            
-    #         for edge in list(node.edges):
-    #             if edge.active:
-    #                 edge.active = False
-    #                 edge.visibility_score = 0
-    #                 removed_edges += 1
-    #         removed_nodes += 1
-            
-    #         logging.info(
-    #             f"FORCE PRUNE NODE: {node.get_text_representer()} "
-    #             f"({priority}, edges={edge_count}, score={score})"
-    #         )
-        
-    #     if removed_nodes > 0:
-    #         remaining = self._count_active_nodes()
-    #         logging.info(
-    #             f"Force pruned {removed_nodes} nodes and {removed_edges} edges. "
-    #             f"Now at {remaining} active nodes"
-    #         )
-            
-    #         if remaining > max_nodes:
-    #             self._force_prune_to_node_limit(max_nodes, explicit_nodes, carryover_nodes, recursion_depth + 1)
-    #     else:
-    #         logging.warning(f"Could not reduce node count below {max_nodes}. Current: {current_nodes}")
-
     # inactivates zombie nodes after pruning and decay
     def prune_inactive_edgeless_nodes(self) -> List["Node"]:
         # First pass: deactivate any ghost edges (active=True, visibility<=0)
@@ -660,34 +553,6 @@ class Decay:
             logging.info(f"reinforced {reinforced_count} edges in inference chains")
 
     def enforce_node_limit(self, max_nodes: int = 20) -> None:
-        # Only count ACTIVE nodes toward the limit — inactive nodes are
-        # retained in memory and should not trigger further deactivation
-        # active_count = sum(1 for n in self._graph.nodes if n.active)
-        # if active_count <= max_nodes:
-        #     return
-
-        # # Protect explicit and carryover nodes from deactivation
-        # protected_nodes = set()
-        # if self._get_explicit_nodes:
-        #     protected_nodes.update(self._get_explicit_nodes())
-
-        # G_active, active_nodes, critical_nodes = self.identify_critical_nodes()
-        # # Add protected nodes to critical so they are never candidates
-        # critical_nodes = critical_nodes | protected_nodes
-        # current_sentence = getattr(self, "_current_sentence_idx", 0)
-        # node_scores = self.score_nodes(
-        #     G_active, active_nodes, current_sentence, critical_nodes
-        # )
-        # candidates, excess = self.select_removal_candidates(
-        #     node_scores, max_nodes, critical_nodes, active_only=True
-        # )
-
-        # if not candidates:
-        #     return
-
-        # safe_to_remove, would_fragment = self.simulate_removals(G_active, candidates)
-        # removed = self.deactivate_nodes(safe_to_remove, would_fragment, excess)
-        # self.log_removal_results(removed, excess, candidates)
         pass
 
     def identify_critical_nodes(self):
@@ -1121,19 +986,52 @@ class Decay:
                 }
             )
 
-        # Add verb activations: take the max activation of connected nodes minus 0.5.
-        # Paper: "Second, in the Landscape Model, verbs are treated as nodes. However, in AMoC v4.0, verbs are primarily found in the edges... Thus, verbs were assigned an activation score with the following procedure: the highest activation score of the nodes linked by the edge that the verb is part of, decayed by 0.5"
+        # ===== FIX: Only record verbs from edges asserted in the CURRENT sentence =====
+        # This ensures we only track verbs that actually appear in the text,
+        # not every possible relationship verb in the graph.
+        
+        # Set of linking verbs to skip (these are not content verbs)
+        linking_verbs = {
+            'is', 'are', 'was', 'were', 'be', 'being', 'been',
+            'has', 'have', 'had', 'having', 'does', 'do', 'did',
+            'involves', 'relates', 'includes', 'describes', 'becomes',
+            'remains', 'seems', 'appears', 'constitutes', 'represents',
+            'not related', 'not applicable', 'part of', 'marks', 
+            'not available', 'returns to', 'precedes'
+        }
+        
         verb_scores: Dict[str, float] = {}
+        
+        # Only consider edges that were ASSERTED in this sentence
+        # (i.e., edges that came directly from the text, not inferred)
         for edge in self._graph.edges:
+            # Skip if not asserted this sentence (only track text-origin verbs)
+            if not edge.asserted_this_sentence:
+                continue
+                
             if not edge.active:
                 continue
-            label = (edge.label or "").strip().lower()
+                
+            label = (edge.label or "").strip()
             if not label:
                 continue
+                
+            # Clean the verb label
+            token = label.replace("_", " ").strip().lower()
+            
+            # Skip linking verbs and other non-content verbs
+            if token in linking_verbs:
+                continue
+                
+            # Skip if the verb is too short or generic
+            if len(token) < 2:
+                continue
+                
             src_tok = node_token_fn(edge.source_node)
             dst_tok = node_token_fn(edge.dest_node)
             if not src_tok or not dst_tok:
                 continue
+                
             src_raw = node_raw_score.get(edge.source_node, max_distance + 1)
             dst_raw = node_raw_score.get(edge.dest_node, max_distance + 1)
             src_act = self.convert_to_landscape_score(src_raw)
@@ -1141,12 +1039,50 @@ class Decay:
             verb_act = max(src_act, dst_act) - 0.5
             if verb_act < 0.0:
                 verb_act = 0.0
-            prev = verb_scores.get(label)
+                
+            prev = verb_scores.get(token)
             if prev is None or verb_act > prev:
-                verb_scores[label] = verb_act
+                verb_scores[token] = verb_act
+                logging.debug(f"Recording verb '{token}' from asserted edge: {edge.source_node.get_text_representer()} -{label}-> {edge.dest_node.get_text_representer()} (score={verb_act})")
 
         for token, score in verb_scores.items():
             append_record_fn({"sentence": sentence_id, "token": token, "score": score})
+            
+        # Update full activation matrix for Spearman correlation
+        self._max_sentence_index = max(self._max_sentence_index, sentence_id)
+        
+        # Store all scores (concepts + verbs) for export
+        all_scores: Dict[str, float] = {}
+        for token, raw_score in token_to_raw_score.items():
+            all_scores[token] = self.convert_to_landscape_score(raw_score)
+        for token, score in verb_scores.items():
+            all_scores[token] = score
+            
+        for token, score in all_scores.items():
+            if token not in self._full_activation_matrix:
+                self._full_activation_matrix[token] = [0.0] * (self._max_sentence_index - 1)
+            while len(self._full_activation_matrix[token]) < self._max_sentence_index:
+                self._full_activation_matrix[token].append(0.0)
+            self._full_activation_matrix[token][sentence_id - 1] = score
+
+    def export_activation_matrix_csv(self, output_path: str) -> None:
+        if not self._full_activation_matrix:
+            logging.warning("No activation matrix data to export")
+            return
+
+        dir_name = os.path.dirname(output_path)
+        if dir_name:
+            os.makedirs(dir_name, exist_ok=True)
+        max_len = max(len(scores) for scores in self._full_activation_matrix.values())
+
+        with open(output_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow(["token"] + [str(i + 1) for i in range(max_len)])
+            for token, scores in sorted(self._full_activation_matrix.items()):
+                padded = scores + [0.0] * (max_len - len(scores))
+                writer.writerow([token] + padded)
+
+        logging.info(f"Full activation matrix exported to {output_path}")
 
     def compute_distances_from_sources(
         self, sources: Set["Node"], max_distance: int
