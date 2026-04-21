@@ -1,7 +1,11 @@
 import logging
-from typing import List, Dict
+import re
+import torch
+from copy import deepcopy
+from typing import List, Dict, Optional
 
 from vllm import LLM, SamplingParams
+from transformers import AutoTokenizer
 
 from amoc.llm.parsing import (
     parse_for_dict,
@@ -35,99 +39,139 @@ class VLLMClient:
         self.debug = debug
         self.model_name = model_name
         self.tp_size = tp_size
+
         if debug:
             logging.getLogger().setLevel(logging.DEBUG)
         else:
             logging.getLogger().setLevel(logging.INFO)
 
         logging.info(f"starting up vllm with model: {model_name}, tp_size={tp_size}")
+
+        # Load tokenizer for chat template
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+
         self.llm = LLM(
             model=model_name,
             tensor_parallel_size=tp_size,
             trust_remote_code=True,
-            gpu_memory_utilization=0.80,
-            max_model_len=8200,
-        )
-        self.sampling_params = SamplingParams(
-            temperature=0.8, top_p=0.95, max_tokens=1024
+            gpu_memory_utilization=0.70,   # lowered from 0.80
+            max_model_len=4096,             # reduced from 8200
         )
 
-        import torch
+        # Default sampling params – temperature 0 for deterministic output
+        self.default_sampling_params = SamplingParams(
+            temperature=0.0,
+            top_p=0.95,
+            max_tokens=1024,
+        )
 
+        
         num_gpus = torch.cuda.device_count()
         if tp_size > num_gpus:
             raise ValueError(
                 f"Requested tensor parallel size {tp_size}, but only {num_gpus} GPUs are available."
             )
 
+    def _apply_chat_template(self, messages: List[Dict[str, str]]) -> str:
+        try:
+            prompt = self.tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True
+            )
+            return prompt
+        except Exception as e:
+            logging.warning(f"apply_chat_template failed: {e}, using fallback Qwen format")
+            # Manual Qwen format
+            parts = []
+            for m in messages:
+                role = m.get("role", "user")
+                content = m.get("content", "")
+                parts.append(f"<|im_start|>{role}\n{content}<|im_end|>")
+            parts.append("<|im_start|>assistant\n")
+            return "\n".join(parts)
+
+    def _clean_response(self, raw_text: str) -> str:
+        # Remove <think>...</think> blocks (including multi-line)
+        raw_text = re.sub(r'<think>.*?</think>', '', raw_text, flags=re.DOTALL)
+        # Remove any leftover </think>
+        raw_text = re.sub(r'</think>', '', raw_text)
+        # Remove markdown code fences
+        raw_text = re.sub(r'```(?:json|python)?\n?', '', raw_text)
+        raw_text = re.sub(r'```\n?', '', raw_text)
+        # Remove single backticks
+        raw_text = re.sub(r'`', '', raw_text)
+        # Find the first '[' or '{'
+        match = re.search(r'[\[\{]', raw_text)
+        if not match:
+            return ""
+        start = match.start()
+        # Find matching closing bracket/brace
+        stack = []
+        end = start
+        for i, ch in enumerate(raw_text[start:], start=start):
+            if ch in '[{':
+                stack.append(ch)
+            elif ch == ']' and stack and stack[-1] == '[':
+                stack.pop()
+                if not stack:
+                    end = i + 1
+                    break
+            elif ch == '}' and stack and stack[-1] == '{':
+                stack.pop()
+                if not stack:
+                    end = i + 1
+                    break
+        if end == start:
+            # fallback: find last occurrence
+            end = raw_text.rfind(']') if raw_text[start] == '[' else raw_text.rfind('}')
+            if end == -1:
+                end = len(raw_text)
+            else:
+                end += 1
+        return raw_text[start:end]
+
     def generate(
-        self, messages: List[Dict[str, str]], temperature: float = None
+        self,
+        messages: List[Dict[str, str]],
+        temperature: float = 0.0,
     ) -> str:
         if self.llm is None:
             logging.error("VLLM not initialized.")
             return "[]"
 
-        prompt = ""
-        for m in messages:
-            role = m.get("role", "user")
-            content = (m.get("content") or "").strip()
-            prompt += (
-                f"<|start_header_id|>{role}<|end_header_id|>\n\n{content}<|eot_id|>"
-            )
+        prompt = self._apply_chat_template(messages)
 
-        prompt += "<|start_header_id|>assistant<|end_header_id|>\n\nfinal\n"
+        sampling_params = SamplingParams(
+            temperature=temperature,
+            top_p=self.default_sampling_params.top_p,
+            max_tokens=self.default_sampling_params.max_tokens,
+        )
 
         try:
-            # Clone sampling params so you don’t mutate global config
-            sampling_params = self.sampling_params
-
-            if temperature is not None:
-                from copy import deepcopy
-
-                sampling_params = deepcopy(self.sampling_params)
-                sampling_params.temperature = temperature
             outputs = self.llm.generate([prompt], sampling_params, use_tqdm=False)
-            raw_text = outputs[0].outputs[0].text
-
-            if "final" in raw_text:
-                return raw_text.split("final")[-1].strip()
-            return raw_text.strip()
-
+            raw_text = outputs[0].outputs[0].text.strip()
+            cleaned = self._clean_response(raw_text)
+            if self.debug:
+                logging.debug(f"Cleaned response: {cleaned[:200]}")
+            return cleaned
         except Exception as e:
             logging.exception(f"VLLM runtime error: {e}")
             return "[]"
 
-    # wrapper to generate response without persona injection for repair - design
-    def generate_raw(
-        self,
-        prompt_text: str,
-        temperature: float = 0.3,
-    ) -> str:
+    def generate_raw(self, prompt_text: str, temperature: float = 0.0) -> str:
         messages = [{"role": "user", "content": prompt_text}]
         return self.generate(messages, temperature=temperature)
 
     def call_vllm(self, prompt: str, persona: str) -> str:
-        # Inject persona into system prompt
-        messages = [
-            {
-                "role": "system",
-                "content": (
-                    "You are a knowledge graph builder and reasoning agent.\n\n"
-                    "IMPORTANT: You are processing story text to build a knowledge graph.\n"
-                    "- ALL concepts, properties, and relationships must come from THE STORY TEXT provided.\n"
-                    "- The persona below is provided ONLY to help you understand what aspects of the story are most relevant or salient.\n"
-                    "- Do NOT create nodes or edges from the persona description itself.\n"
-                    "- The persona influences what you focus on, not what you extract.\n\n"
-                    f"Persona (for salience weighting only):\n{persona}\n\n"
-                    "Use this persona to guide which story elements deserve emphasis, but ensure every node and edge you output is grounded in the story text."
-                ),
-            },
-            {"role": "user", "content": prompt},
-        ]
-        return self.generate(messages)
+        full_prompt = f"""You are a knowledge graph builder. Output ONLY the requested Python list or JSON object. Do not add explanations, thinking process, or extra text.
 
-    # query the LLM to generate relationships that may not be captured by deterministic rules
-    # it uses the full context of the current sentence and the existing graph
+Persona (for focus only, do not add extra concepts): {persona}
+
+{prompt}"""
+        messages = [{"role": "user", "content": full_prompt}]
+        return self.generate(messages, temperature=0.0)
+
     def get_new_relationships(
         self, nodes_from_text, nodes_from_graph, edges_from_graph, text, persona
     ):
@@ -206,17 +250,12 @@ class VLLMClient:
         response = self.call_vllm(prompt, persona)
         return extract_list_from_string(response)
 
-    # Old design: Ask LLM to re-write entire sentence
-    # Issue: risk of contamination with LLM garbage text
-    # New design: Identify pronouns and store them in a dict: {"He": "Charlemagne", "his": "Charlemagne"}
     def resolve_pronouns(self, sentence, context, persona):
         prompt = PRONOUN_RESOLUTION_PROMPT.format(context=context, sentence=sentence)
         response = self.call_vllm(prompt, persona)
         result = parse_for_dict(response)
-
         if not isinstance(result, dict):
             return {}
-
         return result
 
     def get_edge_label(
@@ -261,7 +300,6 @@ class VLLMClient:
         current_sentence: str,
         persona: str,
     ) -> Dict[str, str]:
-        # call method when the activate graph is disconnected
         prompt = FORCED_CONNECTIVITY_EDGE_PROMPT.format(
             node_a=node_a,
             node_b=node_b,
@@ -270,9 +308,7 @@ class VLLMClient:
         )
         response = self.call_vllm(prompt, persona)
         result = parse_for_dict(response)
-
         if not isinstance(result, dict) or not result.get("label"):
-            # Fallback
             logging.warning(
                 " LLM failed to generate edge label for %s -> %s, using fallback",
                 node_a,
@@ -282,13 +318,11 @@ class VLLMClient:
                 "label": "relates to",
                 "explanation": "Fallback connectivity edge (LLM response invalid)",
             }
-
         return {
             "label": result.get("label", "relates to"),
             "explanation": result.get("explanation", ""),
         }
 
-    # Ask LLM to validate if a triple makes sense given the sentence
     def validate_triplet(
         self,
         sentence: str,
@@ -305,7 +339,6 @@ class VLLMClient:
         )
         response = self.call_vllm(prompt, persona)
         result = parse_for_dict(response)
-
         if not isinstance(result, dict):
             logging.warning(f"LLM validation returned invalid format: {response}")
             return {
@@ -313,14 +346,12 @@ class VLLMClient:
                 "reason": "Validation failed, accepting by default",
                 "corrected_triple": None,
             }
-
         return {
             "valid": result.get("valid", True),
             "reason": result.get("reason", ""),
             "corrected_triple": result.get("corrected_triple", None),
         }
 
-    # call in sentrene builder before adding the edges
     def prune_irrelevant_triplets_by_narrative(
         self,
         story_context,
@@ -339,7 +370,6 @@ class VLLMClient:
         response = self.call_vllm(prompt, persona)
         return parse_for_dict(response)
 
-    # Check if a triple is narratively relevant to the story using LLM only
     def check_narrative_relevance(
         self, story_context, current_sentence, active_triplets, persona
     ):
