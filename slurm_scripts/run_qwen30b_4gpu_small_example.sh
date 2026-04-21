@@ -16,7 +16,18 @@ PROJECT_ROOT="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-pe
 CHUNKS_DIR="${PROJECT_ROOT}/personas_dfs/personas_refined_age/chunks"
 STORY_FILE="${1:-}"
 
-CHUNK_FILES=($(ls ${CHUNKS_DIR}/*.csv | sort))
+export HF_HOME="/export/projects/nlp/.cache"
+export TRANSFORMERS_CACHE="$HF_HOME"
+export CUDA_LAUNCH_BLOCKING=1   
+#export CUDA_VISIBLE_DEVICES=0,1,2,3
+export VLLM_WORKER_MULTIPROC_METHOD=spawn
+
+RUN_ID="run_${SLURM_ARRAY_JOB_ID}"
+BASE_OUTPUT_DIR="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/small_example_output_qwen"
+RUN_OUTPUT_DIR="${BASE_OUTPUT_DIR}/${RUN_ID}"
+mkdir -p "${RUN_OUTPUT_DIR}"
+
+mapfile -t CHUNK_FILES < <(ls "${CHUNKS_DIR}"/*.csv | sort)
 NUM_CHUNKS=${#CHUNK_FILES[@]}
 
 if [ "${SLURM_ARRAY_TASK_ID}" -ge "${NUM_CHUNKS}" ]; then
@@ -46,7 +57,7 @@ bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
     --tp 2 \
     --max-rows 1 \
     --plot-after-each-sentence \
-    --output-dir "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/small_example_output" \
+    --output-dir "${RUN_OUTPUT_DIR}" \
     --file "${INPUT_FILE}" \
     --strict-reactivate-function \
     ${STORY_ARG}

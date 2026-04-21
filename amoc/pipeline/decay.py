@@ -101,7 +101,8 @@ class Decay:
 
         # Step 2: Get LLM scores
         scores, reasoning = self.get_decay_scores(candidate_strings)
-        if scores is None:
+        if scores is None or not isinstance(scores, dict):
+            logging.warning(f"Decay scores invalid type: {type(scores)}. Using fallback decay.")
             self.apply_fallback_decay(decay_candidates)
             return []
 

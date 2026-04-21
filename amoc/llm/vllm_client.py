@@ -54,8 +54,8 @@ class VLLMClient:
             model=model_name,
             tensor_parallel_size=tp_size,
             trust_remote_code=True,
-            gpu_memory_utilization=0.70,   # lowered from 0.80
-            max_model_len=4096,             # reduced from 8200
+            gpu_memory_utilization=0.85,      
+            max_model_len=8200,               
         )
 
         # Default sampling params – temperature 0 for deterministic output
@@ -165,10 +165,8 @@ class VLLMClient:
 
     def call_vllm(self, prompt: str, persona: str) -> str:
         full_prompt = f"""You are a knowledge graph builder. Output ONLY the requested Python list or JSON object. Do not add explanations, thinking process, or extra text.
-
-Persona (for focus only, do not add extra concepts): {persona}
-
-{prompt}"""
+        Persona (for focus only, do not add extra concepts): {persona}
+        {prompt}"""
         messages = [{"role": "user", "content": full_prompt}]
         return self.generate(messages, temperature=0.0)
 
@@ -250,6 +248,9 @@ Persona (for focus only, do not add extra concepts): {persona}
         response = self.call_vllm(prompt, persona)
         return extract_list_from_string(response)
 
+    # Old design: Ask LLM to re-write entire sentence
+    # Issue: risk of contamination with LLM garbage text
+    # New design: Identify pronouns and store them in a dict: {"He": "Charlemagne", "his": "Charlemagne"}
     def resolve_pronouns(self, sentence, context, persona):
         prompt = PRONOUN_RESOLUTION_PROMPT.format(context=context, sentence=sentence)
         response = self.call_vllm(prompt, persona)
@@ -300,6 +301,7 @@ Persona (for focus only, do not add extra concepts): {persona}
         current_sentence: str,
         persona: str,
     ) -> Dict[str, str]:
+        # call method when the activate graph is disconnected
         prompt = FORCED_CONNECTIVITY_EDGE_PROMPT.format(
             node_a=node_a,
             node_b=node_b,
@@ -309,6 +311,7 @@ Persona (for focus only, do not add extra concepts): {persona}
         response = self.call_vllm(prompt, persona)
         result = parse_for_dict(response)
         if not isinstance(result, dict) or not result.get("label"):
+            # Fallback
             logging.warning(
                 " LLM failed to generate edge label for %s -> %s, using fallback",
                 node_a,
@@ -323,6 +326,7 @@ Persona (for focus only, do not add extra concepts): {persona}
             "explanation": result.get("explanation", ""),
         }
 
+    # Ask LLM to validate if a triple makes sense given the sentence
     def validate_triplet(
         self,
         sentence: str,
@@ -352,6 +356,7 @@ Persona (for focus only, do not add extra concepts): {persona}
             "corrected_triple": result.get("corrected_triple", None),
         }
 
+    # call in sentrene builder before adding the edges
     def prune_irrelevant_triplets_by_narrative(
         self,
         story_context,
@@ -370,6 +375,7 @@ Persona (for focus only, do not add extra concepts): {persona}
         response = self.call_vllm(prompt, persona)
         return parse_for_dict(response)
 
+    # Check if a triple is narratively relevant to the story using LLM only
     def check_narrative_relevance(
         self, story_context, current_sentence, active_triplets, persona
     ):

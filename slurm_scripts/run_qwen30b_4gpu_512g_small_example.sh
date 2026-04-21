@@ -52,7 +52,7 @@ if [[ -n "${STORY_FILE}" ]]; then
 fi
 
 bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
-    --models "Qwen/Qwen3-235B-A22B-Instruct-2507-FP8" \
+    --models "Qwen/Qwen3-Next-80B-A3B-Instruct-FP8" \
     --tp 4 \
     --max-rows 1 \
     --plot-after-each-sentence \
