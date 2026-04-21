@@ -1,2 +1,0 @@
-persona_id;idx;source_config;persona_text;age_refined;llm_label;llm_confidence;llm_reason;shard_id;age_heuristic;age;age_refine_confidence;age_refine_reason
-persona::1,1,persona,,18,yes,100,0,18,18,,

@@ -1,31 +1,36 @@
 #!/bin/bash
-#SBATCH --job-name=amoc_qwen_baseline
+#SBATCH --job-name=amoc_llama70b_baseline
 #SBATCH --partition=dgxa100
 #SBATCH --nodes=1
+#SBATCH --ntasks=1
 #SBATCH --gres=gpu:tesla_a100:4
-#SBATCH --cpus-per-task=32
-#SBATCH --mem=256GB        
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=256G
 #SBATCH --output=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%j.out
 #SBATCH --error=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%j.err
 
 set -euo pipefail
 
+export VLLM_ATTENTION_BACKEND=FLASH_ATTN
+export VLLM_USE_V1=1
+
 PROJECT_ROOT="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments"
-INPUT_FILE="${PROJECT_ROOT}/personas_dfs/personas_refined_age/chunks/baseline.csv"
+INPUT_FILE="${PROJECT_ROOT}/personas_dfs/personas_refined_age/chunks/baseline_000.csv"
 STORY_FILE="${1:-}"
 
 export HF_HOME="/export/projects/nlp/.cache"
 export TRANSFORMERS_CACHE="$HF_HOME"
-export CUDA_LAUNCH_BLOCKING=1
+export CUDA_VISIBLE_DEVICES=0,1,2,3
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
 
 RUN_ID="run_${SLURM_JOB_ID}"
-BASE_OUTPUT_DIR="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/baseline_output_qwen"
+BASE_OUTPUT_DIR="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/baseline_output_llama"
 RUN_OUTPUT_DIR="${BASE_OUTPUT_DIR}/${RUN_ID}"
 mkdir -p "${RUN_OUTPUT_DIR}"
 
-echo "Running Qwen baseline (no persona)"
+echo "Running Llama-3.3-70B baseline (no persona)"
 echo "Processing file: ${INPUT_FILE}"
+echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}"
 
 if [[ -n "${STORY_FILE}" ]]; then
     echo "Using story file: ${STORY_FILE}"
@@ -39,7 +44,7 @@ if [[ -n "${STORY_FILE}" ]]; then
 fi
 
 bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
-    --models "Qwen/Qwen3-Next-80B-A3B-Instruct-FP8" \
+    --models "meta-llama/Llama-3.3-70B-Instruct" \
     --tp 4 \
     --max-rows 1 \
     --plot-after-each-sentence \
