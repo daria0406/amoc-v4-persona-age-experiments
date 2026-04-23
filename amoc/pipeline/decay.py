@@ -30,16 +30,16 @@ class Decay:
         graph_ref: "Graph",
         llm_extractor,
         get_explicit_nodes: callable,
-        get_story_context: callable,  # Added for semantic decay
+        get_story_context: callable,
         max_distance: int,
         edge_visibility: int,
         nr_relevant_edges: int,
-        strict_reactivate: bool = True,  # uses LLM to select which edges to reactivate
+        strict_reactivate: bool = True,
     ):
         self._graph = graph_ref
         self._llm = llm_extractor
         self._get_explicit_nodes = get_explicit_nodes
-        self._get_story_context = get_story_context  # Store for semantic decay
+        self._get_story_context = get_story_context
         self._max_distance = max_distance
         self._edge_visibility = edge_visibility
         self._nr_relevant_edges = nr_relevant_edges
@@ -56,17 +56,12 @@ class Decay:
         self,
         anchor_nodes: Set["Node"],
         record_edge_fn: callable = None,
-        persona: str = None,  # Added persona parameter
+        persona: str = None,
     ):
         self._record_edge_fn = record_edge_fn
-        self._persona = persona  # Store persona for LLM calls
+        self._persona = persona
 
-    def set_decay_sentence_context(
-        self, idx: int, text: str = None
-    ):  # Added text parameter
-        # Do NOT reset flags here — they are already reset at sentence start
-        # via reset_sentence_state() → deactivate_all_edges() → reset_for_sentence_start().
-        # A second reset here would wipe asserted_this_sentence flags set during extraction.
+    def set_decay_sentence_context(self, idx: int, text: str = None):
         self._current_sentence_index = idx
         if text:
             self._current_sentence_text = text
@@ -80,7 +75,6 @@ class Decay:
         for edge in self._graph.edges:
             edge.reset_for_sentence_start()
 
-    # global decay = fade edges that are never reinforced in cumulative graph
     def apply_global_edge_decay(self) -> None:
         for edge in self._graph.edges:
             if edge.created_at_sentence == self._current_sentence_index:
@@ -113,6 +107,10 @@ class Decay:
         # Step 3: Build connectivity map
         connectivity_map = self.build_connectivity_map()
 
+        # Get current sentence tokens for endpoint checks
+        current_sentence = self._current_sentence_text.lower() if self._current_sentence_text else ""
+        current_sentence_tokens = set(current_sentence.split()) if current_sentence else set()
+
         # Step 4: Process each edge
         stats = {
             "maintain": 0,
@@ -134,18 +132,19 @@ class Decay:
                 edge.dest_node.get_text_representer(),
             )
 
-            # SCORE 0: REMOVE (lowest relevance) — gradual decay, never skip vis=1
+            source_token = edge.source_node.get_text_representer().lower()
+            dest_token = edge.dest_node.get_text_representer().lower()
+            source_in_sentence = source_token in current_sentence_tokens
+            dest_in_sentence = dest_token in current_sentence_tokens
+
+            # SCORE 0: LOWEST RELEVANCE – immediate removal
             if score == 0:
-                if is_critical:
-                    # Protect connectivity - decay instead
-                    edge.reduce_visibility()
-                    stats["protected"] += 1
-                    action = "protected"
-                else:
-                    edge.reduce_visibility()
-                    stats["removed"] += 1
-                    action = "removed"
-
+                # Immediate removal regardless of critical status
+                edge.visibility_score = 0
+                edge.active = False
+                stats["removed"] += 1
+                action = "removed_immediate"
+                
                 decisions.append(
                     DecayDecision(
                         triplet=triplet,
@@ -156,55 +155,79 @@ class Decay:
                     )
                 )
 
-            # SCORE 1: DECAY (low relevance)
+            # SCORE 1: LOW RELEVANCE – only keep if object appears in sentence
             elif score == 1:
-                edge.reduce_visibility()
-                if edge.visibility_score <= 0:
-                    edge.visibility_score = 0
-                    edge.active = False
-                    stats["removed"] += 1
-                    action = "removed"
-                else:
-                    stats["decay"] += 1
-                    action = "decayed"
-
-                decisions.append(
-                    DecayDecision(
-                        triplet=triplet,
-                        score=score,
-                        action=action,
-                        was_connectivity_critical=is_critical,
-                        reasoning=reasoning_text,
-                    )
-                )
-
-            # SCORE 2: REACTIVATE (from inactive) or DECAY (if active)
-            elif score == 2:
-                if edge.visibility_score <= 0:
-                    edge.visibility_score = REACTIVATION_VISIBILITY
-                    edge.active = True
-                    edge.mark_as_reactivated(reset_score=False)
-                    stats["reactivated"] = stats.get("reactivated", 0) + 1
-                else:
-                    # Active edge — still decays by 1 like all other scores
-                    edge.reduce_visibility()
+                # Only keep if object appears in current sentence
+                if dest_in_sentence:
+                    # Object appears – fast decay by 2
+                    edge.visibility_score -= 2
                     if edge.visibility_score <= 0:
                         edge.visibility_score = 0
                         edge.active = False
-                    stats["decay"] = stats.get("decay", 0) + 1
+                        stats["removed"] += 1
+                        action = "removed"
+                    else:
+                        stats["decay"] += 1
+                        action = "decayed"
+                else:
+                    # Object not in sentence – immediate removal
+                    edge.visibility_score = 0
+                    edge.active = False
+                    stats["removed"] += 1
+                    action = "removed_immediate"
+                    logging.debug(f"Forced removal of {triplet_str} – object not in sentence")
 
                 decisions.append(
                     DecayDecision(
                         triplet=triplet,
                         score=score,
-                        action="maintained",
+                        action=action,
                         was_connectivity_critical=is_critical,
                         reasoning=reasoning_text,
                     )
                 )
+
+            # SCORE 2: REACTIVATE (from inactive) or GRADUAL DECAY (if active)
+            elif score == 2:
+                if edge.visibility_score <= 0:
+                    # Only reactivate if object appears in sentence
+                    if dest_in_sentence:
+                        edge.visibility_score = REACTIVATION_VISIBILITY
+                        edge.active = True
+                        edge.mark_as_reactivated(reset_score=False)
+                        stats["reactivated"] = stats.get("reactivated", 0) + 1
+                        action = "reactivated"
+                    else:
+                        # Object not mentioned – keep inactive
+                        action = "not_reactivated"
+                        logging.debug(f"Skipped reactivation of {triplet_str} – object not in sentence")
+                else:
+                    # Active edge – gradual decay by 1
+                    edge.visibility_score -= 1
+                    if edge.visibility_score <= 0:
+                        edge.visibility_score = 0
+                        edge.active = False
+                        action = "removed"
+                    else:
+                        stats["decay"] += 1
+                        action = "decayed"
+
+                decisions.append(
+                    DecayDecision(
+                        triplet=triplet,
+                        score=score,
+                        action=action,
+                        was_connectivity_critical=is_critical,
+                        reasoning=reasoning_text,
+                    )
+                )
+
             # Fallback (should not happen)
             else:
-                edge.reduce_visibility()
+                edge.visibility_score -= 1
+                if edge.visibility_score <= 0:
+                    edge.visibility_score = 0
+                    edge.active = False
                 logging.warning(
                     f"fallback decay for edge {triplet_str} (unexpected score={score})"
                 )
@@ -231,9 +254,6 @@ class Decay:
             f"reactivated: {stats['reactivated']}, "
             f"protected: {stats['protected']}"
         )
-        # Step 0: reinforce inference chains first
-        # TODO: uncomment it
-        # self.reinforce_multi_hop_chains()
         return decisions
 
     def collect_decay_candidates(self):
@@ -247,9 +267,6 @@ class Decay:
 
             if edge.asserted_this_sentence:
                 continue
-
-            # if edge.reactivated_this_sentence:
-            #     continue
 
             triplet = f"({edge.source_node.get_text_representer()}, {edge.label}, {edge.dest_node.get_text_representer()})"
             candidate_strings.append(triplet)
@@ -293,7 +310,6 @@ class Decay:
         except:
             return 2
 
-    # prune carryover nodes and inferred nodes
     def apply_pruning(self, prev_sentences, threshold_for_pruning=3, aggressive=True):
         all_active_triplets = []
         edge_to_obj = {}
@@ -385,9 +401,7 @@ class Decay:
             f"explicit edges affected: {explicit_protected}"
         )
 
-    # inactivates zombie nodes after pruning and decay
     def prune_inactive_edgeless_nodes(self) -> List["Node"]:
-        # First pass: deactivate any ghost edges (active=True, visibility<=0)
         ghost_count = 0
         for edge in self._graph.edges:
             if edge.active and edge.visibility_score <= 0:
@@ -403,13 +417,11 @@ class Decay:
         for node in self._graph.nodes:
             active_edges = [e for e in node.edges if e.active]
 
-            # Node has no active edges — it's dangling
             if not active_edges:
                 if node.active:
                     dangling_nodes.append(node)
                 continue
 
-            # Node has active edges but all have visibility <= 0 (shouldn't happen after ghost pass, but safety net)
             if all(e.visibility_score <= 0 for e in active_edges):
                 for e in active_edges:
                     e.active = False
@@ -431,36 +443,29 @@ class Decay:
                 connectivity.setdefault(edge.dest_node, set()).add(edge.source_node)
         return connectivity
 
-    # Check if edge can be removed without disconnecting the graph using BFS
     def can_remove_edge(self, edge, connectivity_map) -> bool:
         source = edge.source_node
         dest = edge.dest_node
 
-        # Fast path: if either node would become isolated, definitely can't remove
         source_neighbors = connectivity_map.get(source, set())
         dest_neighbors = connectivity_map.get(dest, set())
 
         if len(source_neighbors) == 0 or len(dest_neighbors) == 0:
-            return False  # Should never happen with active edges
+            return False
 
-        # If both nodes have multiple connections, check if there's an alternative path
         if len(source_neighbors) > 1 and len(dest_neighbors) > 1:
-            # Do BFS to see if source can reach dest without this edge
             return self.has_alternative_path(source, dest, edge, connectivity_map)
 
-        # If one node has only this connection, check if removing would isolate it
         if len(source_neighbors) == 1 and dest not in source_neighbors:
-            return False  # This edge IS the only connection for source
+            return False
         if len(dest_neighbors) == 1 and source not in dest_neighbors:
-            return False  # This edge IS the only connection for dest
+            return False
 
-        # For other cases, do BFS to be sure
         return self.has_alternative_path(source, dest, edge, connectivity_map)
 
     def has_alternative_path(
         self, source, dest, edge_to_remove, connectivity_map
     ) -> bool:
-        # Build a temporary connectivity map without this edge
         temp_map = {}
         for node, neighbors in connectivity_map.items():
             if node == source:
@@ -470,7 +475,6 @@ class Decay:
             else:
                 temp_map[node] = set(neighbors)
 
-        # BFS from source to dest
         visited = set()
         queue = deque([source])
         visited.add(source)
@@ -478,14 +482,14 @@ class Decay:
         while queue:
             current = queue.popleft()
             if current == dest:
-                return True  # Found alternative path - safe to remove
+                return True
 
             for neighbor in temp_map.get(current, set()):
                 if neighbor not in visited:
                     visited.add(neighbor)
                     queue.append(neighbor)
 
-        return False  # No alternative path - edge is critical
+        return False
 
     def apply_fallback_decay(self, edges):
         for edge in edges:
@@ -494,7 +498,6 @@ class Decay:
                 edge.visibility_score = 0
                 edge.active = False
 
-    # slightly bumps visibility for multi-chain
     def reinforce_multi_hop_chains(self) -> None:
         text_based_nodes = {
             n for n in self._graph.nodes if n.node_source == NodeSource.TEXT_BASED
@@ -541,11 +544,9 @@ class Decay:
                     queue.append((neighbor, dist + 1))
 
         for edge in chain_edges:
-            # Only reinforce if not already at max
             if edge.visibility_score < REACTIVATION_VISIBILITY:
                 edge.visibility_score = REACTIVATION_VISIBILITY
                 edge.active = True
-                # Only mark as reactivated if it was inactive
                 if not edge.reactivated_this_sentence:
                     edge.mark_as_reactivated(reset_score=True)
                 reinforced_count += 1
@@ -587,14 +588,11 @@ class Decay:
             active_edge_count = sum(1 for e in node.edges if e.active)
             score += active_edge_count * 3
 
-            # Boost inference-based nodes significantly — they represent
-            # LLM-inferred knowledge that bridges concepts
             if node.node_source == NodeSource.TEXT_BASED:
                 score += 5
             elif node.node_source == NodeSource.INFERENCE_BASED:
                 score += 20
 
-            # Extra boost for inference nodes that bridge to text-based nodes
             if node.node_source == NodeSource.INFERENCE_BASED:
                 connects_to_text = any(
                     e.active
@@ -646,7 +644,6 @@ class Decay:
     def select_removal_candidates(
         self, node_scores, max_nodes, critical_nodes, active_only=False
     ):
-        # Separate candidates by source — prune text-based first
         text_nodes = []
         inference_nodes = []
 
@@ -671,7 +668,6 @@ class Decay:
         if excess <= 0:
             return [], 0
 
-        # Take from text-based first, then inference-based only if needed
         if len(sorted_text) >= excess:
             candidates = sorted_text[:excess]
             logging.info(f"selecting {excess} text-based nodes for potential removal")
@@ -793,7 +789,6 @@ class Decay:
             for edge in edges:
                 if edge.is_property_edge():
                     continue
-                # Only reactivate inactive edges — don't override active visibility
                 if edge.visibility_score <= 0:
                     edge.mark_as_reactivated(
                         reset_score=False, new_visibility=REACTIVATION_VISIBILITY
@@ -825,8 +820,6 @@ class Decay:
             selected = set(valid_indices)
             for i in selected:
                 edge = edges[i - 1]
-                # Only reactivate edges that are inactive (vis=0).
-                # Active edges follow the natural decay curve.
                 if edge.visibility_score <= 0:
                     edge.mark_as_reactivated(reset_score=False, new_visibility=REACTIVATION_VISIBILITY)
                     logging.info(
@@ -839,17 +832,13 @@ class Decay:
                 if self._record_edge_fn:
                     self._record_edge_fn(edge, self._current_sentence_index)
         else:
-            selected = set()  # Edge not selected by LLM
+            selected = set()
             logging.info("llm didn't find any edges to reactivate")
 
         for idx, edge in enumerate(edges, start=1):
             if idx in selected or edge in newly_added_edges:
                 if edge.is_property_edge():
                     continue
-                # Only reactivate inactive edges — don't override active visibility.
-                # Re-extracted existing edges leak into newly_added_edges via
-                # edge_admission returning the matched edge, so the vis=0 guard
-                # must apply to ALL edges here, not just LLM-selected ones.
                 if edge.visibility_score <= 0:
                     edge.mark_as_reactivated(
                         reset_score=False, new_visibility=REACTIVATION_VISIBILITY
@@ -885,7 +874,6 @@ class Decay:
         edges_to_reactivate = set()
         for i in selected_indices:
             edge = edges[i - 1]
-            # Only reactivate inactive edges — don't override active visibility
             if edge.visibility_score <= 0:
                 edge.visibility_score = REACTIVATION_VISIBILITY
                 edge.active = True
@@ -916,7 +904,6 @@ class Decay:
             if edge in edges_to_reactivate:
                 if edge.is_property_edge():
                     continue
-                # Only reactivate inactive edges — don't override active visibility
                 if edge.visibility_score <= 0:
                     edge.mark_as_reactivated(
                         reset_score=False, new_visibility=REACTIVATION_VISIBILITY
@@ -937,8 +924,6 @@ class Decay:
             return 5.0
         return val
 
-    # records the activation scores of all relevant nodes for the current sent
-    # landscape model
     def record_sentence_activation_matrix(
         self,
         sentence_id: int,
@@ -953,6 +938,10 @@ class Decay:
             explicit_set, max_distance=max_distance
         )
 
+        current_sentence_tokens = set()
+        if self._current_sentence_text:
+            current_sentence_tokens = set(self._current_sentence_text.lower().split())
+
         token_to_raw_score = {}
         node_raw_score = {}
 
@@ -966,7 +955,7 @@ class Decay:
             if node in explicit_set:
                 continue
             token = node_token_fn(node)
-            if token:
+            if token and token.lower() in current_sentence_tokens:
                 token_to_raw_score[token] = 1
                 node_raw_score[node] = 1
 
@@ -975,8 +964,9 @@ class Decay:
                 continue
             token = node_token_fn(node)
             if token and token not in token_to_raw_score:
-                token_to_raw_score[token] = dist
-                node_raw_score[node] = dist
+                if token.lower() in current_sentence_tokens:
+                    token_to_raw_score[token] = dist
+                    node_raw_score[node] = dist
 
         for token, raw_score in token_to_raw_score.items():
             append_record_fn(
@@ -986,10 +976,6 @@ class Decay:
                     "score": self.convert_to_landscape_score(raw_score),
                 }
             )
-
-        # ===== RECORD VERBS FROM ALL ACTIVE EDGES (continuous activation) =====
-        # Mimics the Landscape model: verbs are recorded for every sentence
-        # where the edge is active, using max(node_activation) - 0.5.
 
         linking_verbs = {
             'is', 'are', 'was', 'were', 'be', 'being', 'been',
@@ -1040,10 +1026,8 @@ class Decay:
         for token, score in verb_scores.items():
             append_record_fn({"sentence": sentence_id, "token": token, "score": score})
             
-        # Update full activation matrix for Spearman correlation
         self._max_sentence_index = max(self._max_sentence_index, sentence_id)
         
-        # Store all scores (concepts + verbs) for export
         all_scores: Dict[str, float] = {}
         for token, raw_score in token_to_raw_score.items():
             all_scores[token] = self.convert_to_landscape_score(raw_score)
@@ -1075,7 +1059,7 @@ class Decay:
                 writer.writerow([token] + padded)
 
         logging.info(f"Full activation matrix exported to {output_path}")
-
+    
     def compute_distances_from_sources(
         self, sources: Set["Node"], max_distance: int
     ) -> Dict["Node", int]:

@@ -510,7 +510,7 @@ Return a JSON with:
 """
 
 # Simplified with 0-2 scale
-NARRATIVE_RELEVANCE_PROMPT = """You are maintaining a knowledge graph of a story. Your task is to score each relationship by how important it is for understanding the current narrative.
+NARRATIVE_RELEVANCE_PROMPT = """You are maintaining a knowledge graph of a story. Your task is to score each relationship.
 
 Story context (previous sentences):
 {story_context}
@@ -521,68 +521,33 @@ Current sentence being processed:
 Active relationships in the reader's memory:
 {active_triplets}
 
-SCORING GUIDE (0-2) – GRADUAL DECAY WITH STRICT RELEVANCE:
-SCORE 2 - DIRECTLY RELEVANT (full activation, resets decay)
-- The RELATION or OBJECT must appear EXPLICITLY in the current sentence (exact word or clear synonym).
-- It is not enough that only the subject appears.
-- Example: Edge (knight, rides, horse) → SCORE 2 if sentence contains "rides" or "horse".
-- Example: Edge (dragon, is, fierce) → SCORE 2 if sentence contains "fierce" (or "fierce dragon").
-- The edge must describe an action or state explicitly mentioned.
+SCORING GUIDE (0-2) – STRICT MODE:
+SCORE 2 - RELEVANT (keep full activation)
+- The RELATION or OBJECT appears EXPLICITLY in the current sentence.
+- The subject alone is NEVER enough for score 2.
+- Example: For (knight, rides, horse), sentence must contain "rides" or "horse".
 
-SCORE 1 - INDIRECTLY RELEVANT (decay one level)
-- The SUBJECT appears in the sentence, but the RELATION and OBJECT do NOT.
-- AND the edge is critical for maintaining graph connectivity (removing it would disconnect a node that is part of the current narrative).
-- Otherwise, do NOT give score 1. Default to 0.
-- Score 1 is a transition state – edges that were score 2 in the previous sentence but are no longer directly mentioned should typically be scored 1 for one or two sentences, then become 0.
+SCORE 1 - BORDERLINE (decay fast)
+- ONLY the SUBJECT appears, AND the edge is critical for connectivity.
+- Otherwise, do NOT give score 1.
 
-SCORE 0 - IRRELEVANT (decay to zero)
-- Neither subject, relation, nor object appears in the sentence.
-- The subject appears but the edge is not connectivity‑critical and the relation/object are absent.
-- The relation is generic ("is", "has", "involves", "relates to", "associated with") and not directly mentioned.
-- The object is vague ("ability", "skill", "pride", "deed", "thing").
-- The edge is a property edge (e.g., "is famous", "is strong") unless the adjective appears in the sentence.
-- The edge is from more than 3 sentences ago with no reinforcement.
+SCORE 0 - NOT RELEVANT (decay immediately)
+- Neither subject, relation, nor object appears.
+- The subject appears but relation/object absent and not connectivity-critical.
+- The relation is generic ("is", "has", "involves", "relates to").
+- The object is vague ("ability", "skill", "pride", "deed").
+- The edge is from more than 2 sentences ago.
 - You are uncertain → SCORE 0.
 
 CRITICAL RULES:
-1. **GRADUAL DECAY**:
-   - An edge that is directly relevant (score 2) will decay to 1 in the next sentence if not reinforced, then to 0 in the following sentence.
-   - Do not skip from 2 to 0 in one sentence unless the topic changes completely.
-2. **STRICT RELEVANCE**:
-   - To get score 2, the relation or object must be explicitly present. Subject alone is never enough for score 2.
-   - Score 1 should only be used for edges that are still somewhat relevant (e.g., main character, recent context) and needed for connectivity.
-3. **CONNECTIVITY PROTECTION**:
-   - The system will automatically protect critical edges, so you can score 0 freely for non‑critical edges.
-   - Only mark an edge as 1 if you are certain that scoring it 0 would fragment the graph and it still has indirect relevance.
+1. BE STRICT: Only score 2 when there is explicit mention of relation or object.
+2. Score 1 is a RARE exception for connectivity-critical edges. A token that does not appear in the current sentence (including as a pronoun) should NEVER get score 2, and should rarely get score 1. The only exception is if removing it would disconnect the entire graph.
+3. When in doubt, score 0.
 
-EXAMPLES:
-Sentence 1: "The knight rode through the forest."
-Active triplets (from previous sentences): none
-Newly added: (knight, rides, forest) → SCORE 2 (relation and object appear)
-
-Sentence 2: "He was tired."
-Now evaluate (knight, rides, forest):
-- Subject "knight" appears (via "He"), but relation "rides" and object "forest" do not appear.
-- This edge is not critical for connectivity (knight has other edges). → SCORE 0 (immediate decay)
-
-But if the sentence were "The knight continued his journey."
-- Subject "knight" appears, relation/object absent. The edge might be connectivity‑critical if forest is only connected via this edge. → SCORE 1 (decay one level)
-
-Sentence 3: "He rested."
-- (knight, rides, forest) → SCORE 0 (no mention, not critical)
-
-Return a JSON object with:
-{{
-    "scores": {{
-        "(subject1, relation1, object1)": 2,
-        "(subject2, relation2, object2)": 1,
-        ...
-    }},
-    "reasoning": "Brief explanation of scoring strategy."
-}}
+Return JSON: {{"scores": {{"(subj, rel, obj)": 0/1/2}}, "reasoning": "brief"}}
 """
 
-PRUNE_IRRELEVANT_TRIPLETS_BY_NARRATIVE = """You are maintaining a clean knowledge graph of a story. Your task is to remove relationships that are no longer needed, but preserve those that are still indirectly relevant or critical for connectivity.
+PRUNE_IRRELEVANT_TRIPLETS_BY_NARRATIVE = """You are maintaining a clean knowledge graph.
 
 Story so far:
 {story_context}
@@ -593,28 +558,11 @@ Current sentence:
 Active relationships:
 {active_triplets}
 
-KEEP a relationship if:
-- The RELATION or OBJECT appears EXPLICITLY in the current sentence (score 2).
-- OR the SUBJECT appears and the relationship is critical for connectivity (i.e., removing it would disconnect a node that is part of the current narrative) – this corresponds to score 1.
-- OR the relationship is less than 3 sentences old and still contextually relevant (gradual decay).
+KEEP a relationship ONLY if:
+- The RELATION or OBJECT appears EXPLICITLY in the current sentence.
+- OR removing it would isolate a concept that appears in the current sentence.
 
-REMOVE a relationship only if:
-- Neither subject, relation, nor object appears in the current sentence.
-- AND it is not needed for connectivity.
-- AND it is more than 3 sentences old without reinforcement.
+REMOVE otherwise, including if only the subject appears.
 
-Connectivity Exception:
-- If removing a relationship would leave a concept completely isolated and that concept is not mentioned in the current sentence, you may still keep ONE relationship for that concept to maintain graph structure, but only if the concept is likely to be referenced again.
-
-EXAMPLES:
-Sentence 1: "Charlemagne conquered the Saxons." → Keep (charlemagne, conquered, saxons)
-Sentence 2: "He was a great king." → (charlemagne, conquered, saxons) is not directly mentioned, but subject appears and it is only 1 sentence old → Keep (score 1).
-Sentence 3: "He built schools." → Now (charlemagne, conquered, saxons) is 2 sentences old, subject appears but relation/object absent, not critical → Remove.
-
-## OUTPUT:
-
-{{
-    "to_keep": ["(subject1, relation1, object1)"],
-    "reasoning": "Brief explanation"
-}}
+OUTPUT: {{"to_keep": ["(subject, relation, object)"], "reasoning": "..."}}
 """
