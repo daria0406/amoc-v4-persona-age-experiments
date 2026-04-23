@@ -229,6 +229,7 @@ class VLLMClient:
             nodes_from_text=nodes_from_text, text=text
         )
         response = self.call_vllm(prompt, persona)
+        logging.error(f"RAW INFERENCE RESPONSE (first 500 chars): {response[:500]}")
         return parse_for_dict(response)
 
     def generate_new_inferred_relationships_first_sentence(

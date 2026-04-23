@@ -294,7 +294,7 @@ class Decay:
             return 2
 
     # prune carryover nodes and inferred nodes
-    def apply_pruning(self, prev_sentences, threshold_for_pruning=5, aggressive=True):
+    def apply_pruning(self, prev_sentences, threshold_for_pruning=3, aggressive=True):
         all_active_triplets = []
         edge_to_obj = {}
 
@@ -345,7 +345,7 @@ class Decay:
             logging.info(
                 f"First pass kept {len(keep_set)} edges – still too many. Running second pass."
             )
-            self.apply_pruning(prev_sentences, threshold_for_pruning=0, aggressive=True)
+            self.apply_pruning(prev_sentences, threshold_for_pruning=3, aggressive=True)
             return
 
         connectivity_map = self.build_connectivity_map()
@@ -987,52 +987,39 @@ class Decay:
                 }
             )
 
-        # ===== FIX: Only record verbs from edges asserted in the CURRENT sentence =====
-        # This ensures we only track verbs that actually appear in the text,
-        # not every possible relationship verb in the graph.
-        
-        # Set of linking verbs to skip (these are not content verbs)
+        # ===== RECORD VERBS FROM ALL ACTIVE EDGES (continuous activation) =====
+        # Mimics the Landscape model: verbs are recorded for every sentence
+        # where the edge is active, using max(node_activation) - 0.5.
+
         linking_verbs = {
             'is', 'are', 'was', 'were', 'be', 'being', 'been',
             'has', 'have', 'had', 'having', 'does', 'do', 'did',
             'involves', 'relates', 'includes', 'describes', 'becomes',
             'remains', 'seems', 'appears', 'constitutes', 'represents',
-            'not related', 'not applicable', 'part of', 'marks', 
+            'not related', 'not applicable', 'part of', 'marks',
             'not available', 'returns to', 'precedes'
         }
-        
+
         verb_scores: Dict[str, float] = {}
-        
-        # Only consider edges that were ASSERTED in this sentence
-        # (i.e., edges that came directly from the text, not inferred)
+
         for edge in self._graph.edges:
-            # Skip if not asserted this sentence (only track text-origin verbs)
-            if not edge.asserted_this_sentence:
-                continue
-                
             if not edge.active:
                 continue
-                
+
             label = (edge.label or "").strip()
             if not label:
                 continue
-                
-            # Clean the verb label
+
             token = label.replace("_", " ").strip().lower()
-            
-            # Skip linking verbs and other non-content verbs
-            if token in linking_verbs:
+
+            if token in linking_verbs or len(token) < 2:
                 continue
-                
-            # Skip if the verb is too short or generic
-            if len(token) < 2:
-                continue
-                
+
             src_tok = node_token_fn(edge.source_node)
             dst_tok = node_token_fn(edge.dest_node)
             if not src_tok or not dst_tok:
                 continue
-                
+
             src_raw = node_raw_score.get(edge.source_node, max_distance + 1)
             dst_raw = node_raw_score.get(edge.dest_node, max_distance + 1)
             src_act = self.convert_to_landscape_score(src_raw)
@@ -1040,11 +1027,15 @@ class Decay:
             verb_act = max(src_act, dst_act) - 0.5
             if verb_act < 0.0:
                 verb_act = 0.0
-                
+
             prev = verb_scores.get(token)
             if prev is None or verb_act > prev:
                 verb_scores[token] = verb_act
-                logging.debug(f"Recording verb '{token}' from asserted edge: {edge.source_node.get_text_representer()} -{label}-> {edge.dest_node.get_text_representer()} (score={verb_act})")
+                logging.debug(
+                    f"Recording verb '{token}' from active edge: "
+                    f"{edge.source_node.get_text_representer()} -{label}-> "
+                    f"{edge.dest_node.get_text_representer()} (score={verb_act})"
+                )
 
         for token, score in verb_scores.items():
             append_record_fn({"sentence": sentence_id, "token": token, "score": score})
