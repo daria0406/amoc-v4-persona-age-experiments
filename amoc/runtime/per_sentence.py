@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from amoc.core.graph import Graph
 
 from amoc.core.node import NodeType
+from amoc.config.constants import MAX_CARRYOVER_NODES, CARRYOVER_SENIORITY_WEIGHT
 
 
 class PerSentenceGraph:
@@ -88,6 +89,7 @@ class PerSentenceGraphBuilder:
         cumulative_graph: Graph,
         max_distance: int,
         anchor_nodes: Set[Node],
+        sentence_index: int,         
         repair_callback=None,
     ):
         self.cumulative_graph = cumulative_graph
@@ -97,7 +99,8 @@ class PerSentenceGraphBuilder:
 
         self._explicit_nodes: Set[Node] = set()
         self._carryover_nodes: Set[Node] = set()
-        self._sentence_index: Optional[int] = None
+        self._sentence_index: int = sentence_index   
+        self._distances: Optional[Dict[Node, int]] = None
 
     def set_explicit_nodes(self, nodes: List[Node]) -> "PerSentenceGraphBuilder":
         self._explicit_nodes = set(nodes)
@@ -106,6 +109,7 @@ class PerSentenceGraphBuilder:
     def compute_carryover_nodes(self) -> "PerSentenceGraphBuilder":
         if not self._explicit_nodes:
             self._carryover_nodes = set()
+            self._distances = {}
             return self
 
         # BFS to find all reachable nodes within distance
@@ -133,24 +137,70 @@ class PerSentenceGraphBuilder:
                 distances[neighbor] = current_dist + 1
                 queue.append(neighbor)
 
+        # Store distances for later capping
+        self._distances = distances
+
         # All reachable nodes - current explicit nodes
         reachable_nodes = set(distances.keys()) - self._explicit_nodes
 
-        # Carryover = all reachable nodes explicit + inferred
+        # Carryover = all reachable nodes with at least one active edge
         self._carryover_nodes = {
             node
             for node in reachable_nodes
             if any(e.active and e.visibility_score > 0 for e in node.edges)
         }
 
-        # Log nodes that were reachable but excluded aka. "deed"
+        # Log nodes that were reachable but excluded (no active edges)
         excluded = reachable_nodes - self._carryover_nodes
         for node in excluded:
             logging.info(
                 f"excluded from carryover: {node.get_text_representer()} (reachable but no active edges)"
             )
 
+        # cap carryover nodes based on activation score and seniority
+        self.cap_carryover_nodes()
+
         return self
+
+    # cap carryover nodes to MAX_CARRYOVER_NODES, using activation score and seniority
+    def cap_carryover_nodes(self) -> None:
+        if len(self._carryover_nodes) <= MAX_CARRYOVER_NODES:
+            logging.info(f"Sentence {self._sentence_index}: carryover size {len(self._carryover_nodes)} ≤ {MAX_CARRYOVER_NODES}, no capping needed")
+            return
+            
+        # Compute priority for each carryover node
+        scored = []
+        for node in self._carryover_nodes:
+            # activation from BFS distance: 5 - distance
+            distance = self._distances.get(node, self.max_distance + 1)
+            if distance > self.max_distance:
+                activation = 0.0
+            else:
+                activation = 5.0 - float(distance)
+
+            # seniority: how many sentences since node first appeared
+            seniority = 0
+            if hasattr(node, 'first_seen_sentence') and node.first_seen_sentence is not None:
+                seniority = self._sentence_index - node.first_seen_sentence
+                if seniority < 0:
+                    seniority = 0
+
+            score = activation - CARRYOVER_SENIORITY_WEIGHT * seniority
+            scored.append((score, node))
+
+        # Sort descending by score, keep top MAX_CARRYOVER_NODES
+        scored.sort(key=lambda x: x[0], reverse=True)
+        best_nodes = {node for _, node in scored[:MAX_CARRYOVER_NODES]}
+
+        # Log dropped nodes for debugging
+        dropped = self._carryover_nodes - best_nodes
+        if dropped:
+            logging.debug(
+                f"Sentence {self._sentence_index}: dropped {len(dropped)} old carryover nodes: "
+                f"{[n.get_text_representer() for n in dropped]}"
+            )
+
+        self._carryover_nodes = best_nodes
 
     def get_active_nodes(self) -> Set[Node]:
         return self._explicit_nodes | self._carryover_nodes
@@ -163,26 +213,18 @@ class PerSentenceGraphBuilder:
         return source in attachable or dest in attachable
 
     def build(self, sentence_index: int) -> PerSentenceGraph:
-        self._sentence_index = sentence_index
+        current_index = self._sentence_index
 
-        # Get global active subgraph (edges with active=True and visibility_score>0)
         global_active_nodes, global_active_edges = (
             self.cumulative_graph.get_active_subgraph_wrapper()
         )
         global_active_nodes = set(global_active_nodes)
         global_active_edges = set(global_active_edges)
 
-        # Explicit nodes: all from the current sentence (even if they have no active edges)
         explicit_nodes = set(self._explicit_nodes)
-
-        # Carryover nodes: those found via BFS (already filtered by distance and edge visibility)
-        # They are guaranteed to be in global_active_nodes because they were reached via active edges.
         carryover_nodes = set(self._carryover_nodes)
-
-        # The nodes that will appear in the active view
         view_nodes = explicit_nodes | carryover_nodes
 
-        # Active edges: only those that are globally active and connect nodes in the view
         view_edges = {
             e
             for e in global_active_edges
@@ -190,7 +232,7 @@ class PerSentenceGraphBuilder:
         }
 
         return PerSentenceGraph(
-            sentence_index=sentence_index,
+            sentence_index=current_index,
             explicit_nodes=frozenset(explicit_nodes),
             carryover_nodes=frozenset(carryover_nodes),
             active_nodes=frozenset(view_nodes),
@@ -199,8 +241,6 @@ class PerSentenceGraphBuilder:
         )
 
 
-# computes carryover nodes via BFS from explicit nodes
-# returns PerSentenceGraph with explicit, carryover, active nodes/edges, and anchor nodes
 def build_per_sentence_graph(
     cumulative_graph: Graph,
     explicit_nodes: List[Node],
@@ -219,6 +259,7 @@ def build_per_sentence_graph(
         cumulative_graph=cumulative_graph,
         max_distance=max_distance,
         anchor_nodes=anchor_nodes,
+        sentence_index=sentence_index,   
         repair_callback=repair_callback,
     )
 

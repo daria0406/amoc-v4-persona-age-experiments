@@ -934,48 +934,29 @@ class Decay:
         append_record_fn: callable,
     ) -> None:
         explicit_set = set(explicit_nodes)
+        # Compute distances from explicit nodes across active edges
         distances = self.compute_distances_from_sources(
             explicit_set, max_distance=max_distance
         )
 
-        current_sentence_tokens = set()
-        if self._current_sentence_text:
-            current_sentence_tokens = set(self._current_sentence_text.lower().split())
+        for node in self._graph.nodes:
+            token = node_token_fn(node)
+            if not token:
+                continue
+            # distance = distance from explicit nodes (if unreachable, use max_distance+1)
+            dist = distances.get(node, max_distance + 1)
+            raw_score = dist
+            score = self.convert_to_landscape_score(raw_score)
+            # Record every node, even if score == 0 (so it appears in matrix)
+            append_record_fn({
+                "sentence": sentence_id,
+                "token": token,
+                "score": score,
+            })
 
-        token_to_raw_score = {}
         node_raw_score = {}
-
-        for node in explicit_set:
-            token = node_token_fn(node)
-            if token:
-                token_to_raw_score[token] = 0
-                node_raw_score[node] = 0
-
-        for node in newly_inferred_nodes:
-            if node in explicit_set:
-                continue
-            token = node_token_fn(node)
-            if token and token.lower() in current_sentence_tokens:
-                token_to_raw_score[token] = 1
-                node_raw_score[node] = 1
-
-        for node, dist in distances.items():
-            if node in explicit_set or dist <= 0:
-                continue
-            token = node_token_fn(node)
-            if token and token not in token_to_raw_score:
-                if token.lower() in current_sentence_tokens:
-                    token_to_raw_score[token] = dist
-                    node_raw_score[node] = dist
-
-        for token, raw_score in token_to_raw_score.items():
-            append_record_fn(
-                {
-                    "sentence": sentence_id,
-                    "token": token,
-                    "score": self.convert_to_landscape_score(raw_score),
-                }
-            )
+        for node in self._graph.nodes:
+            node_raw_score[node] = distances.get(node, max_distance + 1)
 
         linking_verbs = {
             'is', 'are', 'was', 'were', 'be', 'being', 'been',
@@ -998,6 +979,7 @@ class Decay:
 
             token = label.replace("_", " ").strip().lower()
 
+            # Skip linking verbs and very short labels
             if token in linking_verbs or len(token) < 2:
                 continue
 
@@ -1027,16 +1009,21 @@ class Decay:
             append_record_fn({"sentence": sentence_id, "token": token, "score": score})
             
         self._max_sentence_index = max(self._max_sentence_index, sentence_id)
-        
+        # Collect all scores to update _full_activation_matrix
         all_scores: Dict[str, float] = {}
-        for token, raw_score in token_to_raw_score.items():
-            all_scores[token] = self.convert_to_landscape_score(raw_score)
+        for node in self._graph.nodes:
+            token = node_token_fn(node)
+            if token:
+                dist = distances.get(node, max_distance + 1)
+                score = self.convert_to_landscape_score(dist)
+                all_scores[token] = score
         for token, score in verb_scores.items():
             all_scores[token] = score
             
         for token, score in all_scores.items():
             if token not in self._full_activation_matrix:
                 self._full_activation_matrix[token] = [0.0] * (self._max_sentence_index - 1)
+            # Extend list to current max_sentence_index if necessary
             while len(self._full_activation_matrix[token]) < self._max_sentence_index:
                 self._full_activation_matrix[token].append(0.0)
             self._full_activation_matrix[token][sentence_id - 1] = score

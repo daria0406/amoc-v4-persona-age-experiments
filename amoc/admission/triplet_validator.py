@@ -31,6 +31,8 @@ class TripletValidator:
         "not", "no", "never", "neither", "nor", "without"
     ]
 
+    FORCE_ALLOW_CONCEPTS = frozenset({"horse", "sword", "fire"})
+
     def __init__(
         self,
         linguistic_ops: LinguisticProcessing,
@@ -545,6 +547,34 @@ class TripletValidator:
     ) -> Dict[str, Any]:
         subj, relation, obj = triplet
 
+        # FORCE‑ALLOW: if subject or object is in the whitelist
+        if (subj.lower() in self.FORCE_ALLOW_CONCEPTS or 
+            obj.lower() in self.FORCE_ALLOW_CONCEPTS):
+            # Still reject self‑loops
+            if subj.lower().strip() == obj.lower().strip():
+                return {
+                    "valid": False,
+                    "reason": f"Self-loop on forced token '{subj}' – rejected",
+                    "corrected_triple": None,
+                    "action": "reject_self_loop"
+                }
+            # Still reject negations
+            if self.is_negation_relation(relation):
+                return {
+                    "valid": False,
+                    "reason": f"Negation relation on forced token – rejected",
+                    "corrected_triple": None,
+                    "action": "reject_negation"
+                }
+            # Accept all other forced‑token triplets
+            return {
+                "valid": True,
+                "reason": f"Forced acceptance because token in {self.FORCE_ALLOW_CONCEPTS}",
+                "corrected_triple": None,
+                "action": "accept_forced"
+            }
+
+        # Original validation logic for all other tokens
         if self.is_negation_relation(relation):
             return {
                 "valid": False,

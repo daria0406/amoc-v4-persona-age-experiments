@@ -27,8 +27,12 @@ class TextNormalizer:
         if re.search(r"\b(like|likes?)\b", text):
             return "enjoys"
 
-        # |Is" patterns - prevents triplets such as: charlegmagne - is_type_of - king OR biographer - is_kind_of - knowledgeable
-        if re.search(r"\b(is|are|was|were|be|being|been)\b", text):
+        # "Is/Was" patterns - prevents triplets such as: charlegmagne - is_type_of - king
+        if re.search(r"\b(was|were)\b", text):
+            if re.search(r"kind|type|sort|form|variant|example|instance", text):
+                return "was"
+            return "was"
+        if re.search(r"\b(is|are|be|being|been)\b", text):
             if re.search(r"kind|type|sort|form|variant|example|instance", text):
                 return "is"
             return "is"

@@ -73,8 +73,6 @@ class Graph:
         provenance: Optional[NodeProvenance] = None,
         mark_explicit: bool = True,
     ):
-        # if not self.is_valid_node_candidate(actual_text, node_source):
-        #     return None
         lemmas = [lemma.lower() for lemma in lemmas]
         primary_lemma = lemmas[0] if lemmas else ""
 
@@ -97,6 +95,10 @@ class Graph:
             admit_kwargs = admit_kwargs or {}
             if not admit(lemma=lemmas[0], node_type=node_type, **admit_kwargs):
                 return None
+
+        # If origin_sentence is not provided, use the current sentence index
+        if origin_sentence is None:
+            origin_sentence = self._current_sentence_idx
 
         actual_text_l = (actual_text or "").lower()
 
