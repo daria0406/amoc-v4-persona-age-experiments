@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Optional, List, Set, Dict, Tuple
 from collections import deque
 import networkx as nx
 from amoc.core.node import NodeSource
-from amoc.config.constants import MAX_CARRYOVER, MAX_TRIPLETS, REACTIVATION_VISIBILITY
+from amoc.config.constants import MAX_CARRYOVER, MAX_TRIPLETS, REACTIVATION_VISIBILITY, CARRYOVER_SENIORITY_WEIGHT
 from dataclasses import dataclass
 
 
@@ -943,11 +943,22 @@ class Decay:
             token = node_token_fn(node)
             if not token:
                 continue
-            # distance = distance from explicit nodes (if unreachable, use max_distance+1)
+
             dist = distances.get(node, max_distance + 1)
-            raw_score = dist
-            score = self.convert_to_landscape_score(raw_score)
-            # Record every node, even if score == 0 (so it appears in matrix)
+            base_score = self.convert_to_landscape_score(dist)
+
+            seniority = 0
+            if node.first_seen_sentence is not None:
+                seniority = max(0, sentence_id - node.first_seen_sentence)
+
+            penalty = CARRYOVER_SENIORITY_WEIGHT * seniority
+            score = max(0.0, base_score - penalty)
+
+            logging.debug(
+                f"S{sentence_id} | {token} | dist={dist} base={base_score:.1f} "
+                f"seniority={seniority} penalty={penalty:.1f} score={score:.1f}"
+            )
+
             append_record_fn({
                 "sentence": sentence_id,
                 "token": token,
@@ -956,7 +967,13 @@ class Decay:
 
         node_raw_score = {}
         for node in self._graph.nodes:
-            node_raw_score[node] = distances.get(node, max_distance + 1)
+            dist = distances.get(node, max_distance + 1)
+            base_score = self.convert_to_landscape_score(dist)
+            seniority = 0
+            if node.first_seen_sentence is not None:
+                seniority = max(0, sentence_id - node.first_seen_sentence)
+            penalized_score = max(0.0, base_score - CARRYOVER_SENIORITY_WEIGHT * seniority)
+            node_raw_score[node] = 5.0 - penalized_score
 
         linking_verbs = {
             'is', 'are', 'was', 'were', 'be', 'being', 'been',
@@ -1009,21 +1026,26 @@ class Decay:
             append_record_fn({"sentence": sentence_id, "token": token, "score": score})
             
         self._max_sentence_index = max(self._max_sentence_index, sentence_id)
+        
         # Collect all scores to update _full_activation_matrix
         all_scores: Dict[str, float] = {}
         for node in self._graph.nodes:
             token = node_token_fn(node)
             if token:
                 dist = distances.get(node, max_distance + 1)
-                score = self.convert_to_landscape_score(dist)
+                base_score = self.convert_to_landscape_score(dist)
+                seniority = 0
+                if node.first_seen_sentence is not None:
+                    seniority = max(0, sentence_id - node.first_seen_sentence)
+                score = max(0.0, base_score - CARRYOVER_SENIORITY_WEIGHT * seniority)
                 all_scores[token] = score
+                
         for token, score in verb_scores.items():
             all_scores[token] = score
             
         for token, score in all_scores.items():
             if token not in self._full_activation_matrix:
                 self._full_activation_matrix[token] = [0.0] * (self._max_sentence_index - 1)
-            # Extend list to current max_sentence_index if necessary
             while len(self._full_activation_matrix[token]) < self._max_sentence_index:
                 self._full_activation_matrix[token].append(0.0)
             self._full_activation_matrix[token][sentence_id - 1] = score

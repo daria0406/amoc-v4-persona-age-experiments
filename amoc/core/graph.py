@@ -111,6 +111,7 @@ class Graph:
                 node_source,
                 0,
                 origin_sentence=origin_sentence if mark_explicit else None,
+                first_seen_sentence=origin_sentence,
                 provenance=provenance or NodeProvenance.STORY_TEXT,
             )
             self.nodes.add(node)
@@ -118,6 +119,11 @@ class Graph:
                 node.mark_explicit_in_sentence(origin_sentence)
         else:
             node.add_actual_text(actual_text_l)
+            if node.first_seen_sentence is None or (
+                origin_sentence is not None
+                and origin_sentence < node.first_seen_sentence
+            ):
+                node.first_seen_sentence = origin_sentence
             if node.node_type != node_type:
                 if node_type == NodeType.PROPERTY:
                     node.node_type = NodeType.PROPERTY

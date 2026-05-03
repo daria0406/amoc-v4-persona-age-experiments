@@ -32,6 +32,7 @@ class Node:
         node_source: NodeSource,
         score: int,
         origin_sentence: Optional[int] = None,
+        first_seen_sentence: Optional[int] = None,
         provenance: Optional[NodeProvenance] = None,
     ) -> None:
         self.lemmas: List[str] = [lemma.lower() for lemma in lemmas]
@@ -43,7 +44,9 @@ class Node:
         self.edges: List["Edge"] = []
         self.origin_sentence: Optional[int] = origin_sentence
         self.provenance: NodeProvenance = provenance or NodeProvenance.STORY_TEXT
-        self.first_seen_sentence: Optional[int] = origin_sentence
+        self.first_seen_sentence: Optional[int] = (
+            first_seen_sentence if first_seen_sentence is not None else origin_sentence
+        )
         self.explicit_sentences: Set[int] = (
             {origin_sentence} if origin_sentence is not None else set()
         )
