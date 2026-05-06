@@ -6,7 +6,6 @@ pytest.ini
 
 # file types
 *.pyc
-*.json
 *.csv
 *.pdf
 *.def

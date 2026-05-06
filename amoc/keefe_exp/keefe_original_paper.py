@@ -6,6 +6,8 @@ import numpy as np
 from tqdm import tqdm
 from scipy.stats import norm
 from statsmodels.formula.api import mixedlm
+import sys
+import re
 
 from amoc.pipeline.orchestrator import AMoCv4
 from amoc.llm.vllm_client import VLLMClient
@@ -31,16 +33,24 @@ Return only the number (1,2,3,4). Do not add any extra text or punctuation."""
 def score_probe_llm(amoc, probe_lemma):
     triplets = graph_edges_to_triplets(amoc.graph, only_active=False)
     if not triplets:
+        print("No edges extracted.\n")
         return 1
     edges_str = "\n".join([f"{s} - {r} - {o}" for s, r, o in triplets])
     prompt = PROMPT.format(edges=edges_str, probe_word=probe_lemma)
     response = amoc.client.generate_raw(prompt, temperature=0.0)
     try:
-        return int(response.strip())
+        score = int(response.strip())
     except ValueError:
-        import re
         match = re.search(r"\b([1-4])\b", response)
-        return int(match.group(1)) if match else 1
+        score = int(match.group(1)) if match else 1
+
+    # Print debug 
+    print("\n=== Extracted edges ===")
+    print(edges_str)
+    print("="*50)
+    print(f"LLM response: {response.strip()}")
+    print(f"Parsed score: {score}\n")
+    return score
 
 def lme_pairwise(df, item_col="item_id", condition_col="condition", score_col="score"):
     df = df.copy()
@@ -78,16 +88,14 @@ def lme_pairwise(df, item_col="item_id", condition_col="condition", score_col="s
         "p": [expl_p, pred_p, pvex_p]
     })
 
-
 def main():
     parser = argparse.ArgumentParser(description="Keefe v4.0 style")
-    parser.add_argument("--json", default="keefe_ready.json", help="Path to JSON file")
+    parser.add_argument("--json", default="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments/amoc/keefe_exp/keefe_ready.json", help="Path to JSON file")
     parser.add_argument("--output", default="keefe_original_results.csv", help="Output CSV file")
     parser.add_argument("--model", default="meta-llama/Llama-3.3-70B-Instruct", help="vLLM model name")
-    parser.add_argument("--tp", type=int, default=1, help="Tensor parallel size")
+    parser.add_argument("--tp", type=int, default=4, help="Tensor parallel size")
     args = parser.parse_args()
 
-    # Load spaCy and vLLM client
     spacy_nlp = load_spacy()
     if spacy_nlp is None:
         raise RuntimeError("Failed to load spaCy model. Run: python -m spacy download en_core_web_sm")
@@ -123,6 +131,17 @@ def main():
                 matrix_dir_base=None,
                 checkpoint=False,
             )
+            # disable inference and activation matrix wrapper which interfere with the prompt above
+            amoc.record_activation_matrix_wrapper = lambda *args, **kwargs: None
+            amoc._inference_ops.infer_new_relationships_step_0 = lambda sent: ([], [])
+            amoc._inference_ops.infer_new_relationships = lambda *a, **kw: ([], [])
+            amoc._inference_ops._add_inferred_relationships_to_graph_step_0 = lambda *a, **kw: None
+            amoc._inference_ops._add_inferred_relationships_to_graph = lambda *a, **kw: None
+            amoc._infer_new_relationships_step_0_fn = lambda sent: ([], [])
+            amoc._add_inferred_relationships_to_graph_step_0_fn = lambda *a, **kw: None
+            amoc._infer_new_relationships_fn = lambda *a, **kw: ([], [])
+            amoc._add_inferred_relationships_to_graph_fn = lambda *a, **kw: None
+
             amoc.analyze(replace_pronouns=False, plot_after_each_sentence=False)
             score = score_probe_llm(amoc, probe_lemma)
             rows.append({

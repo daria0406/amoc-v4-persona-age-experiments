@@ -38,6 +38,8 @@ class Inference:
     def infer_new_relationships_step_0(
         self, sent: "Span"
     ) -> Tuple[List[Tuple[str, str, str]], List[Tuple[str, str, str]]]:
+        if self._max_new_concepts <= 0 and self._max_new_properties <= 0:
+            return [], []
         if not self._get_sentences_text_based_nodes_fn:
             return [], []
 
@@ -114,6 +116,8 @@ class Inference:
         graph_nodes_representation: str,
         graph_edges_representation: str,
     ) -> Tuple[List[Tuple[str, str, str]], List[Tuple[str, str, str]]]:
+        if self._max_new_concepts <= 0 and self._max_new_properties <= 0:
+            return [], []
         nodes_from_text = ""
         for i, node in enumerate(current_sentence_text_based_nodes):
             nodes_from_text += (
