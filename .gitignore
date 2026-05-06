@@ -17,6 +17,7 @@ pytest.ini
 # environments
 venv/
 venv311/
+venv312/
 
 # patches
 patches/
@@ -26,3 +27,4 @@ patches/
 me_learning/
 tests/*
 local_tests/
+datasets/
