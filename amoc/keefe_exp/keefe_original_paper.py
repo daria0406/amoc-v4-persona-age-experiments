@@ -141,6 +141,11 @@ def main():
             amoc._add_inferred_relationships_to_graph_step_0_fn = lambda *a, **kw: None
             amoc._infer_new_relationships_fn = lambda *a, **kw: ([], [])
             amoc._add_inferred_relationships_to_graph_fn = lambda *a, **kw: None
+            amoc._activation_ops.record_sentence_activation_matrix = lambda *a, **kw: None
+            amoc._activation_ops.export_activation_matrix_csv = lambda *a, **kw: None
+            amoc._output_ops.finalize_outputs = lambda *a, **kw: (None, None, None)
+            amoc._plot_ops.plot_sentence_views = lambda *a, **kw: None
+            amoc._plot_ops.plot_graph_snapshot_full = lambda *a, **kw: None
 
             amoc.analyze(replace_pronouns=False, plot_after_each_sentence=False)
             score = score_probe_llm(amoc, probe_lemma)
