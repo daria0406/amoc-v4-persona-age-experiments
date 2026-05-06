@@ -355,6 +355,11 @@ class SentenceGraphBuilder:
                 self.graph.nodes.add(node)
         # explicit nodes
         explicit_nodes_current_sentence = set(explicit_nodes_current_sentence)
+        self._extract_deterministic_structure_fn(
+            sent,
+            current_nodes,
+            current_words,
+        )
         # define anchor nodes = explicit nodes for the first sent
         # inferred nodes
         inferred_concept_relationships, inferred_property_relationships = (

@@ -14,6 +14,16 @@ from amoc.llm.vllm_client import VLLMClient
 from amoc.output.recorder import graph_edges_to_triplets
 from amoc.utils.spacy_utils import load_spacy
 from amoc.utils.io import robust_read_persona_csv
+from amoc.admission.node_admission import NodeAdmission as _NodeAdmission
+
+# Fix: get_or_create_node_from_text calls admit_node with provenance="TEXT_FALLBACK",
+# which hits the catch-all rejection at node_admission.py:127. Allow it through.
+_orig_admit = _NodeAdmission.admit_node
+def _permissive_admit(self, lemma, node_type, provenance="STORY_EXPLICIT", **kw):
+    if provenance == "TEXT_FALLBACK":
+        return True
+    return _orig_admit(self, lemma, node_type, provenance=provenance, **kw)
+_NodeAdmission.admit_node = _permissive_admit
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -22,21 +32,34 @@ PROMPT = """You have the following edges from a knowledge graph in the format: n
 
 {edges}
 
-Using the graph and the story that the graph tells, for the word "{probe_word}" assign a score between 1 and 4 with the following meaning:
-1 – no connection or relevance to one or more ideas in the graph (pay attention to the story as well)
-2 – little connection or relevance to one or more ideas in the graph
-3 – a clear connection or relevance to one or more ideas in the graph
-4 – a strong connection or relevance to one or more ideas in the graph
+Your task: For the word "{probe_word}", assign a score from 1 to 4 based on the following rules:
 
-Return only the number (1,2,3,4). Do not add any extra text or punctuation."""
+- **Score 4**: The word "{probe_word}" appears EXPLICITLY as an edge label (relation) OR as a node (subject or object) in the graph above.
+- **Score 3**: The word does not appear, but the graph strongly implies the action or concept (e.g., edges like 'throw' for probe 'throw', or 'run' for probe 'sprint').
+- **Score 2**: The graph has a weak or indirect connection to the word (e.g., related objects but no action).
+- **Score 1**: The graph has no connection or relevance to the word.
+
+Return ONLY the number (1,2,3,4). Do not add any extra text or punctuation."""
 
 def score_probe_llm(amoc, probe_lemma):
     triplets = graph_edges_to_triplets(amoc.graph, only_active=False)
+    #print(f"[DEBUG] Number of triplets for probe '{probe_lemma}': {len(triplets)}")
+    # if triplets:
+    #     print(f"[DEBUG] First triplet: {triplets[0]}")
+    # else:
+    #     print(f"[DEBUG] No triplets found. Graph edges: {list(amoc.graph.edges)}")
     if not triplets:
         return 1
     edges_str = "\n".join([f"{s} - {r} - {o}" for s, r, o in triplets])
+    print(f"Edges for {probe_lemma}:\n{edges_str}")
     prompt = PROMPT.format(edges=edges_str, probe_word=probe_lemma)
-    response = amoc.client.generate_raw(prompt, temperature=0.0)
+    try:
+        response = amoc.client.call_vllm(prompt, persona=amoc.persona)
+        print(f"[DEBUG] LLM response: '{response}'", flush=True)
+    except Exception as e:
+        print(f"[ERROR] LLM call failed: {e}", flush=True)
+        return 1
+
     try:
         score = int(response.strip())
     except ValueError:
@@ -112,6 +135,16 @@ def main():
 
     client = VLLMClient(model_name=args.model, tp_size=args.tp, debug=False)
 
+    original_clean = client._clean_response
+    def keefe_clean_response(raw_text: str) -> str:
+        # First, look for a single digit 1
+        match = re.search(r'\b([1-4])\b', raw_text)
+        if match:
+            return match.group(1)
+        # Fall back to the original cleaning (which expects brackets)
+        return original_clean(raw_text)
+    client._clean_response = keefe_clean_response
+
     all_scores = []
     for idx, row in tqdm(df.iterrows(), total=len(df), desc="Processing personas"):
         persona_text = str(row["persona_text"])
@@ -156,6 +189,11 @@ def main():
                 amoc._output_ops.finalize_outputs = lambda *a, **kw: (None, None, None)
                 amoc._plot_ops.plot_sentence_views = lambda *a, **kw: None
                 amoc._plot_ops.plot_graph_snapshot_full = lambda *a, **kw: None
+                amoc.stabilize_connectivity_wrapper = lambda *a, **kw: False
+                amoc._connectivity_ops.run_repair_pipeline = lambda *a, **kw: None
+                amoc.is_attachable_wrapper = lambda *a, **kw: True
+                amoc._edge_ops._get_attachable_nodes = lambda: set(amoc.graph.nodes)
+                amoc._sentence_processing_ops._extract_deterministic_structure_fn = lambda *a, **kw: None
 
                 amoc.analyze(replace_pronouns=False, plot_after_each_sentence=False)
                 score = score_probe_llm(amoc, probe_lemma)

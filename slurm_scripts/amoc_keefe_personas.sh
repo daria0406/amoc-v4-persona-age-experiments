@@ -56,7 +56,7 @@ apptainer exec --nv \
             --keefe-json '$KEEFE_JSON' \
             --output-csv '$OUTPUT_CSV' \
             --stats-output '$STATS_OUTPUT' \
-            --model meta-llama/Llama-3.2-3B-Instruct \
+            --model meta-llama/Llama-3.3-70B-Instruct \
             --max-rows 1 \
             --tp 4
     "

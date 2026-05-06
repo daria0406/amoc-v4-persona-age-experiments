@@ -38,6 +38,7 @@ def score_probe_llm(amoc, probe_lemma):
     edges_str = "\n".join([f"{s} - {r} - {o}" for s, r, o in triplets])
     prompt = PROMPT.format(edges=edges_str, probe_word=probe_lemma)
     response = amoc.client.generate_raw(prompt, temperature=0.0)
+    print(f"[DEBUG] LLM response for '{probe_lemma}': '{response.strip()}'")
     try:
         score = int(response.strip())
     except ValueError:

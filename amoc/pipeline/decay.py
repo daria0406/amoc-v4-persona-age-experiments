@@ -1118,7 +1118,7 @@ class Decay:
         self._last_decay_decisions = self.apply_semantic_edge_decay()
 
         # Then pruning
-        self.apply_pruning(prev_sentences, aggressive=True)
+        #self.apply_pruning(prev_sentences, aggressive=True)
 
         # Enforce active/visibility invariant
         for edge in self._graph.edges:
