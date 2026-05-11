@@ -29,16 +29,12 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 PROMPT = """You have the following edges from a knowledge graph in the format: node - edge - node.
-
 {edges}
-
-Your task: 
 For the word "{probe_word}", assign a score from 1 to 4 using these definitions:
-- 4: Strong connection or relevance to the story
-- 3: A clear connection or relevance
-- 2: Little connection or relevance
-- 1: No connection or relevance
-
+- 4: Strong connection or relevance to the story. The story told by the edges clearly implies or revolves around this word, even if the word itself is not written among the edges.
+- 3: A clear connection or relevance, but the word is not the main focus of the story.
+- 2: Little connection or relevance.
+- 1: No connection or relevance.
 Return ONLY the number (1,2,3,4). Do not add any extra text or punctuation."""
 
 def score_probe_llm(amoc, probe_lemma):
@@ -160,8 +156,8 @@ def main():
                     story_text=sentence,
                     vllm_client=client,
                     max_distance_from_active_nodes=2,
-                    max_new_concepts=7,    
-                    max_new_properties=7,
+                    max_new_concepts=10,    
+                    max_new_properties=10,
                     context_length=1,
                     edge_visibility=2,
                     nr_relevant_edges=10,
@@ -173,9 +169,7 @@ def main():
                     matrix_dir_base=None,
                     checkpoint=False,
                 )
-
-                 # disable inference and activation matrix wrapper which interfere with the prompt above
-                amoc.record_activation_matrix_wrapper = lambda *args, **kwargs: None
+                amoc._activation_ops.record_sentence_activation_matrix = lambda *a, **kw: None
                 # amoc._inference_ops.infer_new_relationships_step_0 = lambda sent: ([], [])
                 # amoc._inference_ops.infer_new_relationships = lambda *a, **kw: ([], [])
                 # amoc._inference_ops._add_inferred_relationships_to_graph_step_0 = lambda *a, **kw: None
@@ -184,7 +178,7 @@ def main():
                 # amoc._add_inferred_relationships_to_graph_step_0_fn = lambda *a, **kw: None
                 # amoc._infer_new_relationships_fn = lambda *a, **kw: ([], [])
                 # amoc._add_inferred_relationships_to_graph_fn = lambda *a, **kw: None
-                amoc._activation_ops.record_sentence_activation_matrix = lambda *a, **kw: None
+                amoc.record_activation_matrix_wrapper = lambda *args, **kwargs: None
                 amoc._activation_ops.export_activation_matrix_csv = lambda *a, **kw: None
                 amoc._output_ops.finalize_outputs = lambda *a, **kw: (None, None, None)
                 amoc._plot_ops.plot_sentence_views = lambda *a, **kw: None

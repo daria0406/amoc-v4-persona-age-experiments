@@ -31,6 +31,8 @@ Do NOT output relationships that only connect new text nodes to other new text n
 
 HUB-FIRST ATTACHMENT: Among the existing graph nodes, prioritize connections to the node(s) with the LOWEST score (score=0 means most central/hub). Every explicit concept from the current sentence should ideally have at least one relationship connecting it to the most central node (hub) in the graph. If a direct connection to the hub is semantically justified by the text, include it.
 
+**INFERRING THE MAIN IMPLIED ACTION:** If the text strongly implies a specific action or event that is central to the story (even if the exact word is not written), you should include the implied action verb as a relation label. For example, a sentence about a player heading toward home plate after a hit strongly implies the actions "run" and "throw". Use your understanding of what must be happening in the narrative to surface those implicit but essential events as edges.
+
 List them as a Python list and do not provide additional explanation."""
 
 NEW_RELATIONSHIPS_FOR_FIRST_SENTENCE_PROMPT ="""I want to build a knowledge graph using the provided text. The graph should consist of two types of nodes: concept nodes and property nodes. Concepts nodes represent objects or persons from the story and are generally represented by nouns in the text. Property nodes describe the concepts nodes and are generally represented by adjectives in the text. An edge connects a concept to another concept or a concept to a property, and it is described by a relationship between the connected nodes.
@@ -40,8 +42,8 @@ The format for representing the graph is as follows: ('concept1', 'relation (edg
 I already extracted the nodes from the text and these ones you should use:
 {nodes_from_text}
 
-**CRITICAL INSTRUCTION FOR ACTION VERBS:**  
-If the text describes an action (e.g., "he tore the shirt", "she threw the ball", "the policeman shot the suspect"), you MUST include a triple where the **relation** is the action verb in its base form (e.g., 'tear', 'throw', 'shoot'). For example: ('he', 'tear', 'shirt') or ('policeman', 'shoot', 'suspect'). Do NOT omit the action verb; it is essential for the graph to capture the main event.
+**CRITICAL INSTRUCTION FOR ACTION VERBS (EXPLICIT AND IMPLIED):**  
+If the text describes an action (e.g., "he tore the shirt", "she threw the ball", "the policeman shot the suspect"), you MUST include a triple where the **relation** is the action verb in its base form (e.g., 'tear', 'throw', 'shoot'). For example: ('he', 'tear', 'shirt') or ('policeman', 'shoot', 'suspect'). Do NOT omit the action verb; it is essential for the graph to capture the main event. Additionally, if the text strongly implies a central action without stating the exact word (e.g., a scene of a player racing toward a ball implies "catch" or "throw"), you must still include that implied action verb as a relation. Use the narrative context to infer the most critical event and make it an edge.
 
 IMPORTANT: Some concept nodes represent persons whose age or educational level is explicitly mentioned or strongly implied in the text (for example: "8-year-old boy", "primary school student", "high school student", "college freshman", "university student"). When you generate relationships, you must take this age or educational level into account so that the relationships reflect what that person is realistically able to understand.
 
