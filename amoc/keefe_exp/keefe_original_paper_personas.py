@@ -32,12 +32,12 @@ PROMPT = """You have the following edges from a knowledge graph in the format: n
 
 {edges}
 
-Your task: For the word "{probe_word}", assign a score from 1 to 4 based on the following rules:
-
-- **Score 4**: The word "{probe_word}" appears EXPLICITLY as an edge label (relation) OR as a node (subject or object) in the graph above.
-- **Score 3**: The word does not appear, but the graph strongly implies the action or concept (e.g., edges like 'throw' for probe 'throw', or 'run' for probe 'sprint').
-- **Score 2**: The graph has a weak or indirect connection to the word (e.g., related objects but no action).
-- **Score 1**: The graph has no connection or relevance to the word.
+Your task: 
+For the word "{probe_word}", assign a score from 1 to 4 using these definitions:
+- 4: Strong connection or relevance to the story
+- 3: A clear connection or relevance
+- 2: Little connection or relevance
+- 1: No connection or relevance
 
 Return ONLY the number (1,2,3,4). Do not add any extra text or punctuation."""
 
@@ -160,8 +160,8 @@ def main():
                     story_text=sentence,
                     vllm_client=client,
                     max_distance_from_active_nodes=2,
-                    max_new_concepts=0,    
-                    max_new_properties=0,
+                    max_new_concepts=7,    
+                    max_new_properties=7,
                     context_length=1,
                     edge_visibility=2,
                     nr_relevant_edges=10,
@@ -176,24 +176,24 @@ def main():
 
                  # disable inference and activation matrix wrapper which interfere with the prompt above
                 amoc.record_activation_matrix_wrapper = lambda *args, **kwargs: None
-                amoc._inference_ops.infer_new_relationships_step_0 = lambda sent: ([], [])
-                amoc._inference_ops.infer_new_relationships = lambda *a, **kw: ([], [])
-                amoc._inference_ops._add_inferred_relationships_to_graph_step_0 = lambda *a, **kw: None
-                amoc._inference_ops._add_inferred_relationships_to_graph = lambda *a, **kw: None
-                amoc._infer_new_relationships_step_0_fn = lambda sent: ([], [])
-                amoc._add_inferred_relationships_to_graph_step_0_fn = lambda *a, **kw: None
-                amoc._infer_new_relationships_fn = lambda *a, **kw: ([], [])
-                amoc._add_inferred_relationships_to_graph_fn = lambda *a, **kw: None
+                # amoc._inference_ops.infer_new_relationships_step_0 = lambda sent: ([], [])
+                # amoc._inference_ops.infer_new_relationships = lambda *a, **kw: ([], [])
+                # amoc._inference_ops._add_inferred_relationships_to_graph_step_0 = lambda *a, **kw: None
+                # amoc._inference_ops._add_inferred_relationships_to_graph = lambda *a, **kw: None
+                # amoc._infer_new_relationships_step_0_fn = lambda sent: ([], [])
+                # amoc._add_inferred_relationships_to_graph_step_0_fn = lambda *a, **kw: None
+                # amoc._infer_new_relationships_fn = lambda *a, **kw: ([], [])
+                # amoc._add_inferred_relationships_to_graph_fn = lambda *a, **kw: None
                 amoc._activation_ops.record_sentence_activation_matrix = lambda *a, **kw: None
                 amoc._activation_ops.export_activation_matrix_csv = lambda *a, **kw: None
                 amoc._output_ops.finalize_outputs = lambda *a, **kw: (None, None, None)
                 amoc._plot_ops.plot_sentence_views = lambda *a, **kw: None
                 amoc._plot_ops.plot_graph_snapshot_full = lambda *a, **kw: None
-                amoc.stabilize_connectivity_wrapper = lambda *a, **kw: False
-                amoc._connectivity_ops.run_repair_pipeline = lambda *a, **kw: None
-                amoc.is_attachable_wrapper = lambda *a, **kw: True
-                amoc._edge_ops._get_attachable_nodes = lambda: set(amoc.graph.nodes)
-                amoc._sentence_processing_ops._extract_deterministic_structure_fn = lambda *a, **kw: None
+                # amoc.stabilize_connectivity_wrapper = lambda *a, **kw: False
+                # amoc._connectivity_ops.run_repair_pipeline = lambda *a, **kw: None
+                # amoc.is_attachable_wrapper = lambda *a, **kw: True
+                # amoc._edge_ops._get_attachable_nodes = lambda: set(amoc.graph.nodes)
+                # amoc._sentence_processing_ops._extract_deterministic_structure_fn = lambda *a, **kw: None
 
                 amoc.analyze(replace_pronouns=False, plot_after_each_sentence=False)
                 score = score_probe_llm(amoc, probe_lemma)
