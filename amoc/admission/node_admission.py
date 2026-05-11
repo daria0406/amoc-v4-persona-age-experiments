@@ -97,9 +97,9 @@ class NodeAdmission:
                 if tok.pos_ in {"VERB", "AUX"}:
                     return False
             # must be grounded in story or a plural form of a grounded lemma
-            if lemma not in self._story_lemmas:
-                if not (lemma.endswith("s") and lemma[:-1] in self._story_lemmas):
-                    return False
+            # if lemma not in self._story_lemmas:
+            #     if not (lemma.endswith("s") and lemma[:-1] in self._story_lemmas):
+            #         return False
 
         # property nodes = adjectives in sentences
         if node_type == NodeType.PROPERTY:

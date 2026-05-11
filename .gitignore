@@ -6,6 +6,7 @@ pytest.ini
 
 # file types
 *.pyc
+*.txt
 *.json
 *.csv
 *.pdf
@@ -17,6 +18,7 @@ pytest.ini
 # environments
 venv/
 venv311/
+venv312/
 
 # patches
 patches/

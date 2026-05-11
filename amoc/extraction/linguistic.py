@@ -101,6 +101,7 @@ class LinguisticProcessing:
                 label=label,
                 edge_forget=self._edge_visibility,
                 created_at_sentence=self._current_sentence_index,
+                bypass_attachment_constraint=True,
             )
             if edge:
                 edge.mark_as_current_sentence(reset_score=True)
