@@ -16,6 +16,7 @@ from amoc.output.recorder import graph_edges_to_triplets
 from amoc.utils.spacy_utils import load_spacy
 from amoc.utils.io import robust_read_persona_csv
 from amoc.admission.node_admission import NodeAdmission as _NodeAdmission
+from amoc.admission.triplet_validator import TripletValidator
 
 # allow nodes created with TEXT_FALLBACK provenance -  same as in the Keefe experiment
 _orig_admit = _NodeAdmission.admit_node
@@ -40,7 +41,7 @@ Example: {{"support": [1, 3], "contradict": [2, 5]}}
 Only output the JSON object."""
 
 def get_support_contradict(amoc, target_sentence):
-    triplets = graph_edges_to_triplets(amoc.graph, only_active=True)
+    triplets = graph_edges_to_triplets(amoc.graph, only_active=False)
     if not triplets:
         return {"support": [], "contradict": []}
 
@@ -129,6 +130,14 @@ def main():
     parser.add_argument("--max-items", type=int, default=None, help="Limit number of O'Brien items (for testing)")
     args = parser.parse_args()
 
+    # invalidate triplet validator - let all triplets go through
+    TripletValidator._orig_validate_with_llm = TripletValidator.validate_with_llm
+    TripletValidator.validate_with_llm = lambda self, *args, **kwargs: {
+        "valid": True, 
+        "reason": "bypassed for O'Brien experiment", 
+        "corrected_triple": None
+    }
+
     # Load O'Brien files
     with open(args.obrien_json, "r", encoding="utf-8") as f:
         items = json.load(f)
@@ -179,7 +188,7 @@ def main():
                     max_new_concepts=15,
                     max_new_properties=15,
                     context_length=2,
-                    edge_visibility=3,
+                    edge_visibility=2,
                     nr_relevant_edges=15,
                     spacy_nlp=spacy_nlp,
                     debug=False,
@@ -197,6 +206,8 @@ def main():
                 amoc._output_ops.finalize_outputs = lambda *a, **kw: (None, None, None)
                 amoc._plot_ops.plot_sentence_views = lambda *a, **kw: None
                 amoc._plot_ops.plot_graph_snapshot_full = lambda *a, **kw: None
+                amoc.is_attachable_wrapper = lambda *a, **kw: True
+                amoc._edge_ops._get_attachable_nodes = lambda: set(amoc.graph.nodes)
 
                 amoc.analyze(replace_pronouns=False, plot_after_each_sentence=False)
 
@@ -244,51 +255,148 @@ def main():
         df_out.to_csv(args.output_csv, index=False)
         print(f"Saved {len(df_out)} observations to {args.output_csv}")
 
+        # ---- Means by Condition (Paper Format) ----
+        print("\n" + "=" * 80)
+        print("  MEANS BY CONDITION (Paper Format)")
+        print("=" * 80)
+
+        all_items_list = sorted(df_out['item_id'].unique())
+        items_with_q1q2 = sorted(df_out[df_out['condition'].isin(['qualified1', 'qualified2'])]['item_id'].unique())
+        items_with_q3q4 = sorted(df_out[df_out['condition'].isin(['qualified3', 'qualified4'])]['item_id'].unique())
+
+        ci_support = df_out[df_out['condition'] == 'consistent']['support'].mean()
+        ci_contradict = df_out[df_out['condition'] == 'consistent']['contradict'].mean()
+        i_support = df_out[df_out['condition'] == 'inconsistent']['support'].mean()
+        i_contradict = df_out[df_out['condition'] == 'inconsistent']['contradict'].mean()
+
+        ciq12 = df_out[df_out['item_id'].isin(items_with_q1q2)]
+        cq12_support = ciq12[ciq12['condition'] == 'consistent']['support'].mean()
+        cq12_contradict = ciq12[ciq12['condition'] == 'consistent']['contradict'].mean()
+        iq12_support = ciq12[ciq12['condition'] == 'inconsistent']['support'].mean()
+        iq12_contradict = ciq12[ciq12['condition'] == 'inconsistent']['contradict'].mean()
+        q1_support = ciq12[ciq12['condition'] == 'qualified1']['support'].mean()
+        q1_contradict = ciq12[ciq12['condition'] == 'qualified1']['contradict'].mean()
+        q2_support = ciq12[ciq12['condition'] == 'qualified2']['support'].mean()
+        q2_contradict = ciq12[ciq12['condition'] == 'qualified2']['contradict'].mean()
+
+        ciq34 = df_out[df_out['item_id'].isin(items_with_q3q4)]
+        cq34_support = ciq34[ciq34['condition'] == 'consistent']['support'].mean()
+        cq34_contradict = ciq34[ciq34['condition'] == 'consistent']['contradict'].mean()
+        iq34_support = ciq34[ciq34['condition'] == 'inconsistent']['support'].mean()
+        iq34_contradict = ciq34[ciq34['condition'] == 'inconsistent']['contradict'].mean()
+        q3_support = ciq34[ciq34['condition'] == 'qualified3']['support'].mean()
+        q3_contradict = ciq34[ciq34['condition'] == 'qualified3']['contradict'].mean()
+        q4_support = ciq34[ciq34['condition'] == 'qualified4']['support'].mean()
+        q4_contradict = ciq34[ciq34['condition'] == 'qualified4']['contradict'].mean()
+
+        print(f"{'Type':<6} {'C/I Support':<15} {'C/I Contradict':<17} {'C/I/Q1/Q2 Support':<20} {'C/I/Q1/Q2 Contradict':<22} {'C/I/Q3/Q4 Support':<20} {'C/I/Q3/Q4 Contradict'}")
+        print(f"{'C':<6} {ci_support:<15.2f} {ci_contradict:<17.2f} {cq12_support:<20.2f} {cq12_contradict:<22.2f} {cq34_support:<20.2f} {cq34_contradict:.2f}")
+        print(f"{'I':<6} {i_support:<15.2f} {i_contradict:<17.2f} {iq12_support:<20.2f} {iq12_contradict:<22.2f} {iq34_support:<20.2f} {iq34_contradict:.2f}")
+        print(f"{'Q1':<6} {'–':<15} {'–':<17} {q1_support:<20.2f} {q1_contradict:<22.2f} {'–':<20} {'–'}")
+        print(f"{'Q2':<6} {'–':<15} {'–':<17} {q2_support:<20.2f} {q2_contradict:<22.2f} {'–':<20} {'–'}")
+        print(f"{'Q3':<6} {'–':<15} {'–':<17} {'–':<20} {'–':<22} {q3_support:<20.2f} {q3_contradict:.2f}")
+        print(f"{'Q4':<6} {'–':<15} {'–':<17} {'–':<20} {'–':<22} {q4_support:<20.2f} {q4_contradict:.2f}")
+
+        print(f"\nItems with Q1/Q2: {len(items_with_q1q2)}")
+        print(f"Items with Q3/Q4: {len(items_with_q3q4)}")
+
+        # ---- LME for each metric ----
         all_stats = []
-        for metric in ["support", "contradict", "difference"]:
-            print(f"\n=== LME for {metric} ===")
-            conditions_present = df_out[df_out[metric].notna()]['condition'].unique()
-            sub_df = df_out[df_out['condition'].isin(conditions_present)]
-            
-            print(f"  Observations: {len(sub_df)}")
-            print(f"  Unique items: {sub_df['item_id'].nunique()}")
-            print(f"  Conditions: {sorted(sub_df['condition'].unique())}")
-            print(f"  Mean {metric} by condition:")
-            print(sub_df.groupby('condition')[metric].mean().to_string())
-            
+        for metric in ['support', 'contradict', 'difference']:
+            print(f"\n{'='*60}")
+            print(f"  LME for {metric.upper()}")
+            print(f"{'='*60}")
+
+            sub = df_out[df_out[metric].notna()].copy()
+
+            cond_map = {
+                'consistent': 'C',
+                'inconsistent': 'I',
+                'qualified1': 'Q1',
+                'qualified2': 'Q2',
+                'qualified3': 'Q3',
+                'qualified4': 'Q4'
+            }
+            sub['cond_clean'] = sub['condition'].map(cond_map)
+            sub['cond_clean'] = pd.Categorical(sub['cond_clean'])
+
+            print(f"  Observations: {len(sub)}")
+            print(f"  Unique items: {sub['item_id'].nunique()}")
+
             try:
-                stats = lme_all_pairs(sub_df, metric)
-                print(stats.to_string(index=False))
-                stats["metric"] = metric
-                all_stats.append(stats)
+                model = mixedlm(
+                    f"{metric} ~ C(cond_clean, Treatment('C'))",
+                    sub,
+                    groups=sub['item_id']
+                )
+                result = model.fit()
+
+                coefs = result.params
+                vcov = result.cov_params()
+
+                rows = []
+                all_levels = sorted(sub['cond_clean'].unique())
+                ref_level = 'C'
+
+                for i, c1 in enumerate(all_levels):
+                    for c2 in all_levels[i+1:]:
+                        contrast = np.zeros(len(coefs))
+                        param_names = coefs.index.tolist()
+
+                        if c1 == ref_level:
+                            contrast[0] = 1.0
+                        else:
+                            param_name = f"C(cond_clean, Treatment('{ref_level}'))[T.{c1}]"
+                            if param_name in param_names:
+                                contrast[param_names.index(param_name)] = 1.0
+                            else:
+                                continue
+
+                        if c2 == ref_level:
+                            contrast[0] -= 1.0
+                        else:
+                            param_name = f"C(cond_clean, Treatment('{ref_level}'))[T.{c2}]"
+                            if param_name in param_names:
+                                contrast[param_names.index(param_name)] -= 1.0
+                            else:
+                                continue
+
+                        est = contrast @ coefs.values
+                        se = np.sqrt(contrast @ vcov.values @ contrast)
+
+                        if se > 0:
+                            t_val = est / se
+                            p_val = 2 * (1 - norm.cdf(abs(t_val)))
+
+                            rows.append({
+                                "Comparison": f"{c1} – {c2}",
+                                "Estimate": round(est, 3),
+                                "t": round(t_val, 3),
+                                "p": round(p_val, 6),
+                                "metric": metric
+                            })
+
+                if rows:
+                    tbl = pd.DataFrame(rows)
+                    tbl['sig'] = tbl['p'].apply(
+                        lambda x: '***' if x < 0.001 else ('**' if x < 0.01 else ('*' if x < 0.05 else ''))
+                    )
+                    print(tbl.to_string(index=False))
+                    all_stats.extend(rows)
+                else:
+                    print("  No comparisons computed")
+
             except Exception as e:
                 print(f"  LME failed: {e}")
-                # Fallback: simple t-tests between conditions
-                from scipy.stats import ttest_ind
-                print(f"  Falling back to pairwise t-tests...")
-                rows = []
-                levels = sorted(sub_df['condition'].unique())
-                for cond1, cond2 in combinations(levels, 2):
-                    vals1 = sub_df[sub_df['condition'] == cond1][metric].dropna().values
-                    vals2 = sub_df[sub_df['condition'] == cond2][metric].dropna().values
-                    if len(vals1) > 1 and len(vals2) > 1:
-                        t_stat, p_val = ttest_ind(vals1, vals2)
-                        rows.append({
-                            "Comparison": f"{cond1} - {cond2}",
-                            "Estimate": np.mean(vals1) - np.mean(vals2),
-                            "z": t_stat,
-                            "p": p_val
-                        })
-                if rows:
-                    fallback_df = pd.DataFrame(rows)
-                    print(fallback_df.to_string(index=False))
-                    fallback_df["metric"] = metric
-                    all_stats.append(fallback_df)
+                import traceback
+                traceback.print_exc()
 
+        # Save all stats
         if args.stats_output and all_stats:
-            final_stats = pd.concat(all_stats, ignore_index=True)
+            final_stats = pd.DataFrame(all_stats)
             final_stats.to_csv(args.stats_output, index=False)
             print(f"\nSaved LME pairwise tables to {args.stats_output}")
+
 
 if __name__ == "__main__":
     main()
