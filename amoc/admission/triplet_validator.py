@@ -16,10 +16,10 @@ class TripletValidator:
     )
     
     VAGUE_PROTOTYPES = [
-        "related to", "associated with", "connected to", 
+        "related to", "associated with", "connected to",
         "involved in", "concerned with", "pertaining to",
         "refers to", "regarding", "with respect to",
-        "has", "have", "having", "belongs to", "part of"
+        "belongs to", "part of"
     ]
     
     NEGATION_PHRASES = [
@@ -176,9 +176,9 @@ class TripletValidator:
         
         normalized = label.lower().strip()
         
-        exact_vague = ["relates to", "related to", "associated with", 
+        exact_vague = ["relates to", "related to", "associated with",
                       "connected to", "involves", "concerns", "pertains to",
-                      "refers to", "regarding", "has", "have", "belongs to"]
+                      "refers to", "regarding", "belongs to"]
         if normalized in exact_vague:
             logging.debug(f"Vague relation (exact): '{label}'")
             return True
@@ -186,7 +186,9 @@ class TripletValidator:
         vague_prefixes = ["relate", "associate", "connect", "involve", 
                          "concern", "pertain", "refer", "regard"]
         for prefix in vague_prefixes:
-            if normalized.startswith(prefix) or prefix in normalized:
+            # startswith only — substring match creates false positives:
+            # "relate" IN "correlates" would wrongly flag a valid verb.
+            if normalized.startswith(prefix):
                 logging.debug(f"Vague relation (prefix match): '{label}'")
                 return True
         
@@ -610,6 +612,22 @@ class TripletValidator:
         obj_pos = obj_doc[0].pos_ if obj_doc and len(obj_doc) > 0 else None
 
         rel_lemma, rel_has_verb = self.extract_verb_info(relation, rel_doc)
+
+        # If the isolated parse missed the verb (e.g. "experiences" → NOUN in
+        # isolation), retry inside the full S-V-O context so spaCy has enough
+        # context to assign the correct POS tag.
+        if not rel_has_verb and relation_for_parse and subj and obj:
+            ctx_doc = self.spacy_nlp(f"{subj} {relation_for_parse} {obj}")
+            rel_words = set(relation_for_parse.split())
+            for _tok in ctx_doc:
+                if _tok.text.lower() in rel_words:
+                    if _tok.pos_ in {"VERB", "AUX"} or any(
+                        f in str(_tok.morph)
+                        for f in ("Tense=", "VerbForm=", "Mood=", "Voice=")
+                    ):
+                        rel_has_verb = True
+                        rel_lemma = _tok.lemma_.lower()
+                        break
 
         if subj_pos == "ADJ" and obj_pos == "ADJ":
             return {

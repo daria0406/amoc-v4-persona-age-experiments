@@ -123,6 +123,9 @@ class TextNormalizer:
 
         if token.pos_ in {"NOUN", "PROPN"}:
             return NodeType.CONCEPT
+        # Gerunds used as noun objects (e.g. "climbing", "swimming", "avoiding") are tagged VBG (tag_) 
+        if token.pos_ == "VERB" and token.tag_ == "VBG":
+            return NodeType.CONCEPT
         if token.pos_ == "ADJ":
             return NodeType.PROPERTY
 

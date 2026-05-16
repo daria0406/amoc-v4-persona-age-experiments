@@ -200,6 +200,17 @@ class NodeAdmission:
             return None
 
         lemmas = get_concept_lemmas(self._spacy_nlp, canon)
+        # Past-participle adjectives (e.g. "scared") are often mislabelled VBD
+        # in isolation, giving a wrong lemma (e.g. "scar"). Re-parse in a copula
+        # frame to recover the correct adjectival lemma.
+        if inferred_type == NodeType.PROPERTY and lemmas:
+            ctx_doc = self._spacy_nlp(f"it is {canon}")
+            for tok in ctx_doc:
+                if tok.text.lower() == canon.lower() and tok.pos_ == "ADJ":
+                    if tok.lemma_ and tok.lemma_ != lemmas[0]:
+                        lemmas = [tok.lemma_]
+                    break
+
         if not self.admit_node(
             lemma=canon,
             node_type=inferred_type,

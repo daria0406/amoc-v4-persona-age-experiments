@@ -36,6 +36,10 @@ SUPPORT_CONTRADICT_PROMPT = """You have the following edges from a knowledge gra
 Target sentence: "{target_sentence}"
 
 Using the graph and the story it tells, tell me which edges SUPPORT or CONTRADICT the target sentence.
+
+- An edge SUPPORTS the target if it makes the target more likely or consistent with the story.
+- An edge CONTRADICTS the target if it describes a trait or circumstance that is inconsistent with the target, making it unlikely or surprising given the story.
+
 Return a JSON object with two lists: "support" contains the numbers of edges that support the target sentence, and "contradict" contains the numbers of edges that contradict it.
 Example: {{"support": [1, 3], "contradict": [2, 5]}}
 Only output the JSON object."""
