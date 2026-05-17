@@ -163,6 +163,10 @@ class VLLMClient:
         messages = [{"role": "user", "content": prompt_text}]
         return self.generate(messages, temperature=temperature)
 
+    def score_edges(self, prompt: str) -> str:
+        messages = [{"role": "user", "content": prompt}]
+        return self.generate(messages, temperature=0.0)
+
     def call_vllm(self, prompt: str, persona: str) -> str:
         full_prompt = f"""You are a knowledge graph builder. Output ONLY the requested Python list or JSON object. Do not add explanations, thinking process, or extra text.
         Persona (for focus only, do not add extra concepts): {persona}

@@ -29,65 +29,73 @@ _NodeAdmission.admit_node = _permissive_admit
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-# Prompt for support / contradict 
-SUPPORT_CONTRADICT_PROMPT = """You have the following edges from a knowledge graph in the format: node - edge - node.
+# Scoring prompt — uses a neutral system role to avoid biasing Llama away from narrative reasoning.
+SUPPORT_CONTRADICT_PROMPT = """You are evaluating a knowledge graph against a target sentence.
+
+Here are the edges from the graph, numbered:
 {edges}
 
 Target sentence: "{target_sentence}"
 
-Using the graph and the story it tells, tell me which edges SUPPORT or CONTRADICT the target sentence.
+Classify each edge as SUPPORT, CONTRADICT:
+- SUPPORT: the edge describes a trait, event, or circumstance that makes the target more likely or expected.
+- CONTRADICT: the edge describes a trait, event, or circumstance that conflicts with the target — even indirectly. For example, if a character fears heights, any edge expressing that fear contradicts a target involving high-altitude activities, because a person afraid of heights would be unlikely to seek them out.
 
-- An edge SUPPORTS the target if it makes the target more likely or consistent with the story.
-- An edge CONTRADICTS the target if it describes a trait or circumstance that is inconsistent with the target, making it unlikely or surprising given the story.
+Only flag an edge as CONTRADICT if it directly states or strongly implies something incompatible with the target. Do NOT flag edges just because they describe traits that might make the target less likely.
 
-Return a JSON object with two lists: "support" contains the numbers of edges that support the target sentence, and "contradict" contains the numbers of edges that contradict it.
-Example: {{"support": [1, 3], "contradict": [2, 5]}}
-Only output the JSON object."""
+Return ONLY a JSON object with "support" and "contradict" lists containing edge numbers.
+Example: {{"support": [1, 3], "contradict": [2, 5]}}"""
+
+
+def _parse_scoring_response(response: str, raw_prompt: str) -> dict:
+    clean = response.strip()
+    if clean.startswith("```"):
+        clean = clean.split("\n", 1)[1].rsplit("```", 1)[0].strip()
+    # strip Llama <think> blocks
+    clean = re.sub(r"<think>.*?</think>", "", clean, flags=re.DOTALL).strip()
+    try:
+        result = json.loads(clean)
+        if isinstance(result, dict):
+            return result
+    except Exception:
+        pass
+    # Fallback: regex extraction
+    support_match = re.search(r"\"support\"\s*:\s*\[(.*?)\]", clean, re.DOTALL)
+    contradict_match = re.search(r"\"contradict\"\s*:\s*\[(.*?)\]", clean, re.DOTALL)
+    if support_match and contradict_match:
+        try:
+            support_nums = [int(x.strip()) for x in support_match.group(1).split(",") if x.strip().isdigit()]
+            contradict_nums = [int(x.strip()) for x in contradict_match.group(1).split(",") if x.strip().isdigit()]
+            return {"support": support_nums, "contradict": contradict_nums}
+        except Exception:
+            pass
+    logger.warning(f"Could not parse scoring response: {response[:200]}")
+    return {"support": [], "contradict": []}
+
 
 def get_support_contradict(amoc, target_sentence):
     triplets = graph_edges_to_triplets(amoc.graph, only_active=False)
     if not triplets:
         return {"support": [], "contradict": []}
 
-    edges_str_parts = []
-    for i, (s, r, o) in enumerate(triplets, 1):
-        edges_str_parts.append(f"{i}. {s} - {r} - {o}")
-    edges_str = "\n".join(edges_str_parts)
-
+    edges_str = "\n".join(f"{i}. {s} - {r} - {o}" for i, (s, r, o) in enumerate(triplets, 1))
     prompt = SUPPORT_CONTRADICT_PROMPT.format(
         edges=edges_str,
-        target_sentence=target_sentence
+        target_sentence=target_sentence,
     )
 
     try:
-        response = amoc.client.call_vllm(prompt, persona=amoc.persona)
+        # Use score_edges (neutral role) instead of call_vllm (KG-builder role)
+        if hasattr(amoc.client, "score_edges"):
+            response = amoc.client.score_edges(prompt)
+        else:
+            response = amoc.client.call_vllm(prompt, persona=amoc.persona)
         print(f"[DEBUG] LLM response: '{response}'", flush=True)
     except Exception as e:
         print(f"[ERROR] LLM call failed: {e}", flush=True)
         return {"support": [], "contradict": []}
 
-    # Parse JSON response (handle possible markdown fences)
-    clean = response.strip()
-    if clean.startswith("```"):
-        clean = clean.split("\n", 1)[1].rsplit("```", 1)[0].strip()
-    try:
-        result = json.loads(clean)
-        if not isinstance(result, dict):
-            raise ValueError("Not a dict")
-        return result
-    except Exception as e:
-        logger.warning(f"Could not parse LLM response: {response}, error: {e}")
-        # Fallback regex extraction
-        support_match = re.search(r"\"support\"\s*:\s*\[(.*?)\]", clean, re.DOTALL)
-        contradict_match = re.search(r"\"contradict\"\s*:\s*\[(.*?)\]", clean, re.DOTALL)
-        if support_match and contradict_match:
-            try:
-                support_nums = [int(x.strip()) for x in support_match.group(1).split(",") if x.strip().isdigit()]
-                contradict_nums = [int(x.strip()) for x in contradict_match.group(1).split(",") if x.strip().isdigit()]
-                return {"support": support_nums, "contradict": contradict_nums}
-            except:
-                pass
-        return {"support": [], "contradict": []}
+    return _parse_scoring_response(response, prompt)
 
 
 def lme_all_pairs(df, metric_col, condition_col="condition", item_col="item_id"):
