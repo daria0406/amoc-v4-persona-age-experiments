@@ -220,6 +220,8 @@ def main():
                 amoc._plot_ops.plot_graph_snapshot_full = lambda *a, **kw: None
                 amoc.is_attachable_wrapper = lambda *a, **kw: True
                 amoc._edge_ops._get_attachable_nodes = lambda: set(amoc.graph.nodes)
+                amoc._activation_ops.apply_semantic_edge_decay = lambda: []
+                amoc._activation_ops.reactivate_relevant_edges = lambda *a, **kw: None
 
                 amoc.analyze(replace_pronouns=False, plot_after_each_sentence=False)
 
