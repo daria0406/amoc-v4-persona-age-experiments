@@ -32,10 +32,12 @@ def canonicalize_model_name(name: str) -> str:
     return name
 
 
-def run_statistical_analysis(model_name: str):
+def run_statistical_analysis(model_name: str, output_dir: str = None):
     print("\n" + "=" * 60)
     print(f"AMoC REGIME-BASED ANALYSIS — MODEL: {model_name}")
     print("=" * 60)
+
+    search_dir = output_dir if output_dir else OUTPUT_DIR
 
     model_name = canonicalize_model_name(model_name)
     safe_tag = model_name.replace("/", "-").replace(":", "-").replace(" ", "_")
@@ -64,7 +66,7 @@ def run_statistical_analysis(model_name: str):
     is_llama = model_name.lower().startswith("meta-llama")
 
     pattern = f"model_{safe_tag}_triplets_*.csv"
-    search_path = os.path.join(OUTPUT_DIR, pattern)
+    search_path = os.path.join(search_dir, pattern)
 
     print(f"Looking for CSV files with pattern: {search_path}")
     files_to_analyze = glob.glob(search_path)
@@ -73,7 +75,7 @@ def run_statistical_analysis(model_name: str):
         print("No files found with glob")
 
         candidates = [
-            os.path.join(OUTPUT_DIR, f)
+            os.path.join(search_dir, f)
             for f in os.listdir(OUTPUT_DIR)
             if f.lower().startswith("model_")
             and "triplets_" in f.lower()

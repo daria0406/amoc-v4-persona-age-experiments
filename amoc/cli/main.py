@@ -5,8 +5,6 @@ import logging
 import argparse
 import re
 from typing import List
-
-# --- Multiprocessing safety (vLLM + CUDA) ---
 import multiprocessing
 
 multiprocessing.set_start_method("spawn", force=True)
@@ -260,7 +258,7 @@ def main(argv: List[str]) -> None:
         if is_leader():
             for model in model_names:
                 try:
-                    run_statistical_analysis(model)
+                    run_statistical_analysis(model, output_dir=output_dir)
                 except Exception as e:
                     logging.error(
                         f"Statistical analysis failed for {model}: {e}",
