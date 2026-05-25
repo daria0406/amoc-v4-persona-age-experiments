@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import glob as glob_module
 import logging
 import argparse
 import re
@@ -19,9 +20,26 @@ from amoc.config import (
     STORY_TEXT,
 )
 from amoc.pipeline.runner import process_persona_csv
-from amoc.analysis.statistics import run_statistical_analysis
+from amoc.analysis.statistics import run_statistical_analysis, canonicalize_model_name
 from amoc.utils.spacy_utils import load_spacy
 from amoc.utils.highlights import blue_nodes_from_text
+from amoc.outliers.io import save_persona_outputs
+from amoc.outliers.stats import build_persona_stats
+from amoc.outliers.trimming import quantile_trim, iqr_cap
+from amoc.outliers.triplets import filter_triplets_by_persona
+from amoc.outliers.cleaned_regime_analysis import run_cleaned_regime_analysis
+
+LOWER_Q = 0.05
+UPPER_Q = 0.95
+MIN_PERSONAS_FOR_TRIMMING = 14
+TRIM_METRICS = [
+    "num_triplets",
+    "num_unique_concepts",
+    "triplets_per_100_tokens",
+    "graph_num_nodes",
+    "graph_num_edges",
+]
+CAP_METRICS = ["graph_density", "graph_avg_degree"]
 
 
 def parse_args(argv: List[str]) -> argparse.Namespace:
@@ -135,8 +153,8 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
     p.add_argument(
         "--file",
         type=str,
-        required=True,
-        help="Path to a single persona CSV chunk file to process",
+        default=None,
+        help="Path to a single persona CSV chunk file to process (required without --post-process)",
     )
 
     p.add_argument(
@@ -153,12 +171,93 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
         help="Enable checkpoint mode for edges",
     )
 
+    p.add_argument(
+        "--post-process",
+        action="store_true",
+        help=(
+            "After extraction, wait for all array tasks to finish then run "
+            "outlier removal and plots across all run_* output folders"
+        ),
+    )
+
+    p.add_argument(
+        "--plots",
+        action="store_true",
+        help="Generate statistical (violin, etc.) plots per regime after outlier removal",
+    )
+
+    p.add_argument(
+        "--plots-age",
+        action="store_true",
+        help="Generate plots per regime after outlier removal for age",
+    )
+
     return p.parse_args(argv)
 
 
 # 2 tasks can be executed concurrenctly, only run statistics after the first one is done
 def is_leader() -> bool:
     return os.environ.get("SLURM_ARRAY_TASK_ID") in (None, "0")
+
+
+def run_post_processing(model_name: str, base_dir: str, plots: bool = False, plots_age: bool = False) -> None:
+    csv_pattern = os.path.join(
+        base_dir, "triplets", "triplets_final_state", "*_final_triplets_*.csv"
+    )
+
+    triplet_files = glob_module.glob(csv_pattern)
+    if not triplet_files:
+        raise RuntimeError(f"[post-process] No final triplet CSVs found under {base_dir}")
+
+    print(f"\n[post-process] Aggregating {len(triplet_files)} CSVs")
+
+    model_tag = canonicalize_model_name(model_name).replace("/", "-")
+    statistics_dir = os.path.join(base_dir, "statistics")
+    os.makedirs(statistics_dir, exist_ok=True)
+
+    df_stats = build_persona_stats(triplet_files)
+    if "original_index" in df_stats.columns:
+        df_stats = df_stats.rename(columns={"original_index": "idx"})
+
+    print(df_stats.groupby("regime").size())
+
+    df_stats.to_csv(os.path.join(statistics_dir, "persona_stats_raw.csv"), index=False)
+
+    if len(df_stats) < MIN_PERSONAS_FOR_TRIMMING:
+        print(f"[post-process] Only {len(df_stats)} personas — skipping trimming (need >= {MIN_PERSONAS_FOR_TRIMMING})")
+        df_trimmed = df_stats.copy()
+        df_clean = df_stats.copy()
+    else:
+        df_trimmed = quantile_trim(df_stats, TRIM_METRICS, LOWER_Q, UPPER_Q)
+        df_clean = iqr_cap(df_trimmed, CAP_METRICS)
+
+    kept_personas = set(df_trimmed["idx"])
+    removed_personas = set(df_stats["idx"]) - kept_personas
+
+    save_persona_outputs(
+        df_trimmed,
+        df_clean,
+        removed_personas,
+        model_tag,
+        out_dir=os.path.join(statistics_dir, "persona_stats"),
+    )
+
+    filter_triplets_by_persona(
+        triplet_files,
+        kept_personas,
+        model_tag,
+        out_dir=os.path.join(statistics_dir, "triplets_processed"),
+    )
+
+    print(f"[post-process] Kept {len(df_trimmed)} of {len(df_stats)} personas")
+
+    run_cleaned_regime_analysis(
+        input_dir=statistics_dir,
+        model=model_tag,
+        output_dir=statistics_dir,
+        plots=plots,
+        plots_age=plots_age,
+    )
 
 
 def load_story_text_from_arg(story_text_arg: str) -> str:
@@ -187,6 +286,12 @@ def main(argv: List[str]) -> None:
     model_names = [m.strip() for m in args.models.split(",") if m.strip()]
     if not model_names:
         raise SystemExit("--models must contain at least one model")
+
+    if not args.file:
+        raise SystemExit("--file is required for extraction")
+
+    if args.post_process and not args.output_dir:
+        raise SystemExit("--output-dir is required when --post-process is set")
 
     spacy_nlp = load_spacy()
 
@@ -255,16 +360,49 @@ def main(argv: List[str]) -> None:
         elapsed = time.time() - total_start
         print(f"\nExtraction phase finished in {elapsed:.2f} seconds")
 
-        if is_leader():
-            for model in model_names:
+        if args.post_process:
+            sentinel_dir = os.path.join(output_dir, ".sentinels")
+            os.makedirs(sentinel_dir, exist_ok=True)
+            task_id = os.environ.get("SLURM_ARRAY_TASK_ID", "0")
+            open(os.path.join(sentinel_dir, f"done_{task_id}"), "w").close()
+
+            total = int(os.environ.get("SLURM_ARRAY_TASK_COUNT", 1))
+            done = len(glob_module.glob(os.path.join(sentinel_dir, "done_*")))
+            print(f"[post-process] {done}/{total} tasks finished")
+
+            if done >= total:
+                for model in model_names:
+                    try:
+                        run_statistical_analysis(
+                            model,
+                            output_dir=output_dir,
+                            analysis_dir=os.path.join(output_dir, "statistics"),
+                        )
+                    except Exception as e:
+                        logging.error(f"Statistical analysis failed for {model}: {e}", exc_info=True)
+                        print(f"Statistics failed for {model}")
+
                 try:
-                    run_statistical_analysis(model, output_dir=output_dir)
-                except Exception as e:
-                    logging.error(
-                        f"Statistical analysis failed for {model}: {e}",
-                        exc_info=True,
+                    run_post_processing(
+                        model_names[0],
+                        output_dir,
+                        plots=args.plots,
+                        plots_age=args.plots_age,
                     )
-                    print(f"Statistics failed for {model}")
+                except Exception as e:
+                    logging.error(f"Post-processing failed: {e}", exc_info=True)
+                    print(f"Post-processing failed: {e}")
+        else:
+            if is_leader():
+                for model in model_names:
+                    try:
+                        run_statistical_analysis(model, output_dir=output_dir)
+                    except Exception as e:
+                        logging.error(
+                            f"Statistical analysis failed for {model}: {e}",
+                            exc_info=True,
+                        )
+                        print(f"Statistics failed for {model}")
 
 
 if __name__ == "__main__":

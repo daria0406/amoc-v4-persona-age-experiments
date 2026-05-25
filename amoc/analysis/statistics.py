@@ -32,16 +32,17 @@ def canonicalize_model_name(name: str) -> str:
     return name
 
 
-def run_statistical_analysis(model_name: str, output_dir: str = None):
+def run_statistical_analysis(model_name: str, output_dir: str = None, analysis_dir: str = None):
     print("\n" + "=" * 60)
     print(f"AMoC REGIME-BASED ANALYSIS — MODEL: {model_name}")
     print("=" * 60)
 
     search_dir = output_dir if output_dir else OUTPUT_DIR
 
+    raw_safe_tag = model_name.replace("/", "-").replace(":", "-").replace(" ", "_")
+
     model_name = canonicalize_model_name(model_name)
     safe_tag = model_name.replace("/", "-").replace(":", "-").replace(" ", "_")
-    # Apply Qwen-specific capitalization rules
     safe_tag = safe_tag.lower()
 
     if "qwen" in safe_tag:
@@ -65,28 +66,30 @@ def run_statistical_analysis(model_name: str, output_dir: str = None):
 
     is_llama = model_name.lower().startswith("meta-llama")
 
-    pattern = f"model_{safe_tag}_triplets_*.csv"
+    pattern = f"triplets/triplets_final_state/model_{raw_safe_tag}_paper_final_triplets_*.csv"
     search_path = os.path.join(search_dir, pattern)
 
     print(f"Looking for CSV files with pattern: {search_path}")
     files_to_analyze = glob.glob(search_path)
 
     if not files_to_analyze and is_llama:
-        print("No files found with glob")
+        print("No files found with glob, falling back to directory scan")
+        final_state_dir = os.path.join(search_dir, "triplets", "triplets_final_state")
 
-        candidates = [
-            os.path.join(search_dir, f)
-            for f in os.listdir(OUTPUT_DIR)
-            if f.lower().startswith("model_")
-            and "triplets_" in f.lower()
-            and f.lower().endswith(".csv")
-        ]
+        if os.path.isdir(final_state_dir):
+            candidates = [
+                os.path.join(final_state_dir, f)
+                for f in os.listdir(final_state_dir)
+                if f.lower().startswith("model_")
+                and "final_triplets" in f.lower()
+                and f.lower().endswith(".csv")
+            ]
 
-        safe_tag_lc = safe_tag.lower()
+            safe_tag_lc = safe_tag.lower()
 
-        files_to_analyze = [
-            f for f in candidates if safe_tag_lc in os.path.basename(f).lower()
-        ]
+            files_to_analyze = [
+                f for f in candidates if safe_tag_lc in os.path.basename(f).lower()
+            ]
 
     if not files_to_analyze:
         print(f"No triplet CSVs found for model {model_name}")
@@ -112,7 +115,8 @@ def run_statistical_analysis(model_name: str, output_dir: str = None):
     print("Regime counts:")
     print(df_master["regime"].value_counts())
 
-    os.makedirs(OUTPUT_ANALYSIS_DIR, exist_ok=True)
+    effective_analysis_dir = analysis_dir if analysis_dir else OUTPUT_ANALYSIS_DIR
+    os.makedirs(effective_analysis_dir, exist_ok=True)
 
     model_tag = safe_tag
     stats_records = []
@@ -126,7 +130,7 @@ def run_statistical_analysis(model_name: str, output_dir: str = None):
         plot_violin_box(
             df=df_master,
             metric=metric,
-            output_dir=OUTPUT_ANALYSIS_DIR,
+            output_dir=effective_analysis_dir,
             model_tag=model_tag,
         )
 
@@ -150,6 +154,6 @@ def run_statistical_analysis(model_name: str, output_dir: str = None):
 
     if stats_records:
         stats_df = pd.DataFrame(stats_records)
-        stats_path = os.path.join(OUTPUT_ANALYSIS_DIR, f"{model_tag}_regime_stats.csv")
+        stats_path = os.path.join(effective_analysis_dir, f"{model_tag}_regime_stats.csv")
         stats_df.to_csv(stats_path, index=False)
         print(f"\nSaved statistical test results to {stats_path}")

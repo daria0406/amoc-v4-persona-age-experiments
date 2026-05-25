@@ -11,12 +11,14 @@ pytest.ini
 *.pdf
 *.def
 *.png
+*.txt
 #except the diagrams
 !diagrams/*.png
 
 # environments
 venv/
 venv311/
+venv312/
 
 # patches
 patches/

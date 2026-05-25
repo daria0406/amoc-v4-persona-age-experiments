@@ -63,4 +63,7 @@ bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
     --output-dir "${RUN_OUTPUT_DIR}" \
     --file "${INPUT_FILE}" \
     --strict-reactivate-function \
+    --post-process \
+    # --plots \
+    # --plots-age \
     ${STORY_ARG}
