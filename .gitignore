@@ -8,6 +8,7 @@ pytest.ini
 *.pyc
 *.json
 *.csv
+!personas_dfs/personas_refined_age/chunks_balanced/*.csv
 *.pdf
 *.def
 *.png

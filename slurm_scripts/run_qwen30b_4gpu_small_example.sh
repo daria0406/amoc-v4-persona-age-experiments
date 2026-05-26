@@ -6,20 +6,22 @@
 #SBATCH --gres=gpu:tesla_a100:2
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=256G
-#SBATCH --array=0-13%2
+#SBATCH --array=0-7%2
 #SBATCH --output=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%A_%a.out
 #SBATCH --error=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%A_%a.err
 
 set -euo pipefail
 
+export VLLM_ATTENTION_BACKEND=FLASH_ATTN  
+export VLLM_USE_V1=1 
+
 PROJECT_ROOT="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments"
-CHUNKS_DIR="${PROJECT_ROOT}/personas_dfs/personas_refined_age/chunks"
+CHUNKS_DIR="${PROJECT_ROOT}/personas_dfs/personas_refined_age/chunks_balanced"
 STORY_FILE="${1:-}"
 
 export HF_HOME="/export/projects/nlp/.cache"
 export TRANSFORMERS_CACHE="$HF_HOME"
-export CUDA_LAUNCH_BLOCKING=1   
-#export CUDA_VISIBLE_DEVICES=0,1,2,3
+export CUDA_VISIBLE_DEVICES=0,1,2,3
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
 
 RUN_ID="run_${SLURM_ARRAY_JOB_ID}"
@@ -55,9 +57,10 @@ fi
 bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
     --models "Qwen/Qwen3-30B-A3B-Instruct-2507" \
     --tp 2 \
-    --max-rows 1 \
+    --max-rows 5 \
     --plot-after-each-sentence \
     --output-dir "${RUN_OUTPUT_DIR}" \
     --file "${INPUT_FILE}" \
     --strict-reactivate-function \
+    --post-process \
     ${STORY_ARG}

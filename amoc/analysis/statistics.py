@@ -14,6 +14,9 @@ METRICS_TO_PLOT = [
     "graph_density",
     "triplets_per_100_tokens",
     "graph_avg_degree",
+    "abstract_relation_ratio",
+    "abstract_concept_ratio",
+    "graph_largest_component_ratio",
 ]
 
 
