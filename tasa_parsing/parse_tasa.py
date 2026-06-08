@@ -1,26 +1,19 @@
 import re
 import csv
 
-
+#redesign 
 def drp_to_grade(drp: float) -> str:
-    if drp < 44:
-        return "Grades K–1"
-    elif 42 <= drp <= 54:
-        return "Grades 2–3"
-    elif 52 <= drp <= 60:
-        return "Grades 4–5"
-    elif 57 <= drp <= 67:
-        return "Grades 6–8"
-    elif 62 <= drp <= 72:
-        return "Grades 9–10"
-    elif 67 <= drp <= 74:
-        return "Grades 11–12"
+    if drp < 60:
+        return "primary"
+    elif drp < 67:
+        return "secondary"
+    elif drp <= 74:
+        return "highschool"
     else:
-        return "College and Career Readiness (CCR)"
+        return "university"
 
 
-def extract_paragraphs_with_drp(text: str):
-    # Split *before* each DRP occurrence
+def extract_paragraphs_with_drp(text: str, category: str = None):
     blocks = re.split(r'(?=DRP="[\d.]+")', text)
 
     results = []
@@ -30,18 +23,20 @@ def extract_paragraphs_with_drp(text: str):
         if not drp_match:
             continue
 
+        if category and f'{category}="Yes"' not in block:
+            continue
+
         drp = float(drp_match.group(1))
 
-        # Remove XML-like tags
         cleaned = re.sub(r"<[^>]+>", "", block)
-
-        # Remove the DRP attribute itself
         cleaned = re.sub(r'DRP="[\d.]+"', "", cleaned)
 
-        # Normalize whitespace
         paragraph = " ".join(
             line.strip() for line in cleaned.splitlines() if line.strip()
         )
+
+        paragraph = re.sub(r'^[A-Za-z]+="Yes"\s*>\s*', '', paragraph)
+        paragraph = re.sub(r'\s*<ID="[^"]*".*$', '', paragraph).strip()
 
         if paragraph:
             results.append((drp, paragraph))
@@ -83,7 +78,7 @@ if __name__ == "__main__":
         raw_text = f.read()
 
     # 2. Extract DRP and grade level
-    paragraphs_with_drp = extract_paragraphs_with_drp(raw_text)
+    paragraphs_with_drp = extract_paragraphs_with_drp(raw_text, category="SocialStudies")
 
     if not paragraphs_with_drp:
         raise ValueError("No DRP-tagged paragraphs found")

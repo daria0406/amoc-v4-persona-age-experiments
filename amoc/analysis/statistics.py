@@ -1,11 +1,12 @@
 import os
 import glob
 import pandas as pd
-from scipy.stats import kruskal
+# from scipy.stats import kruskal
 
 from amoc.metrics.aggregation import process_triplets_file
 from amoc.config.paths import OUTPUT_DIR, OUTPUT_ANALYSIS_DIR
 from amoc.analysis.regime_plots import plot_violin_box
+from amoc.analysis.pairwise import PairwiseAnalysis
 
 
 METRICS_TO_PLOT = [
@@ -137,26 +138,43 @@ def run_statistical_analysis(model_name: str, output_dir: str = None, analysis_d
             model_tag=model_tag,
         )
 
-        groups = [
-            g[metric].dropna().values
-            for _, g in df_master.groupby("regime")
-            if g[metric].notna().any()
-        ]
+        # commented out the K-W test
+        
+        # groups = [
+        #     g[metric].dropna().values
+        #     for _, g in df_master.groupby("regime")
+        #     if g[metric].notna().any()
+        # ]
 
-        if len(groups) >= 2:
-            h, p = kruskal(*groups)
-            stats_records.append(
-                {
-                    "metric": metric,
-                    "test": "kruskal",
-                    "H": h,
-                    "p_value": p,
-                }
-            )
-            print(f"  Kruskal–Wallis H={h:.3f}, p={p:.4g}")
+        # if len(groups) >= 2:
+        #     h, p = kruskal(*groups)
+        #     stats_records.append(
+        #         {
+        #             "metric": metric,
+        #             "test": "kruskal",
+        #             "H": h,
+        #             "p_value": p,
+        #         }
+        #     )
+        #     print(f"  Kruskal–Wallis H={h:.3f}, p={p:.4g}")
 
-    if stats_records:
-        stats_df = pd.DataFrame(stats_records)
-        stats_path = os.path.join(effective_analysis_dir, f"{model_tag}_regime_stats.csv")
-        stats_df.to_csv(stats_path, index=False)
-        print(f"\nSaved statistical test results to {stats_path}")
+    # if stats_records:
+    #     stats_df = pd.DataFrame(stats_records)
+    #     stats_path = os.path.join(effective_analysis_dir, f"{model_tag}_regime_stats.csv")
+    #     stats_df.to_csv(stats_path, index=False)
+    #     print(f"\nSaved statistical test results to {stats_path}")
+
+    #     significant_metrics = [
+    #         r["metric"] for r in stats_records if r["p_value"] < 0.05
+    #     ]
+    #     if significant_metrics:
+    #         pa = PairwiseAnalysis(df_master)
+    #         pa.run(significant_metrics)
+    #         pa.print_summary()
+    #         pa.save(effective_analysis_dir, model_tag)
+
+    metrics_to_run = [m for m in METRICS_TO_PLOT if m in df_master.columns]
+    pa = PairwiseAnalysis(df_master)
+    pa.run(metrics_to_run)
+    pa.print_summary()
+    pa.save(effective_analysis_dir, model_tag)

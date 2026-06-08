@@ -18,6 +18,9 @@ export VLLM_USE_V1=1
 PROJECT_ROOT="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments"
 CHUNKS_DIR="${PROJECT_ROOT}/personas_dfs/personas_refined_age/chunks_balanced"
 STORY_FILE="${1:-}"
+if [[ -n "${STORY_FILE}" && "${STORY_FILE}" != /* ]]; then
+    STORY_FILE="${PROJECT_ROOT}/${STORY_FILE}"
+fi
 
 export HF_HOME="/export/projects/nlp/.cache"
 export TRANSFORMERS_CACHE="$HF_HOME"
@@ -55,6 +58,7 @@ if [[ -n "${STORY_FILE}" ]]; then
     STORY_ARG="--story-text ${STORY_FILE}"
 fi
 
+# --plots and --plots-age are disabled for this small example run
 bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
     --models "meta-llama/Llama-3.3-70B-Instruct" \
     --tp 4 \
@@ -64,6 +68,4 @@ bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
     --file "${INPUT_FILE}" \
     --strict-reactivate-function \
     --post-process \
-    # --plots \
-    # --plots-age \
     ${STORY_ARG}
