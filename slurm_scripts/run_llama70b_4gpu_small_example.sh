@@ -62,7 +62,7 @@ fi
 bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
     --models "meta-llama/Llama-3.3-70B-Instruct" \
     --tp 4 \
-    --max-rows 5 \
+    --max-rows 10 \
     --plot-after-each-sentence \
     --output-dir "${RUN_OUTPUT_DIR}" \
     --file "${INPUT_FILE}" \

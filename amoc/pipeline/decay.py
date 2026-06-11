@@ -1113,6 +1113,30 @@ class Decay:
                 result.append((decision.triplet, decision.reasoning))
         return result
 
+    def apply_hard_cap(self) -> None:
+        active_edges = [e for e in self._graph.edges if e.active]
+        if len(active_edges) <= MAX_TRIPLETS:
+            return
+
+        removable = sorted(
+            [e for e in active_edges if not e.asserted_this_sentence],
+            key=lambda e: e.visibility_score,
+        )
+
+        to_remove = len(active_edges) - MAX_TRIPLETS
+        removed = 0
+        for edge in removable:
+            if removed >= to_remove:
+                break
+            edge.visibility_score = 0
+            edge.active = False
+            removed += 1
+
+        logging.info(
+            f"[hard cap] capped active triplets: {len(active_edges)} → "
+            f"{len(active_edges) - removed} (removed {removed})"
+        )
+
     def post_sentence_cleanup(self, prev_sentences):
         # First run semantic decay
         self._last_decay_decisions = self.apply_semantic_edge_decay()
@@ -1123,6 +1147,8 @@ class Decay:
         # Enforce active/visibility invariant
         for edge in self._graph.edges:
             edge.active = edge.visibility_score > 0
+
+        self.apply_hard_cap()
 
         self.prune_inactive_edgeless_nodes()
 

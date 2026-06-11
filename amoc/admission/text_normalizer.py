@@ -29,12 +29,14 @@ class TextNormalizer:
 
         # "Is/Was" patterns - prevents triplets such as: charlegmagne - is_type_of - king
         if re.search(r"\b(was|were)\b", text):
-            if re.search(r"kind|type|sort|form|variant|example|instance", text):
-                return "was"
+            remainder = re.sub(r"^\s*(was|were)\s+", "", text).strip()
+            if remainder:
+                return remainder
             return "was"
         if re.search(r"\b(is|are|be|being|been)\b", text):
-            if re.search(r"kind|type|sort|form|variant|example|instance", text):
-                return "is"
+            remainder = re.sub(r"^\s*(is|are|be|being|been)\s+", "", text).strip()
+            if remainder:
+                return remainder
             return "is"
 
         # "Has" patterns
