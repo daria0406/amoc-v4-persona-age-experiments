@@ -83,7 +83,7 @@ if __name__ == "__main__":
     if not paragraphs_with_drp:
         raise ValueError("No DRP-tagged paragraphs found")
 
-    # 4. Write CSV
+    # 4. Write full CSV
     with open(output_path, "w", encoding="utf-8", newline="") as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(["drp", "level", "paragraph"])
@@ -93,3 +93,24 @@ if __name__ == "__main__":
             writer.writerow([f"{drp:.5f}", level, para])
 
     print(f"Saved {len(paragraphs_with_drp)} paragraphs to {output_path}")
+
+    # 5. Write top 3 min-DRP per group
+    groups = {}
+    for drp, para in paragraphs_with_drp:
+        level = drp_to_grade(drp)
+        groups.setdefault(level, []).append((drp, para))
+
+    min_output_path = output_path.replace(".csv", "_min_drp_per_group.csv")
+    with open(min_output_path, "w", encoding="utf-8", newline="") as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(["drp", "level", "paragraph"])
+
+        for level in ["primary", "secondary", "highschool", "university"]:
+            if level not in groups:
+                print(f"Warning: no paragraphs found for group '{level}'")
+                continue
+            top3 = sorted(groups[level], key=lambda x: x[0])[:3]
+            for drp, para in top3:
+                writer.writerow([f"{drp:.5f}", level, para])
+
+    print(f"Saved min-DRP representatives to {min_output_path}")
