@@ -1,7 +1,7 @@
 import logging
 import hashlib
 import os
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 import pandas as pd
 
@@ -84,6 +84,85 @@ def abstract_concept_ratio(concepts) -> float:
     return abstract / total if total > 0 else 0.0
 
 
+def build_persona_record(g: pd.DataFrame) -> Optional[Dict[str, Any]]:
+    num_triplets = len(g)
+    if num_triplets == 0:
+        return None
+
+    subjects = g["subject"].astype(str)
+    objects = g["object"].astype(str)
+    relations = (
+        g["relation"].astype(str)
+        if "relation" in g.columns
+        else pd.Series(["<NO_RELATION>"] * num_triplets, index=g.index)
+    )
+
+    # METRICS
+    num_unique_subjects = subjects.nunique()
+    num_unique_objects = objects.nunique()
+    num_unique_relations = relations.nunique()
+    num_unique_concepts = len(set(subjects) | set(objects))
+
+    triplets = list(zip(subjects, relations, objects))
+    num_unique_triplets = len(set(triplets))
+    triplet_repetition_ratio = 1.0 - (num_unique_triplets / num_triplets)
+
+    persona_text = (
+        g["persona_text"].iloc[0] if "persona_text" in g.columns else ""
+    ) or ""
+    persona_tokens = persona_text.split()
+    persona_num_tokens = len(persona_tokens)
+    triplets_per_100_tokens = (
+        (num_triplets / persona_num_tokens) * 100 if persona_num_tokens > 0 else 0.0
+    )
+    sentiment_score = simple_sentiment_score(persona_text)
+    lex = compute_lexical_metrics(persona_text)
+    edges = list(zip(subjects.tolist(), objects.tolist()))
+    graph = compute_graph_metrics(edges)
+
+    concepts = list(subjects) + list(objects)
+    relation_list = list(relations)
+    concept_abstraction = abstract_concept_ratio(concepts)
+    relation_abstraction = abstract_relation_ratio(relation_list)
+
+    # age -> retrieved from age_refined
+    age_refined = g["age_refined"].iloc[0]
+    try:
+        age_refined_int = int(age_refined)
+    except Exception:
+        age_refined_int = None
+
+    record: Dict[str, Any] = {
+        "persona_id": g["persona_id"].iloc[0],
+        "original_index": g["original_index"].iloc[0],  # metadata only
+        "source_file": g["source_file"].iloc[0] if "source_file" in g.columns else None,
+        "regime": g["regime"].iloc[0],
+        "model_name": g["model_name"].iloc[0] if "model_name" in g.columns else None,
+        "persona_text": persona_text,
+        "age_refined": age_refined_int,
+        "num_triplets": num_triplets,
+        "num_unique_triplets": num_unique_triplets,
+        "num_unique_subjects": num_unique_subjects,
+        "num_unique_objects": num_unique_objects,
+        "num_unique_concepts": num_unique_concepts,
+        "num_unique_relations": num_unique_relations,
+        "triplet_repetition_ratio": triplet_repetition_ratio,
+        "persona_num_tokens": persona_num_tokens,
+        "triplets_per_100_tokens": triplets_per_100_tokens,
+        "sentiment_score": sentiment_score,
+        "lexical_ttr": lex["lexical_ttr"],
+        "lexical_avg_word_len": lex["lexical_avg_word_len"],
+        "abstract_concept_ratio": concept_abstraction,
+        "abstract_relation_ratio": relation_abstraction,
+        **graph,
+    }
+
+    if "education_level" in g.columns:
+        record["education_level"] = g["education_level"].iloc[0]
+
+    return record
+
+
 def process_triplets_file(path: str) -> pd.DataFrame:
 
     df = pd.read_csv(path, engine="python", on_bad_lines="warn")
@@ -126,82 +205,9 @@ def process_triplets_file(path: str) -> pd.DataFrame:
 
     records = []
 
-    for keys, g in df.groupby(group_cols, dropna=False):
-        ctx = dict(zip(group_cols, keys if isinstance(keys, tuple) else (keys,)))
-
-        num_triplets = len(g)
-        if num_triplets == 0:
-            continue
-
-        subjects = g["subject"].astype(str)
-        objects = g["object"].astype(str)
-        relations = (
-            g["relation"].astype(str)
-            if "relation" in g.columns
-            else pd.Series(["<NO_RELATION>"] * num_triplets, index=g.index)
-        )
-
-        # METRICS
-        num_unique_subjects = subjects.nunique()
-        num_unique_objects = objects.nunique()
-        num_unique_relations = relations.nunique()
-        num_unique_concepts = len(set(subjects) | set(objects))
-
-        triplets = list(zip(subjects, relations, objects))
-        num_unique_triplets = len(set(triplets))
-        triplet_repetition_ratio = 1.0 - (num_unique_triplets / num_triplets)
-
-        persona_text = ctx["persona_text"] or ""
-        persona_tokens = persona_text.split()
-        persona_num_tokens = len(persona_tokens)
-        triplets_per_100_tokens = (
-            (num_triplets / persona_num_tokens) * 100 if persona_num_tokens > 0 else 0.0
-        )
-        sentiment_score = simple_sentiment_score(persona_text)
-        lex = compute_lexical_metrics(persona_text)
-        edges = list(zip(subjects.tolist(), objects.tolist()))
-        graph = compute_graph_metrics(edges)
-
-        concepts = list(subjects) + list(objects)
-        relation_list = list(relations)
-        concept_abstraction = abstract_concept_ratio(concepts)
-        relation_abstraction = abstract_relation_ratio(relation_list)
-
-        # age -> retrieved from age_refined
-        age_refined = g["age_refined"].iloc[0]
-        try:
-            age_refined_int = int(age_refined)
-        except Exception:
-            age_refined_int = None
-
-        record: Dict[str, Any] = {
-            "persona_id": ctx["persona_id"],
-            "original_index": g["original_index"].iloc[0],  # metadata only
-            "source_file": g["source_file"].iloc[0],
-            "regime": ctx["regime"],
-            "model_name": ctx["model_name"],
-            "persona_text": persona_text,
-            "age_refined": age_refined_int,
-            "num_triplets": num_triplets,
-            "num_unique_triplets": num_unique_triplets,
-            "num_unique_subjects": num_unique_subjects,
-            "num_unique_objects": num_unique_objects,
-            "num_unique_concepts": num_unique_concepts,
-            "num_unique_relations": num_unique_relations,
-            "triplet_repetition_ratio": triplet_repetition_ratio,
-            "persona_num_tokens": persona_num_tokens,
-            "triplets_per_100_tokens": triplets_per_100_tokens,
-            "sentiment_score": sentiment_score,
-            "lexical_ttr": lex["lexical_ttr"],
-            "lexical_avg_word_len": lex["lexical_avg_word_len"],
-            "abstract_concept_ratio": concept_abstraction,
-            "abstract_relation_ratio": relation_abstraction,
-            **graph,
-        }
-
-        if "education_level" in ctx:
-            record["education_level"] = ctx["education_level"]
-
-        records.append(record)
+    for _, g in df.groupby(group_cols, dropna=False):
+        record = build_persona_record(g)
+        if record is not None:
+            records.append(record)
 
     return pd.DataFrame(records)
