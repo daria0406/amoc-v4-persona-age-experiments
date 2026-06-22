@@ -10,7 +10,8 @@ from scipy.stats import kruskal, mannwhitneyu, rankdata
 import statsmodels.formula.api as smf
 from statsmodels.stats.multitest import multipletests
 
-from amoc.analysis.repeated_measures import build_long, METRICS, _safe_tag
+from amoc.analysis.repeated_measures import (
+    build_long, METRICS, _safe_tag, parse_label_overrides)
 
 ABSTRACTION_METRICS = ["abstract_concept_ratio", "abstract_relation_ratio"]
 
@@ -190,8 +191,10 @@ def _rank_ss(df: pd.DataFrame, effect: str) -> float:
 
 def analyze(input_dir: Union[str, List[str]], model_name: str, output_dir: str,
             text_dir: Optional[str] = "tusa_text/min_drp_texts",
-            alpha: float = 0.05, model_tag: Optional[str] = None):
-    long = build_long(input_dir, model_name, text_dir, require_min_texts=2)
+            alpha: float = 0.05, model_tag: Optional[str] = None,
+            label_overrides: Optional[Dict[str, str]] = None):
+    long = build_long(input_dir, model_name, text_dir, require_min_texts=2,
+                      label_overrides=label_overrides)
     if long.empty:
         print("[regime-effect] no data (need >=2 texts and matching personas).")
         return pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
@@ -249,9 +252,13 @@ def main():
     ap.add_argument("--output-dir", required=True)
     ap.add_argument("--text-dir", default="tusa_text/min_drp_texts")
     ap.add_argument("--alpha", type=float, default=0.05)
+    ap.add_argument("--label", nargs="*", default=None,
+                    help="Explicit run_dir=label overrides, "
+                         "e.g. --label run_228474=primary")
     args = ap.parse_args()
     analyze(args.input_dir, args.model, args.output_dir,
-            text_dir=args.text_dir, alpha=args.alpha)
+            text_dir=args.text_dir, alpha=args.alpha,
+            label_overrides=parse_label_overrides(args.label))
 
 
 if __name__ == "__main__":

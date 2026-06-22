@@ -77,13 +77,30 @@ def _recover_story_from_run_dir(run_dir: str) -> str:
     return ""
 
 
-def _run_dir_label(run_dir: str, label_map: Dict[str, str]) -> str:
+def _run_dir_label(run_dir: str, label_map: Dict[str, str],
+                   overrides: Optional[Dict[str, str]] = None) -> str:
+    base = os.path.basename(os.path.normpath(run_dir))
+    if overrides:
+        if run_dir in overrides:
+            return overrides[run_dir]
+        if base in overrides:
+            return overrides[base]
     story = _recover_story_from_run_dir(run_dir)
     if story:
         label = _story_label(story, label_map)
         if not label.startswith("story_"):
             return label
-    return os.path.basename(os.path.normpath(run_dir))
+    return base
+
+
+def parse_label_overrides(items: Optional[List[str]]) -> Dict[str, str]:
+    out: Dict[str, str] = {}
+    for item in items or []:
+        if "=" not in item:
+            raise ValueError(f"--label expects run_dir=label, got: {item!r}")
+        key, val = item.split("=", 1)
+        out[os.path.basename(os.path.normpath(key.strip()))] = val.strip()
+    return out
 
 
 def _as_dir_list(input_dir: Union[str, List[str]]) -> List[str]:
@@ -128,7 +145,8 @@ EMPTY_LONG_COLS = ["persona_id", "regime", "text", "model_name"] + METRICS
 
 
 def build_long(input_dir: Union[str, List[str]], model_name: str,
-               text_dir: Optional[str], require_min_texts: int = 3) -> pd.DataFrame:
+               text_dir: Optional[str], require_min_texts: int = 3,
+               label_overrides: Optional[Dict[str, str]] = None) -> pd.DataFrame:
     files = discover_files(input_dir, model_name)
     if not files:
         raise FileNotFoundError(
@@ -169,7 +187,8 @@ def build_long(input_dir: Union[str, List[str]], model_name: str,
 
     label_map = _load_text_labels(text_dir)
     text_by_run_dir = {
-        rd: _run_dir_label(rd, label_map) for rd in raw["story_id"].unique()
+        rd: _run_dir_label(rd, label_map, label_overrides)
+        for rd in raw["story_id"].unique()
     }
 
     group_cols = ["persona_id", "story_id", "regime", "model_name"]
@@ -282,9 +301,11 @@ def _safe_tag(model_name: str) -> str:
 def analyze(input_dir: Union[str, List[str]], model_name: str, output_dir: str,
             text_dir: Optional[str] = "tusa_text/min_drp_texts",
             alpha: float = 0.05, model_tag: Optional[str] = None,
-            require_min_texts: int = 3):
+            require_min_texts: int = 3,
+            label_overrides: Optional[Dict[str, str]] = None):
     long = build_long(input_dir, model_name, text_dir,
-                      require_min_texts=require_min_texts)
+                      require_min_texts=require_min_texts,
+                      label_overrides=label_overrides)
     if long.empty:
         return pd.DataFrame(columns=["regime", "metric"]), pd.DataFrame()
 
@@ -323,9 +344,13 @@ def main():
     ap.add_argument("--text-dir", default="tusa_text/min_drp_texts",
                     help="Dir of *.txt reading passages, used to label texts")
     ap.add_argument("--alpha", type=float, default=0.05)
+    ap.add_argument("--label", nargs="*", default=None,
+                    help="Explicit run_dir=label overrides for text names, "
+                         "e.g. --label run_228474=primary")
     args = ap.parse_args()
     analyze(args.input_dir, args.model, args.output_dir,
-            text_dir=args.text_dir, alpha=args.alpha)
+            text_dir=args.text_dir, alpha=args.alpha,
+            label_overrides=parse_label_overrides(args.label))
 
 
 if __name__ == "__main__":
