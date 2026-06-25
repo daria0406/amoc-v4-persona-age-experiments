@@ -92,6 +92,64 @@ def story_snippet(story_text: Optional[str], max_words: int = 5) -> str:
     return " ".join(words[:max_words])
 
 
+def generate_reverse_plots_for_amoc(
+    amoc,
+    persona_text: str,
+    age_refined_int: int,
+    model_name: str,
+    highlight_nodes,
+    base_output_dir: str,
+    persona_index,
+) -> bool:
+    if amoc is None:
+        return False
+    plotter = getattr(amoc, "_plot_ops", None)
+    if plotter is None:
+        return False
+    produced = False
+    try:
+        all_states = plotter.get_graph_states()
+        if len(all_states) >= 2:
+            # One subdir per persona, keyed on the unique original_index.
+            persona_dir = os.path.join(
+                base_output_dir, f"persona_{persona_index}"
+            )
+            reverse_plotter = ReverseGraphPlotter(output_dir=persona_dir)
+            final_positions = plotter.get_viz_positions()
+
+            base_kwargs = {
+                "persona": persona_text,
+                "model_name": model_name,
+                "age": age_refined_int,
+                "blue_nodes": highlight_nodes,
+                "avoid_edge_overlap": True,
+                "layout_depth": 3,
+                "show_triplet_overlay": True,
+            }
+
+            # Only paper mode is supported for reverse plots
+            filtered_states = [
+                s for s in all_states if "paper" in s.get("step_tag", "")
+            ]
+            if len(filtered_states) >= 2:
+                png_paths = reverse_plotter.plot_reverse_sequence(
+                    filtered_states, base_kwargs, final_positions, mode="paper"
+                )
+                produced = len(png_paths) > 0
+                logging.info(
+                    f"made {len(png_paths)} reverse plots for persona "
+                    f"{persona_index} -> {os.path.join(persona_dir, 'reverse_plots')}"
+                )
+        # Free memory before the next persona regardless of state count.
+        plotter.clear_graph_states()
+    except Exception as e:
+        logging.error(
+            f"Failed to generate reverse PNGs for persona {persona_index}: {e}",
+            exc_info=True,
+        )
+    return produced
+
+
 def process_persona_csv(
     filename: str,
     model_names: List[str],
@@ -208,6 +266,7 @@ def process_persona_csv(
 
         start_model_time = time.time()
         total_rows = len(df)
+        reverse_plot_folders = 0
 
         try:
             for idx, (row_idx, row) in enumerate(df.iterrows(), start=1):
@@ -358,6 +417,21 @@ def process_persona_csv(
                                     encoding="utf-8",
                                 )
 
+                    # Reverse plots are per-persona: generate them here, while
+                    # engine.last_amoc still holds THIS persona's run. Doing it
+                    # after the loop would only ever plot the final persona.
+                    if generate_reverse_plots:
+                        if generate_reverse_plots_for_amoc(
+                            amoc=engine.last_amoc,
+                            persona_text=persona_text,
+                            age_refined_int=age_refined_int,
+                            model_name=model_name,
+                            highlight_nodes=highlight_nodes,
+                            base_output_dir=str(graphs_output_dir or output_dir),
+                            persona_index=row_idx,
+                        ):
+                            reverse_plot_folders += 1
+
                     personas_processed += 1
                     processed_indices.add(row_idx)
 
@@ -383,64 +457,15 @@ def process_persona_csv(
                         ckpt["failures"] = failures
                         save_checkpoint(ckpt_path, ckpt)
         finally:
-            # Generate reverse plots from the AMoC plotter's collected states
-            if generate_reverse_plots and engine.last_amoc is not None:
-                plotter = getattr(engine.last_amoc, "_plot_ops", None)
-                if plotter is not None:
-                    try:
-                        all_states = plotter.get_graph_states()
-
-                        if len(all_states) >= 2:
-                            logging.info(
-                                f"generating reverse plots from {len(all_states)} states"
-                            )
-
-                            reverse_plotter = ReverseGraphPlotter(
-                                output_dir=graphs_output_dir or output_dir
-                            )
-
-                            final_positions = plotter.get_viz_positions()
-
-                            base_kwargs = {
-                                "persona": persona_text,
-                                "model_name": model_name,
-                                "age": age_refined_int,
-                                "blue_nodes": highlight_nodes,
-                                "avoid_edge_overlap": True,
-                                "layout_depth": 3,
-                                "show_triplet_overlay": True,
-                            }
-
-                            # Only paper mode is supported for reverse plots
-                            filtered_states = [
-                                s
-                                for s in all_states
-                                if "paper" in s.get("step_tag", "")
-                            ]
-
-                            if len(filtered_states) >= 2:
-                                png_paths = reverse_plotter.plot_reverse_sequence(
-                                    filtered_states,
-                                    base_kwargs,
-                                    final_positions,
-                                    mode="paper",
-                                )
-                                logging.info(
-                                    f"made {len(png_paths)} reverse plots for paper mode"
-                                )
-
-                            reverse_dir = os.path.join(
-                                graphs_output_dir or output_dir, "reverse_plots"
-                            )
-                            logging.info(f"reverse plots saved in: {reverse_dir}")
-
-                        plotter.clear_graph_states()
-
-                    except Exception as e:
-                        logging.error(
-                            f"Failed to generate reverse PNGs: {e}", exc_info=True
-                        )
-
+            # Reverse plots are now generated per-persona inside the loop above
+            # (see generate_reverse_plots_for_amoc), so each persona gets its own
+            # reverse_plots/persona_<idx>/ folder instead of only the last one.
+            if generate_reverse_plots:
+                logging.info(
+                    f"{model_name}: produced reverse-plot folders for "
+                    f"{reverse_plot_folders}/{personas_processed} personas "
+                    f"under {graphs_output_dir or output_dir}/persona_<idx>/reverse_plots/"
+                )
             if checkpoint:
                 ckpt["elapsed_seconds"] = time.time() - start_model_time
                 ckpt["failures"] = failures

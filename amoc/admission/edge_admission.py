@@ -210,8 +210,10 @@ class EdgeAdmission:
         explicit_nodes = self._get_explicit_nodes()
         both_explicit = source_node in explicit_nodes and dest_node in explicit_nodes
 
-        # Also allow if this is the first sentence and we have explicit nodes
-        is_first_sentence = self._current_sentence_index == 0
+        # Also allow if this is the first sentence and we have explicit nodes.
+        # The analyze() loop is 1-based (sentence_counter starts at 1), so the
+        # first processed sentence has _current_sentence_index == 1.
+        is_first_sentence = self._current_sentence_index == 1
         has_explicit_nodes = len(explicit_nodes) > 0
         if both_explicit or (is_first_sentence and has_explicit_nodes):
             # Skip attachment constraint entirely
