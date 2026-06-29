@@ -32,15 +32,33 @@ BASE_OUTPUT_DIR="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/
 RUN_OUTPUT_DIR="${BASE_OUTPUT_DIR}/${RUN_ID}"
 mkdir -p "${RUN_OUTPUT_DIR}"
 
-mapfile -t CHUNK_FILES < <(ls "${CHUNKS_DIR}"/*.csv | sort)
-NUM_CHUNKS=${#CHUNK_FILES[@]}
+# Single-file override: set SINGLE_FILE=<path> to process exactly ONE csv and
+# bypass the chunk-array indexing entirely. Submit with `--array=0` so only one
+# task runs, e.g.:
+#   SINGLE_FILE=personas_dfs/personas_refined_age/missing_secondary/secondary_002.csv \
+#       sbatch --array=0 slurm_scripts/run_llama70b_4gpu_small_example.sh
+SINGLE_FILE="${SINGLE_FILE:-}"
+if [[ -n "${SINGLE_FILE}" ]]; then
+    if [[ "${SINGLE_FILE}" != /* ]]; then
+        SINGLE_FILE="${PROJECT_ROOT}/${SINGLE_FILE}"
+    fi
+    if [[ ! -f "${SINGLE_FILE}" ]]; then
+        echo "SINGLE_FILE not found: ${SINGLE_FILE}"
+        exit 1
+    fi
+    INPUT_FILE="${SINGLE_FILE}"
+    echo "SINGLE_FILE override -> processing only: ${INPUT_FILE}"
+else
+    mapfile -t CHUNK_FILES < <(ls "${CHUNKS_DIR}"/*.csv | sort)
+    NUM_CHUNKS=${#CHUNK_FILES[@]}
 
-if [[ "${SLURM_ARRAY_TASK_ID}" -ge "${NUM_CHUNKS}" ]]; then
-    echo "SLURM_ARRAY_TASK_ID=${SLURM_ARRAY_TASK_ID} exceeds number of chunks (${NUM_CHUNKS})"
-    exit 1
+    if [[ "${SLURM_ARRAY_TASK_ID}" -ge "${NUM_CHUNKS}" ]]; then
+        echo "SLURM_ARRAY_TASK_ID=${SLURM_ARRAY_TASK_ID} exceeds number of chunks (${NUM_CHUNKS})"
+        exit 1
+    fi
+
+    INPUT_FILE="${CHUNK_FILES[$SLURM_ARRAY_TASK_ID]}"
 fi
-
-INPUT_FILE="${CHUNK_FILES[$SLURM_ARRAY_TASK_ID]}"
 
 echo "Running Llama-3.3-70B"
 echo "SLURM ARRAY TASK ID: ${SLURM_ARRAY_TASK_ID}"

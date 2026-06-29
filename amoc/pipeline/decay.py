@@ -949,7 +949,11 @@ class Decay:
 
             seniority = 0
             if node.first_seen_sentence is not None:
-                seniority = max(0, sentence_id - node.first_seen_sentence)
+                if node in explicit_set:
+                    # Fix C: node explicitly re-mentioned → reset age penalty
+                    seniority = 0
+                else:
+                    seniority = max(0, sentence_id - node.first_seen_sentence)
 
             penalty = CARRYOVER_SENIORITY_WEIGHT * seniority
             score = max(0.0, base_score - penalty)
@@ -971,7 +975,11 @@ class Decay:
             base_score = self.convert_to_landscape_score(dist)
             seniority = 0
             if node.first_seen_sentence is not None:
-                seniority = max(0, sentence_id - node.first_seen_sentence)
+                if node in explicit_set:
+                    # Fix C: re-mentioned node → no age penalty on verb scores either
+                    seniority = 0
+                else:
+                    seniority = max(0, sentence_id - node.first_seen_sentence)
             penalized_score = max(0.0, base_score - CARRYOVER_SENIORITY_WEIGHT * seniority)
             node_raw_score[node] = 5.0 - penalized_score
 
@@ -1036,7 +1044,11 @@ class Decay:
                 base_score = self.convert_to_landscape_score(dist)
                 seniority = 0
                 if node.first_seen_sentence is not None:
-                    seniority = max(0, sentence_id - node.first_seen_sentence)
+                    if node in explicit_set:
+                        # Fix C: re-mentioned node → no age penalty in matrix record
+                        seniority = 0
+                    else:
+                        seniority = max(0, sentence_id - node.first_seen_sentence)
                 score = max(0.0, base_score - CARRYOVER_SENIORITY_WEIGHT * seniority)
                 all_scores[token] = score
                 
