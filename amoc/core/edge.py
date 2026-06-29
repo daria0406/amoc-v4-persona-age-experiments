@@ -108,7 +108,7 @@ class Edge:
         self.active = self.visibility_score > 0
 
     def reduce_visibility(self) -> None:
-        self.visibility_score -= 1
+        self.visibility_score -= DECAY_STEP
 
         if self.visibility_score <= 0:
             self.visibility_score = 0

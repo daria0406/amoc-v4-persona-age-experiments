@@ -5,7 +5,11 @@ from typing import TYPE_CHECKING, Optional, List, Set, Dict, Tuple
 from collections import deque
 import networkx as nx
 from amoc.core.node import NodeSource
-from amoc.config.constants import MAX_CARRYOVER, MAX_TRIPLETS, REACTIVATION_VISIBILITY, CARRYOVER_SENIORITY_WEIGHT
+from amoc.config.constants import (
+    MAX_CARRYOVER, MAX_TRIPLETS, REACTIVATION_VISIBILITY,
+    CARRYOVER_SENIORITY_WEIGHT, DECAY_STEP, SEMANTIC_FAST_DECAY_STEP,
+    MATRIX_MIN_PROPAGATION_VISIBILITY,
+)
 from dataclasses import dataclass
 
 
@@ -159,8 +163,8 @@ class Decay:
             elif score == 1:
                 # Only keep if object appears in current sentence
                 if dest_in_sentence:
-                    # Object appears – fast decay by 2
-                    edge.visibility_score -= 2
+                    # Object appears – faster decay (configurable)
+                    edge.visibility_score -= SEMANTIC_FAST_DECAY_STEP
                     if edge.visibility_score <= 0:
                         edge.visibility_score = 0
                         edge.active = False
@@ -202,8 +206,8 @@ class Decay:
                         action = "not_reactivated"
                         logging.debug(f"Skipped reactivation of {triplet_str} – object not in sentence")
                 else:
-                    # Active edge – gradual decay by 1
-                    edge.visibility_score -= 1
+                    # Active edge – gradual decay (configurable)
+                    edge.visibility_score -= DECAY_STEP
                     if edge.visibility_score <= 0:
                         edge.visibility_score = 0
                         edge.active = False
@@ -224,7 +228,7 @@ class Decay:
 
             # Fallback (should not happen)
             else:
-                edge.visibility_score -= 1
+                edge.visibility_score -= DECAY_STEP
                 if edge.visibility_score <= 0:
                     edge.visibility_score = 0
                     edge.active = False
@@ -945,23 +949,33 @@ class Decay:
                 continue
 
             dist = distances.get(node, max_distance + 1)
-            base_score = self.convert_to_landscape_score(dist)
+            # Nodes outside the reachable graph neighbourhood get score 0.
+            # Previously convert_to_landscape_score(max_distance+1) = 5-(max_distance+1)
+            # gave them a non-zero phantom base score (e.g. 2.0 when max_distance=2),
+            # causing stale battle tokens to linger 4+ sentences in the matrix.
+            if dist > max_distance:
+                score = 0.0
+            else:
+                base_score = self.convert_to_landscape_score(dist)
 
-            seniority = 0
-            if node.first_seen_sentence is not None:
-                if node in explicit_set:
-                    # Fix C: node explicitly re-mentioned → reset age penalty
-                    seniority = 0
-                else:
-                    seniority = max(0, sentence_id - node.first_seen_sentence)
+                seniority = 0
+                if node.first_seen_sentence is not None:
+                    if node in explicit_set:
+                        # Fix C: node explicitly re-mentioned → reset age penalty
+                        seniority = 0
+                    else:
+                        seniority = max(0, sentence_id - node.first_seen_sentence)
 
-            penalty = CARRYOVER_SENIORITY_WEIGHT * seniority
-            score = max(0.0, base_score - penalty)
+                penalty = CARRYOVER_SENIORITY_WEIGHT * seniority
+                score = max(0.0, base_score - penalty)
 
-            logging.debug(
-                f"S{sentence_id} | {token} | dist={dist} base={base_score:.1f} "
-                f"seniority={seniority} penalty={penalty:.1f} score={score:.1f}"
-            )
+            if dist > max_distance:
+                logging.debug(f"S{sentence_id} | {token} | dist={dist} (unreachable) score=0.0")
+            else:
+                logging.debug(
+                    f"S{sentence_id} | {token} | dist={dist} base={base_score:.1f} "
+                    f"seniority={seniority} penalty={penalty:.1f} score={score:.1f}"
+                )
 
             append_record_fn({
                 "sentence": sentence_id,
@@ -972,16 +986,19 @@ class Decay:
         node_raw_score = {}
         for node in self._graph.nodes:
             dist = distances.get(node, max_distance + 1)
-            base_score = self.convert_to_landscape_score(dist)
-            seniority = 0
-            if node.first_seen_sentence is not None:
-                if node in explicit_set:
-                    # Fix C: re-mentioned node → no age penalty on verb scores either
-                    seniority = 0
-                else:
-                    seniority = max(0, sentence_id - node.first_seen_sentence)
-            penalized_score = max(0.0, base_score - CARRYOVER_SENIORITY_WEIGHT * seniority)
-            node_raw_score[node] = 5.0 - penalized_score
+            if dist > max_distance:
+                node_raw_score[node] = 5.0  # unreachable → raw distance = max, verb score = 0
+            else:
+                base_score = self.convert_to_landscape_score(dist)
+                seniority = 0
+                if node.first_seen_sentence is not None:
+                    if node in explicit_set:
+                        # Fix C: re-mentioned node → no age penalty on verb scores either
+                        seniority = 0
+                    else:
+                        seniority = max(0, sentence_id - node.first_seen_sentence)
+                penalized_score = max(0.0, base_score - CARRYOVER_SENIORITY_WEIGHT * seniority)
+                node_raw_score[node] = 5.0 - penalized_score
 
         linking_verbs = {
             'is', 'are', 'was', 'were', 'be', 'being', 'been',
@@ -1041,15 +1058,18 @@ class Decay:
             token = node_token_fn(node)
             if token:
                 dist = distances.get(node, max_distance + 1)
-                base_score = self.convert_to_landscape_score(dist)
-                seniority = 0
-                if node.first_seen_sentence is not None:
-                    if node in explicit_set:
-                        # Fix C: re-mentioned node → no age penalty in matrix record
-                        seniority = 0
-                    else:
-                        seniority = max(0, sentence_id - node.first_seen_sentence)
-                score = max(0.0, base_score - CARRYOVER_SENIORITY_WEIGHT * seniority)
+                if dist > max_distance:
+                    score = 0.0
+                else:
+                    base_score = self.convert_to_landscape_score(dist)
+                    seniority = 0
+                    if node.first_seen_sentence is not None:
+                        if node in explicit_set:
+                            # Fix C: re-mentioned node → no age penalty in matrix record
+                            seniority = 0
+                        else:
+                            seniority = max(0, sentence_id - node.first_seen_sentence)
+                    score = max(0.0, base_score - CARRYOVER_SENIORITY_WEIGHT * seniority)
                 all_scores[token] = score
                 
         for token, score in verb_scores.items():
@@ -1094,7 +1114,7 @@ class Decay:
             if dist >= max_distance:
                 continue
             for edge in node.edges:
-                if not edge.active or edge.visibility_score <= 1:
+                if not edge.active or edge.visibility_score < MATRIX_MIN_PROPAGATION_VISIBILITY:
                     continue
                 neighbor = (
                     edge.dest_node if edge.source_node == node else edge.source_node
