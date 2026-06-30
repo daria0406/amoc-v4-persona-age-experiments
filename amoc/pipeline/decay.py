@@ -980,7 +980,7 @@ class Decay:
             append_record_fn({
                 "sentence": sentence_id,
                 "token": token,
-                "score": score,
+                "score": min(score, 5.0),
             })
 
         node_raw_score = {}
@@ -1048,7 +1048,7 @@ class Decay:
                 )
 
         for token, score in verb_scores.items():
-            append_record_fn({"sentence": sentence_id, "token": token, "score": score})
+            append_record_fn({"sentence": sentence_id, "token": token, "score": min(score, 5.0)})
             
         self._max_sentence_index = max(self._max_sentence_index, sentence_id)
         
@@ -1070,10 +1070,10 @@ class Decay:
                         else:
                             seniority = max(0, sentence_id - node.first_seen_sentence)
                     score = max(0.0, base_score - CARRYOVER_SENIORITY_WEIGHT * seniority)
-                all_scores[token] = score
-                
+                all_scores[token] = min(score, 5.0)
+
         for token, score in verb_scores.items():
-            all_scores[token] = score
+            all_scores[token] = min(score, 5.0)
             
         for token, score in all_scores.items():
             if token not in self._full_activation_matrix:
