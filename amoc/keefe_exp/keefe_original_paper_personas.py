@@ -142,69 +142,83 @@ def main():
     client._clean_response = keefe_clean_response
 
     all_scores = []
+    write_header = not os.path.exists(args.output_csv)
     for idx, row in tqdm(df.iterrows(), total=len(df), desc="Processing personas"):
         persona_text = str(row["persona_text"])
         age = int(row["age_refined"]) if pd.notna(row["age_refined"]) else -1
         persona_description = f"Age: {age} years old.\n{persona_text}"
-        for item in items:
-            item_id = item["id"]
-            probe_lemma = item["target_lemma"]
-            for cond in ["control", "predictive", "explicit"]:
-                sentence = item[f"{cond}_text"]
-                amoc = AMoCv4(
-                    persona_description=persona_description,
-                    story_text=sentence,
-                    vllm_client=client,
-                    max_distance_from_active_nodes=2,
-                    max_new_concepts=10,    
-                    max_new_properties=10,
-                    context_length=1,
-                    edge_visibility=2,
-                    nr_relevant_edges=10,
-                    spacy_nlp=spacy_nlp,
-                    debug=False,
-                    persona_age=age,
-                    strict_reactivate_function=True,
-                    single_anchor_hub=True,
-                    matrix_dir_base=None,
-                    checkpoint=False,
-                )
-                amoc._activation_ops.record_sentence_activation_matrix = lambda *a, **kw: None
-                # amoc._inference_ops.infer_new_relationships_step_0 = lambda sent: ([], [])
-                # amoc._inference_ops.infer_new_relationships = lambda *a, **kw: ([], [])
-                # amoc._inference_ops._add_inferred_relationships_to_graph_step_0 = lambda *a, **kw: None
-                # amoc._inference_ops._add_inferred_relationships_to_graph = lambda *a, **kw: None
-                # amoc._infer_new_relationships_step_0_fn = lambda sent: ([], [])
-                # amoc._add_inferred_relationships_to_graph_step_0_fn = lambda *a, **kw: None
-                # amoc._infer_new_relationships_fn = lambda *a, **kw: ([], [])
-                # amoc._add_inferred_relationships_to_graph_fn = lambda *a, **kw: None
-                amoc.record_activation_matrix_wrapper = lambda *args, **kwargs: None
-                amoc._activation_ops.export_activation_matrix_csv = lambda *a, **kw: None
-                amoc._output_ops.finalize_outputs = lambda *a, **kw: (None, None, None)
-                amoc._plot_ops.plot_sentence_views = lambda *a, **kw: None
-                amoc._plot_ops.plot_graph_snapshot_full = lambda *a, **kw: None
-                # amoc.stabilize_connectivity_wrapper = lambda *a, **kw: False
-                # amoc._connectivity_ops.run_repair_pipeline = lambda *a, **kw: None
-                # amoc.is_attachable_wrapper = lambda *a, **kw: True
-                # amoc._edge_ops._get_attachable_nodes = lambda: set(amoc.graph.nodes)
-                # amoc._sentence_processing_ops._extract_deterministic_structure_fn = lambda *a, **kw: None
+        persona_scores = []
+        try:
+            for item in items:
+                item_id = item["id"]
+                probe_lemma = item["target_lemma"]
+                for cond in ["control", "predictive", "explicit"]:
+                    sentence = item[f"{cond}_text"]
+                    amoc = AMoCv4(
+                        persona_description=persona_description,
+                        story_text=sentence,
+                        vllm_client=client,
+                        max_distance_from_active_nodes=2,
+                        max_new_concepts=10,
+                        max_new_properties=10,
+                        context_length=1,
+                        edge_visibility=2,
+                        nr_relevant_edges=10,
+                        spacy_nlp=spacy_nlp,
+                        debug=False,
+                        persona_age=age,
+                        strict_reactivate_function=True,
+                        single_anchor_hub=True,
+                        matrix_dir_base=None,
+                        checkpoint=False,
+                    )
+                    amoc._activation_ops.record_sentence_activation_matrix = lambda *a, **kw: None
+                    # amoc._inference_ops.infer_new_relationships_step_0 = lambda sent: ([], [])
+                    # amoc._inference_ops.infer_new_relationships = lambda *a, **kw: ([], [])
+                    # amoc._inference_ops._add_inferred_relationships_to_graph_step_0 = lambda *a, **kw: None
+                    # amoc._inference_ops._add_inferred_relationships_to_graph = lambda *a, **kw: None
+                    # amoc._infer_new_relationships_step_0_fn = lambda sent: ([], [])
+                    # amoc._add_inferred_relationships_to_graph_step_0_fn = lambda *a, **kw: None
+                    # amoc._infer_new_relationships_fn = lambda *a, **kw: ([], [])
+                    # amoc._add_inferred_relationships_to_graph_fn = lambda *a, **kw: None
+                    amoc.record_activation_matrix_wrapper = lambda *args, **kwargs: None
+                    amoc._activation_ops.export_activation_matrix_csv = lambda *a, **kw: None
+                    amoc._output_ops.finalize_outputs = lambda *a, **kw: (None, None, None)
+                    amoc._plot_ops.plot_sentence_views = lambda *a, **kw: None
+                    amoc._plot_ops.plot_graph_snapshot_full = lambda *a, **kw: None
+                    # amoc.stabilize_connectivity_wrapper = lambda *a, **kw: False
+                    # amoc._connectivity_ops.run_repair_pipeline = lambda *a, **kw: None
+                    # amoc.is_attachable_wrapper = lambda *a, **kw: True
+                    # amoc._edge_ops._get_attachable_nodes = lambda: set(amoc.graph.nodes)
+                    # amoc._sentence_processing_ops._extract_deterministic_structure_fn = lambda *a, **kw: None
 
-                amoc.analyze(replace_pronouns=False, plot_after_each_sentence=False)
-                score = score_probe_llm(amoc, probe_lemma)
-                all_scores.append({
-                    "global_persona_index": row.get("original_index", idx),
-                    "age": age,
-                    "persona_text": persona_text,
-                    "item_id": item_id,
-                    "condition": cond,
-                    "score": score,
-                })
+                    amoc.analyze(replace_pronouns=False, plot_after_each_sentence=False)
+                    score = score_probe_llm(amoc, probe_lemma)
+                    persona_scores.append({
+                        "global_persona_index": row.get("original_index", idx),
+                        "age": age,
+                        "persona_text": persona_text,
+                        "item_id": item_id,
+                        "condition": cond,
+                        "score": score,
+                    })
+        except Exception as e:
+            logger.error(f"Persona idx={idx} failed: {e}", exc_info=True)
+            if not persona_scores:
+                continue
+
+        if persona_scores:
+            all_scores.extend(persona_scores)
+            pd.DataFrame(persona_scores).to_csv(
+                args.output_csv, mode="a", header=write_header, index=False
+            )
+            write_header = False
+            logger.info(f"Saved {len(persona_scores)} rows for persona idx={idx} (running total: {len(all_scores)})")
 
     # After all personas in the chunk are processed, compute LME on the entire chunk
     if all_scores:
         df_out = pd.DataFrame(all_scores)
-        df_out.to_csv(args.output_csv, index=False)
-        print(f"Saved {len(df_out)} scores to {args.output_csv}")
+        print(f"Total {len(df_out)} scores written to {args.output_csv}")
 
         # Compute pairwise table
         stats_df = lme_pairwise(df_out)

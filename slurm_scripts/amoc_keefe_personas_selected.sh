@@ -6,7 +6,7 @@
 #SBATCH --gres=gpu:tesla_a100:4
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=32G
-#SBATCH --array=0-2%2
+#SBATCH --array=0-7%2
 #SBATCH --output=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%A_%a.out
 #SBATCH --error=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%A_%a.err
 
@@ -26,9 +26,7 @@ RUN_ID="keefe_${SLURM_ARRAY_JOB_ID}"
 RUN_OUTPUT_DIR="${BASE_OUTPUT_DIR}/${RUN_ID}"
 mkdir -p "${RUN_OUTPUT_DIR}"
 
-# List all chunk files with natural numeric sort, then slice to get chunks 11,12,13
-mapfile -t ALL_CHUNKS < <(ls "${CHUNKS_DIR}"/*.csv | sort -V)
-CHUNK_FILES=("${ALL_CHUNKS[@]:11:3}")   # start at index 11, take 3 files
+mapfile -t CHUNK_FILES < <(ls "${CHUNKS_DIR}"/*.csv | sort -V)
 NUM_CHUNKS=${#CHUNK_FILES[@]}
 
 if [[ "${SLURM_ARRAY_TASK_ID}" -ge "${NUM_CHUNKS}" ]]; then
