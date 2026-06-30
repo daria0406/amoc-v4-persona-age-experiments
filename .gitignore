@@ -7,10 +7,14 @@ pytest.ini
 # file types
 *.pyc
 *.csv
+!personas_dfs/personas_refined_age/chunks_balanced/*csv
 *.pdf
 *.def
 *.png
-#except the diagrams
+*.tex
+*.pptx
+*.md
+#except the] diagrams
 !diagrams/*.png
 
 # environments

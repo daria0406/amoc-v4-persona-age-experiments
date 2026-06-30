@@ -19,7 +19,7 @@ export TRANSFORMERS_CACHE="$HF_HOME"
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
 
 PROJECT_ROOT="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments"
-CHUNKS_DIR="${PROJECT_ROOT}/personas_dfs/personas_refined_age/chunks"
+CHUNKS_DIR="${PROJECT_ROOT}/personas_dfs/personas_refined_age/chunks_balanced"
 KEEFE_JSON="${PROJECT_ROOT}/amoc/keefe_exp/keefe_ready.json"
 BASE_OUTPUT_DIR="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/keefe_llama"
 RUN_ID="keefe_${SLURM_ARRAY_JOB_ID}"
@@ -59,6 +59,6 @@ apptainer exec --nv \
             --output-csv '$OUTPUT_CSV' \
             --stats-output '$STATS_OUTPUT' \
             --model meta-llama/Llama-3.3-70B-Instruct \
-            --max-rows 1 \
+            --max-rows 5 \
             --tp 4
     "
