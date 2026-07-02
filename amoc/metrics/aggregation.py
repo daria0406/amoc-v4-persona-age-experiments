@@ -69,7 +69,11 @@ def abstract_concept_ratio(concepts) -> float:
     if not concepts:
         return 0.0
 
-    nlp = get_nlp()
+    try:
+        nlp = get_nlp()
+    except RuntimeError:
+        return 0.0
+
     abstract = 0
     total = 0
 
@@ -165,7 +169,10 @@ def build_persona_record(g: pd.DataFrame) -> Optional[Dict[str, Any]]:
 
 def process_triplets_file(path: str) -> pd.DataFrame:
 
-    df = pd.read_csv(path, engine="python", on_bad_lines="warn")
+    try:
+        df = pd.read_csv(path, engine="python", on_bad_lines="warn")
+    except UnicodeDecodeError:
+        df = pd.read_csv(path, engine="python", on_bad_lines="warn", encoding="latin-1")
 
     # Drop stray unnamed columns
     df = df.loc[:, ~df.columns.str.startswith("Unnamed")]
