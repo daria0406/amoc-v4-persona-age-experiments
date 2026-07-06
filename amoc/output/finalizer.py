@@ -63,6 +63,7 @@ class OutputFinalizer:
                 .sort_index()
                 .fillna(0.0)
             )
+            matrix = matrix.clip(lower=0.0, upper=5.0)
             salience_max = matrix.max(axis=1)
             salience_sum = matrix.sum(axis=1)
             ordering = (

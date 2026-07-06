@@ -2,14 +2,9 @@ import argparse
 import glob
 import pandas as pd
 import os
-# scipy used only for legacy spearmanr path; binary_agreement does not need it
-try:
-    from scipy.stats import spearmanr
-except ImportError:
-    spearmanr = None
+from scipy.stats import spearmanr
 
 TOKEN_MAP = {
-    # ── rode ──────────────────────────────────────────────────────────────────
     "rode": "rode",
     "ride": "rode",
     "rides": "rode",
@@ -18,16 +13,9 @@ TOKEN_MAP = {
     "travels through": "rode",
     "traveled through": "rode",
     "journeyed through": "rode",
-    "explores": "rode",
-    "hurried after": "rode",        # preschooler: "knight hurried after dragon"
-    "hurries after": "rode",
-    "hurry after": "rode",
-    "chased": "rode",
-    "chases": "rode",
     "galloped": "rode",
     "gallops": "rode",
 
-    # ── appeared ──────────────────────────────────────────────────────────────
     "appeared": "appeared",
     "appears": "appeared",
     "appears in": "appeared",
@@ -40,86 +28,78 @@ TOKEN_MAP = {
     "came out": "appeared",
     "emerged": "appeared",
 
-    # ── kidnapping ────────────────────────────────────────────────────────────
     "kidnapping": "kidnapping",
     "kidnap": "kidnapping",
     "kidnaps": "kidnapping",
     "kidnapped by": "kidnapping",
-    "kidnaped": "kidnapping",        # typo variant in AMoC output
-    "kidnaped by": "kidnapping",     # typo variant in AMoC output
-    "kidnaping": "kidnapping",       # typo variant
+    "kidnaped": "kidnapping",
+    "kidnaped by": "kidnapping",
+    "kidnaping": "kidnapping",
     "abducts": "kidnapping",
     "abducted": "kidnapping",
     "captures": "kidnapping",
     "captured": "kidnapping",
     "taken from": "kidnapping",
-    "takes": "kidnapping",
-    "took": "kidnapping",
+    "kidnapped": "kidnapping",
 
-    # ── scorched ──────────────────────────────────────────────────────────────
     "scorched": "scorched",
     "scorch": "scorched",
     "scorches": "scorched",
     "scorched by": "scorched",
     "burned by": "scorched",
+    "burned": "scorched",
     "burns": "scorched",
 
-    # ── killed ────────────────────────────────────────────────────────────────
     "killed": "killed",
     "kill": "killed",
     "kills": "killed",
     "killed by": "killed",
     "defeat": "killed",
     "defeats": "killed",
+    "defeated": "killed",
     "defeated by": "killed",
     "dies from": "killed",
     "died at": "killed",
     "dies at": "killed",
     "slays": "killed",
     "slain by": "killed",
-    "overcomes": "killed",
+    "slain": "killed",
+    "slew": "killed",
 
-    # ── freed ─────────────────────────────────────────────────────────────────
     "freed": "freed",
     "free": "freed",
     "frees": "freed",
     "freed by": "freed",
+    "freed from": "freed",
     "frees from": "freed",
     "to be freed by": "freed",
-    "defends against": "freed",
     "rescued by": "freed",
     "rescued at": "freed",
+    "rescued": "freed",
     "rescue from": "freed",
     "rescues from": "freed",
     "rescues": "freed",
-    "seeks to rescue": "freed",
-    "wants to free": "freed",
-    "protects from": "freed",
     "saved by": "freed",
     "saved from": "freed",
+    "saved": "freed",
     "saves from": "freed",
     "saves": "freed",
     "liberates": "freed",
-
-    # ── married ───────────────────────────────────────────────────────────────
     "married": "married",
     "marries": "married",
     "marry": "married",
     "married to": "married",
-    "wants to marry": "married",
     "gets married": "married",
     "gets married in": "married",
     "gets married at": "married",
-    "got married in": "married",     # preschooler typo variant
+    "got married in": "married",
     "got married at": "married",
     "to be married in": "married",
     "to be married to": "married",
     "to be wed at": "married",
     "wed": "married",
     "weds": "married",
-    "wants to marry in": "married",  # seen in preschooler output
 
-    # ── fought ────────────────────────────────────────────────────────────────
     "fought": "fought",
     "fight": "fought",
     "fights": "fought",
@@ -143,11 +123,7 @@ TOKEN_MAP = {
     "battled": "fought",
     "battles": "fought",
     "battle": "fought",
-    "engages in": "fought",
-    "participated in": "fought",
-    "participates in": "fought",
 
-    # ── thankful ──────────────────────────────────────────────────────────────
     "thankful": "thankful",
     "grateful": "thankful",
     "grateful to": "thankful",
@@ -155,12 +131,11 @@ TOKEN_MAP = {
     "grateful to knight on": "thankful",
     "receives gratitude from": "thankful",
     "thanks": "thankful",
+    "thanked": "thankful",
 
-    # ── unfamiliar ────────────────────────────────────────────────────────────
     "unfamiliar": "unfamiliar",
     "unfamiliar with": "unfamiliar",
 
-    # ── landscape nouns / adjectives (identity) ───────────────────────────────
     "knight": "knight",
     "princess": "princess",
     "dragon": "dragon",
@@ -169,6 +144,12 @@ TOKEN_MAP = {
     "beautiful": "beautiful",
     "armor": "armor",
 }
+
+MAX_SCORE = 5.0
+N_SENTENCES = 13
+SENTENCE_COLS = [str(i) for i in range(1, N_SENTENCES + 1)]
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
 
 
 def parse_args():
@@ -189,19 +170,22 @@ def parse_args():
     )
     parser.add_argument(
         "--pattern",
-        default="*.csv",
-        help="Glob pattern within --input-dir (default: *.csv). "
-        "Use e.g. 'amoc_matrix_*.csv' to restrict to canonical matrices.",
+        default="amoc_matrix_*.csv",
+        help="Glob pattern within --input-dir (default: amoc_matrix_*.csv, i.e. "
+        "canonical raw matrices only — avoids re-processing aligned_/presence_/"
+        "spearman_ outputs living in the same tree).",
     )
     parser.add_argument(
         "--landscape",
-        default="./matrix/landscape_paper_no_inference.csv",
-        help="Path to Landscape reference matrix (space-separated). Default: ./matrix/landscape_paper.csv",
+        default=os.path.join(_HERE, "matrix/landscape_paper_no_inference.csv"),
+        help="Path to Landscape reference matrix (space-separated). "
+        "Default: <script dir>/matrix/landscape_paper_no_inference.csv",
     )
     parser.add_argument(
         "--output-dir",
-        default="./matrix_results/run_233630",
-        help="Directory to save output files (default: ./matrix_results).",
+        default=os.path.join(_HERE, "matrix_results/run_233965_fixed"),
+        help="Directory to save output files. Regime subfolders of --input-dir "
+        "(primary/secondary/highschool/college) are mirrored here.",
     )
     parser.add_argument(
         "--threshold",
@@ -215,9 +199,23 @@ def parse_args():
     return args
 
 
+_TRAILING_PREPS = {
+    "by", "at", "in", "for", "with", "from", "to", "on", "against", "into", "of",
+}
+
+
 def normalise_amoc_token(token: str) -> str:
     token_clean = token.strip()
-    return TOKEN_MAP.get(token_clean, token_clean)
+    key = token_clean.lower()
+    if key in TOKEN_MAP:
+        return TOKEN_MAP[key]
+    parts = key.split()
+    while len(parts) > 1 and parts[-1] in _TRAILING_PREPS:
+        parts = parts[:-1]
+        candidate = " ".join(parts)
+        if candidate in TOKEN_MAP:
+            return TOKEN_MAP[candidate]
+    return token_clean
 
 
 def load_amoc_matrix(file_path):
@@ -228,13 +226,30 @@ def load_amoc_matrix(file_path):
     for col in df.columns[1:]:
         df[col] = pd.to_numeric(df[col], errors="coerce")
     df["token"] = df["token"].str.strip()
-    # Apply normalisation
     df["token"] = df["token"].apply(normalise_amoc_token)
-    # Aggregate: for each token, take the maximum score per sentence
     token_col = "token"
     sentence_cols = [c for c in df.columns if c != token_col]
     df = df.groupby(token_col, as_index=False)[sentence_cols].max()
+    df[sentence_cols] = df[sentence_cols].clip(upper=MAX_SCORE)
     return df
+
+
+def build_aligned_matrix(amoc_wide, landscape_tokens):
+    df = amoc_wide.copy()
+    df["token"] = df["token"].apply(normalise_amoc_token)
+    num_cols = [c for c in df.columns if c != "token"]
+    df = df.groupby("token", as_index=False)[num_cols].max()
+    df = df.set_index("token")
+
+    df = df.rename(columns={c: str(c).strip() for c in df.columns if str(c).strip().isdigit()})
+    for c in SENTENCE_COLS:
+        if c not in df.columns:
+            df[c] = 0.0
+    df = df[SENTENCE_COLS]
+
+    df = df.reindex(list(landscape_tokens)).fillna(0.0).clip(upper=MAX_SCORE)
+    df.index.name = "token"
+    return df.reset_index()
 
 
 def load_landscape_matrix(file_path):
@@ -277,53 +292,39 @@ def wide_to_long(df):
     return long_df
 
 
-def binary_agreement(amoc_vec, land_vec, threshold):
-    """
-    Per-token binary presence agreement metrics.
-
-    Both vectors have 13 values (one per sentence).
-    A sentence is 'present' if score > threshold.
-
-    Returns:
-        agreement_rate  – fraction of sentences where both agree (TP+TN / 13)
-        jaccard         – |both present| / |either present|  (NaN if union=0)
-        phi             – phi coefficient (binary Pearson correlation)
-    """
-    n = len(amoc_vec)
-    a = [1 if v > threshold else 0 for v in amoc_vec]
-    b = [1 if v > threshold else 0 for v in land_vec]
-
-    tp = sum(1 for i in range(n) if a[i] == 1 and b[i] == 1)
-    tn = sum(1 for i in range(n) if a[i] == 0 and b[i] == 0)
-    fp = sum(1 for i in range(n) if a[i] == 1 and b[i] == 0)
-    fn = sum(1 for i in range(n) if a[i] == 0 and b[i] == 1)
-
-    agreement_rate = (tp + tn) / n
-
-    union = tp + fp + fn
-    jaccard = tp / union if union > 0 else float("nan")
-
-    # phi coefficient
-    denom = ((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)) ** 0.5
-    phi = (tp * tn - fp * fn) / denom if denom > 0 else float("nan")
-
-    return agreement_rate, jaccard, phi
+PAPER_R = {
+    1: 0.77, 2: 0.98, 3: 0.66, 4: 0.91, 5: 0.69, 6: 0.74,
+    7: 0.68, 8: 0.69, 9: 0.93, 10: 0.76, 11: 0.68, 12: 0.79, 13: 0.79,
+}
 
 
 def process_amoc_file(amoc_csv, landscape_wide, landscape_tokens, output_dir, threshold=0.0):
     input_name = os.path.splitext(os.path.basename(amoc_csv))[0]
 
-    amoc_wide = load_amoc_matrix(amoc_csv)
-    # Keep only tokens that appear in Landscape (after normalisation)
+    try:
+        amoc_wide = load_amoc_matrix(amoc_csv)
+    except (pd.errors.EmptyDataError, ValueError) as e:
+        print(f"  SKIP [{input_name}]: unreadable/empty matrix ({e})")
+        return None
     amoc_filtered = amoc_wide[amoc_wide["token"].isin(landscape_tokens)].copy()
     print(f"[{input_name}] AMoC tokens (after aggregation): {len(amoc_wide)}; "
           f"filtered to {len(amoc_filtered)} common tokens.")
 
-    # Report tokens that did not match across the two matrices (both directions)
     amoc_tokens = set(amoc_wide["token"])
-    unmatched_amoc = sorted(amoc_tokens - landscape_tokens)
     missing_landscape = sorted(landscape_tokens - amoc_tokens)
-    print(f"  AMoC tokens not in Landscape ({len(unmatched_amoc)}): {unmatched_amoc}")
+    sent_cols = [c for c in amoc_wide.columns if c != "token"]
+    unmatched_mass = (
+        amoc_wide[~amoc_wide["token"].isin(landscape_tokens)]
+        .set_index("token")[sent_cols]
+        .sum(axis=1)
+        .sort_values(ascending=False)
+    )
+    unmatched_mass = unmatched_mass[unmatched_mass > 0]
+    top_unmatched = ", ".join(
+        f"{t} ({m:.1f})" for t, m in unmatched_mass.head(15).items()
+    )
+    print(f"  Unmatched AMoC tokens with mass>0 ({len(unmatched_mass)}), "
+          f"top by total activation: {top_unmatched}")
     print(f"  Landscape tokens missing from AMoC ({len(missing_landscape)}): {missing_landscape}")
 
     if amoc_filtered.empty:
@@ -332,17 +333,18 @@ def process_amoc_file(amoc_csv, landscape_wide, landscape_tokens, output_dir, th
 
     print(f"  Common tokens: {sorted(amoc_filtered['token'].tolist())}")
 
-    # Save filtered matrix (optional, for inspection)
     formatted_path = os.path.join(output_dir, f"formatted_{input_name}.csv")
     amoc_filtered.to_csv(formatted_path, index=False)
     print(f"  Saved filtered AMoC matrix to {formatted_path}")
 
-    # Convert to long format
+    aligned = build_aligned_matrix(amoc_wide, landscape_wide["token"].tolist())
+    aligned_path = os.path.join(output_dir, f"aligned_{input_name}.csv")
+    aligned.to_csv(aligned_path, index=False)
+    print(f"  Saved aligned appendix matrix to {aligned_path}")
+
     amoc_long = wide_to_long(amoc_filtered)
     landscape_long = wide_to_long(landscape_wide)
 
-    # Left join on landscape: all 17 landscape (sentence, token) pairs are kept.
-    # AMoC score is 0 for tokens the model didn't generate (a real miss, not a skip).
     merged = landscape_long.merge(
         amoc_long,
         on=["sentence", "token"],
@@ -355,39 +357,42 @@ def process_amoc_file(amoc_csv, landscape_wide, landscape_tokens, output_dir, th
         print("  No overlapping (sentence, token) pairs found; skipping.")
         return None
 
-    # ── Binary presence agreement per token ───────────────────────────────────
-    # For each landscape token, compare its 13-sentence presence profile in
-    # AMoC vs landscape using a score > threshold threshold.
-    # Metrics: agreement_rate (TP+TN/13), Jaccard (TP/TP+FP+FN), phi coefficient.
-    # This avoids the rank-ordering issue that collapses knight r to ~0.
     results = []
-    for token in sorted(merged["token"].unique()):
-        sub = merged[merged["token"] == token].sort_values("sentence")
-        amoc_vec = sub["score_amoc"].tolist()
-        land_vec = sub["score_land"].tolist()
-        agr, jac, phi = binary_agreement(amoc_vec, land_vec, threshold)
+    for sentence in sorted(merged["sentence"].unique()):
+        sub = merged[merged["sentence"] == sentence]
+        amoc_vec = sub["score_amoc"].to_numpy()
+        land_vec = sub["score_land"].to_numpy()
+        if len(sub) < 2 or amoc_vec.std() == 0 or land_vec.std() == 0:
+            r, p = float("nan"), float("nan")
+        else:
+            r, p = spearmanr(amoc_vec, land_vec)
         results.append({
-            "token":          token,
-            "agreement_rate": round(agr, 4),
-            "jaccard":        round(jac, 4) if jac == jac else float("nan"),
-            "phi":            round(phi, 4) if phi == phi else float("nan"),
+            "sentence":     int(sentence),
+            "spearman_r":   round(r, 2) if pd.notna(r) else float("nan"),
+            "paper_r":      PAPER_R.get(int(sentence)),
+            "p_value":      p,
+            "significance": (
+                "not significant" if pd.isna(p)
+                else ("significant" if p < 0.05 else "not significant")
+            ),
         })
 
-    df_results = pd.DataFrame(results)
+    df_results = pd.DataFrame(
+        results, columns=["sentence", "spearman_r", "paper_r", "p_value", "significance"]
+    )
 
-    output_path = os.path.join(output_dir, f"presence_{input_name}.csv")
+    output_path = os.path.join(output_dir, f"spearman_{input_name}.csv")
     df_results.to_csv(output_path, index=False)
-    print(f"  Saved per-token presence metrics to {output_path}")
+    print(f"  Saved per-sentence Spearman correlations to {output_path}")
 
-    avg_agr = df_results["agreement_rate"].mean(skipna=True)
-    avg_jac = df_results["jaccard"].mean(skipna=True)
-    print(f"  Mean agreement={avg_agr:.3f}  mean Jaccard={avg_jac:.3f}  (threshold={threshold})")
+    avg_r = df_results["spearman_r"].mean(skipna=True)
+    n_valid = int(df_results["spearman_r"].notna().sum())
+    print(f"  Average Spearman rho = {avg_r:.4f}  (over {n_valid} valid sentences)")
 
     return {
-        "file":             input_name,
-        "avg_agreement":    round(avg_agr, 4) if pd.notna(avg_agr) else float("nan"),
-        "avg_jaccard":      round(avg_jac, 4) if pd.notna(avg_jac) else float("nan"),
-        "n_tokens":         len(df_results),
+        "file":          input_name,
+        "avg_spearman":  round(avg_r, 4) if pd.notna(avg_r) else float("nan"),
+        "n_sentences":   n_valid,
     }
 
 
@@ -395,11 +400,9 @@ def main():
     args = parse_args()
     os.makedirs(args.output_dir, exist_ok=True)
 
-    # Load the Landscape reference once and reuse across all files
     landscape_wide = load_landscape_matrix(args.landscape)
     landscape_tokens = set(landscape_wide["token"])
 
-    # --- Single-file mode -----------------------------------------------------
     if args.amoc_csv:
         summary = process_amoc_file(
             args.amoc_csv, landscape_wide, landscape_tokens, args.output_dir,
@@ -407,14 +410,18 @@ def main():
         )
         if summary is not None:
             df = pd.read_csv(
-                os.path.join(args.output_dir, f"presence_{summary['file']}.csv")
+                os.path.join(args.output_dir, f"spearman_{summary['file']}.csv")
             )
-            print("\nBinary presence metrics by token:")
+            print("\nPer-sentence Spearman correlations:")
             print(df.to_string(index=False))
+            print(f"\nAverage Spearman rho: {summary['avg_spearman']}")
         return
 
-    # --- Batch / directory mode ----------------------------------------------
     files = sorted(glob.glob(os.path.join(args.input_dir, args.pattern)))
+    if not files:
+        files = sorted(
+            glob.glob(os.path.join(args.input_dir, "**", args.pattern), recursive=True)
+        )
     files = [f for f in files if not os.path.basename(f).startswith("landscape_")]
     if not files:
         print(f"No files matching '{args.pattern}' in {args.input_dir} "
@@ -427,8 +434,16 @@ def main():
     summaries = []
     for f in files:
         print(f"=== {f} ===")
-        res = process_amoc_file(f, landscape_wide, landscape_tokens, args.output_dir, threshold=args.threshold)
+        rel = os.path.relpath(os.path.dirname(f), args.input_dir)
+        file_out_dir = (
+            args.output_dir if rel == "." else os.path.join(args.output_dir, rel)
+        )
+        os.makedirs(file_out_dir, exist_ok=True)
+        res = process_amoc_file(
+            f, landscape_wide, landscape_tokens, file_out_dir, threshold=args.threshold
+        )
         if res is not None:
+            res["regime_dir"] = "" if rel == "." else rel
             summaries.append(res)
         print()
 
@@ -437,19 +452,17 @@ def main():
         return
 
     summary_df = pd.DataFrame(summaries).sort_values(
-        "avg_agreement", ascending=False, na_position="last"
+        "avg_spearman", ascending=False, na_position="last"
     )
-    summary_path = os.path.join(args.output_dir, "presence_summary.csv")
+    summary_path = os.path.join(args.output_dir, "spearman_summary.csv")
     summary_df.to_csv(summary_path, index=False)
 
     print("=" * 70)
     print(f"SUMMARY: {len(summaries)}/{len(files)} files produced metrics")
     print("=" * 70)
     print(summary_df.to_string(index=False))
-    print(f"\nMean avg_agreement across files: "
-          f"{summary_df['avg_agreement'].mean(skipna=True):.3f}")
-    print(f"Mean avg_jaccard  across files: "
-          f"{summary_df['avg_jaccard'].mean(skipna=True):.3f}")
+    print(f"\nMean avg_spearman across files: "
+          f"{summary_df['avg_spearman'].mean(skipna=True):.3f}")
     print(f"Saved combined summary to {summary_path}")
 
 

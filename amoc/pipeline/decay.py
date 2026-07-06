@@ -13,6 +13,13 @@ from amoc.config.constants import (
 from dataclasses import dataclass
 
 
+MATRIX_SCORE_MIN = 0.0
+MATRIX_SCORE_MAX = 5.0
+
+
+def clamp_matrix_score(value: float) -> float:
+    return max(MATRIX_SCORE_MIN, min(float(value), MATRIX_SCORE_MAX))
+
 @dataclass
 class DecayDecision:
     triplet: Tuple[str, str, str]
@@ -928,6 +935,14 @@ class Decay:
             return 5.0
         return val
 
+    def is_activation_onset(self, token: str, sentence_id: int) -> bool:
+        if sentence_id <= 1:
+            return True
+        history = self._full_activation_matrix.get(token)
+        if not history or len(history) < sentence_id - 1:
+            return True
+        return history[sentence_id - 2] == 0.0
+
     def record_sentence_activation_matrix(
         self,
         sentence_id: int,
@@ -977,10 +992,13 @@ class Decay:
                     f"seniority={seniority} penalty={penalty:.1f} score={score:.1f}"
                 )
 
+            if score > 0.0 and self.is_activation_onset(token, sentence_id):
+                score = 5.0
+
             append_record_fn({
                 "sentence": sentence_id,
                 "token": token,
-                "score": min(score, 5.0),
+                "score": clamp_matrix_score(score),
             })
 
         node_raw_score = {}
@@ -1010,6 +1028,7 @@ class Decay:
         }
 
         verb_scores: Dict[str, float] = {}
+        verb_onset_scores: Dict[str, float] = {}
 
         for edge in self._graph.edges:
             if not edge.active:
@@ -1034,21 +1053,27 @@ class Decay:
             dst_raw = node_raw_score.get(edge.dest_node, max_distance + 1)
             src_act = self.convert_to_landscape_score(src_raw)
             dst_act = self.convert_to_landscape_score(dst_raw)
-            verb_act = max(src_act, dst_act) - 0.5
+            endpoint_act = max(src_act, dst_act)
+            verb_act = endpoint_act - 0.5
             if verb_act < 0.0:
                 verb_act = 0.0
 
             prev = verb_scores.get(token)
             if prev is None or verb_act > prev:
                 verb_scores[token] = verb_act
+                verb_onset_scores[token] = endpoint_act
                 logging.debug(
                     f"Recording verb '{token}' from active edge: "
                     f"{edge.source_node.get_text_representer()} -{label}-> "
                     f"{edge.dest_node.get_text_representer()} (score={verb_act})"
                 )
 
+        for token in verb_scores:
+            if verb_onset_scores.get(token, 0.0) > 0.0 and self.is_activation_onset(token, sentence_id):
+                verb_scores[token] = 5.0
+
         for token, score in verb_scores.items():
-            append_record_fn({"sentence": sentence_id, "token": token, "score": min(score, 5.0)})
+            append_record_fn({"sentence": sentence_id, "token": token, "score": clamp_matrix_score(score)})
             
         self._max_sentence_index = max(self._max_sentence_index, sentence_id)
         
@@ -1070,10 +1095,12 @@ class Decay:
                         else:
                             seniority = max(0, sentence_id - node.first_seen_sentence)
                     score = max(0.0, base_score - CARRYOVER_SENIORITY_WEIGHT * seniority)
-                all_scores[token] = min(score, 5.0)
+                if score > 0.0 and self.is_activation_onset(token, sentence_id):
+                    score = 5.0
+                all_scores[token] = clamp_matrix_score(score)
 
         for token, score in verb_scores.items():
-            all_scores[token] = min(score, 5.0)
+            all_scores[token] = clamp_matrix_score(score)
             
         for token, score in all_scores.items():
             if token not in self._full_activation_matrix:

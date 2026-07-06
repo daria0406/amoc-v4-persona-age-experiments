@@ -7,7 +7,10 @@ OUTPUT_DIR = (
 OUTPUT_ANALYSIS_DIR = os.path.join(
     "/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output", "amoc_analysis"
 )
-os.makedirs(OUTPUT_ANALYSIS_DIR, exist_ok=True)
+try:
+    os.makedirs(OUTPUT_ANALYSIS_DIR, exist_ok=True)
+except OSError:
+    pass
 
 VLLM_MODELS = {
     "qwen3:30b": "Qwen/Qwen3-30B-A3B-Instruct-2507",
