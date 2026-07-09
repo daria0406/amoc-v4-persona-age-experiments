@@ -509,8 +509,10 @@ Return a JSON with:
 3. "corrected_triple": [subject, relation, object] if fixable, else null
 """
 
-# Simplified with 0-2 scale
-NARRATIVE_RELEVANCE_PROMPT = """You are maintaining a knowledge graph of a story. Your task is to score each relationship.
+# Topical/scene continuity scale (0-2) — judges whether the STORY has moved on, not whether exact words are repeated
+NARRATIVE_RELEVANCE_PROMPT = """You are maintaining a knowledge graph of a story. Your task is to score each
+relationship by how much the story's CURRENT context still applies to it — not by whether its exact words
+are repeated in the current sentence.
 
 Story context (previous sentences):
 {story_context}
@@ -521,30 +523,40 @@ Current sentence being processed:
 Active relationships in the reader's memory:
 {active_triplets}
 
-SCORING GUIDE (0-2) – STRICT MODE:
-SCORE 2 - RELEVANT (keep full activation)
-- The RELATION or OBJECT appears EXPLICITLY in the current sentence.
-- The subject alone is NEVER enough for score 2.
-- Example: For (knight, rides, horse), sentence must contain "rides" or "horse".
+SCORING GUIDE (0-2) – TOPICAL/SCENE CONTINUITY:
+SCORE 2 - CONTINUOUS (keep active)
+- The relationship is still part of the scene, topic, or characters the story is currently discussing.
+- Pronouns, synonyms, or an implied continuation of the same idea are enough — literal repetition of the
+  relation or object word is NOT required.
+- Example: if the story is still following the knight through the forest, (knight, rides, horse) stays
+  relevant even if the current sentence doesn't say "rides" or "horse", as long as the scene hasn't changed.
 
-SCORE 1 - BORDERLINE (decay fast)
-- ONLY the SUBJECT appears, AND the edge is critical for connectivity.
-- Otherwise, do NOT give score 1.
+SCORE 1 - FADING (borderline / connectivity-critical exception)
+- The story has moved on to different specific details, but is still within the same broader scene or
+  event (same characters/location/topic) — this relationship isn't the current focus but hasn't been
+  contradicted or abandoned.
+- Also use this score if the edge is critical for keeping the graph connected, even while faded.
 
-SCORE 0 - NOT RELEVANT (decay immediately)
-- Neither subject, relation, nor object appears.
-- The subject appears but relation/object absent and not connectivity-critical.
-- The relation is generic ("is", "has", "involves", "relates to").
-- The object is vague ("ability", "skill", "pride", "deed").
-- The edge is from more than 2 sentences ago.
-- You are uncertain → SCORE 0.
+SCORE 0 - DISCONTINUOUS (no longer applies)
+- The current sentence marks a clear shift: a new scene, a new time ("later that day", "meanwhile"), a new
+  topic, or a new set of characters — the relationship's context has been superseded and is no longer part
+  of what the story is discussing.
+- The relation is generic ("is", "has", "involves", "relates to") with no remaining topical anchor.
+- You are uncertain whether the topic is still continuous → SCORE 0.
 
 CRITICAL RULES:
-1. BE STRICT: Only score 2 when there is explicit mention of relation or object.
-2. Score 1 is a RARE exception for connectivity-critical edges. A token that does not appear in the current sentence (including as a pronoun) should NEVER get score 2, and should rarely get score 1. The only exception is if removing it would disconnect the entire graph.
-3. When in doubt, score 0.
+1. Judge continuity of TOPIC/SCENE, not literal word overlap. A pronoun, a synonym, or an implied
+   continuation of the same idea is enough for score 2 — do not require the exact noun/verb to reappear.
+2. Score 0 should correspond to an actual shift in the story (new scene/topic/time/characters), not simply
+   "this specific word wasn't used in this sentence."
+3. When in doubt about whether the topic changed, score 0.
 
-Return JSON: {{"scores": {{"(subj, rel, obj)": 0/1/2}}, "reasoning": "brief"}}
+ALSO report whether the CURRENT SENTENCE ITSELF marks a context shift for the story as a whole — i.e., a
+"paragraph break": a new scene, a new time, a new topic, or a new set of characters, such that much of the
+established context is no longer what the story is discussing. This is a single yes/no judgment about the
+sentence, separate from the individual per-relationship scores above.
+
+Return JSON: {{"scores": {{"(subj, rel, obj)": 0/1/2}}, "context_shift": true/false, "reasoning": "brief"}}
 """
 
 PRUNE_IRRELEVANT_TRIPLETS_BY_NARRATIVE = """You are maintaining a clean knowledge graph.

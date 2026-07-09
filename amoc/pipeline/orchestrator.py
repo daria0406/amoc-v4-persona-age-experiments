@@ -540,6 +540,8 @@ class AMoCv4:
         if decisions:
             self._triplet_ops.set_decay_decisions(decisions)
 
+        self._triplet_ops.set_context_shift(self._activation_ops.get_last_context_shift())
+
         self._triplet_ops.capture_sentence_edges(
             sentence_index=self._current_sentence_index,
             sentence_text=original_text,

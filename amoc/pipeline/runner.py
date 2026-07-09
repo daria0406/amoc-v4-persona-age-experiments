@@ -52,6 +52,7 @@ CSV_HEADERS = [
     "edge_visibility",
     "edge_status",
     "decay_explanation",
+    "context_shift",
 ]
 
 
@@ -330,6 +331,7 @@ def process_persona_csv(
                                     "edge_visibility": record.edge_visibility,
                                     "edge_status": record.edge_status,
                                     "decay_explanation": record.decay_explanation,
+                                    "context_shift": record.context_shift,
                                 }
                             )
 

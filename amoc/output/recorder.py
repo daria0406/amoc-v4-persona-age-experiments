@@ -33,6 +33,7 @@ class EdgeRecord:
     edge_visibility: int = 0
     edge_status: str = ""
     decay_explanation: str = ""
+    context_shift: bool = False
 
 
 class TripletRecorderV2:
@@ -47,6 +48,7 @@ class TripletRecorderV2:
         self._edge_visibility = edge_visibility
         self._sentence_records: List[List[EdgeRecord]] = []
         self._current_decay_decisions: Dict[Tuple[str, str, str], str] = {}
+        self._current_context_shift: bool = False
 
         self._original_index: int = -1
         self._age_refined: int = -1
@@ -71,11 +73,15 @@ class TripletRecorderV2:
     def reset(self) -> None:
         self._sentence_records.clear()
         self._current_decay_decisions.clear()
+        self._current_context_shift = False
 
     def set_decay_decisions(self, decisions: List[Tuple[Tuple[str, str, str], str]]) -> None:
         self._current_decay_decisions.clear()
         for triplet, reasoning in decisions:
             self._current_decay_decisions[triplet] = reasoning
+
+    def set_context_shift(self, context_shift: bool) -> None:
+        self._current_context_shift = context_shift
 
     def capture_sentence_edges(
         self,
@@ -137,6 +143,7 @@ class TripletRecorderV2:
                 edge_visibility=edge.visibility_score,
                 edge_status=edge_status,
                 decay_explanation=decay_reasoning,
+                context_shift=self._current_context_shift,
             )
             records.append(record)
 

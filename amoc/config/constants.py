@@ -7,9 +7,6 @@ EDGE_VISIBILITY = 2
 NR_RELEVANT_EDGES = 10
 DEBUG = False
 DECAY_STEP = 1
-# Faster decay step applied to low-relevance (semantic score 1) edges whose
-# object is re-mentioned. Raise to make transient edges drop out sooner.
-SEMANTIC_FAST_DECAY_STEP = 2
 # In the activation matrix, an edge only propagates activation to its neighbour
 # while visibility_score > this threshold. Raise it to make carried-over tokens
 # fade from the matrix faster (fewer sentences of lingering activation).
@@ -17,7 +14,10 @@ MATRIX_MIN_PROPAGATION_VISIBILITY = 1
 MAX_REACTIVATION_COUNT = 6
 MAX_EDGES_PER_NODE = 5
 MAX_CARRYOVER = 10
-MAX_TRIPLETS = 25
+# Active-edge count above which apply_pruning steps in. Kept well above a
+# typical per-sentence active count so pruning acts as a safety net for
+# runaway graph growth, not a routine second relevance pass every sentence.
+PRUNING_SIZE_THRESHOLD = 15
 REACTIVATION_VISIBILITY = 2
 MAX_CARRYOVER_NODES = 5          
 CARRYOVER_SENIORITY_WEIGHT = 1.0

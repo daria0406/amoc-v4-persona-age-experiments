@@ -6,8 +6,8 @@ from collections import deque
 import networkx as nx
 from amoc.core.node import NodeSource
 from amoc.config.constants import (
-    MAX_CARRYOVER, MAX_TRIPLETS, REACTIVATION_VISIBILITY,
-    CARRYOVER_SENIORITY_WEIGHT, DECAY_STEP, SEMANTIC_FAST_DECAY_STEP,
+    MAX_CARRYOVER, PRUNING_SIZE_THRESHOLD, REACTIVATION_VISIBILITY,
+    CARRYOVER_SENIORITY_WEIGHT, DECAY_STEP,
     MATRIX_MIN_PROPAGATION_VISIBILITY,
 )
 from dataclasses import dataclass
@@ -62,6 +62,7 @@ class Decay:
         self._last_decay_decisions: List[DecayDecision] = []
         self._full_activation_matrix: Dict[str, List[float]] = {}
         self._max_sentence_index: int = 0
+        self._last_context_shift: bool = False
 
     def set_decay_state_refs(
         self,
@@ -102,14 +103,22 @@ class Decay:
             self.collect_decay_candidates()
         )
         if not decay_candidates:
+            self._last_context_shift = False
             return []
 
         # Step 2: Get LLM scores
-        scores, reasoning = self.get_decay_scores(candidate_strings)
+        scores, reasoning, context_shift = self.get_decay_scores(candidate_strings)
         if scores is None or not isinstance(scores, dict):
             logging.warning(f"Decay scores invalid type: {type(scores)}. Using fallback decay.")
             self.apply_fallback_decay(decay_candidates)
+            self._last_context_shift = False
             return []
+
+        self._last_context_shift = context_shift
+        if context_shift:
+            logging.info(
+                f"CONTEXT SHIFT detected at sentence {self._current_sentence_index}"
+            )
 
         reasoning_text = reasoning if reasoning else ""
         if reasoning_text:
@@ -166,27 +175,14 @@ class Decay:
                     )
                 )
 
-            # SCORE 1: LOW RELEVANCE – only keep if object appears in sentence
+            # SCORE 1: LOW RELEVANCE – per the LLM's own rubric, score 1 means
+            # only the subject appears,  so the object is never expected to be in the sentence
+            # here. Treat the same as score 0: immediate removal.
             elif score == 1:
-                # Only keep if object appears in current sentence
-                if dest_in_sentence:
-                    # Object appears – faster decay (configurable)
-                    edge.visibility_score -= SEMANTIC_FAST_DECAY_STEP
-                    if edge.visibility_score <= 0:
-                        edge.visibility_score = 0
-                        edge.active = False
-                        stats["removed"] += 1
-                        action = "removed"
-                    else:
-                        stats["decay"] += 1
-                        action = "decayed"
-                else:
-                    # Object not in sentence – immediate removal
-                    edge.visibility_score = 0
-                    edge.active = False
-                    stats["removed"] += 1
-                    action = "removed_immediate"
-                    logging.debug(f"Forced removal of {triplet_str} – object not in sentence")
+                edge.visibility_score = 0
+                edge.active = False
+                stats["removed"] += 1
+                action = "removed_immediate"
 
                 decisions.append(
                     DecayDecision(
@@ -292,7 +288,7 @@ class Decay:
 
         if not current_sentence:
             logging.warning("SEMANTIC_DECAY: No current sentence text, skipping")
-            return None, None
+            return None, None, False
 
         try:
             result = self._llm.check_narrative_relevance(
@@ -303,12 +299,16 @@ class Decay:
             )
         except Exception as e:
             logging.error(f"SEMANTIC_DECAY: LLM call failed: {e}")
-            return None, None
+            return None, None, False
 
         if not result or "scores" not in result:
-            return None, None
+            return None, None, False
 
-        return result.get("scores", {}), result.get("reasoning", "")
+        return (
+            result.get("scores", {}),
+            result.get("reasoning", ""),
+            bool(result.get("context_shift", False)),
+        )
 
     def normalize_score(self, score):
         try:
@@ -321,7 +321,9 @@ class Decay:
         except:
             return 2
 
-    def apply_pruning(self, prev_sentences, threshold_for_pruning=3, aggressive=True):
+    def apply_pruning(
+        self, prev_sentences, threshold_for_pruning=PRUNING_SIZE_THRESHOLD, aggressive=True
+    ):
         all_active_triplets = []
         edge_to_obj = {}
 
@@ -367,13 +369,6 @@ class Decay:
             return
 
         keep_set = set(result["to_keep"])
-
-        if not aggressive and len(keep_set) > MAX_TRIPLETS:
-            logging.info(
-                f"First pass kept {len(keep_set)} edges – still too many. Running second pass."
-            )
-            self.apply_pruning(prev_sentences, threshold_for_pruning=3, aggressive=True)
-            return
 
         connectivity_map = self.build_connectivity_map()
 
@@ -1163,6 +1158,9 @@ class Decay:
     def get_last_decay_decisions(self) -> List[DecayDecision]:
         return self._last_decay_decisions
 
+    def get_last_context_shift(self) -> bool:
+        return self._last_context_shift
+
     def get_decay_decisions_with_triplets(
         self,
     ) -> List[Tuple[Tuple[str, str, str], str]]:
@@ -1171,30 +1169,6 @@ class Decay:
             if decision.action in ("removed", "decayed", "protected", "maintained"):
                 result.append((decision.triplet, decision.reasoning))
         return result
-
-    def apply_hard_cap(self) -> None:
-        active_edges = [e for e in self._graph.edges if e.active]
-        if len(active_edges) <= MAX_TRIPLETS:
-            return
-
-        removable = sorted(
-            [e for e in active_edges if not e.asserted_this_sentence],
-            key=lambda e: e.visibility_score,
-        )
-
-        to_remove = len(active_edges) - MAX_TRIPLETS
-        removed = 0
-        for edge in removable:
-            if removed >= to_remove:
-                break
-            edge.visibility_score = 0
-            edge.active = False
-            removed += 1
-
-        logging.info(
-            f"[hard cap] capped active triplets: {len(active_edges)} → "
-            f"{len(active_edges) - removed} (removed {removed})"
-        )
 
     def post_sentence_cleanup(self, prev_sentences):
         # First run semantic decay
@@ -1206,8 +1180,6 @@ class Decay:
         # Enforce active/visibility invariant
         for edge in self._graph.edges:
             edge.active = edge.visibility_score > 0
-
-        self.apply_hard_cap()
 
         self.prune_inactive_edgeless_nodes()
 
