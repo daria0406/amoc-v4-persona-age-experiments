@@ -16,6 +16,9 @@ from dataclasses import dataclass
 MATRIX_SCORE_MIN = 0.0
 MATRIX_SCORE_MAX = 5.0
 
+# Backstop-only ceiling on active triplets: apply_pruning's LLM relevance
+HARD_TRIPLET_CAP = 20
+
 
 def clamp_matrix_score(value: float) -> float:
     return max(MATRIX_SCORE_MIN, min(float(value), MATRIX_SCORE_MAX))
@@ -406,6 +409,59 @@ class Decay:
             f"decayed {protected} critical edges, "
             f"explicit edges affected: {explicit_protected}"
         )
+
+        self.enforce_triplet_cap()
+
+    def enforce_triplet_cap(self, max_triplets: int = HARD_TRIPLET_CAP) -> None:
+        active_edges = [e for e in self._graph.edges if e.active]
+        current_count = len(active_edges)
+        if current_count <= max_triplets:
+            return
+
+        G, active_nodes, critical_nodes = self.identify_critical_nodes()
+        node_scores = self.score_nodes(
+            G, active_nodes, self._current_sentence_index, critical_nodes
+        )
+
+        def edge_score(edge):
+            return max(
+                node_scores.get(edge.source_node, 0.0),
+                node_scores.get(edge.dest_node, 0.0),
+            )
+
+        ranked = sorted(active_edges, key=edge_score)  # lowest priority first
+        connectivity_map = self.build_connectivity_map()
+
+        removed = 0
+        for edge in ranked:
+            if current_count - removed <= max_triplets:
+                break
+            if edge.asserted_this_sentence or edge.reactivated_this_sentence:
+                continue
+            if not self.can_remove_edge(edge, connectivity_map):
+                continue
+
+            source, dest = edge.source_node, edge.dest_node
+            connectivity_map.get(source, set()).discard(dest)
+            connectivity_map.get(dest, set()).discard(source)
+
+            old_vis = edge.visibility_score
+            edge.visibility_score = 0
+            edge.active = False
+            removed += 1
+            logging.info(
+                f"TRIPLET_CAP S{self._current_sentence_index}: "
+                f"({source.get_text_representer()}, {edge.label}, "
+                f"{dest.get_text_representer()}) | vis {old_vis}→0"
+            )
+
+        if removed:
+            logging.info(
+                f"triplet cap: {current_count} active triplets exceeded "
+                f"{max_triplets} after narrative pruning, removed {removed} "
+                f"more (lowest-priority, connectivity-preserving) -> "
+                f"{current_count - removed} remain"
+            )
 
     def prune_inactive_edgeless_nodes(self) -> List["Node"]:
         ghost_count = 0

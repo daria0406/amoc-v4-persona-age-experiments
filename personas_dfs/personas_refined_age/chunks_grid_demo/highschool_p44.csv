@@ -1,0 +1,2 @@
+idx,persona_text,age,source_config,strict_reject_reasons,llm_label,llm_confidence,llm_reason,age_refined,age_refine_confidence,age_refine_reason
+16829,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,16.0,persona,[],yes,100,"The persona explicitly identifies the individual as a 'high school student' and expresses interest in building a foundation in mathematics, which is a core part of the high school curriculum, indicating current enrollment in high school.",16,,

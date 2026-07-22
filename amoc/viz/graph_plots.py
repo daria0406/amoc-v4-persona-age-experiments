@@ -33,7 +33,7 @@ def compute_bfs_levels(G, hub):
 
     while queue:
         current = queue.popleft()
-        for neighbor in G.neighbors(current):
+        for neighbor in nx.all_neighbors(G, current):
             if neighbor not in levels:
                 levels[neighbor] = levels[current] + 1
                 queue.append(neighbor)
@@ -42,10 +42,10 @@ def compute_bfs_levels(G, hub):
 
 
 # Radial layout constants (shared between initial layout and incremental placement)
-_RADIAL_BASE_RADIUS = 4.0
-_RADIAL_RING_GAP = 4.5
-_RADIAL_NODE_DIAMETER = 1.8
-_RADIAL_MIN_DISTANCE = 3.0
+_RADIAL_BASE_RADIUS = 3.2
+_RADIAL_RING_GAP = 3.8
+_RADIAL_NODE_DIAMETER = 2.1
+_RADIAL_MIN_DISTANCE = 2.6
 
 
 # Golden angle (~137.5°) for optimal angular separation across rings
@@ -760,7 +760,7 @@ def plot_amoc_triplets(
             G,
             pos,
             nodelist=inactive_in_graph,
-            node_size=3800,
+            node_size=4800,
             node_color=inactive_colors,
             linewidths=1.5,
             edgecolors="#999999",
@@ -780,7 +780,7 @@ def plot_amoc_triplets(
             G,
             pos,
             nodelist=active_in_graph,
-            node_size=3800,
+            node_size=4800,
             node_color=active_colors,
             linewidths=2.0,
             edgecolors="black",
@@ -880,7 +880,7 @@ def plot_amoc_triplets(
                 arrows=True,
                 arrowsize=35,  # Large arrowheads for visibility
                 arrowstyle="-|>",  # Filled arrow style
-                node_size=3800,  # Match node size so arrows stop at node boundary
+                node_size=4800,  # Match node size so arrows stop at node boundary
                 width=group_widths,
                 alpha=alpha_val,
                 connectionstyle="arc3,rad=0.0",
@@ -907,7 +907,7 @@ def plot_amoc_triplets(
                 arrows=True,
                 arrowsize=30,  # Large arrowheads for visibility
                 arrowstyle="-|>",
-                node_size=3800,  # Match node size so arrows stop at node boundary
+                node_size=4800,  # Match node size so arrows stop at node boundary
                 width=group_widths,
                 style="dashed",
                 connectionstyle="arc3,rad=0.0",
@@ -936,7 +936,7 @@ def plot_amoc_triplets(
                 arrows=True,
                 arrowsize=35,  # Large arrowheads for visibility
                 arrowstyle="-|>",
-                node_size=3800,  # Match node size so arrows stop at node boundary
+                node_size=4800,  # Match node size so arrows stop at node boundary
                 connectionstyle="arc3,rad=0.0",
                 min_target_margin=15,
                 ax=ax,
@@ -962,7 +962,7 @@ def plot_amoc_triplets(
                 arrows=True,
                 arrowsize=25,  # Smaller but still visible for inactive edges
                 arrowstyle="-|>",
-                node_size=3800,  # Match node size so arrows stop at node boundary
+                node_size=4800,  # Match node size so arrows stop at node boundary
                 alpha=0.4,
                 connectionstyle="arc3,rad=0.0",
                 min_target_margin=15,
@@ -1011,7 +1011,7 @@ def plot_amoc_triplets(
                 lx,
                 ly,
                 pretty_text(label_text),
-                fontsize=12,
+                fontsize=16,
                 fontweight="bold",
                 color=label_color,
                 ha="center",
@@ -1032,7 +1032,7 @@ def plot_amoc_triplets(
                 lx,
                 ly,
                 pretty_text(label_text),
-                fontsize=10,
+                fontsize=13,
                 color=label_color,
                 ha="center",
                 va="center",
@@ -1052,7 +1052,7 @@ def plot_amoc_triplets(
                 lx,
                 ly,
                 pretty_text(label_text),
-                fontsize=12,
+                fontsize=16,
                 color=label_color,
                 ha="center",
                 va="center",
@@ -1072,7 +1072,7 @@ def plot_amoc_triplets(
             G,
             pos,
             labels=active_labels,
-            font_size=11,
+            font_size=15,
             font_weight="bold",
             font_color="black",
             ax=ax,
@@ -1084,7 +1084,7 @@ def plot_amoc_triplets(
             G,
             pos,
             labels=inactive_labels,
-            font_size=10,
+            font_size=13,
             font_weight="normal",
             font_color="#777777",
             alpha=0.6,
@@ -1191,12 +1191,23 @@ def plot_amoc_triplets(
                 (explanation[:120] + "...") if len(explanation) > 120 else explanation
             )
             sup_lines.append(f"  • {truncated}")
+    header_fontsize = 12
+    header_text = "\n".join(sup_lines)
+    n_header_lines = header_text.count("\n") + 1 if header_text else 0
+
+    fig_height_in = fig.get_size_inches()[1]
+    line_height_frac = (header_fontsize * 1.35) / 72.0 / fig_height_in
+    header_reserve = n_header_lines * line_height_frac + 0.01
+    top = max(0.5, 1.0 - header_reserve)
+    fig.subplots_adjust(top=top)
+
     plt.suptitle(
-        "\n".join(sup_lines),
-        y=0.98,
-        fontsize=12,
+        header_text,
+        y=0.995,
+        fontsize=header_fontsize,
         style="italic",
         color="darkblue",
+        va="top",
     )
 
     # Draw active triplets in dedicated right panel

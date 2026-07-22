@@ -13,8 +13,15 @@ pytest.ini
 *.def
 *.png
 *.txt
-#except the diagrams
-!diagrams/*.png
+*.html
+*.sentinels
+*.tex
+*.pptx
+*.xlsx
+*.numbers
+*.svg
+*.md
+*.mmd
 
 # environments
 venv/
