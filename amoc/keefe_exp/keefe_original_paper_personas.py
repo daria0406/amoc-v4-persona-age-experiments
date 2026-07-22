@@ -108,6 +108,7 @@ def main():
     parser.add_argument("--model", default="meta-llama/Llama-3.2-3B-Instruct", help="vLLM model name")
     parser.add_argument("--tp", type=int, default=1, help="Tensor parallel size")
     parser.add_argument("--max-rows", type=int, default=None, help="Limit number of personas in this chunk (for testing)")
+    parser.add_argument("--start-row", type=int, default=0, help="Skip the first N personas in this chunk (0-based offset, e.g. resume after an earlier --max-rows run)")
     args = parser.parse_args()
 
     # Load texts
@@ -120,9 +121,12 @@ def main():
     if "persona_text" not in df.columns or "age_refined" not in df.columns:
         raise ValueError(f"CSV must contain 'persona_text' and 'age_refined' columns. Found: {df.columns.tolist()}")
     df["age_refined"] = pd.to_numeric(df["age_refined"], errors="coerce")
+    start = args.start_row or 0
     if args.max_rows:
-        df = df.head(args.max_rows)
-    logger.info(f"Loaded {len(df)} personas from {args.persona_csv}")
+        df = df.iloc[start:start + args.max_rows]
+    elif start:
+        df = df.iloc[start:]
+    logger.info(f"Loaded {len(df)} personas from {args.persona_csv} (start_row={start})")
 
     # spaCy
     spacy_nlp = load_spacy()
