@@ -1,22 +1,22 @@
 #!/bin/bash
-#SBATCH --job-name=amoc_llama70b_small_example
+#SBATCH --job-name=amoc_llama70b_grid_demo_personas
 #SBATCH --partition=dgxa100
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --gres=gpu:tesla_a100:4
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=256G
-#SBATCH --array=0-7%2
+#SBATCH --array=0-3
 #SBATCH --output=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%A_%a.out
 #SBATCH --error=/export/home/acs/stud/a/ana_daria.zahaleanu/exports/%x_%A_%a.err
 
 set -euo pipefail
 
-export VLLM_ATTENTION_BACKEND=FLASH_ATTN  
-export VLLM_USE_V1=1 
+export VLLM_ATTENTION_BACKEND=FLASH_ATTN
+export VLLM_USE_V1=1
 
 PROJECT_ROOT="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/amoc-v4-persona-age-experiments"
-CHUNKS_DIR="${PROJECT_ROOT}/personas_dfs/personas_refined_age/chunks_balanced"
+CHUNKS_DIR="${PROJECT_ROOT}/personas_dfs/personas_refined_age/chunks_grid_demo"
 STORY_FILE="${1:-}"
 if [[ -n "${STORY_FILE}" && "${STORY_FILE}" != /* ]]; then
     STORY_FILE="${PROJECT_ROOT}/${STORY_FILE}"
@@ -28,7 +28,7 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
 
 RUN_ID="run_${SLURM_ARRAY_JOB_ID}"
-BASE_OUTPUT_DIR="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/small_example_output_llama"
+BASE_OUTPUT_DIR="/export/home/acs/stud/a/ana_daria.zahaleanu/to_transfer/output/extracted_triplets/grid_demo_personas_output_llama"
 RUN_OUTPUT_DIR="${BASE_OUTPUT_DIR}/${RUN_ID}"
 mkdir -p "${RUN_OUTPUT_DIR}"
 
@@ -36,7 +36,7 @@ mkdir -p "${RUN_OUTPUT_DIR}"
 # bypass the chunk-array indexing entirely. Submit with `--array=0` so only one
 # task runs, e.g.:
 #   SINGLE_FILE=personas_dfs/personas_refined_age/missing_secondary/secondary_002.csv \
-#       sbatch --array=0 slurm_scripts/run_llama70b_4gpu_small_example.sh
+#       sbatch --array=0 slurm_scripts/llama_demo_grid.sh
 SINGLE_FILE="${SINGLE_FILE:-}"
 if [[ -n "${SINGLE_FILE}" ]]; then
     if [[ "${SINGLE_FILE}" != /* ]]; then
@@ -76,11 +76,10 @@ if [[ -n "${STORY_FILE}" ]]; then
     STORY_ARG="--story-text ${STORY_FILE}"
 fi
 
-# --plots and --plots-age are disabled for this small example run
 bash "${PROJECT_ROOT}/slurm_scripts/amoc-run.sh" \
     --models "meta-llama/Llama-3.3-70B-Instruct" \
     --tp 4 \
-    --max-rows 10 \
+    --max-rows 1 \
     --plot-after-each-sentence \
     --output-dir "${RUN_OUTPUT_DIR}" \
     --file "${INPUT_FILE}" \
