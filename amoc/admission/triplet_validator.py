@@ -488,14 +488,16 @@ class TripletValidator:
         return False
 
     def check_adjective_subject(
-        self, subj_pos: str, rel_has_verb: bool, relation: str, rel_doc
+        self, subj: str, subj_pos: str, rel_has_verb: bool, relation: str, rel_doc
     ) -> Optional[Dict]:
-        if subj_pos == "ADJ" and rel_has_verb:
-            if self.is_copular_construction(relation, rel_doc):
-                return None
+        # Property/adjective nodes only ever describe concepts; they may be
+        # the object of a relation but never the subject, regardless of what
+        # kind of relation follows (verb, copula, or otherwise): "faithful
+        # involves death" is just as invalid as "faithful is death".
+        if subj_pos == "ADJ":
             return {
                 "valid": False,
-                "reason": f"adjective cannot be the subject of action verb '{relation}'",
+                "reason": f"adjective '{subj}' cannot be the subject of relation '{relation}'",
                 "corrected_triple": None,
                 "action": "reject",
             }
@@ -629,7 +631,7 @@ class TripletValidator:
         if result:
             return result
 
-        result = self.check_adjective_subject(subj_pos, rel_has_verb, relation, rel_doc)
+        result = self.check_adjective_subject(subj, subj_pos, rel_has_verb, relation, rel_doc)
         if result:
             return result
 
