@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from amoc.core.node import Node
     from amoc.core.edge import Edge
 from amoc.prompts.amoc_prompts import FORCED_CONNECTIVITY_EDGE_PROMPT
+from amoc.admission.triplet_validator import TripletValidator
 
 
 # Old code: no connectivity enforced
@@ -22,6 +23,7 @@ class ConnectivityStabilizer:
         get_carryover_nodes: callable,
         edge_visibility: int,
         llm_extractor=None,
+        spacy_nlp=None,
     ):
         self._graph = graph_ref
         self._get_explicit_nodes = get_explicit_nodes
@@ -31,6 +33,54 @@ class ConnectivityStabilizer:
         self._story_text: str = ""
         self._current_sentence_text: str = ""
         self._persona = ""
+        self._validator = TripletValidator(
+            linguistic_ops=None,
+            extract_deterministic_fn=None,
+            text_normalizer=None,
+            client=llm_extractor,
+            spacy_nlp=spacy_nlp,
+        )
+
+    def _validate_forced_relation(
+        self, subj_text: str, relation: str, obj_text: str
+    ) -> Optional[str]:
+        """Run a forced-connectivity relation through the same grammatical
+        checks the normal triplet-extraction path uses (TripletValidator),
+        so a dangling property/adjective node (e.g. "faithful") can't become
+        the subject of an invented verb, and vague relations like "has"
+        can't reconnect two otherwise-unrelated nodes. Returns the
+        (possibly corrected) relation label, or None if the triplet should
+        be rejected outright.
+        """
+        if not self._validator.is_valid_relation_label(relation):
+            logging.info(
+                f"FORCED_EDGE rejected (invalid label): "
+                f"({subj_text}, {relation}, {obj_text})"
+            )
+            return None
+
+        result = self._validator.validate_triplet_relation(
+            (subj_text, relation, obj_text)
+        )
+
+        if result["action"] in ("swap", "add_copula") and result.get(
+            "corrected_triple"
+        ):
+            corrected_relation = result["corrected_triple"][1]
+            logging.info(
+                f"FORCED_EDGE corrected: ({subj_text}, {relation}, {obj_text}) "
+                f"-> relation '{corrected_relation}'"
+            )
+            return corrected_relation
+
+        if not result.get("valid", True):
+            logging.info(
+                f"FORCED_EDGE rejected ({result.get('reason')}): "
+                f"({subj_text}, {relation}, {obj_text})"
+            )
+            return None
+
+        return relation
 
     def set_context(self, story_text: str, current_sentence_text: str):
         self._story_text = story_text
@@ -294,6 +344,11 @@ class ConnectivityStabilizer:
                 relation = normalize_edge_label_fn(relation)
                 if not relation:
                     continue
+                relation = self._validate_forced_relation(
+                    node.get_text_representer(), relation, anchor.get_text_representer()
+                )
+                if not relation:
+                    continue
                 # if valid relation returned, add edge to graph with inferred=True
                 edge = self._graph.add_edge(
                     node,
@@ -496,6 +551,11 @@ class ConnectivityStabilizer:
         relation = normalize_edge_label_fn(relation)
         if not relation:
             return
+        relation = self._validate_forced_relation(
+            node.get_text_representer(), relation, anchor.get_text_representer()
+        )
+        if not relation:
+            return
 
         edge = self._graph.add_edge(
             node,
@@ -552,6 +612,11 @@ class ConnectivityStabilizer:
                 continue
 
             relation = normalize_edge_label_fn(relation)
+            if not relation:
+                continue
+            relation = self._validate_forced_relation(
+                node.get_text_representer(), relation, anchor.get_text_representer()
+            )
             if not relation:
                 continue
 
