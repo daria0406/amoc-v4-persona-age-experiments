@@ -625,6 +625,16 @@ def plot_amoc_triplets(
 
     plotted_nodes = set(G.nodes())
 
+    _NODE_SIZE_REF_N = 8
+    _NODE_SIZE_REF = 16000
+    _NODE_SIZE_MIN = 4500
+    _NODE_SIZE_MAX = 20000
+    n_plot_nodes = max(1, G.number_of_nodes())
+    node_size = max(
+        _NODE_SIZE_MIN,
+        min(_NODE_SIZE_MAX, _NODE_SIZE_REF * math.sqrt(_NODE_SIZE_REF_N / n_plot_nodes)),
+    )
+
     fig = plt.figure(figsize=(40, 26))
     gs = GridSpec(1, 2, width_ratios=[0.85, 0.15], figure=fig, wspace=0.02)
     ax = fig.add_subplot(gs[0])
@@ -760,7 +770,7 @@ def plot_amoc_triplets(
             G,
             pos,
             nodelist=inactive_in_graph,
-            node_size=4800,
+            node_size=node_size,
             node_color=inactive_colors,
             linewidths=1.5,
             edgecolors="#999999",
@@ -780,7 +790,7 @@ def plot_amoc_triplets(
             G,
             pos,
             nodelist=active_in_graph,
-            node_size=4800,
+            node_size=node_size,
             node_color=active_colors,
             linewidths=2.0,
             edgecolors="black",
@@ -880,7 +890,7 @@ def plot_amoc_triplets(
                 arrows=True,
                 arrowsize=35,  # Large arrowheads for visibility
                 arrowstyle="-|>",  # Filled arrow style
-                node_size=4800,  # Match node size so arrows stop at node boundary
+                node_size=node_size,  # Match node size so arrows stop at node boundary
                 width=group_widths,
                 alpha=alpha_val,
                 connectionstyle="arc3,rad=0.0",
@@ -907,7 +917,7 @@ def plot_amoc_triplets(
                 arrows=True,
                 arrowsize=30,  # Large arrowheads for visibility
                 arrowstyle="-|>",
-                node_size=4800,  # Match node size so arrows stop at node boundary
+                node_size=node_size,  # Match node size so arrows stop at node boundary
                 width=group_widths,
                 style="dashed",
                 connectionstyle="arc3,rad=0.0",
@@ -936,7 +946,7 @@ def plot_amoc_triplets(
                 arrows=True,
                 arrowsize=35,  # Large arrowheads for visibility
                 arrowstyle="-|>",
-                node_size=4800,  # Match node size so arrows stop at node boundary
+                node_size=node_size,  # Match node size so arrows stop at node boundary
                 connectionstyle="arc3,rad=0.0",
                 min_target_margin=15,
                 ax=ax,
@@ -962,7 +972,7 @@ def plot_amoc_triplets(
                 arrows=True,
                 arrowsize=25,  # Smaller but still visible for inactive edges
                 arrowstyle="-|>",
-                node_size=4800,  # Match node size so arrows stop at node boundary
+                node_size=node_size,  # Match node size so arrows stop at node boundary
                 alpha=0.4,
                 connectionstyle="arc3,rad=0.0",
                 min_target_margin=15,
@@ -1129,7 +1139,9 @@ def plot_amoc_triplets(
         return wrapped
 
     title_persona = (persona[:150] + "...") if len(persona) > 150 else persona
-    ax.set_title(f"AMoC Knowledge Graph: {model_name}", size=20, pad=20)
+    title_fontsize = 20
+    title_pad = 20
+    ax.set_title(f"AMoC Knowledge Graph: {model_name}", size=title_fontsize, pad=title_pad)
     sup_lines = []
     persona_line = _normalize_title_line(title_persona, max_len=180)
     sentence_idx = None
@@ -1198,7 +1210,8 @@ def plot_amoc_triplets(
     fig_height_in = fig.get_size_inches()[1]
     line_height_frac = (header_fontsize * 1.35) / 72.0 / fig_height_in
     header_reserve = n_header_lines * line_height_frac + 0.01
-    top = max(0.5, 1.0 - header_reserve)
+    title_reserve = (title_fontsize * 1.3 + title_pad) / 72.0 / fig_height_in
+    top = max(0.4, 1.0 - header_reserve - title_reserve)
     fig.subplots_adjust(top=top)
 
     plt.suptitle(
