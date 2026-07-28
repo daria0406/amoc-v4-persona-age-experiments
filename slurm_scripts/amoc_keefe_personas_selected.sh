@@ -57,7 +57,6 @@ apptainer exec --nv \
             --output-csv '$OUTPUT_CSV' \
             --stats-output '$STATS_OUTPUT' \
             --model meta-llama/Llama-3.3-70B-Instruct \
-            --start-row 5 \
-            --max-rows 5 \
+            --max-rows 10 \
             --tp 4
     "
