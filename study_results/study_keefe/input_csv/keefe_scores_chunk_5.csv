@@ -1,0 +1,1201 @@
+global_persona_index,age,persona_text,item_id,condition,score
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,32,control,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,32,predictive,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,32,explicit,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,35,control,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,35,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,35,explicit,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,34,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,34,predictive,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,34,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,33,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,33,predictive,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,33,explicit,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,20,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,20,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,20,explicit,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,18,control,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,18,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,18,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,27,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,27,predictive,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,27,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,9,control,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,9,predictive,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,9,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,11,control,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,11,predictive,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,11,explicit,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,7,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,7,predictive,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,7,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,29,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,29,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,29,explicit,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,16,control,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,16,predictive,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,16,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,6,control,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,6,predictive,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,6,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,28,control,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,28,predictive,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,28,explicit,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,17,control,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,17,predictive,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,17,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,1,control,1
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,1,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,1,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,10,control,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,10,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,10,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,19,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,19,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,19,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,26,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,26,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,26,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,8,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,8,predictive,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,8,explicit,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,21,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,21,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,21,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,38,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,38,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,38,explicit,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,36,control,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,36,predictive,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,36,explicit,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,31,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,31,predictive,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,31,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,30,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,30,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,30,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,37,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,37,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,37,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,39,control,1
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,39,predictive,1
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,39,explicit,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,24,control,1
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,24,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,24,explicit,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,23,control,1
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,23,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,23,explicit,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,4,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,4,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,4,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,15,control,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,15,predictive,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,15,explicit,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,3,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,3,predictive,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,3,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,12,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,12,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,12,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,40,control,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,40,predictive,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,40,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,2,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,2,predictive,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,2,explicit,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,13,control,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,13,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,13,explicit,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,5,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,5,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,5,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,14,control,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,14,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,14,explicit,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,22,control,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,22,predictive,3
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,22,explicit,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,25,control,2
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,25,predictive,4
+0,12,A middle school student who attends the coding workshops and looks up to the advocate as a role model,25,explicit,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,32,control,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,32,predictive,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,32,explicit,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,35,control,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,35,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,35,explicit,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,34,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,34,predictive,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,34,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,33,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,33,predictive,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,33,explicit,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,20,control,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,20,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,20,explicit,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,18,control,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,18,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,18,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,27,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,27,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,27,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,9,control,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,9,predictive,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,9,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,11,control,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,11,predictive,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,11,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,7,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,7,predictive,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,7,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,29,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,29,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,29,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,16,control,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,16,predictive,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,16,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,6,control,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,6,predictive,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,6,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,28,control,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,28,predictive,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,28,explicit,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,17,control,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,17,predictive,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,17,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,1,control,1
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,1,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,1,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,10,control,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,10,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,10,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,19,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,19,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,19,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,26,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,26,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,26,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,8,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,8,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,8,explicit,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,21,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,21,predictive,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,21,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,38,control,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,38,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,38,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,36,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,36,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,36,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,31,control,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,31,predictive,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,31,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,30,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,30,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,30,explicit,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,37,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,37,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,37,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,39,control,1
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,39,predictive,1
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,39,explicit,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,24,control,1
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,24,predictive,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,24,explicit,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,23,control,1
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,23,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,23,explicit,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,4,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,4,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,4,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,15,control,1
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,15,predictive,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,15,explicit,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,3,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,3,predictive,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,3,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,12,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,12,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,12,explicit,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,40,control,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,40,predictive,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,40,explicit,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,2,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,2,predictive,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,2,explicit,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,13,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,13,predictive,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,13,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,5,control,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,5,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,5,explicit,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,14,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,14,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,14,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,22,control,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,22,predictive,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,22,explicit,3
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,25,control,2
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,25,predictive,4
+1,12,A middle school student who aspires to be a nurse and seeks guidance on how to start their journey,25,explicit,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,32,control,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,32,predictive,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,32,explicit,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,35,control,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,35,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,35,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,34,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,34,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,34,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,33,control,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,33,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,33,explicit,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,20,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,20,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,20,explicit,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,18,control,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,18,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,18,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,27,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,27,predictive,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,27,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,9,control,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,9,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,9,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,11,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,11,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,11,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,7,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,7,predictive,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,7,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,29,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,29,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,29,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,16,control,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,16,predictive,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,16,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,6,control,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,6,predictive,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,6,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,28,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,28,predictive,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,28,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,17,control,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,17,predictive,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,17,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,1,control,1
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,1,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,1,explicit,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,10,control,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,10,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,10,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,19,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,19,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,19,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,26,control,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,26,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,26,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,8,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,8,predictive,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,8,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,21,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,21,predictive,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,21,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,38,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,38,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,38,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,36,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,36,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,36,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,31,control,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,31,predictive,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,31,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,30,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,30,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,30,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,37,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,37,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,37,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,39,control,1
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,39,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,39,explicit,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,24,control,1
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,24,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,24,explicit,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,23,control,1
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,23,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,23,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,4,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,4,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,4,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,15,control,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,15,predictive,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,15,explicit,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,3,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,3,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,3,explicit,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,12,control,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,12,predictive,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,12,explicit,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,40,control,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,40,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,40,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,2,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,2,predictive,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,2,explicit,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,13,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,13,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,13,explicit,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,5,control,2
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,5,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,5,explicit,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,14,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,14,predictive,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,14,explicit,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,22,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,22,predictive,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,22,explicit,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,25,control,3
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,25,predictive,4
+2,12,A middle schooler who loves exploring their town's history through geocaching and local legends,25,explicit,4
+3,12,A middle school student working on a school project about mystery novels,32,control,3
+3,12,A middle school student working on a school project about mystery novels,32,predictive,4
+3,12,A middle school student working on a school project about mystery novels,32,explicit,4
+3,12,A middle school student working on a school project about mystery novels,35,control,3
+3,12,A middle school student working on a school project about mystery novels,35,predictive,3
+3,12,A middle school student working on a school project about mystery novels,35,explicit,3
+3,12,A middle school student working on a school project about mystery novels,34,control,3
+3,12,A middle school student working on a school project about mystery novels,34,predictive,3
+3,12,A middle school student working on a school project about mystery novels,34,explicit,3
+3,12,A middle school student working on a school project about mystery novels,33,control,3
+3,12,A middle school student working on a school project about mystery novels,33,predictive,4
+3,12,A middle school student working on a school project about mystery novels,33,explicit,4
+3,12,A middle school student working on a school project about mystery novels,20,control,2
+3,12,A middle school student working on a school project about mystery novels,20,predictive,3
+3,12,A middle school student working on a school project about mystery novels,20,explicit,4
+3,12,A middle school student working on a school project about mystery novels,18,control,2
+3,12,A middle school student working on a school project about mystery novels,18,predictive,3
+3,12,A middle school student working on a school project about mystery novels,18,explicit,3
+3,12,A middle school student working on a school project about mystery novels,27,control,3
+3,12,A middle school student working on a school project about mystery novels,27,predictive,3
+3,12,A middle school student working on a school project about mystery novels,27,explicit,3
+3,12,A middle school student working on a school project about mystery novels,9,control,2
+3,12,A middle school student working on a school project about mystery novels,9,predictive,2
+3,12,A middle school student working on a school project about mystery novels,9,explicit,4
+3,12,A middle school student working on a school project about mystery novels,11,control,4
+3,12,A middle school student working on a school project about mystery novels,11,predictive,4
+3,12,A middle school student working on a school project about mystery novels,11,explicit,4
+3,12,A middle school student working on a school project about mystery novels,7,control,3
+3,12,A middle school student working on a school project about mystery novels,7,predictive,4
+3,12,A middle school student working on a school project about mystery novels,7,explicit,3
+3,12,A middle school student working on a school project about mystery novels,29,control,3
+3,12,A middle school student working on a school project about mystery novels,29,predictive,3
+3,12,A middle school student working on a school project about mystery novels,29,explicit,4
+3,12,A middle school student working on a school project about mystery novels,16,control,2
+3,12,A middle school student working on a school project about mystery novels,16,predictive,2
+3,12,A middle school student working on a school project about mystery novels,16,explicit,3
+3,12,A middle school student working on a school project about mystery novels,6,control,2
+3,12,A middle school student working on a school project about mystery novels,6,predictive,2
+3,12,A middle school student working on a school project about mystery novels,6,explicit,3
+3,12,A middle school student working on a school project about mystery novels,28,control,3
+3,12,A middle school student working on a school project about mystery novels,28,predictive,4
+3,12,A middle school student working on a school project about mystery novels,28,explicit,4
+3,12,A middle school student working on a school project about mystery novels,17,control,2
+3,12,A middle school student working on a school project about mystery novels,17,predictive,2
+3,12,A middle school student working on a school project about mystery novels,17,explicit,3
+3,12,A middle school student working on a school project about mystery novels,1,control,1
+3,12,A middle school student working on a school project about mystery novels,1,predictive,3
+3,12,A middle school student working on a school project about mystery novels,1,explicit,3
+3,12,A middle school student working on a school project about mystery novels,10,control,2
+3,12,A middle school student working on a school project about mystery novels,10,predictive,3
+3,12,A middle school student working on a school project about mystery novels,10,explicit,3
+3,12,A middle school student working on a school project about mystery novels,19,control,3
+3,12,A middle school student working on a school project about mystery novels,19,predictive,4
+3,12,A middle school student working on a school project about mystery novels,19,explicit,3
+3,12,A middle school student working on a school project about mystery novels,26,control,3
+3,12,A middle school student working on a school project about mystery novels,26,predictive,3
+3,12,A middle school student working on a school project about mystery novels,26,explicit,3
+3,12,A middle school student working on a school project about mystery novels,8,control,4
+3,12,A middle school student working on a school project about mystery novels,8,predictive,4
+3,12,A middle school student working on a school project about mystery novels,8,explicit,4
+3,12,A middle school student working on a school project about mystery novels,21,control,2
+3,12,A middle school student working on a school project about mystery novels,21,predictive,3
+3,12,A middle school student working on a school project about mystery novels,21,explicit,3
+3,12,A middle school student working on a school project about mystery novels,38,control,2
+3,12,A middle school student working on a school project about mystery novels,38,predictive,3
+3,12,A middle school student working on a school project about mystery novels,38,explicit,2
+3,12,A middle school student working on a school project about mystery novels,36,control,3
+3,12,A middle school student working on a school project about mystery novels,36,predictive,3
+3,12,A middle school student working on a school project about mystery novels,36,explicit,3
+3,12,A middle school student working on a school project about mystery novels,31,control,3
+3,12,A middle school student working on a school project about mystery novels,31,predictive,4
+3,12,A middle school student working on a school project about mystery novels,31,explicit,3
+3,12,A middle school student working on a school project about mystery novels,30,control,2
+3,12,A middle school student working on a school project about mystery novels,30,predictive,3
+3,12,A middle school student working on a school project about mystery novels,30,explicit,3
+3,12,A middle school student working on a school project about mystery novels,37,control,3
+3,12,A middle school student working on a school project about mystery novels,37,predictive,3
+3,12,A middle school student working on a school project about mystery novels,37,explicit,3
+3,12,A middle school student working on a school project about mystery novels,39,control,1
+3,12,A middle school student working on a school project about mystery novels,39,predictive,1
+3,12,A middle school student working on a school project about mystery novels,39,explicit,3
+3,12,A middle school student working on a school project about mystery novels,24,control,1
+3,12,A middle school student working on a school project about mystery novels,24,predictive,3
+3,12,A middle school student working on a school project about mystery novels,24,explicit,2
+3,12,A middle school student working on a school project about mystery novels,23,control,1
+3,12,A middle school student working on a school project about mystery novels,23,predictive,3
+3,12,A middle school student working on a school project about mystery novels,23,explicit,3
+3,12,A middle school student working on a school project about mystery novels,4,control,3
+3,12,A middle school student working on a school project about mystery novels,4,predictive,3
+3,12,A middle school student working on a school project about mystery novels,4,explicit,3
+3,12,A middle school student working on a school project about mystery novels,15,control,1
+3,12,A middle school student working on a school project about mystery novels,15,predictive,3
+3,12,A middle school student working on a school project about mystery novels,15,explicit,4
+3,12,A middle school student working on a school project about mystery novels,3,control,3
+3,12,A middle school student working on a school project about mystery novels,3,predictive,4
+3,12,A middle school student working on a school project about mystery novels,3,explicit,3
+3,12,A middle school student working on a school project about mystery novels,12,control,3
+3,12,A middle school student working on a school project about mystery novels,12,predictive,3
+3,12,A middle school student working on a school project about mystery novels,12,explicit,4
+3,12,A middle school student working on a school project about mystery novels,40,control,2
+3,12,A middle school student working on a school project about mystery novels,40,predictive,3
+3,12,A middle school student working on a school project about mystery novels,40,explicit,3
+3,12,A middle school student working on a school project about mystery novels,2,control,3
+3,12,A middle school student working on a school project about mystery novels,2,predictive,4
+3,12,A middle school student working on a school project about mystery novels,2,explicit,4
+3,12,A middle school student working on a school project about mystery novels,13,control,4
+3,12,A middle school student working on a school project about mystery novels,13,predictive,4
+3,12,A middle school student working on a school project about mystery novels,13,explicit,3
+3,12,A middle school student working on a school project about mystery novels,5,control,2
+3,12,A middle school student working on a school project about mystery novels,5,predictive,4
+3,12,A middle school student working on a school project about mystery novels,5,explicit,4
+3,12,A middle school student working on a school project about mystery novels,14,control,2
+3,12,A middle school student working on a school project about mystery novels,14,predictive,3
+3,12,A middle school student working on a school project about mystery novels,14,explicit,3
+3,12,A middle school student working on a school project about mystery novels,22,control,3
+3,12,A middle school student working on a school project about mystery novels,22,predictive,3
+3,12,A middle school student working on a school project about mystery novels,22,explicit,4
+3,12,A middle school student working on a school project about mystery novels,25,control,3
+3,12,A middle school student working on a school project about mystery novels,25,predictive,4
+3,12,A middle school student working on a school project about mystery novels,25,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,32,control,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,32,predictive,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,32,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,35,control,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,35,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,35,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,34,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,34,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,34,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,33,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,33,predictive,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,33,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,20,control,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,20,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,20,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,18,control,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,18,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,18,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,27,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,27,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,27,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,9,control,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,9,predictive,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,9,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,11,control,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,11,predictive,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,11,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,7,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,7,predictive,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,7,explicit,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,29,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,29,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,29,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,16,control,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,16,predictive,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,16,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,6,control,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,6,predictive,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,6,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,28,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,28,predictive,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,28,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,17,control,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,17,predictive,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,17,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,1,control,1
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,1,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,1,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,10,control,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,10,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,10,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,19,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,19,predictive,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,19,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,26,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,26,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,26,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,8,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,8,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,8,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,21,control,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,21,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,21,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,38,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,38,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,38,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,36,control,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,36,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,36,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,31,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,31,predictive,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,31,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,30,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,30,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,30,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,37,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,37,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,37,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,39,control,1
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,39,predictive,1
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,39,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,24,control,1
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,24,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,24,explicit,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,23,control,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,23,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,23,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,4,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,4,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,4,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,15,control,1
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,15,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,15,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,3,control,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,3,predictive,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,3,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,12,control,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,12,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,12,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,40,control,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,40,predictive,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,40,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,2,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,2,predictive,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,2,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,13,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,13,predictive,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,13,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,5,control,2
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,5,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,5,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,14,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,14,predictive,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,14,explicit,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,22,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,22,predictive,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,22,explicit,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,25,control,3
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,25,predictive,4
+4,12,A secondary school student who is just starting to learn about programming and open-source projects,25,explicit,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,32,control,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,32,predictive,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,32,explicit,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,35,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,35,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,35,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,34,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,34,predictive,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,34,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,33,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,33,predictive,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,33,explicit,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,20,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,20,predictive,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,20,explicit,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,18,control,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,18,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,18,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,27,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,27,predictive,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,27,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,9,control,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,9,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,9,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,11,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,11,predictive,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,11,explicit,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,7,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,7,predictive,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,7,explicit,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,29,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,29,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,29,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,16,control,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,16,predictive,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,16,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,6,control,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,6,predictive,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,6,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,28,control,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,28,predictive,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,28,explicit,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,17,control,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,17,predictive,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,17,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,1,control,1
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,1,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,1,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,10,control,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,10,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,10,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,19,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,19,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,19,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,26,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,26,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,26,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,8,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,8,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,8,explicit,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,21,control,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,21,predictive,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,21,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,38,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,38,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,38,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,36,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,36,predictive,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,36,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,31,control,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,31,predictive,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,31,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,30,control,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,30,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,30,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,37,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,37,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,37,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,39,control,1
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,39,predictive,1
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,39,explicit,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,24,control,1
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,24,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,24,explicit,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,23,control,1
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,23,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,23,explicit,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,4,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,4,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,4,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,15,control,1
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,15,predictive,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,15,explicit,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,3,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,3,predictive,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,3,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,12,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,12,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,12,explicit,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,40,control,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,40,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,40,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,2,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,2,predictive,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,2,explicit,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,13,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,13,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,13,explicit,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,5,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,5,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,5,explicit,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,14,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,14,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,14,explicit,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,22,control,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,22,predictive,3
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,22,explicit,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,25,control,2
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,25,predictive,4
+5,12,A curious and inquisitive middle school student eager to learn about the town's past,25,explicit,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,32,control,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,32,predictive,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,32,explicit,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,35,control,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,35,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,35,explicit,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,34,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,34,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,34,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,33,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,33,predictive,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,33,explicit,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,20,control,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,20,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,20,explicit,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,18,control,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,18,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,18,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,27,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,27,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,27,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,9,control,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,9,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,9,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,11,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,11,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,11,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,7,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,7,predictive,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,7,explicit,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,29,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,29,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,29,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,16,control,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,16,predictive,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,16,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,6,control,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,6,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,6,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,28,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,28,predictive,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,28,explicit,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,17,control,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,17,predictive,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,17,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,1,control,1
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,1,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,1,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,10,control,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,10,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,10,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,19,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,19,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,19,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,26,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,26,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,26,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,8,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,8,predictive,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,8,explicit,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,21,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,21,predictive,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,21,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,38,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,38,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,38,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,36,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,36,predictive,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,36,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,31,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,31,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,31,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,30,control,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,30,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,30,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,37,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,37,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,37,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,39,control,1
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,39,predictive,1
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,39,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,24,control,1
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,24,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,24,explicit,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,23,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,23,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,23,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,4,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,4,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,4,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,15,control,1
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,15,predictive,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,15,explicit,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,3,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,3,predictive,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,3,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,12,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,12,predictive,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,12,explicit,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,40,control,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,40,predictive,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,40,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,2,control,2
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,2,predictive,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,2,explicit,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,13,control,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,13,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,13,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,5,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,5,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,5,explicit,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,14,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,14,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,14,explicit,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,22,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,22,predictive,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,22,explicit,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,25,control,3
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,25,predictive,4
+6,13,An ambitious 8th grader with a penchant for documentary filmmaking and a keen interest in local legends,25,explicit,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,32,control,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,32,predictive,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,32,explicit,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,35,control,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,35,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,35,explicit,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,34,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,34,predictive,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,34,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,33,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,33,predictive,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,33,explicit,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,20,control,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,20,predictive,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,20,explicit,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,18,control,1
+7,12,A bright and curious middle schooler struggling with reading comprehension,18,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,18,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,27,control,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,27,predictive,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,27,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,9,control,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,9,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,9,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,11,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,11,predictive,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,11,explicit,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,7,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,7,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,7,explicit,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,29,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,29,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,29,explicit,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,16,control,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,16,predictive,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,16,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,6,control,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,6,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,6,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,28,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,28,predictive,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,28,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,17,control,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,17,predictive,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,17,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,1,control,1
+7,12,A bright and curious middle schooler struggling with reading comprehension,1,predictive,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,1,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,10,control,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,10,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,10,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,19,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,19,predictive,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,19,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,26,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,26,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,26,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,8,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,8,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,8,explicit,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,21,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,21,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,21,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,38,control,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,38,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,38,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,36,control,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,36,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,36,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,31,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,31,predictive,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,31,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,30,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,30,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,30,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,37,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,37,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,37,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,39,control,1
+7,12,A bright and curious middle schooler struggling with reading comprehension,39,predictive,1
+7,12,A bright and curious middle schooler struggling with reading comprehension,39,explicit,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,24,control,1
+7,12,A bright and curious middle schooler struggling with reading comprehension,24,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,24,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,23,control,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,23,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,23,explicit,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,4,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,4,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,4,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,15,control,1
+7,12,A bright and curious middle schooler struggling with reading comprehension,15,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,15,explicit,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,3,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,3,predictive,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,3,explicit,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,12,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,12,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,12,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,40,control,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,40,predictive,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,40,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,2,control,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,2,predictive,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,2,explicit,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,13,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,13,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,13,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,5,control,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,5,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,5,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,14,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,14,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,14,explicit,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,22,control,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,22,predictive,3
+7,12,A bright and curious middle schooler struggling with reading comprehension,22,explicit,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,25,control,2
+7,12,A bright and curious middle schooler struggling with reading comprehension,25,predictive,4
+7,12,A bright and curious middle schooler struggling with reading comprehension,25,explicit,4
+8,12,A keen middle school student working on a project about famous architects in history,32,control,2
+8,12,A keen middle school student working on a project about famous architects in history,32,predictive,4
+8,12,A keen middle school student working on a project about famous architects in history,32,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,35,control,3
+8,12,A keen middle school student working on a project about famous architects in history,35,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,35,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,34,control,3
+8,12,A keen middle school student working on a project about famous architects in history,34,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,34,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,33,control,3
+8,12,A keen middle school student working on a project about famous architects in history,33,predictive,4
+8,12,A keen middle school student working on a project about famous architects in history,33,explicit,4
+8,12,A keen middle school student working on a project about famous architects in history,20,control,2
+8,12,A keen middle school student working on a project about famous architects in history,20,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,20,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,18,control,2
+8,12,A keen middle school student working on a project about famous architects in history,18,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,18,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,27,control,3
+8,12,A keen middle school student working on a project about famous architects in history,27,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,27,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,9,control,2
+8,12,A keen middle school student working on a project about famous architects in history,9,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,9,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,11,control,4
+8,12,A keen middle school student working on a project about famous architects in history,11,predictive,4
+8,12,A keen middle school student working on a project about famous architects in history,11,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,7,control,3
+8,12,A keen middle school student working on a project about famous architects in history,7,predictive,4
+8,12,A keen middle school student working on a project about famous architects in history,7,explicit,2
+8,12,A keen middle school student working on a project about famous architects in history,29,control,3
+8,12,A keen middle school student working on a project about famous architects in history,29,predictive,4
+8,12,A keen middle school student working on a project about famous architects in history,29,explicit,4
+8,12,A keen middle school student working on a project about famous architects in history,16,control,1
+8,12,A keen middle school student working on a project about famous architects in history,16,predictive,2
+8,12,A keen middle school student working on a project about famous architects in history,16,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,6,control,2
+8,12,A keen middle school student working on a project about famous architects in history,6,predictive,2
+8,12,A keen middle school student working on a project about famous architects in history,6,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,28,control,3
+8,12,A keen middle school student working on a project about famous architects in history,28,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,28,explicit,4
+8,12,A keen middle school student working on a project about famous architects in history,17,control,2
+8,12,A keen middle school student working on a project about famous architects in history,17,predictive,2
+8,12,A keen middle school student working on a project about famous architects in history,17,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,1,control,1
+8,12,A keen middle school student working on a project about famous architects in history,1,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,1,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,10,control,2
+8,12,A keen middle school student working on a project about famous architects in history,10,predictive,4
+8,12,A keen middle school student working on a project about famous architects in history,10,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,19,control,3
+8,12,A keen middle school student working on a project about famous architects in history,19,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,19,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,26,control,3
+8,12,A keen middle school student working on a project about famous architects in history,26,predictive,2
+8,12,A keen middle school student working on a project about famous architects in history,26,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,8,control,3
+8,12,A keen middle school student working on a project about famous architects in history,8,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,8,explicit,4
+8,12,A keen middle school student working on a project about famous architects in history,21,control,2
+8,12,A keen middle school student working on a project about famous architects in history,21,predictive,2
+8,12,A keen middle school student working on a project about famous architects in history,21,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,38,control,3
+8,12,A keen middle school student working on a project about famous architects in history,38,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,38,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,36,control,2
+8,12,A keen middle school student working on a project about famous architects in history,36,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,36,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,31,control,3
+8,12,A keen middle school student working on a project about famous architects in history,31,predictive,4
+8,12,A keen middle school student working on a project about famous architects in history,31,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,30,control,2
+8,12,A keen middle school student working on a project about famous architects in history,30,predictive,4
+8,12,A keen middle school student working on a project about famous architects in history,30,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,37,control,3
+8,12,A keen middle school student working on a project about famous architects in history,37,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,37,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,39,control,1
+8,12,A keen middle school student working on a project about famous architects in history,39,predictive,1
+8,12,A keen middle school student working on a project about famous architects in history,39,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,24,control,1
+8,12,A keen middle school student working on a project about famous architects in history,24,predictive,2
+8,12,A keen middle school student working on a project about famous architects in history,24,explicit,2
+8,12,A keen middle school student working on a project about famous architects in history,23,control,1
+8,12,A keen middle school student working on a project about famous architects in history,23,predictive,4
+8,12,A keen middle school student working on a project about famous architects in history,23,explicit,4
+8,12,A keen middle school student working on a project about famous architects in history,4,control,3
+8,12,A keen middle school student working on a project about famous architects in history,4,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,4,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,15,control,1
+8,12,A keen middle school student working on a project about famous architects in history,15,predictive,4
+8,12,A keen middle school student working on a project about famous architects in history,15,explicit,4
+8,12,A keen middle school student working on a project about famous architects in history,3,control,3
+8,12,A keen middle school student working on a project about famous architects in history,3,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,3,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,12,control,4
+8,12,A keen middle school student working on a project about famous architects in history,12,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,12,explicit,4
+8,12,A keen middle school student working on a project about famous architects in history,40,control,2
+8,12,A keen middle school student working on a project about famous architects in history,40,predictive,2
+8,12,A keen middle school student working on a project about famous architects in history,40,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,2,control,3
+8,12,A keen middle school student working on a project about famous architects in history,2,predictive,4
+8,12,A keen middle school student working on a project about famous architects in history,2,explicit,4
+8,12,A keen middle school student working on a project about famous architects in history,13,control,4
+8,12,A keen middle school student working on a project about famous architects in history,13,predictive,4
+8,12,A keen middle school student working on a project about famous architects in history,13,explicit,4
+8,12,A keen middle school student working on a project about famous architects in history,5,control,2
+8,12,A keen middle school student working on a project about famous architects in history,5,predictive,4
+8,12,A keen middle school student working on a project about famous architects in history,5,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,14,control,2
+8,12,A keen middle school student working on a project about famous architects in history,14,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,14,explicit,3
+8,12,A keen middle school student working on a project about famous architects in history,22,control,3
+8,12,A keen middle school student working on a project about famous architects in history,22,predictive,3
+8,12,A keen middle school student working on a project about famous architects in history,22,explicit,4
+8,12,A keen middle school student working on a project about famous architects in history,25,control,2
+8,12,A keen middle school student working on a project about famous architects in history,25,predictive,4
+8,12,A keen middle school student working on a project about famous architects in history,25,explicit,4
+9,12,7th grade student in a computer science class,32,control,2
+9,12,7th grade student in a computer science class,32,predictive,4
+9,12,7th grade student in a computer science class,32,explicit,4
+9,12,7th grade student in a computer science class,35,control,4
+9,12,7th grade student in a computer science class,35,predictive,3
+9,12,7th grade student in a computer science class,35,explicit,4
+9,12,7th grade student in a computer science class,34,control,3
+9,12,7th grade student in a computer science class,34,predictive,3
+9,12,7th grade student in a computer science class,34,explicit,4
+9,12,7th grade student in a computer science class,33,control,3
+9,12,7th grade student in a computer science class,33,predictive,4
+9,12,7th grade student in a computer science class,33,explicit,4
+9,12,7th grade student in a computer science class,20,control,2
+9,12,7th grade student in a computer science class,20,predictive,3
+9,12,7th grade student in a computer science class,20,explicit,4
+9,12,7th grade student in a computer science class,18,control,2
+9,12,7th grade student in a computer science class,18,predictive,3
+9,12,7th grade student in a computer science class,18,explicit,4
+9,12,7th grade student in a computer science class,27,control,3
+9,12,7th grade student in a computer science class,27,predictive,3
+9,12,7th grade student in a computer science class,27,explicit,3
+9,12,7th grade student in a computer science class,9,control,2
+9,12,7th grade student in a computer science class,9,predictive,3
+9,12,7th grade student in a computer science class,9,explicit,2
+9,12,7th grade student in a computer science class,11,control,3
+9,12,7th grade student in a computer science class,11,predictive,4
+9,12,7th grade student in a computer science class,11,explicit,4
+9,12,7th grade student in a computer science class,7,control,3
+9,12,7th grade student in a computer science class,7,predictive,4
+9,12,7th grade student in a computer science class,7,explicit,3
+9,12,7th grade student in a computer science class,29,control,3
+9,12,7th grade student in a computer science class,29,predictive,3
+9,12,7th grade student in a computer science class,29,explicit,3
+9,12,7th grade student in a computer science class,16,control,2
+9,12,7th grade student in a computer science class,16,predictive,2
+9,12,7th grade student in a computer science class,16,explicit,3
+9,12,7th grade student in a computer science class,6,control,2
+9,12,7th grade student in a computer science class,6,predictive,3
+9,12,7th grade student in a computer science class,6,explicit,3
+9,12,7th grade student in a computer science class,28,control,3
+9,12,7th grade student in a computer science class,28,predictive,4
+9,12,7th grade student in a computer science class,28,explicit,4
+9,12,7th grade student in a computer science class,17,control,2
+9,12,7th grade student in a computer science class,17,predictive,2
+9,12,7th grade student in a computer science class,17,explicit,3
+9,12,7th grade student in a computer science class,1,control,1
+9,12,7th grade student in a computer science class,1,predictive,4
+9,12,7th grade student in a computer science class,1,explicit,3
+9,12,7th grade student in a computer science class,10,control,1
+9,12,7th grade student in a computer science class,10,predictive,3
+9,12,7th grade student in a computer science class,10,explicit,3
+9,12,7th grade student in a computer science class,19,control,3
+9,12,7th grade student in a computer science class,19,predictive,4
+9,12,7th grade student in a computer science class,19,explicit,3
+9,12,7th grade student in a computer science class,26,control,3
+9,12,7th grade student in a computer science class,26,predictive,3
+9,12,7th grade student in a computer science class,26,explicit,3
+9,12,7th grade student in a computer science class,8,control,3
+9,12,7th grade student in a computer science class,8,predictive,3
+9,12,7th grade student in a computer science class,8,explicit,4
+9,12,7th grade student in a computer science class,21,control,3
+9,12,7th grade student in a computer science class,21,predictive,3
+9,12,7th grade student in a computer science class,21,explicit,3
+9,12,7th grade student in a computer science class,38,control,3
+9,12,7th grade student in a computer science class,38,predictive,3
+9,12,7th grade student in a computer science class,38,explicit,3
+9,12,7th grade student in a computer science class,36,control,2
+9,12,7th grade student in a computer science class,36,predictive,3
+9,12,7th grade student in a computer science class,36,explicit,3
+9,12,7th grade student in a computer science class,31,control,3
+9,12,7th grade student in a computer science class,31,predictive,4
+9,12,7th grade student in a computer science class,31,explicit,3
+9,12,7th grade student in a computer science class,30,control,3
+9,12,7th grade student in a computer science class,30,predictive,2
+9,12,7th grade student in a computer science class,30,explicit,3
+9,12,7th grade student in a computer science class,37,control,3
+9,12,7th grade student in a computer science class,37,predictive,3
+9,12,7th grade student in a computer science class,37,explicit,3
+9,12,7th grade student in a computer science class,39,control,1
+9,12,7th grade student in a computer science class,39,predictive,1
+9,12,7th grade student in a computer science class,39,explicit,3
+9,12,7th grade student in a computer science class,24,control,1
+9,12,7th grade student in a computer science class,24,predictive,3
+9,12,7th grade student in a computer science class,24,explicit,3
+9,12,7th grade student in a computer science class,23,control,1
+9,12,7th grade student in a computer science class,23,predictive,3
+9,12,7th grade student in a computer science class,23,explicit,3
+9,12,7th grade student in a computer science class,4,control,3
+9,12,7th grade student in a computer science class,4,predictive,3
+9,12,7th grade student in a computer science class,4,explicit,3
+9,12,7th grade student in a computer science class,15,control,1
+9,12,7th grade student in a computer science class,15,predictive,3
+9,12,7th grade student in a computer science class,15,explicit,4
+9,12,7th grade student in a computer science class,3,control,3
+9,12,7th grade student in a computer science class,3,predictive,4
+9,12,7th grade student in a computer science class,3,explicit,4
+9,12,7th grade student in a computer science class,12,control,3
+9,12,7th grade student in a computer science class,12,predictive,3
+9,12,7th grade student in a computer science class,12,explicit,3
+9,12,7th grade student in a computer science class,40,control,3
+9,12,7th grade student in a computer science class,40,predictive,2
+9,12,7th grade student in a computer science class,40,explicit,3
+9,12,7th grade student in a computer science class,2,control,3
+9,12,7th grade student in a computer science class,2,predictive,4
+9,12,7th grade student in a computer science class,2,explicit,4
+9,12,7th grade student in a computer science class,13,control,4
+9,12,7th grade student in a computer science class,13,predictive,4
+9,12,7th grade student in a computer science class,13,explicit,4
+9,12,7th grade student in a computer science class,5,control,3
+9,12,7th grade student in a computer science class,5,predictive,3
+9,12,7th grade student in a computer science class,5,explicit,4
+9,12,7th grade student in a computer science class,14,control,3
+9,12,7th grade student in a computer science class,14,predictive,3
+9,12,7th grade student in a computer science class,14,explicit,3
+9,12,7th grade student in a computer science class,22,control,3
+9,12,7th grade student in a computer science class,22,predictive,3
+9,12,7th grade student in a computer science class,22,explicit,4
+9,12,7th grade student in a computer science class,25,control,3
+9,12,7th grade student in a computer science class,25,predictive,4
+9,12,7th grade student in a computer science class,25,explicit,4

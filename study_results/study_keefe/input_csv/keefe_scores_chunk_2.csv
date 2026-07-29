@@ -1,0 +1,1201 @@
+global_persona_index,age,persona_text,item_id,condition,score
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,32,control,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,32,predictive,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,32,explicit,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,35,control,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,35,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,35,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,34,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,34,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,34,explicit,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,33,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,33,predictive,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,33,explicit,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,20,control,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,20,predictive,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,20,explicit,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,18,control,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,18,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,18,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,27,control,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,27,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,27,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,9,control,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,9,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,9,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,11,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,11,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,11,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,7,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,7,predictive,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,7,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,29,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,29,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,29,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,16,control,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,16,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,16,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,6,control,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,6,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,6,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,28,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,28,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,28,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,17,control,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,17,predictive,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,17,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,1,control,1
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,1,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,1,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,10,control,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,10,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,10,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,19,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,19,predictive,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,19,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,26,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,26,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,26,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,8,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,8,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,8,explicit,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,21,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,21,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,21,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,38,control,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,38,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,38,explicit,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,36,control,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,36,predictive,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,36,explicit,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,31,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,31,predictive,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,31,explicit,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,30,control,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,30,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,30,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,37,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,37,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,37,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,39,control,1
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,39,predictive,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,39,explicit,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,24,control,1
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,24,predictive,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,24,explicit,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,23,control,1
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,23,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,23,explicit,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,4,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,4,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,4,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,15,control,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,15,predictive,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,15,explicit,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,3,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,3,predictive,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,3,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,12,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,12,predictive,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,12,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,40,control,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,40,predictive,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,40,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,2,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,2,predictive,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,2,explicit,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,13,control,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,13,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,13,explicit,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,5,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,5,predictive,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,5,explicit,4
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,14,control,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,14,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,14,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,22,control,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,22,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,22,explicit,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,25,control,2
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,25,predictive,3
+0,8,A curious elementary school student who eagerly awaits the next story on their daily bus ride,25,explicit,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,32,control,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,32,predictive,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,32,explicit,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,35,control,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,35,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,35,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,34,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,34,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,34,explicit,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,33,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,33,predictive,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,33,explicit,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,20,control,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,20,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,20,explicit,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,18,control,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,18,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,18,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,27,control,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,27,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,27,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,9,control,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,9,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,9,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,11,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,11,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,11,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,7,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,7,predictive,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,7,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,29,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,29,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,29,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,16,control,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,16,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,16,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,6,control,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,6,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,6,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,28,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,28,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,28,explicit,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,17,control,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,17,predictive,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,17,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,1,control,1
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,1,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,1,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,10,control,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,10,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,10,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,19,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,19,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,19,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,26,control,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,26,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,26,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,8,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,8,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,8,explicit,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,21,control,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,21,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,21,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,38,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,38,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,38,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,36,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,36,predictive,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,36,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,31,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,31,predictive,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,31,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,30,control,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,30,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,30,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,37,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,37,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,37,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,39,control,1
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,39,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,39,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,24,control,1
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,24,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,24,explicit,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,23,control,1
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,23,predictive,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,23,explicit,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,4,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,4,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,4,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,15,control,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,15,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,15,explicit,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,3,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,3,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,3,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,12,control,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,12,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,12,explicit,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,40,control,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,40,predictive,2
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,40,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,2,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,2,predictive,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,2,explicit,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,13,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,13,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,13,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,5,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,5,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,5,explicit,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,14,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,14,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,14,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,22,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,22,predictive,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,22,explicit,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,25,control,3
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,25,predictive,4
+1,8,An imaginative elementary school student with a pet iguana and a love for adventure stories,25,explicit,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,32,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,32,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,32,explicit,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,35,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,35,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,35,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,34,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,34,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,34,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,33,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,33,predictive,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,33,explicit,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,20,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,20,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,20,explicit,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,18,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,18,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,18,explicit,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,27,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,27,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,27,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,9,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,9,predictive,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,9,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,11,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,11,predictive,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,11,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,7,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,7,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,7,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,29,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,29,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,29,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,16,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,16,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,16,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,6,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,6,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,6,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,28,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,28,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,28,explicit,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,17,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,17,predictive,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,17,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,1,control,1
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,1,predictive,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,1,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,10,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,10,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,10,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,19,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,19,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,19,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,26,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,26,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,26,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,8,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,8,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,8,explicit,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,21,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,21,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,21,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,38,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,38,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,38,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,36,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,36,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,36,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,31,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,31,predictive,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,31,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,30,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,30,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,30,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,37,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,37,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,37,explicit,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,39,control,1
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,39,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,39,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,24,control,1
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,24,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,24,explicit,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,23,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,23,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,23,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,4,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,4,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,4,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,15,control,1
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,15,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,15,explicit,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,3,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,3,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,3,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,12,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,12,predictive,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,12,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,40,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,40,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,40,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,2,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,2,predictive,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,2,explicit,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,13,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,13,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,13,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,5,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,5,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,5,explicit,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,14,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,14,predictive,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,14,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,22,control,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,22,predictive,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,22,explicit,3
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,25,control,2
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,25,predictive,4
+2,8,A curious elementary school student who has just learned about millipedes in science class and is fascinated by all kinds of bugs.,25,explicit,4
+3,8,An elementary school student working on a community recycling project for a school fair,32,control,2
+3,8,An elementary school student working on a community recycling project for a school fair,32,predictive,4
+3,8,An elementary school student working on a community recycling project for a school fair,32,explicit,4
+3,8,An elementary school student working on a community recycling project for a school fair,35,control,4
+3,8,An elementary school student working on a community recycling project for a school fair,35,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,35,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,34,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,34,predictive,4
+3,8,An elementary school student working on a community recycling project for a school fair,34,explicit,4
+3,8,An elementary school student working on a community recycling project for a school fair,33,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,33,predictive,4
+3,8,An elementary school student working on a community recycling project for a school fair,33,explicit,4
+3,8,An elementary school student working on a community recycling project for a school fair,20,control,2
+3,8,An elementary school student working on a community recycling project for a school fair,20,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,20,explicit,4
+3,8,An elementary school student working on a community recycling project for a school fair,18,control,2
+3,8,An elementary school student working on a community recycling project for a school fair,18,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,18,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,27,control,4
+3,8,An elementary school student working on a community recycling project for a school fair,27,predictive,4
+3,8,An elementary school student working on a community recycling project for a school fair,27,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,9,control,2
+3,8,An elementary school student working on a community recycling project for a school fair,9,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,9,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,11,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,11,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,11,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,7,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,7,predictive,4
+3,8,An elementary school student working on a community recycling project for a school fair,7,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,29,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,29,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,29,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,16,control,2
+3,8,An elementary school student working on a community recycling project for a school fair,16,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,16,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,6,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,6,predictive,2
+3,8,An elementary school student working on a community recycling project for a school fair,6,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,28,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,28,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,28,explicit,4
+3,8,An elementary school student working on a community recycling project for a school fair,17,control,2
+3,8,An elementary school student working on a community recycling project for a school fair,17,predictive,2
+3,8,An elementary school student working on a community recycling project for a school fair,17,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,1,control,1
+3,8,An elementary school student working on a community recycling project for a school fair,1,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,1,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,10,control,2
+3,8,An elementary school student working on a community recycling project for a school fair,10,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,10,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,19,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,19,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,19,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,26,control,2
+3,8,An elementary school student working on a community recycling project for a school fair,26,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,26,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,8,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,8,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,8,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,21,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,21,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,21,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,38,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,38,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,38,explicit,4
+3,8,An elementary school student working on a community recycling project for a school fair,36,control,2
+3,8,An elementary school student working on a community recycling project for a school fair,36,predictive,4
+3,8,An elementary school student working on a community recycling project for a school fair,36,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,31,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,31,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,31,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,30,control,2
+3,8,An elementary school student working on a community recycling project for a school fair,30,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,30,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,37,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,37,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,37,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,39,control,1
+3,8,An elementary school student working on a community recycling project for a school fair,39,predictive,1
+3,8,An elementary school student working on a community recycling project for a school fair,39,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,24,control,1
+3,8,An elementary school student working on a community recycling project for a school fair,24,predictive,2
+3,8,An elementary school student working on a community recycling project for a school fair,24,explicit,2
+3,8,An elementary school student working on a community recycling project for a school fair,23,control,1
+3,8,An elementary school student working on a community recycling project for a school fair,23,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,23,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,4,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,4,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,4,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,15,control,1
+3,8,An elementary school student working on a community recycling project for a school fair,15,predictive,4
+3,8,An elementary school student working on a community recycling project for a school fair,15,explicit,4
+3,8,An elementary school student working on a community recycling project for a school fair,3,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,3,predictive,4
+3,8,An elementary school student working on a community recycling project for a school fair,3,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,12,control,4
+3,8,An elementary school student working on a community recycling project for a school fair,12,predictive,4
+3,8,An elementary school student working on a community recycling project for a school fair,12,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,40,control,2
+3,8,An elementary school student working on a community recycling project for a school fair,40,predictive,2
+3,8,An elementary school student working on a community recycling project for a school fair,40,explicit,2
+3,8,An elementary school student working on a community recycling project for a school fair,2,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,2,predictive,4
+3,8,An elementary school student working on a community recycling project for a school fair,2,explicit,4
+3,8,An elementary school student working on a community recycling project for a school fair,13,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,13,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,13,explicit,4
+3,8,An elementary school student working on a community recycling project for a school fair,5,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,5,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,5,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,14,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,14,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,14,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,22,control,3
+3,8,An elementary school student working on a community recycling project for a school fair,22,predictive,3
+3,8,An elementary school student working on a community recycling project for a school fair,22,explicit,3
+3,8,An elementary school student working on a community recycling project for a school fair,25,control,2
+3,8,An elementary school student working on a community recycling project for a school fair,25,predictive,4
+3,8,An elementary school student working on a community recycling project for a school fair,25,explicit,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,32,control,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,32,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,32,explicit,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,35,control,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,35,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,35,explicit,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,34,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,34,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,34,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,33,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,33,predictive,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,33,explicit,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,20,control,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,20,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,20,explicit,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,18,control,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,18,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,18,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,27,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,27,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,27,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,9,control,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,9,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,9,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,11,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,11,predictive,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,11,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,7,control,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,7,predictive,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,7,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,29,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,29,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,29,explicit,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,16,control,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,16,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,16,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,6,control,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,6,predictive,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,6,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,28,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,28,predictive,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,28,explicit,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,17,control,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,17,predictive,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,17,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,1,control,1
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,1,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,1,explicit,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,10,control,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,10,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,10,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,19,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,19,predictive,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,19,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,26,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,26,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,26,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,8,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,8,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,8,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,21,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,21,predictive,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,21,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,38,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,38,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,38,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,36,control,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,36,predictive,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,36,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,31,control,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,31,predictive,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,31,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,30,control,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,30,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,30,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,37,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,37,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,37,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,39,control,1
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,39,predictive,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,39,explicit,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,24,control,1
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,24,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,24,explicit,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,23,control,1
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,23,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,23,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,4,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,4,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,4,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,15,control,1
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,15,predictive,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,15,explicit,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,3,control,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,3,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,3,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,12,control,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,12,predictive,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,12,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,40,control,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,40,predictive,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,40,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,2,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,2,predictive,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,2,explicit,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,13,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,13,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,13,explicit,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,5,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,5,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,5,explicit,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,14,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,14,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,14,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,22,control,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,22,predictive,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,22,explicit,3
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,25,control,2
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,25,predictive,4
+4,7,An eager 7-year old boy who enjoys reading more than playing video games,25,explicit,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,32,control,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,32,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,32,explicit,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,35,control,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,35,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,35,explicit,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,34,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,34,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,34,explicit,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,33,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,33,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,33,explicit,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,20,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,20,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,20,explicit,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,18,control,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,18,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,18,explicit,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,27,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,27,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,27,explicit,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,9,control,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,9,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,9,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,11,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,11,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,11,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,7,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,7,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,7,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,29,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,29,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,29,explicit,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,16,control,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,16,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,16,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,6,control,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,6,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,6,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,28,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,28,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,28,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,17,control,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,17,predictive,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,17,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,1,control,1
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,1,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,1,explicit,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,10,control,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,10,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,10,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,19,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,19,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,19,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,26,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,26,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,26,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,8,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,8,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,8,explicit,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,21,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,21,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,21,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,38,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,38,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,38,explicit,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,36,control,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,36,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,36,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,31,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,31,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,31,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,30,control,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,30,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,30,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,37,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,37,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,37,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,39,control,1
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,39,predictive,1
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,39,explicit,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,24,control,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,24,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,24,explicit,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,23,control,1
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,23,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,23,explicit,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,4,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,4,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,4,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,15,control,1
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,15,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,15,explicit,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,3,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,3,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,3,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,12,control,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,12,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,12,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,40,control,2
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,40,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,40,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,2,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,2,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,2,explicit,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,13,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,13,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,13,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,5,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,5,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,5,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,14,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,14,predictive,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,14,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,22,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,22,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,22,explicit,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,25,control,3
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,25,predictive,4
+5,8,A curious elementary school student who looks forward to meeting the author and asking questions about their books,25,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,32,control,2
+6,8,A curious elementary school student in need of help with math and science homework,32,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,32,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,35,control,4
+6,8,A curious elementary school student in need of help with math and science homework,35,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,35,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,34,control,4
+6,8,A curious elementary school student in need of help with math and science homework,34,predictive,4
+6,8,A curious elementary school student in need of help with math and science homework,34,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,33,control,3
+6,8,A curious elementary school student in need of help with math and science homework,33,predictive,4
+6,8,A curious elementary school student in need of help with math and science homework,33,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,20,control,3
+6,8,A curious elementary school student in need of help with math and science homework,20,predictive,4
+6,8,A curious elementary school student in need of help with math and science homework,20,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,18,control,2
+6,8,A curious elementary school student in need of help with math and science homework,18,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,18,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,27,control,4
+6,8,A curious elementary school student in need of help with math and science homework,27,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,27,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,9,control,2
+6,8,A curious elementary school student in need of help with math and science homework,9,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,9,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,11,control,4
+6,8,A curious elementary school student in need of help with math and science homework,11,predictive,4
+6,8,A curious elementary school student in need of help with math and science homework,11,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,7,control,4
+6,8,A curious elementary school student in need of help with math and science homework,7,predictive,4
+6,8,A curious elementary school student in need of help with math and science homework,7,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,29,control,3
+6,8,A curious elementary school student in need of help with math and science homework,29,predictive,4
+6,8,A curious elementary school student in need of help with math and science homework,29,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,16,control,2
+6,8,A curious elementary school student in need of help with math and science homework,16,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,16,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,6,control,2
+6,8,A curious elementary school student in need of help with math and science homework,6,predictive,2
+6,8,A curious elementary school student in need of help with math and science homework,6,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,28,control,3
+6,8,A curious elementary school student in need of help with math and science homework,28,predictive,4
+6,8,A curious elementary school student in need of help with math and science homework,28,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,17,control,2
+6,8,A curious elementary school student in need of help with math and science homework,17,predictive,2
+6,8,A curious elementary school student in need of help with math and science homework,17,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,1,control,1
+6,8,A curious elementary school student in need of help with math and science homework,1,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,1,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,10,control,2
+6,8,A curious elementary school student in need of help with math and science homework,10,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,10,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,19,control,3
+6,8,A curious elementary school student in need of help with math and science homework,19,predictive,4
+6,8,A curious elementary school student in need of help with math and science homework,19,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,26,control,3
+6,8,A curious elementary school student in need of help with math and science homework,26,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,26,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,8,control,3
+6,8,A curious elementary school student in need of help with math and science homework,8,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,8,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,21,control,3
+6,8,A curious elementary school student in need of help with math and science homework,21,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,21,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,38,control,3
+6,8,A curious elementary school student in need of help with math and science homework,38,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,38,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,36,control,3
+6,8,A curious elementary school student in need of help with math and science homework,36,predictive,4
+6,8,A curious elementary school student in need of help with math and science homework,36,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,31,control,3
+6,8,A curious elementary school student in need of help with math and science homework,31,predictive,4
+6,8,A curious elementary school student in need of help with math and science homework,31,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,30,control,3
+6,8,A curious elementary school student in need of help with math and science homework,30,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,30,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,37,control,3
+6,8,A curious elementary school student in need of help with math and science homework,37,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,37,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,39,control,1
+6,8,A curious elementary school student in need of help with math and science homework,39,predictive,1
+6,8,A curious elementary school student in need of help with math and science homework,39,explicit,2
+6,8,A curious elementary school student in need of help with math and science homework,24,control,1
+6,8,A curious elementary school student in need of help with math and science homework,24,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,24,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,23,control,1
+6,8,A curious elementary school student in need of help with math and science homework,23,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,23,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,4,control,3
+6,8,A curious elementary school student in need of help with math and science homework,4,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,4,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,15,control,2
+6,8,A curious elementary school student in need of help with math and science homework,15,predictive,4
+6,8,A curious elementary school student in need of help with math and science homework,15,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,3,control,3
+6,8,A curious elementary school student in need of help with math and science homework,3,predictive,4
+6,8,A curious elementary school student in need of help with math and science homework,3,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,12,control,3
+6,8,A curious elementary school student in need of help with math and science homework,12,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,12,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,40,control,2
+6,8,A curious elementary school student in need of help with math and science homework,40,predictive,2
+6,8,A curious elementary school student in need of help with math and science homework,40,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,2,control,3
+6,8,A curious elementary school student in need of help with math and science homework,2,predictive,4
+6,8,A curious elementary school student in need of help with math and science homework,2,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,13,control,4
+6,8,A curious elementary school student in need of help with math and science homework,13,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,13,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,5,control,2
+6,8,A curious elementary school student in need of help with math and science homework,5,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,5,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,14,control,2
+6,8,A curious elementary school student in need of help with math and science homework,14,predictive,3
+6,8,A curious elementary school student in need of help with math and science homework,14,explicit,3
+6,8,A curious elementary school student in need of help with math and science homework,22,control,3
+6,8,A curious elementary school student in need of help with math and science homework,22,predictive,4
+6,8,A curious elementary school student in need of help with math and science homework,22,explicit,4
+6,8,A curious elementary school student in need of help with math and science homework,25,control,3
+6,8,A curious elementary school student in need of help with math and science homework,25,predictive,4
+6,8,A curious elementary school student in need of help with math and science homework,25,explicit,4
+7,8,A 3rd grade biology enthusiast,32,control,2
+7,8,A 3rd grade biology enthusiast,32,predictive,4
+7,8,A 3rd grade biology enthusiast,32,explicit,4
+7,8,A 3rd grade biology enthusiast,35,control,4
+7,8,A 3rd grade biology enthusiast,35,predictive,3
+7,8,A 3rd grade biology enthusiast,35,explicit,4
+7,8,A 3rd grade biology enthusiast,34,control,3
+7,8,A 3rd grade biology enthusiast,34,predictive,3
+7,8,A 3rd grade biology enthusiast,34,explicit,3
+7,8,A 3rd grade biology enthusiast,33,control,3
+7,8,A 3rd grade biology enthusiast,33,predictive,4
+7,8,A 3rd grade biology enthusiast,33,explicit,4
+7,8,A 3rd grade biology enthusiast,20,control,2
+7,8,A 3rd grade biology enthusiast,20,predictive,4
+7,8,A 3rd grade biology enthusiast,20,explicit,4
+7,8,A 3rd grade biology enthusiast,18,control,2
+7,8,A 3rd grade biology enthusiast,18,predictive,3
+7,8,A 3rd grade biology enthusiast,18,explicit,3
+7,8,A 3rd grade biology enthusiast,27,control,3
+7,8,A 3rd grade biology enthusiast,27,predictive,4
+7,8,A 3rd grade biology enthusiast,27,explicit,3
+7,8,A 3rd grade biology enthusiast,9,control,2
+7,8,A 3rd grade biology enthusiast,9,predictive,2
+7,8,A 3rd grade biology enthusiast,9,explicit,3
+7,8,A 3rd grade biology enthusiast,11,control,4
+7,8,A 3rd grade biology enthusiast,11,predictive,4
+7,8,A 3rd grade biology enthusiast,11,explicit,4
+7,8,A 3rd grade biology enthusiast,7,control,3
+7,8,A 3rd grade biology enthusiast,7,predictive,3
+7,8,A 3rd grade biology enthusiast,7,explicit,3
+7,8,A 3rd grade biology enthusiast,29,control,3
+7,8,A 3rd grade biology enthusiast,29,predictive,3
+7,8,A 3rd grade biology enthusiast,29,explicit,3
+7,8,A 3rd grade biology enthusiast,16,control,2
+7,8,A 3rd grade biology enthusiast,16,predictive,2
+7,8,A 3rd grade biology enthusiast,16,explicit,3
+7,8,A 3rd grade biology enthusiast,6,control,2
+7,8,A 3rd grade biology enthusiast,6,predictive,2
+7,8,A 3rd grade biology enthusiast,6,explicit,3
+7,8,A 3rd grade biology enthusiast,28,control,3
+7,8,A 3rd grade biology enthusiast,28,predictive,4
+7,8,A 3rd grade biology enthusiast,28,explicit,3
+7,8,A 3rd grade biology enthusiast,17,control,2
+7,8,A 3rd grade biology enthusiast,17,predictive,2
+7,8,A 3rd grade biology enthusiast,17,explicit,3
+7,8,A 3rd grade biology enthusiast,1,control,1
+7,8,A 3rd grade biology enthusiast,1,predictive,3
+7,8,A 3rd grade biology enthusiast,1,explicit,3
+7,8,A 3rd grade biology enthusiast,10,control,2
+7,8,A 3rd grade biology enthusiast,10,predictive,3
+7,8,A 3rd grade biology enthusiast,10,explicit,4
+7,8,A 3rd grade biology enthusiast,19,control,3
+7,8,A 3rd grade biology enthusiast,19,predictive,4
+7,8,A 3rd grade biology enthusiast,19,explicit,3
+7,8,A 3rd grade biology enthusiast,26,control,3
+7,8,A 3rd grade biology enthusiast,26,predictive,3
+7,8,A 3rd grade biology enthusiast,26,explicit,3
+7,8,A 3rd grade biology enthusiast,8,control,3
+7,8,A 3rd grade biology enthusiast,8,predictive,3
+7,8,A 3rd grade biology enthusiast,8,explicit,4
+7,8,A 3rd grade biology enthusiast,21,control,3
+7,8,A 3rd grade biology enthusiast,21,predictive,3
+7,8,A 3rd grade biology enthusiast,21,explicit,3
+7,8,A 3rd grade biology enthusiast,38,control,3
+7,8,A 3rd grade biology enthusiast,38,predictive,3
+7,8,A 3rd grade biology enthusiast,38,explicit,4
+7,8,A 3rd grade biology enthusiast,36,control,3
+7,8,A 3rd grade biology enthusiast,36,predictive,4
+7,8,A 3rd grade biology enthusiast,36,explicit,4
+7,8,A 3rd grade biology enthusiast,31,control,3
+7,8,A 3rd grade biology enthusiast,31,predictive,4
+7,8,A 3rd grade biology enthusiast,31,explicit,4
+7,8,A 3rd grade biology enthusiast,30,control,2
+7,8,A 3rd grade biology enthusiast,30,predictive,3
+7,8,A 3rd grade biology enthusiast,30,explicit,3
+7,8,A 3rd grade biology enthusiast,37,control,3
+7,8,A 3rd grade biology enthusiast,37,predictive,3
+7,8,A 3rd grade biology enthusiast,37,explicit,3
+7,8,A 3rd grade biology enthusiast,39,control,1
+7,8,A 3rd grade biology enthusiast,39,predictive,1
+7,8,A 3rd grade biology enthusiast,39,explicit,2
+7,8,A 3rd grade biology enthusiast,24,control,1
+7,8,A 3rd grade biology enthusiast,24,predictive,3
+7,8,A 3rd grade biology enthusiast,24,explicit,3
+7,8,A 3rd grade biology enthusiast,23,control,1
+7,8,A 3rd grade biology enthusiast,23,predictive,3
+7,8,A 3rd grade biology enthusiast,23,explicit,3
+7,8,A 3rd grade biology enthusiast,4,control,3
+7,8,A 3rd grade biology enthusiast,4,predictive,3
+7,8,A 3rd grade biology enthusiast,4,explicit,3
+7,8,A 3rd grade biology enthusiast,15,control,2
+7,8,A 3rd grade biology enthusiast,15,predictive,4
+7,8,A 3rd grade biology enthusiast,15,explicit,4
+7,8,A 3rd grade biology enthusiast,3,control,3
+7,8,A 3rd grade biology enthusiast,3,predictive,4
+7,8,A 3rd grade biology enthusiast,3,explicit,4
+7,8,A 3rd grade biology enthusiast,12,control,3
+7,8,A 3rd grade biology enthusiast,12,predictive,3
+7,8,A 3rd grade biology enthusiast,12,explicit,4
+7,8,A 3rd grade biology enthusiast,40,control,2
+7,8,A 3rd grade biology enthusiast,40,predictive,2
+7,8,A 3rd grade biology enthusiast,40,explicit,2
+7,8,A 3rd grade biology enthusiast,2,control,3
+7,8,A 3rd grade biology enthusiast,2,predictive,4
+7,8,A 3rd grade biology enthusiast,2,explicit,4
+7,8,A 3rd grade biology enthusiast,13,control,3
+7,8,A 3rd grade biology enthusiast,13,predictive,3
+7,8,A 3rd grade biology enthusiast,13,explicit,4
+7,8,A 3rd grade biology enthusiast,5,control,3
+7,8,A 3rd grade biology enthusiast,5,predictive,4
+7,8,A 3rd grade biology enthusiast,5,explicit,4
+7,8,A 3rd grade biology enthusiast,14,control,2
+7,8,A 3rd grade biology enthusiast,14,predictive,3
+7,8,A 3rd grade biology enthusiast,14,explicit,3
+7,8,A 3rd grade biology enthusiast,22,control,3
+7,8,A 3rd grade biology enthusiast,22,predictive,3
+7,8,A 3rd grade biology enthusiast,22,explicit,3
+7,8,A 3rd grade biology enthusiast,25,control,2
+7,8,A 3rd grade biology enthusiast,25,predictive,4
+7,8,A 3rd grade biology enthusiast,25,explicit,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,32,control,2
+8,8,A primary school student who eagerly provides input and suggestions for story development,32,predictive,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,32,explicit,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,35,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,35,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,35,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,34,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,34,predictive,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,34,explicit,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,33,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,33,predictive,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,33,explicit,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,20,control,2
+8,8,A primary school student who eagerly provides input and suggestions for story development,20,predictive,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,20,explicit,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,18,control,2
+8,8,A primary school student who eagerly provides input and suggestions for story development,18,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,18,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,27,control,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,27,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,27,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,9,control,2
+8,8,A primary school student who eagerly provides input and suggestions for story development,9,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,9,explicit,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,11,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,11,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,11,explicit,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,7,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,7,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,7,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,29,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,29,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,29,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,16,control,2
+8,8,A primary school student who eagerly provides input and suggestions for story development,16,predictive,2
+8,8,A primary school student who eagerly provides input and suggestions for story development,16,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,6,control,2
+8,8,A primary school student who eagerly provides input and suggestions for story development,6,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,6,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,28,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,28,predictive,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,28,explicit,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,17,control,2
+8,8,A primary school student who eagerly provides input and suggestions for story development,17,predictive,2
+8,8,A primary school student who eagerly provides input and suggestions for story development,17,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,1,control,1
+8,8,A primary school student who eagerly provides input and suggestions for story development,1,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,1,explicit,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,10,control,2
+8,8,A primary school student who eagerly provides input and suggestions for story development,10,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,10,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,19,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,19,predictive,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,19,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,26,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,26,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,26,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,8,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,8,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,8,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,21,control,2
+8,8,A primary school student who eagerly provides input and suggestions for story development,21,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,21,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,38,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,38,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,38,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,36,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,36,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,36,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,31,control,2
+8,8,A primary school student who eagerly provides input and suggestions for story development,31,predictive,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,31,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,30,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,30,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,30,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,37,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,37,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,37,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,39,control,1
+8,8,A primary school student who eagerly provides input and suggestions for story development,39,predictive,1
+8,8,A primary school student who eagerly provides input and suggestions for story development,39,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,24,control,1
+8,8,A primary school student who eagerly provides input and suggestions for story development,24,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,24,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,23,control,1
+8,8,A primary school student who eagerly provides input and suggestions for story development,23,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,23,explicit,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,4,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,4,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,4,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,15,control,2
+8,8,A primary school student who eagerly provides input and suggestions for story development,15,predictive,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,15,explicit,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,3,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,3,predictive,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,3,explicit,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,12,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,12,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,12,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,40,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,40,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,40,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,2,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,2,predictive,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,2,explicit,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,13,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,13,predictive,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,13,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,5,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,5,predictive,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,5,explicit,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,14,control,2
+8,8,A primary school student who eagerly provides input and suggestions for story development,14,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,14,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,22,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,22,predictive,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,22,explicit,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,25,control,3
+8,8,A primary school student who eagerly provides input and suggestions for story development,25,predictive,4
+8,8,A primary school student who eagerly provides input and suggestions for story development,25,explicit,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,32,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,32,predictive,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,32,explicit,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,35,control,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,35,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,35,explicit,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,34,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,34,predictive,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,34,explicit,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,33,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,33,predictive,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,33,explicit,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,20,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,20,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,20,explicit,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,18,control,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,18,predictive,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,18,explicit,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,27,control,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,27,predictive,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,27,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,9,control,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,9,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,9,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,11,control,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,11,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,11,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,7,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,7,predictive,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,7,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,29,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,29,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,29,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,16,control,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,16,predictive,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,16,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,6,control,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,6,predictive,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,6,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,28,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,28,predictive,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,28,explicit,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,17,control,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,17,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,17,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,1,control,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,1,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,1,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,10,control,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,10,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,10,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,19,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,19,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,19,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,26,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,26,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,26,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,8,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,8,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,8,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,21,control,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,21,predictive,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,21,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,38,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,38,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,38,explicit,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,36,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,36,predictive,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,36,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,31,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,31,predictive,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,31,explicit,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,30,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,30,predictive,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,30,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,37,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,37,predictive,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,37,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,39,control,1
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,39,predictive,1
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,39,explicit,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,24,control,1
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,24,predictive,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,24,explicit,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,23,control,1
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,23,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,23,explicit,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,4,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,4,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,4,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,15,control,1
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,15,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,15,explicit,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,3,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,3,predictive,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,3,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,12,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,12,predictive,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,12,explicit,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,40,control,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,40,predictive,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,40,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,2,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,2,predictive,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,2,explicit,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,13,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,13,predictive,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,13,explicit,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,5,control,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,5,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,5,explicit,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,14,control,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,14,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,14,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,22,control,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,22,predictive,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,22,explicit,3
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,25,control,2
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,25,predictive,4
+9,8,A local elementary school student who is part of a gardening club and looks up to the urban gardening enthusiast as a mentor,25,explicit,4

@@ -6,8 +6,6 @@ pytest.ini
 
 # file types
 *.pyc
-*.csv
-!personas_dfs/personas_refined_age/chunks_balanced/*csv
 *.pdf
 *.def
 *.png
@@ -15,7 +13,15 @@ pytest.ini
 *.pptx
 *.md
 #except the] diagrams
-!diagrams/*.png
+#!diagrams/*.png
+*.sentinels
+*.out
+
+# Ignore all CSV files anywhere
+**/*.csv
+
+# But keep this directory's CSVs
+!study_results/study_keefe/*.csv
 
 # environments
 venv/

@@ -1,0 +1,1201 @@
+global_persona_index,age,persona_text,item_id,condition,score
+0,12,An inquisitive middle school student joining the science club for the first time,32,control,2
+0,12,An inquisitive middle school student joining the science club for the first time,32,predictive,4
+0,12,An inquisitive middle school student joining the science club for the first time,32,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,35,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,35,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,35,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,34,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,34,predictive,4
+0,12,An inquisitive middle school student joining the science club for the first time,34,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,33,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,33,predictive,4
+0,12,An inquisitive middle school student joining the science club for the first time,33,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,20,control,2
+0,12,An inquisitive middle school student joining the science club for the first time,20,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,20,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,18,control,2
+0,12,An inquisitive middle school student joining the science club for the first time,18,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,18,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,27,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,27,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,27,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,9,control,2
+0,12,An inquisitive middle school student joining the science club for the first time,9,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,9,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,11,control,4
+0,12,An inquisitive middle school student joining the science club for the first time,11,predictive,4
+0,12,An inquisitive middle school student joining the science club for the first time,11,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,7,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,7,predictive,4
+0,12,An inquisitive middle school student joining the science club for the first time,7,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,29,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,29,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,29,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,16,control,2
+0,12,An inquisitive middle school student joining the science club for the first time,16,predictive,2
+0,12,An inquisitive middle school student joining the science club for the first time,16,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,6,control,2
+0,12,An inquisitive middle school student joining the science club for the first time,6,predictive,2
+0,12,An inquisitive middle school student joining the science club for the first time,6,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,28,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,28,predictive,4
+0,12,An inquisitive middle school student joining the science club for the first time,28,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,17,control,2
+0,12,An inquisitive middle school student joining the science club for the first time,17,predictive,2
+0,12,An inquisitive middle school student joining the science club for the first time,17,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,1,control,1
+0,12,An inquisitive middle school student joining the science club for the first time,1,predictive,4
+0,12,An inquisitive middle school student joining the science club for the first time,1,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,10,control,2
+0,12,An inquisitive middle school student joining the science club for the first time,10,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,10,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,19,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,19,predictive,4
+0,12,An inquisitive middle school student joining the science club for the first time,19,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,26,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,26,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,26,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,8,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,8,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,8,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,21,control,2
+0,12,An inquisitive middle school student joining the science club for the first time,21,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,21,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,38,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,38,predictive,4
+0,12,An inquisitive middle school student joining the science club for the first time,38,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,36,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,36,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,36,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,31,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,31,predictive,4
+0,12,An inquisitive middle school student joining the science club for the first time,31,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,30,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,30,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,30,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,37,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,37,predictive,4
+0,12,An inquisitive middle school student joining the science club for the first time,37,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,39,control,1
+0,12,An inquisitive middle school student joining the science club for the first time,39,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,39,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,24,control,1
+0,12,An inquisitive middle school student joining the science club for the first time,24,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,24,explicit,2
+0,12,An inquisitive middle school student joining the science club for the first time,23,control,1
+0,12,An inquisitive middle school student joining the science club for the first time,23,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,23,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,4,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,4,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,4,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,15,control,1
+0,12,An inquisitive middle school student joining the science club for the first time,15,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,15,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,3,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,3,predictive,4
+0,12,An inquisitive middle school student joining the science club for the first time,3,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,12,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,12,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,12,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,40,control,2
+0,12,An inquisitive middle school student joining the science club for the first time,40,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,40,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,2,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,2,predictive,4
+0,12,An inquisitive middle school student joining the science club for the first time,2,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,13,control,4
+0,12,An inquisitive middle school student joining the science club for the first time,13,predictive,4
+0,12,An inquisitive middle school student joining the science club for the first time,13,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,5,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,5,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,5,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,14,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,14,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,14,explicit,3
+0,12,An inquisitive middle school student joining the science club for the first time,22,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,22,predictive,3
+0,12,An inquisitive middle school student joining the science club for the first time,22,explicit,4
+0,12,An inquisitive middle school student joining the science club for the first time,25,control,3
+0,12,An inquisitive middle school student joining the science club for the first time,25,predictive,4
+0,12,An inquisitive middle school student joining the science club for the first time,25,explicit,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,32,control,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,32,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,32,explicit,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,35,control,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,35,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,35,explicit,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,34,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,34,predictive,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,34,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,33,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,33,predictive,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,33,explicit,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,20,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,20,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,20,explicit,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,18,control,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,18,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,18,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,27,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,27,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,27,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,9,control,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,9,predictive,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,9,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,11,control,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,11,predictive,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,11,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,7,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,7,predictive,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,7,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,29,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,29,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,29,explicit,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,16,control,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,16,predictive,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,16,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,6,control,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,6,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,6,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,28,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,28,predictive,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,28,explicit,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,17,control,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,17,predictive,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,17,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,1,control,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,1,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,1,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,10,control,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,10,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,10,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,19,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,19,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,19,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,26,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,26,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,26,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,8,control,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,8,predictive,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,8,explicit,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,21,control,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,21,predictive,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,21,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,38,control,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,38,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,38,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,36,control,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,36,predictive,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,36,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,31,control,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,31,predictive,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,31,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,30,control,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,30,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,30,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,37,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,37,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,37,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,39,control,1
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,39,predictive,1
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,39,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,24,control,1
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,24,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,24,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,23,control,1
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,23,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,23,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,4,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,4,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,4,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,15,control,1
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,15,predictive,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,15,explicit,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,3,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,3,predictive,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,3,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,12,control,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,12,predictive,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,12,explicit,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,40,control,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,40,predictive,2
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,40,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,2,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,2,predictive,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,2,explicit,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,13,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,13,predictive,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,13,explicit,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,5,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,5,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,5,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,14,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,14,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,14,explicit,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,22,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,22,predictive,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,22,explicit,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,25,control,3
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,25,predictive,4
+1,12,A bright middle schooler who voraciously reads science fiction and conducts small experiments in their spare time,25,explicit,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,32,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,32,predictive,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,32,explicit,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,35,control,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,35,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,35,explicit,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,34,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,34,predictive,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,34,explicit,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,33,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,33,predictive,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,33,explicit,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,20,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,20,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,20,explicit,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,18,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,18,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,18,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,27,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,27,predictive,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,27,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,9,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,9,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,9,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,11,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,11,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,11,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,7,control,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,7,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,7,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,29,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,29,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,29,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,16,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,16,predictive,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,16,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,6,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,6,predictive,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,6,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,28,control,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,28,predictive,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,28,explicit,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,17,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,17,predictive,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,17,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,1,control,1
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,1,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,1,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,10,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,10,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,10,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,19,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,19,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,19,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,26,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,26,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,26,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,8,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,8,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,8,explicit,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,21,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,21,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,21,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,38,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,38,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,38,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,36,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,36,predictive,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,36,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,31,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,31,predictive,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,31,explicit,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,30,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,30,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,30,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,37,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,37,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,37,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,39,control,1
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,39,predictive,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,39,explicit,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,24,control,1
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,24,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,24,explicit,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,23,control,1
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,23,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,23,explicit,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,4,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,4,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,4,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,15,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,15,predictive,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,15,explicit,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,3,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,3,predictive,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,3,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,12,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,12,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,12,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,40,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,40,predictive,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,40,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,2,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,2,predictive,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,2,explicit,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,13,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,13,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,13,explicit,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,5,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,5,predictive,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,5,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,14,control,2
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,14,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,14,explicit,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,22,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,22,predictive,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,22,explicit,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,25,control,3
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,25,predictive,4
+2,12,A creative middle schooler who has started a cooking vlog using the new kitchen,25,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,32,control,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,32,predictive,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,32,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,35,control,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,35,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,35,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,34,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,34,predictive,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,34,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,33,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,33,predictive,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,33,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,20,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,20,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,20,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,18,control,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,18,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,18,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,27,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,27,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,27,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,9,control,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,9,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,9,explicit,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,11,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,11,predictive,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,11,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,7,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,7,predictive,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,7,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,29,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,29,predictive,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,29,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,16,control,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,16,predictive,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,16,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,6,control,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,6,predictive,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,6,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,28,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,28,predictive,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,28,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,17,control,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,17,predictive,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,17,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,1,control,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,1,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,1,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,10,control,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,10,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,10,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,19,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,19,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,19,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,26,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,26,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,26,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,8,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,8,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,8,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,21,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,21,predictive,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,21,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,38,control,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,38,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,38,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,36,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,36,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,36,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,31,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,31,predictive,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,31,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,30,control,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,30,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,30,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,37,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,37,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,37,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,39,control,1
+3,12,A curious middle school student who is fascinated by rocks and minerals,39,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,39,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,24,control,1
+3,12,A curious middle school student who is fascinated by rocks and minerals,24,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,24,explicit,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,23,control,1
+3,12,A curious middle school student who is fascinated by rocks and minerals,23,predictive,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,23,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,4,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,4,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,4,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,15,control,1
+3,12,A curious middle school student who is fascinated by rocks and minerals,15,predictive,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,15,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,3,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,3,predictive,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,3,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,12,control,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,12,predictive,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,12,explicit,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,40,control,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,40,predictive,2
+3,12,A curious middle school student who is fascinated by rocks and minerals,40,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,2,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,2,predictive,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,2,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,13,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,13,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,13,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,5,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,5,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,5,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,14,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,14,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,14,explicit,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,22,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,22,predictive,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,22,explicit,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,25,control,3
+3,12,A curious middle school student who is fascinated by rocks and minerals,25,predictive,4
+3,12,A curious middle school student who is fascinated by rocks and minerals,25,explicit,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,32,control,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,32,predictive,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,32,explicit,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,35,control,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,35,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,35,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,34,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,34,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,34,explicit,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,33,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,33,predictive,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,33,explicit,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,20,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,20,predictive,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,20,explicit,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,18,control,1
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,18,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,18,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,27,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,27,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,27,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,9,control,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,9,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,9,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,11,control,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,11,predictive,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,11,explicit,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,7,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,7,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,7,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,29,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,29,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,29,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,16,control,1
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,16,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,16,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,6,control,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,6,predictive,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,6,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,28,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,28,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,28,explicit,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,17,control,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,17,predictive,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,17,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,1,control,1
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,1,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,1,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,10,control,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,10,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,10,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,19,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,19,predictive,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,19,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,26,control,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,26,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,26,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,8,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,8,predictive,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,8,explicit,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,21,control,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,21,predictive,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,21,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,38,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,38,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,38,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,36,control,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,36,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,36,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,31,control,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,31,predictive,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,31,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,30,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,30,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,30,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,37,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,37,predictive,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,37,explicit,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,39,control,1
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,39,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,39,explicit,1
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,24,control,1
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,24,predictive,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,24,explicit,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,23,control,1
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,23,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,23,explicit,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,4,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,4,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,4,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,15,control,1
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,15,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,15,explicit,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,3,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,3,predictive,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,3,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,12,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,12,predictive,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,12,explicit,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,40,control,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,40,predictive,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,40,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,2,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,2,predictive,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,2,explicit,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,13,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,13,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,13,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,5,control,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,5,predictive,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,5,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,14,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,14,predictive,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,14,explicit,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,22,control,3
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,22,predictive,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,22,explicit,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,25,control,2
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,25,predictive,4
+4,12,A middle school student seeking guidance on how to improve their computer skills for school assignments,25,explicit,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,32,control,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,32,predictive,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,32,explicit,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,35,control,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,35,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,35,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,34,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,34,predictive,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,34,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,33,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,33,predictive,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,33,explicit,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,20,control,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,20,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,20,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,18,control,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,18,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,18,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,27,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,27,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,27,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,9,control,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,9,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,9,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,11,control,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,11,predictive,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,11,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,7,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,7,predictive,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,7,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,29,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,29,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,29,explicit,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,16,control,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,16,predictive,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,16,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,6,control,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,6,predictive,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,6,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,28,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,28,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,28,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,17,control,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,17,predictive,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,17,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,1,control,1
+5,12,A middle school band member interested in learning a variety of percussion instruments,1,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,1,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,10,control,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,10,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,10,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,19,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,19,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,19,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,26,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,26,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,26,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,8,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,8,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,8,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,21,control,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,21,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,21,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,38,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,38,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,38,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,36,control,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,36,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,36,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,31,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,31,predictive,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,31,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,30,control,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,30,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,30,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,37,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,37,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,37,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,39,control,1
+5,12,A middle school band member interested in learning a variety of percussion instruments,39,predictive,1
+5,12,A middle school band member interested in learning a variety of percussion instruments,39,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,24,control,1
+5,12,A middle school band member interested in learning a variety of percussion instruments,24,predictive,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,24,explicit,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,23,control,1
+5,12,A middle school band member interested in learning a variety of percussion instruments,23,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,23,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,4,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,4,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,4,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,15,control,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,15,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,15,explicit,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,3,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,3,predictive,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,3,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,12,control,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,12,predictive,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,12,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,40,control,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,40,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,40,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,2,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,2,predictive,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,2,explicit,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,13,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,13,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,13,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,5,control,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,5,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,5,explicit,4
+5,12,A middle school band member interested in learning a variety of percussion instruments,14,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,14,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,14,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,22,control,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,22,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,22,explicit,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,25,control,2
+5,12,A middle school band member interested in learning a variety of percussion instruments,25,predictive,3
+5,12,A middle school band member interested in learning a variety of percussion instruments,25,explicit,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,32,control,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,32,predictive,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,32,explicit,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,35,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,35,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,35,explicit,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,34,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,34,predictive,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,34,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,33,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,33,predictive,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,33,explicit,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,20,control,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,20,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,20,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,18,control,1
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,18,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,18,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,27,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,27,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,27,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,9,control,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,9,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,9,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,11,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,11,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,11,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,7,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,7,predictive,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,7,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,29,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,29,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,29,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,16,control,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,16,predictive,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,16,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,6,control,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,6,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,6,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,28,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,28,predictive,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,28,explicit,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,17,control,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,17,predictive,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,17,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,1,control,1
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,1,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,1,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,10,control,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,10,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,10,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,19,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,19,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,19,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,26,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,26,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,26,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,8,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,8,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,8,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,21,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,21,predictive,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,21,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,38,control,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,38,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,38,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,36,control,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,36,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,36,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,31,control,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,31,predictive,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,31,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,30,control,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,30,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,30,explicit,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,37,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,37,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,37,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,39,control,1
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,39,predictive,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,39,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,24,control,1
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,24,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,24,explicit,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,23,control,1
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,23,predictive,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,23,explicit,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,4,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,4,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,4,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,15,control,1
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,15,predictive,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,15,explicit,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,3,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,3,predictive,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,3,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,12,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,12,predictive,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,12,explicit,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,40,control,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,40,predictive,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,40,explicit,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,2,control,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,2,predictive,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,2,explicit,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,13,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,13,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,13,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,5,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,5,predictive,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,5,explicit,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,14,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,14,predictive,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,14,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,22,control,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,22,predictive,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,22,explicit,3
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,25,control,2
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,25,predictive,4
+6,12,A shy but imaginative middle schooler who is looking for a captivating adventure novel to read,25,explicit,4
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,32,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,32,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,32,explicit,4
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,35,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,35,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,35,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,34,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,34,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,34,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,33,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,33,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,33,explicit,4
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,20,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,20,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,20,explicit,4
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,18,control,1
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,18,predictive,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,18,explicit,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,27,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,27,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,27,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,9,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,9,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,9,explicit,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,11,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,11,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,11,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,7,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,7,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,7,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,29,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,29,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,29,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,16,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,16,predictive,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,16,explicit,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,6,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,6,predictive,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,6,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,28,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,28,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,28,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,17,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,17,predictive,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,17,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,1,control,1
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,1,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,1,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,10,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,10,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,10,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,19,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,19,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,19,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,26,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,26,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,26,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,8,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,8,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,8,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,21,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,21,predictive,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,21,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,38,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,38,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,38,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,36,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,36,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,36,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,31,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,31,predictive,4
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,31,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,30,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,30,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,30,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,37,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,37,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,37,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,39,control,1
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,39,predictive,1
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,39,explicit,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,24,control,1
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,24,predictive,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,24,explicit,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,23,control,1
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,23,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,23,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,4,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,4,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,4,explicit,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,15,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,15,predictive,4
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,15,explicit,4
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,3,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,3,predictive,4
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,3,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,12,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,12,predictive,4
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,12,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,40,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,40,predictive,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,40,explicit,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,2,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,2,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,2,explicit,4
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,13,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,13,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,13,explicit,4
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,5,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,5,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,5,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,14,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,14,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,14,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,22,control,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,22,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,22,explicit,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,25,control,2
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,25,predictive,3
+7,12,A middle school student excited about earth sciences and participating in the school's science fair with a volcano project,25,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,32,control,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,32,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,32,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,35,control,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,35,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,35,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,34,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,34,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,34,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,33,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,33,predictive,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,33,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,20,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,20,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,20,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,18,control,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,18,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,18,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,27,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,27,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,27,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,9,control,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,9,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,9,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,11,control,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,11,predictive,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,11,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,7,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,7,predictive,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,7,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,29,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,29,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,29,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,16,control,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,16,predictive,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,16,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,6,control,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,6,predictive,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,6,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,28,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,28,predictive,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,28,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,17,control,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,17,predictive,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,17,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,1,control,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,1,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,1,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,10,control,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,10,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,10,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,19,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,19,predictive,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,19,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,26,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,26,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,26,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,8,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,8,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,8,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,21,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,21,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,21,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,38,control,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,38,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,38,explicit,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,36,control,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,36,predictive,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,36,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,31,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,31,predictive,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,31,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,30,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,30,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,30,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,37,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,37,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,37,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,39,control,1
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,39,predictive,1
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,39,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,24,control,1
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,24,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,24,explicit,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,23,control,1
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,23,predictive,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,23,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,4,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,4,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,4,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,15,control,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,15,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,15,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,3,control,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,3,predictive,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,3,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,12,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,12,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,12,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,40,control,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,40,predictive,2
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,40,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,2,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,2,predictive,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,2,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,13,control,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,13,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,13,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,5,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,5,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,5,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,14,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,14,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,14,explicit,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,22,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,22,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,22,explicit,4
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,25,control,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,25,predictive,3
+8,12,An ambitious 7th grade student who loves to learn but struggles with dyscalculia,25,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,32,control,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,32,predictive,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,32,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,35,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,35,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,35,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,34,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,34,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,34,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,33,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,33,predictive,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,33,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,20,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,20,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,20,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,18,control,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,18,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,18,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,27,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,27,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,27,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,9,control,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,9,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,9,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,11,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,11,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,11,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,7,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,7,predictive,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,7,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,29,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,29,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,29,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,16,control,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,16,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,16,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,6,control,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,6,predictive,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,6,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,28,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,28,predictive,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,28,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,17,control,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,17,predictive,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,17,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,1,control,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,1,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,1,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,10,control,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,10,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,10,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,19,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,19,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,19,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,26,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,26,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,26,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,8,control,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,8,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,8,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,21,control,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,21,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,21,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,38,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,38,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,38,explicit,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,36,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,36,predictive,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,36,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,31,control,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,31,predictive,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,31,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,30,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,30,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,30,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,37,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,37,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,37,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,39,control,1
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,39,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,39,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,24,control,1
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,24,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,24,explicit,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,23,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,23,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,23,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,4,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,4,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,4,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,15,control,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,15,predictive,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,15,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,3,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,3,predictive,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,3,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,12,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,12,predictive,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,12,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,40,control,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,40,predictive,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,40,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,2,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,2,predictive,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,2,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,13,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,13,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,13,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,5,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,5,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,5,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,14,control,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,14,predictive,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,14,explicit,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,22,control,3
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,22,predictive,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,22,explicit,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,25,control,2
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,25,predictive,4
+9,12,A creative writing enthusiast in middle school who enjoys crafting stories and sometimes struggles with math homework,25,explicit,4

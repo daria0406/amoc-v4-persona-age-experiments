@@ -1,0 +1,1201 @@
+global_persona_index,age,persona_text,item_id,condition,score
+0,18,A first-year university student who just completed a course in number theory,32,control,2
+0,18,A first-year university student who just completed a course in number theory,32,predictive,4
+0,18,A first-year university student who just completed a course in number theory,32,explicit,4
+0,18,A first-year university student who just completed a course in number theory,35,control,3
+0,18,A first-year university student who just completed a course in number theory,35,predictive,3
+0,18,A first-year university student who just completed a course in number theory,35,explicit,4
+0,18,A first-year university student who just completed a course in number theory,34,control,3
+0,18,A first-year university student who just completed a course in number theory,34,predictive,3
+0,18,A first-year university student who just completed a course in number theory,34,explicit,3
+0,18,A first-year university student who just completed a course in number theory,33,control,3
+0,18,A first-year university student who just completed a course in number theory,33,predictive,4
+0,18,A first-year university student who just completed a course in number theory,33,explicit,4
+0,18,A first-year university student who just completed a course in number theory,20,control,2
+0,18,A first-year university student who just completed a course in number theory,20,predictive,3
+0,18,A first-year university student who just completed a course in number theory,20,explicit,4
+0,18,A first-year university student who just completed a course in number theory,18,control,2
+0,18,A first-year university student who just completed a course in number theory,18,predictive,3
+0,18,A first-year university student who just completed a course in number theory,18,explicit,3
+0,18,A first-year university student who just completed a course in number theory,27,control,3
+0,18,A first-year university student who just completed a course in number theory,27,predictive,4
+0,18,A first-year university student who just completed a course in number theory,27,explicit,3
+0,18,A first-year university student who just completed a course in number theory,9,control,2
+0,18,A first-year university student who just completed a course in number theory,9,predictive,3
+0,18,A first-year university student who just completed a course in number theory,9,explicit,3
+0,18,A first-year university student who just completed a course in number theory,11,control,4
+0,18,A first-year university student who just completed a course in number theory,11,predictive,4
+0,18,A first-year university student who just completed a course in number theory,11,explicit,4
+0,18,A first-year university student who just completed a course in number theory,7,control,3
+0,18,A first-year university student who just completed a course in number theory,7,predictive,3
+0,18,A first-year university student who just completed a course in number theory,7,explicit,3
+0,18,A first-year university student who just completed a course in number theory,29,control,3
+0,18,A first-year university student who just completed a course in number theory,29,predictive,3
+0,18,A first-year university student who just completed a course in number theory,29,explicit,3
+0,18,A first-year university student who just completed a course in number theory,16,control,2
+0,18,A first-year university student who just completed a course in number theory,16,predictive,2
+0,18,A first-year university student who just completed a course in number theory,16,explicit,3
+0,18,A first-year university student who just completed a course in number theory,6,control,2
+0,18,A first-year university student who just completed a course in number theory,6,predictive,2
+0,18,A first-year university student who just completed a course in number theory,6,explicit,3
+0,18,A first-year university student who just completed a course in number theory,28,control,3
+0,18,A first-year university student who just completed a course in number theory,28,predictive,4
+0,18,A first-year university student who just completed a course in number theory,28,explicit,4
+0,18,A first-year university student who just completed a course in number theory,17,control,2
+0,18,A first-year university student who just completed a course in number theory,17,predictive,2
+0,18,A first-year university student who just completed a course in number theory,17,explicit,3
+0,18,A first-year university student who just completed a course in number theory,1,control,1
+0,18,A first-year university student who just completed a course in number theory,1,predictive,3
+0,18,A first-year university student who just completed a course in number theory,1,explicit,3
+0,18,A first-year university student who just completed a course in number theory,10,control,2
+0,18,A first-year university student who just completed a course in number theory,10,predictive,3
+0,18,A first-year university student who just completed a course in number theory,10,explicit,3
+0,18,A first-year university student who just completed a course in number theory,19,control,3
+0,18,A first-year university student who just completed a course in number theory,19,predictive,3
+0,18,A first-year university student who just completed a course in number theory,19,explicit,3
+0,18,A first-year university student who just completed a course in number theory,26,control,2
+0,18,A first-year university student who just completed a course in number theory,26,predictive,2
+0,18,A first-year university student who just completed a course in number theory,26,explicit,3
+0,18,A first-year university student who just completed a course in number theory,8,control,3
+0,18,A first-year university student who just completed a course in number theory,8,predictive,3
+0,18,A first-year university student who just completed a course in number theory,8,explicit,3
+0,18,A first-year university student who just completed a course in number theory,21,control,3
+0,18,A first-year university student who just completed a course in number theory,21,predictive,2
+0,18,A first-year university student who just completed a course in number theory,21,explicit,3
+0,18,A first-year university student who just completed a course in number theory,38,control,3
+0,18,A first-year university student who just completed a course in number theory,38,predictive,4
+0,18,A first-year university student who just completed a course in number theory,38,explicit,3
+0,18,A first-year university student who just completed a course in number theory,36,control,2
+0,18,A first-year university student who just completed a course in number theory,36,predictive,3
+0,18,A first-year university student who just completed a course in number theory,36,explicit,4
+0,18,A first-year university student who just completed a course in number theory,31,control,2
+0,18,A first-year university student who just completed a course in number theory,31,predictive,4
+0,18,A first-year university student who just completed a course in number theory,31,explicit,3
+0,18,A first-year university student who just completed a course in number theory,30,control,2
+0,18,A first-year university student who just completed a course in number theory,30,predictive,3
+0,18,A first-year university student who just completed a course in number theory,30,explicit,4
+0,18,A first-year university student who just completed a course in number theory,37,control,3
+0,18,A first-year university student who just completed a course in number theory,37,predictive,3
+0,18,A first-year university student who just completed a course in number theory,37,explicit,3
+0,18,A first-year university student who just completed a course in number theory,39,control,1
+0,18,A first-year university student who just completed a course in number theory,39,predictive,1
+0,18,A first-year university student who just completed a course in number theory,39,explicit,2
+0,18,A first-year university student who just completed a course in number theory,24,control,2
+0,18,A first-year university student who just completed a course in number theory,24,predictive,3
+0,18,A first-year university student who just completed a course in number theory,24,explicit,2
+0,18,A first-year university student who just completed a course in number theory,23,control,1
+0,18,A first-year university student who just completed a course in number theory,23,predictive,3
+0,18,A first-year university student who just completed a course in number theory,23,explicit,4
+0,18,A first-year university student who just completed a course in number theory,4,control,3
+0,18,A first-year university student who just completed a course in number theory,4,predictive,3
+0,18,A first-year university student who just completed a course in number theory,4,explicit,3
+0,18,A first-year university student who just completed a course in number theory,15,control,1
+0,18,A first-year university student who just completed a course in number theory,15,predictive,4
+0,18,A first-year university student who just completed a course in number theory,15,explicit,4
+0,18,A first-year university student who just completed a course in number theory,3,control,3
+0,18,A first-year university student who just completed a course in number theory,3,predictive,4
+0,18,A first-year university student who just completed a course in number theory,3,explicit,3
+0,18,A first-year university student who just completed a course in number theory,12,control,3
+0,18,A first-year university student who just completed a course in number theory,12,predictive,3
+0,18,A first-year university student who just completed a course in number theory,12,explicit,3
+0,18,A first-year university student who just completed a course in number theory,40,control,3
+0,18,A first-year university student who just completed a course in number theory,40,predictive,2
+0,18,A first-year university student who just completed a course in number theory,40,explicit,3
+0,18,A first-year university student who just completed a course in number theory,2,control,3
+0,18,A first-year university student who just completed a course in number theory,2,predictive,4
+0,18,A first-year university student who just completed a course in number theory,2,explicit,4
+0,18,A first-year university student who just completed a course in number theory,13,control,3
+0,18,A first-year university student who just completed a course in number theory,13,predictive,3
+0,18,A first-year university student who just completed a course in number theory,13,explicit,3
+0,18,A first-year university student who just completed a course in number theory,5,control,3
+0,18,A first-year university student who just completed a course in number theory,5,predictive,4
+0,18,A first-year university student who just completed a course in number theory,5,explicit,4
+0,18,A first-year university student who just completed a course in number theory,14,control,3
+0,18,A first-year university student who just completed a course in number theory,14,predictive,3
+0,18,A first-year university student who just completed a course in number theory,14,explicit,3
+0,18,A first-year university student who just completed a course in number theory,22,control,3
+0,18,A first-year university student who just completed a course in number theory,22,predictive,3
+0,18,A first-year university student who just completed a course in number theory,22,explicit,3
+0,18,A first-year university student who just completed a course in number theory,25,control,2
+0,18,A first-year university student who just completed a course in number theory,25,predictive,4
+0,18,A first-year university student who just completed a course in number theory,25,explicit,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,32,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,32,predictive,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,32,explicit,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,35,control,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,35,predictive,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,35,explicit,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,34,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,34,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,34,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,33,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,33,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,33,explicit,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,20,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,20,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,20,explicit,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,18,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,18,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,18,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,27,control,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,27,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,27,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,9,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,9,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,9,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,11,control,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,11,predictive,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,11,explicit,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,7,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,7,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,7,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,29,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,29,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,29,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,16,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,16,predictive,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,16,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,6,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,6,predictive,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,6,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,28,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,28,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,28,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,17,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,17,predictive,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,17,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,1,control,1
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,1,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,1,explicit,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,10,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,10,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,10,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,19,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,19,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,19,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,26,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,26,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,26,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,8,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,8,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,8,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,21,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,21,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,21,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,38,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,38,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,38,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,36,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,36,predictive,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,36,explicit,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,31,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,31,predictive,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,31,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,30,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,30,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,30,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,37,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,37,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,37,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,39,control,1
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,39,predictive,1
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,39,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,24,control,1
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,24,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,24,explicit,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,23,control,1
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,23,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,23,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,4,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,4,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,4,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,15,control,1
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,15,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,15,explicit,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,3,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,3,predictive,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,3,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,12,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,12,predictive,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,12,explicit,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,40,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,40,predictive,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,40,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,2,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,2,predictive,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,2,explicit,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,13,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,13,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,13,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,5,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,5,predictive,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,5,explicit,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,14,control,2
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,14,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,14,explicit,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,22,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,22,predictive,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,22,explicit,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,25,control,3
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,25,predictive,4
+1,18,A first-year college student who is timid and anxious about situations that involve big crowds and strangers,25,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,32,control,2
+2,18,A first-year university student who values honesty and integrity in academics,32,predictive,4
+2,18,A first-year university student who values honesty and integrity in academics,32,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,35,control,4
+2,18,A first-year university student who values honesty and integrity in academics,35,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,35,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,34,control,3
+2,18,A first-year university student who values honesty and integrity in academics,34,predictive,4
+2,18,A first-year university student who values honesty and integrity in academics,34,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,33,control,3
+2,18,A first-year university student who values honesty and integrity in academics,33,predictive,4
+2,18,A first-year university student who values honesty and integrity in academics,33,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,20,control,2
+2,18,A first-year university student who values honesty and integrity in academics,20,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,20,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,18,control,2
+2,18,A first-year university student who values honesty and integrity in academics,18,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,18,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,27,control,4
+2,18,A first-year university student who values honesty and integrity in academics,27,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,27,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,9,control,2
+2,18,A first-year university student who values honesty and integrity in academics,9,predictive,2
+2,18,A first-year university student who values honesty and integrity in academics,9,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,11,control,4
+2,18,A first-year university student who values honesty and integrity in academics,11,predictive,4
+2,18,A first-year university student who values honesty and integrity in academics,11,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,7,control,3
+2,18,A first-year university student who values honesty and integrity in academics,7,predictive,4
+2,18,A first-year university student who values honesty and integrity in academics,7,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,29,control,4
+2,18,A first-year university student who values honesty and integrity in academics,29,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,29,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,16,control,2
+2,18,A first-year university student who values honesty and integrity in academics,16,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,16,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,6,control,2
+2,18,A first-year university student who values honesty and integrity in academics,6,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,6,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,28,control,3
+2,18,A first-year university student who values honesty and integrity in academics,28,predictive,4
+2,18,A first-year university student who values honesty and integrity in academics,28,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,17,control,2
+2,18,A first-year university student who values honesty and integrity in academics,17,predictive,2
+2,18,A first-year university student who values honesty and integrity in academics,17,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,1,control,1
+2,18,A first-year university student who values honesty and integrity in academics,1,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,1,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,10,control,2
+2,18,A first-year university student who values honesty and integrity in academics,10,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,10,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,19,control,3
+2,18,A first-year university student who values honesty and integrity in academics,19,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,19,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,26,control,1
+2,18,A first-year university student who values honesty and integrity in academics,26,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,26,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,8,control,2
+2,18,A first-year university student who values honesty and integrity in academics,8,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,8,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,21,control,3
+2,18,A first-year university student who values honesty and integrity in academics,21,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,21,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,38,control,2
+2,18,A first-year university student who values honesty and integrity in academics,38,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,38,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,36,control,2
+2,18,A first-year university student who values honesty and integrity in academics,36,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,36,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,31,control,3
+2,18,A first-year university student who values honesty and integrity in academics,31,predictive,4
+2,18,A first-year university student who values honesty and integrity in academics,31,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,30,control,3
+2,18,A first-year university student who values honesty and integrity in academics,30,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,30,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,37,control,3
+2,18,A first-year university student who values honesty and integrity in academics,37,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,37,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,39,control,1
+2,18,A first-year university student who values honesty and integrity in academics,39,predictive,1
+2,18,A first-year university student who values honesty and integrity in academics,39,explicit,2
+2,18,A first-year university student who values honesty and integrity in academics,24,control,1
+2,18,A first-year university student who values honesty and integrity in academics,24,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,24,explicit,2
+2,18,A first-year university student who values honesty and integrity in academics,23,control,2
+2,18,A first-year university student who values honesty and integrity in academics,23,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,23,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,4,control,3
+2,18,A first-year university student who values honesty and integrity in academics,4,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,4,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,15,control,1
+2,18,A first-year university student who values honesty and integrity in academics,15,predictive,4
+2,18,A first-year university student who values honesty and integrity in academics,15,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,3,control,2
+2,18,A first-year university student who values honesty and integrity in academics,3,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,3,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,12,control,3
+2,18,A first-year university student who values honesty and integrity in academics,12,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,12,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,40,control,2
+2,18,A first-year university student who values honesty and integrity in academics,40,predictive,2
+2,18,A first-year university student who values honesty and integrity in academics,40,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,2,control,3
+2,18,A first-year university student who values honesty and integrity in academics,2,predictive,4
+2,18,A first-year university student who values honesty and integrity in academics,2,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,13,control,3
+2,18,A first-year university student who values honesty and integrity in academics,13,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,13,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,5,control,3
+2,18,A first-year university student who values honesty and integrity in academics,5,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,5,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,14,control,2
+2,18,A first-year university student who values honesty and integrity in academics,14,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,14,explicit,3
+2,18,A first-year university student who values honesty and integrity in academics,22,control,3
+2,18,A first-year university student who values honesty and integrity in academics,22,predictive,3
+2,18,A first-year university student who values honesty and integrity in academics,22,explicit,4
+2,18,A first-year university student who values honesty and integrity in academics,25,control,3
+2,18,A first-year university student who values honesty and integrity in academics,25,predictive,4
+2,18,A first-year university student who values honesty and integrity in academics,25,explicit,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,32,control,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,32,predictive,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,32,explicit,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,35,control,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,35,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,35,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,34,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,34,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,34,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,33,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,33,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,33,explicit,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,20,control,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,20,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,20,explicit,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,18,control,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,18,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,18,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,27,control,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,27,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,27,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,9,control,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,9,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,9,explicit,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,11,control,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,11,predictive,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,11,explicit,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,7,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,7,predictive,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,7,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,29,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,29,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,29,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,16,control,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,16,predictive,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,16,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,6,control,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,6,predictive,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,6,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,28,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,28,predictive,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,28,explicit,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,17,control,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,17,predictive,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,17,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,1,control,1
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,1,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,1,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,10,control,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,10,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,10,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,19,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,19,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,19,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,26,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,26,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,26,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,8,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,8,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,8,explicit,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,21,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,21,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,21,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,38,control,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,38,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,38,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,36,control,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,36,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,36,explicit,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,31,control,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,31,predictive,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,31,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,30,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,30,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,30,explicit,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,37,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,37,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,37,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,39,control,1
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,39,predictive,1
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,39,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,24,control,1
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,24,predictive,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,24,explicit,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,23,control,1
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,23,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,23,explicit,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,4,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,4,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,4,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,15,control,1
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,15,predictive,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,15,explicit,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,3,control,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,3,predictive,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,3,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,12,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,12,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,12,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,40,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,40,predictive,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,40,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,2,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,2,predictive,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,2,explicit,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,13,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,13,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,13,explicit,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,5,control,2
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,5,predictive,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,5,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,14,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,14,predictive,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,14,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,22,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,22,predictive,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,22,explicit,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,25,control,3
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,25,predictive,4
+3,18,A college freshman who struggles with distinguishing reliable information from misinformation online,25,explicit,4
+4,18,A first-year college student majoring in engineering struggling with calculus,32,control,2
+4,18,A first-year college student majoring in engineering struggling with calculus,32,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,32,explicit,4
+4,18,A first-year college student majoring in engineering struggling with calculus,35,control,4
+4,18,A first-year college student majoring in engineering struggling with calculus,35,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,35,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,34,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,34,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,34,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,33,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,33,predictive,4
+4,18,A first-year college student majoring in engineering struggling with calculus,33,explicit,4
+4,18,A first-year college student majoring in engineering struggling with calculus,20,control,2
+4,18,A first-year college student majoring in engineering struggling with calculus,20,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,20,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,18,control,2
+4,18,A first-year college student majoring in engineering struggling with calculus,18,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,18,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,27,control,4
+4,18,A first-year college student majoring in engineering struggling with calculus,27,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,27,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,9,control,2
+4,18,A first-year college student majoring in engineering struggling with calculus,9,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,9,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,11,control,4
+4,18,A first-year college student majoring in engineering struggling with calculus,11,predictive,4
+4,18,A first-year college student majoring in engineering struggling with calculus,11,explicit,4
+4,18,A first-year college student majoring in engineering struggling with calculus,7,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,7,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,7,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,29,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,29,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,29,explicit,4
+4,18,A first-year college student majoring in engineering struggling with calculus,16,control,2
+4,18,A first-year college student majoring in engineering struggling with calculus,16,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,16,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,6,control,2
+4,18,A first-year college student majoring in engineering struggling with calculus,6,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,6,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,28,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,28,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,28,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,17,control,2
+4,18,A first-year college student majoring in engineering struggling with calculus,17,predictive,2
+4,18,A first-year college student majoring in engineering struggling with calculus,17,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,1,control,1
+4,18,A first-year college student majoring in engineering struggling with calculus,1,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,1,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,10,control,1
+4,18,A first-year college student majoring in engineering struggling with calculus,10,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,10,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,19,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,19,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,19,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,26,control,2
+4,18,A first-year college student majoring in engineering struggling with calculus,26,predictive,2
+4,18,A first-year college student majoring in engineering struggling with calculus,26,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,8,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,8,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,8,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,21,control,2
+4,18,A first-year college student majoring in engineering struggling with calculus,21,predictive,2
+4,18,A first-year college student majoring in engineering struggling with calculus,21,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,38,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,38,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,38,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,36,control,2
+4,18,A first-year college student majoring in engineering struggling with calculus,36,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,36,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,31,control,2
+4,18,A first-year college student majoring in engineering struggling with calculus,31,predictive,4
+4,18,A first-year college student majoring in engineering struggling with calculus,31,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,30,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,30,predictive,4
+4,18,A first-year college student majoring in engineering struggling with calculus,30,explicit,4
+4,18,A first-year college student majoring in engineering struggling with calculus,37,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,37,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,37,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,39,control,1
+4,18,A first-year college student majoring in engineering struggling with calculus,39,predictive,1
+4,18,A first-year college student majoring in engineering struggling with calculus,39,explicit,2
+4,18,A first-year college student majoring in engineering struggling with calculus,24,control,1
+4,18,A first-year college student majoring in engineering struggling with calculus,24,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,24,explicit,2
+4,18,A first-year college student majoring in engineering struggling with calculus,23,control,1
+4,18,A first-year college student majoring in engineering struggling with calculus,23,predictive,2
+4,18,A first-year college student majoring in engineering struggling with calculus,23,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,4,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,4,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,4,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,15,control,1
+4,18,A first-year college student majoring in engineering struggling with calculus,15,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,15,explicit,4
+4,18,A first-year college student majoring in engineering struggling with calculus,3,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,3,predictive,4
+4,18,A first-year college student majoring in engineering struggling with calculus,3,explicit,4
+4,18,A first-year college student majoring in engineering struggling with calculus,12,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,12,predictive,2
+4,18,A first-year college student majoring in engineering struggling with calculus,12,explicit,2
+4,18,A first-year college student majoring in engineering struggling with calculus,40,control,2
+4,18,A first-year college student majoring in engineering struggling with calculus,40,predictive,2
+4,18,A first-year college student majoring in engineering struggling with calculus,40,explicit,2
+4,18,A first-year college student majoring in engineering struggling with calculus,2,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,2,predictive,4
+4,18,A first-year college student majoring in engineering struggling with calculus,2,explicit,4
+4,18,A first-year college student majoring in engineering struggling with calculus,13,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,13,predictive,4
+4,18,A first-year college student majoring in engineering struggling with calculus,13,explicit,4
+4,18,A first-year college student majoring in engineering struggling with calculus,5,control,2
+4,18,A first-year college student majoring in engineering struggling with calculus,5,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,5,explicit,4
+4,18,A first-year college student majoring in engineering struggling with calculus,14,control,2
+4,18,A first-year college student majoring in engineering struggling with calculus,14,predictive,3
+4,18,A first-year college student majoring in engineering struggling with calculus,14,explicit,3
+4,18,A first-year college student majoring in engineering struggling with calculus,22,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,22,predictive,4
+4,18,A first-year college student majoring in engineering struggling with calculus,22,explicit,4
+4,18,A first-year college student majoring in engineering struggling with calculus,25,control,3
+4,18,A first-year college student majoring in engineering struggling with calculus,25,predictive,4
+4,18,A first-year college student majoring in engineering struggling with calculus,25,explicit,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,32,control,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,32,predictive,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,32,explicit,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,35,control,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,35,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,35,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,34,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,34,predictive,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,34,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,33,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,33,predictive,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,33,explicit,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,20,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,20,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,20,explicit,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,18,control,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,18,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,18,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,27,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,27,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,27,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,9,control,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,9,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,9,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,11,control,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,11,predictive,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,11,explicit,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,7,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,7,predictive,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,7,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,29,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,29,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,29,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,16,control,1
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,16,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,16,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,6,control,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,6,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,6,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,28,control,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,28,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,28,explicit,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,17,control,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,17,predictive,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,17,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,1,control,1
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,1,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,1,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,10,control,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,10,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,10,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,19,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,19,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,19,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,26,control,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,26,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,26,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,8,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,8,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,8,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,21,control,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,21,predictive,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,21,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,38,control,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,38,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,38,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,36,control,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,36,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,36,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,31,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,31,predictive,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,31,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,30,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,30,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,30,explicit,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,37,control,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,37,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,37,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,39,control,1
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,39,predictive,1
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,39,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,24,control,1
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,24,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,24,explicit,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,23,control,1
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,23,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,23,explicit,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,4,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,4,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,4,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,15,control,1
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,15,predictive,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,15,explicit,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,3,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,3,predictive,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,3,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,12,control,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,12,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,12,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,40,control,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,40,predictive,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,40,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,2,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,2,predictive,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,2,explicit,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,13,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,13,predictive,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,13,explicit,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,5,control,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,5,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,5,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,14,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,14,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,14,explicit,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,22,control,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,22,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,22,explicit,4
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,25,control,2
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,25,predictive,3
+5,18,A college freshman enrolled in an archaeology course and inspired by the stories of past civilizations,25,explicit,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,32,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,32,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,32,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,35,control,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,35,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,35,explicit,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,34,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,34,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,34,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,33,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,33,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,33,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,20,control,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,20,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,20,explicit,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,18,control,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,18,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,18,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,27,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,27,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,27,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,9,control,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,9,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,9,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,11,control,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,11,predictive,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,11,explicit,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,7,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,7,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,7,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,29,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,29,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,29,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,16,control,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,16,predictive,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,16,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,6,control,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,6,predictive,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,6,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,28,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,28,predictive,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,28,explicit,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,17,control,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,17,predictive,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,17,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,1,control,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,1,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,1,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,10,control,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,10,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,10,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,19,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,19,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,19,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,26,control,1
+6,18,A college freshman volunteering in social work inspired by early education experiences,26,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,26,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,8,control,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,8,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,8,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,21,control,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,21,predictive,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,21,explicit,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,38,control,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,38,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,38,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,36,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,36,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,36,explicit,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,31,control,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,31,predictive,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,31,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,30,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,30,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,30,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,37,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,37,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,37,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,39,control,1
+6,18,A college freshman volunteering in social work inspired by early education experiences,39,predictive,1
+6,18,A college freshman volunteering in social work inspired by early education experiences,39,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,24,control,1
+6,18,A college freshman volunteering in social work inspired by early education experiences,24,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,24,explicit,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,23,control,1
+6,18,A college freshman volunteering in social work inspired by early education experiences,23,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,23,explicit,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,4,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,4,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,4,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,15,control,1
+6,18,A college freshman volunteering in social work inspired by early education experiences,15,predictive,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,15,explicit,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,3,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,3,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,3,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,12,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,12,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,12,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,40,control,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,40,predictive,2
+6,18,A college freshman volunteering in social work inspired by early education experiences,40,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,2,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,2,predictive,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,2,explicit,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,13,control,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,13,predictive,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,13,explicit,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,5,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,5,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,5,explicit,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,14,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,14,predictive,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,14,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,22,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,22,predictive,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,22,explicit,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,25,control,3
+6,18,A college freshman volunteering in social work inspired by early education experiences,25,predictive,4
+6,18,A college freshman volunteering in social work inspired by early education experiences,25,explicit,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,32,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,32,predictive,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,32,explicit,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,35,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,35,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,35,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,34,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,34,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,34,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,33,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,33,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,33,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,20,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,20,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,20,explicit,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,18,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,18,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,18,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,27,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,27,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,27,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,9,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,9,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,9,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,11,control,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,11,predictive,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,11,explicit,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,7,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,7,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,7,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,29,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,29,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,29,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,16,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,16,predictive,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,16,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,6,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,6,predictive,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,6,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,28,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,28,predictive,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,28,explicit,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,17,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,17,predictive,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,17,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,1,control,1
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,1,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,1,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,10,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,10,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,10,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,19,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,19,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,19,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,26,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,26,predictive,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,26,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,8,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,8,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,8,explicit,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,21,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,21,predictive,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,21,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,38,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,38,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,38,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,36,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,36,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,36,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,31,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,31,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,31,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,30,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,30,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,30,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,37,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,37,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,37,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,39,control,1
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,39,predictive,1
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,39,explicit,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,24,control,1
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,24,predictive,1
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,24,explicit,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,23,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,23,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,23,explicit,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,4,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,4,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,4,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,15,control,1
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,15,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,15,explicit,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,3,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,3,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,3,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,12,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,12,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,12,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,40,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,40,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,40,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,2,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,2,predictive,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,2,explicit,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,13,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,13,predictive,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,13,explicit,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,5,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,5,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,5,explicit,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,14,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,14,predictive,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,14,explicit,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,22,control,3
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,22,predictive,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,22,explicit,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,25,control,2
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,25,predictive,4
+7,18,A freshman student at Cleveland State University who is eager to deepen his understanding of Middle Eastern Studies and needs to collect various academic resources for his study.,25,explicit,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,32,control,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,32,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,32,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,35,control,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,35,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,35,explicit,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,34,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,34,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,34,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,33,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,33,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,33,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,20,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,20,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,20,explicit,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,18,control,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,18,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,18,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,27,control,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,27,predictive,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,27,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,9,control,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,9,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,9,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,11,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,11,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,11,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,7,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,7,predictive,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,7,explicit,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,29,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,29,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,29,explicit,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,16,control,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,16,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,16,explicit,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,6,control,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,6,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,6,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,28,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,28,predictive,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,28,explicit,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,17,control,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,17,predictive,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,17,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,1,control,1
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,1,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,1,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,10,control,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,10,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,10,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,19,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,19,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,19,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,26,control,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,26,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,26,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,8,control,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,8,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,8,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,21,control,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,21,predictive,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,21,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,38,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,38,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,38,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,36,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,36,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,36,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,31,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,31,predictive,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,31,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,30,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,30,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,30,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,37,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,37,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,37,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,39,control,1
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,39,predictive,1
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,39,explicit,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,24,control,1
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,24,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,24,explicit,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,23,control,1
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,23,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,23,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,4,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,4,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,4,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,15,control,1
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,15,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,15,explicit,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,3,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,3,predictive,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,3,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,12,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,12,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,12,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,40,control,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,40,predictive,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,40,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,2,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,2,predictive,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,2,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,13,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,13,predictive,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,13,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,5,control,2
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,5,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,5,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,14,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,14,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,14,explicit,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,22,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,22,predictive,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,22,explicit,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,25,control,3
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,25,predictive,4
+8,18,A freshman at Utah Tech University enthusiastic about football and deeply involved in school spirit,25,explicit,4
+9,18,An university freshman interested in cross-disciplinary studies,32,control,2
+9,18,An university freshman interested in cross-disciplinary studies,32,predictive,4
+9,18,An university freshman interested in cross-disciplinary studies,32,explicit,4
+9,18,An university freshman interested in cross-disciplinary studies,35,control,4
+9,18,An university freshman interested in cross-disciplinary studies,35,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,35,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,34,control,3
+9,18,An university freshman interested in cross-disciplinary studies,34,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,34,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,33,control,3
+9,18,An university freshman interested in cross-disciplinary studies,33,predictive,4
+9,18,An university freshman interested in cross-disciplinary studies,33,explicit,4
+9,18,An university freshman interested in cross-disciplinary studies,20,control,2
+9,18,An university freshman interested in cross-disciplinary studies,20,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,20,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,18,control,2
+9,18,An university freshman interested in cross-disciplinary studies,18,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,18,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,27,control,3
+9,18,An university freshman interested in cross-disciplinary studies,27,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,27,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,9,control,2
+9,18,An university freshman interested in cross-disciplinary studies,9,predictive,4
+9,18,An university freshman interested in cross-disciplinary studies,9,explicit,2
+9,18,An university freshman interested in cross-disciplinary studies,11,control,4
+9,18,An university freshman interested in cross-disciplinary studies,11,predictive,4
+9,18,An university freshman interested in cross-disciplinary studies,11,explicit,4
+9,18,An university freshman interested in cross-disciplinary studies,7,control,3
+9,18,An university freshman interested in cross-disciplinary studies,7,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,7,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,29,control,3
+9,18,An university freshman interested in cross-disciplinary studies,29,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,29,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,16,control,2
+9,18,An university freshman interested in cross-disciplinary studies,16,predictive,2
+9,18,An university freshman interested in cross-disciplinary studies,16,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,6,control,2
+9,18,An university freshman interested in cross-disciplinary studies,6,predictive,2
+9,18,An university freshman interested in cross-disciplinary studies,6,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,28,control,3
+9,18,An university freshman interested in cross-disciplinary studies,28,predictive,4
+9,18,An university freshman interested in cross-disciplinary studies,28,explicit,4
+9,18,An university freshman interested in cross-disciplinary studies,17,control,2
+9,18,An university freshman interested in cross-disciplinary studies,17,predictive,2
+9,18,An university freshman interested in cross-disciplinary studies,17,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,1,control,1
+9,18,An university freshman interested in cross-disciplinary studies,1,predictive,4
+9,18,An university freshman interested in cross-disciplinary studies,1,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,10,control,2
+9,18,An university freshman interested in cross-disciplinary studies,10,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,10,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,19,control,3
+9,18,An university freshman interested in cross-disciplinary studies,19,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,19,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,26,control,3
+9,18,An university freshman interested in cross-disciplinary studies,26,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,26,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,8,control,3
+9,18,An university freshman interested in cross-disciplinary studies,8,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,8,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,21,control,3
+9,18,An university freshman interested in cross-disciplinary studies,21,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,21,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,38,control,3
+9,18,An university freshman interested in cross-disciplinary studies,38,predictive,4
+9,18,An university freshman interested in cross-disciplinary studies,38,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,36,control,3
+9,18,An university freshman interested in cross-disciplinary studies,36,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,36,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,31,control,3
+9,18,An university freshman interested in cross-disciplinary studies,31,predictive,4
+9,18,An university freshman interested in cross-disciplinary studies,31,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,30,control,3
+9,18,An university freshman interested in cross-disciplinary studies,30,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,30,explicit,4
+9,18,An university freshman interested in cross-disciplinary studies,37,control,3
+9,18,An university freshman interested in cross-disciplinary studies,37,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,37,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,39,control,1
+9,18,An university freshman interested in cross-disciplinary studies,39,predictive,1
+9,18,An university freshman interested in cross-disciplinary studies,39,explicit,2
+9,18,An university freshman interested in cross-disciplinary studies,24,control,1
+9,18,An university freshman interested in cross-disciplinary studies,24,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,24,explicit,2
+9,18,An university freshman interested in cross-disciplinary studies,23,control,1
+9,18,An university freshman interested in cross-disciplinary studies,23,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,23,explicit,4
+9,18,An university freshman interested in cross-disciplinary studies,4,control,3
+9,18,An university freshman interested in cross-disciplinary studies,4,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,4,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,15,control,1
+9,18,An university freshman interested in cross-disciplinary studies,15,predictive,4
+9,18,An university freshman interested in cross-disciplinary studies,15,explicit,4
+9,18,An university freshman interested in cross-disciplinary studies,3,control,2
+9,18,An university freshman interested in cross-disciplinary studies,3,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,3,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,12,control,3
+9,18,An university freshman interested in cross-disciplinary studies,12,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,12,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,40,control,3
+9,18,An university freshman interested in cross-disciplinary studies,40,predictive,2
+9,18,An university freshman interested in cross-disciplinary studies,40,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,2,control,3
+9,18,An university freshman interested in cross-disciplinary studies,2,predictive,4
+9,18,An university freshman interested in cross-disciplinary studies,2,explicit,4
+9,18,An university freshman interested in cross-disciplinary studies,13,control,3
+9,18,An university freshman interested in cross-disciplinary studies,13,predictive,4
+9,18,An university freshman interested in cross-disciplinary studies,13,explicit,4
+9,18,An university freshman interested in cross-disciplinary studies,5,control,3
+9,18,An university freshman interested in cross-disciplinary studies,5,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,5,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,14,control,3
+9,18,An university freshman interested in cross-disciplinary studies,14,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,14,explicit,3
+9,18,An university freshman interested in cross-disciplinary studies,22,control,3
+9,18,An university freshman interested in cross-disciplinary studies,22,predictive,3
+9,18,An university freshman interested in cross-disciplinary studies,22,explicit,4
+9,18,An university freshman interested in cross-disciplinary studies,25,control,3
+9,18,An university freshman interested in cross-disciplinary studies,25,predictive,4
+9,18,An university freshman interested in cross-disciplinary studies,25,explicit,4

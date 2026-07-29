@@ -1,0 +1,1201 @@
+global_persona_index,age,persona_text,item_id,condition,score
+0,18,A college freshman interested in studying automobile engineering,32,control,2
+0,18,A college freshman interested in studying automobile engineering,32,predictive,3
+0,18,A college freshman interested in studying automobile engineering,32,explicit,4
+0,18,A college freshman interested in studying automobile engineering,35,control,3
+0,18,A college freshman interested in studying automobile engineering,35,predictive,3
+0,18,A college freshman interested in studying automobile engineering,35,explicit,4
+0,18,A college freshman interested in studying automobile engineering,34,control,2
+0,18,A college freshman interested in studying automobile engineering,34,predictive,3
+0,18,A college freshman interested in studying automobile engineering,34,explicit,3
+0,18,A college freshman interested in studying automobile engineering,33,control,3
+0,18,A college freshman interested in studying automobile engineering,33,predictive,4
+0,18,A college freshman interested in studying automobile engineering,33,explicit,4
+0,18,A college freshman interested in studying automobile engineering,20,control,3
+0,18,A college freshman interested in studying automobile engineering,20,predictive,3
+0,18,A college freshman interested in studying automobile engineering,20,explicit,4
+0,18,A college freshman interested in studying automobile engineering,18,control,2
+0,18,A college freshman interested in studying automobile engineering,18,predictive,3
+0,18,A college freshman interested in studying automobile engineering,18,explicit,3
+0,18,A college freshman interested in studying automobile engineering,27,control,4
+0,18,A college freshman interested in studying automobile engineering,27,predictive,3
+0,18,A college freshman interested in studying automobile engineering,27,explicit,3
+0,18,A college freshman interested in studying automobile engineering,9,control,2
+0,18,A college freshman interested in studying automobile engineering,9,predictive,3
+0,18,A college freshman interested in studying automobile engineering,9,explicit,3
+0,18,A college freshman interested in studying automobile engineering,11,control,3
+0,18,A college freshman interested in studying automobile engineering,11,predictive,4
+0,18,A college freshman interested in studying automobile engineering,11,explicit,3
+0,18,A college freshman interested in studying automobile engineering,7,control,3
+0,18,A college freshman interested in studying automobile engineering,7,predictive,4
+0,18,A college freshman interested in studying automobile engineering,7,explicit,2
+0,18,A college freshman interested in studying automobile engineering,29,control,3
+0,18,A college freshman interested in studying automobile engineering,29,predictive,3
+0,18,A college freshman interested in studying automobile engineering,29,explicit,3
+0,18,A college freshman interested in studying automobile engineering,16,control,2
+0,18,A college freshman interested in studying automobile engineering,16,predictive,2
+0,18,A college freshman interested in studying automobile engineering,16,explicit,3
+0,18,A college freshman interested in studying automobile engineering,6,control,2
+0,18,A college freshman interested in studying automobile engineering,6,predictive,3
+0,18,A college freshman interested in studying automobile engineering,6,explicit,3
+0,18,A college freshman interested in studying automobile engineering,28,control,3
+0,18,A college freshman interested in studying automobile engineering,28,predictive,3
+0,18,A college freshman interested in studying automobile engineering,28,explicit,3
+0,18,A college freshman interested in studying automobile engineering,17,control,2
+0,18,A college freshman interested in studying automobile engineering,17,predictive,3
+0,18,A college freshman interested in studying automobile engineering,17,explicit,3
+0,18,A college freshman interested in studying automobile engineering,1,control,1
+0,18,A college freshman interested in studying automobile engineering,1,predictive,3
+0,18,A college freshman interested in studying automobile engineering,1,explicit,3
+0,18,A college freshman interested in studying automobile engineering,10,control,2
+0,18,A college freshman interested in studying automobile engineering,10,predictive,3
+0,18,A college freshman interested in studying automobile engineering,10,explicit,3
+0,18,A college freshman interested in studying automobile engineering,19,control,3
+0,18,A college freshman interested in studying automobile engineering,19,predictive,3
+0,18,A college freshman interested in studying automobile engineering,19,explicit,3
+0,18,A college freshman interested in studying automobile engineering,26,control,1
+0,18,A college freshman interested in studying automobile engineering,26,predictive,2
+0,18,A college freshman interested in studying automobile engineering,26,explicit,3
+0,18,A college freshman interested in studying automobile engineering,8,control,3
+0,18,A college freshman interested in studying automobile engineering,8,predictive,3
+0,18,A college freshman interested in studying automobile engineering,8,explicit,4
+0,18,A college freshman interested in studying automobile engineering,21,control,3
+0,18,A college freshman interested in studying automobile engineering,21,predictive,2
+0,18,A college freshman interested in studying automobile engineering,21,explicit,3
+0,18,A college freshman interested in studying automobile engineering,38,control,3
+0,18,A college freshman interested in studying automobile engineering,38,predictive,3
+0,18,A college freshman interested in studying automobile engineering,38,explicit,3
+0,18,A college freshman interested in studying automobile engineering,36,control,2
+0,18,A college freshman interested in studying automobile engineering,36,predictive,3
+0,18,A college freshman interested in studying automobile engineering,36,explicit,3
+0,18,A college freshman interested in studying automobile engineering,31,control,2
+0,18,A college freshman interested in studying automobile engineering,31,predictive,4
+0,18,A college freshman interested in studying automobile engineering,31,explicit,3
+0,18,A college freshman interested in studying automobile engineering,30,control,3
+0,18,A college freshman interested in studying automobile engineering,30,predictive,3
+0,18,A college freshman interested in studying automobile engineering,30,explicit,3
+0,18,A college freshman interested in studying automobile engineering,37,control,3
+0,18,A college freshman interested in studying automobile engineering,37,predictive,3
+0,18,A college freshman interested in studying automobile engineering,37,explicit,3
+0,18,A college freshman interested in studying automobile engineering,39,control,1
+0,18,A college freshman interested in studying automobile engineering,39,predictive,1
+0,18,A college freshman interested in studying automobile engineering,39,explicit,3
+0,18,A college freshman interested in studying automobile engineering,24,control,1
+0,18,A college freshman interested in studying automobile engineering,24,predictive,2
+0,18,A college freshman interested in studying automobile engineering,24,explicit,2
+0,18,A college freshman interested in studying automobile engineering,23,control,1
+0,18,A college freshman interested in studying automobile engineering,23,predictive,3
+0,18,A college freshman interested in studying automobile engineering,23,explicit,4
+0,18,A college freshman interested in studying automobile engineering,4,control,3
+0,18,A college freshman interested in studying automobile engineering,4,predictive,3
+0,18,A college freshman interested in studying automobile engineering,4,explicit,3
+0,18,A college freshman interested in studying automobile engineering,15,control,1
+0,18,A college freshman interested in studying automobile engineering,15,predictive,4
+0,18,A college freshman interested in studying automobile engineering,15,explicit,4
+0,18,A college freshman interested in studying automobile engineering,3,control,3
+0,18,A college freshman interested in studying automobile engineering,3,predictive,4
+0,18,A college freshman interested in studying automobile engineering,3,explicit,3
+0,18,A college freshman interested in studying automobile engineering,12,control,3
+0,18,A college freshman interested in studying automobile engineering,12,predictive,3
+0,18,A college freshman interested in studying automobile engineering,12,explicit,3
+0,18,A college freshman interested in studying automobile engineering,40,control,2
+0,18,A college freshman interested in studying automobile engineering,40,predictive,3
+0,18,A college freshman interested in studying automobile engineering,40,explicit,3
+0,18,A college freshman interested in studying automobile engineering,2,control,3
+0,18,A college freshman interested in studying automobile engineering,2,predictive,4
+0,18,A college freshman interested in studying automobile engineering,2,explicit,4
+0,18,A college freshman interested in studying automobile engineering,13,control,3
+0,18,A college freshman interested in studying automobile engineering,13,predictive,3
+0,18,A college freshman interested in studying automobile engineering,13,explicit,3
+0,18,A college freshman interested in studying automobile engineering,5,control,2
+0,18,A college freshman interested in studying automobile engineering,5,predictive,4
+0,18,A college freshman interested in studying automobile engineering,5,explicit,4
+0,18,A college freshman interested in studying automobile engineering,14,control,2
+0,18,A college freshman interested in studying automobile engineering,14,predictive,3
+0,18,A college freshman interested in studying automobile engineering,14,explicit,3
+0,18,A college freshman interested in studying automobile engineering,22,control,3
+0,18,A college freshman interested in studying automobile engineering,22,predictive,4
+0,18,A college freshman interested in studying automobile engineering,22,explicit,3
+0,18,A college freshman interested in studying automobile engineering,25,control,3
+0,18,A college freshman interested in studying automobile engineering,25,predictive,4
+0,18,A college freshman interested in studying automobile engineering,25,explicit,4
+1,18,A freshman in mathematics at an university,32,control,2
+1,18,A freshman in mathematics at an university,32,predictive,4
+1,18,A freshman in mathematics at an university,32,explicit,4
+1,18,A freshman in mathematics at an university,35,control,4
+1,18,A freshman in mathematics at an university,35,predictive,3
+1,18,A freshman in mathematics at an university,35,explicit,3
+1,18,A freshman in mathematics at an university,34,control,3
+1,18,A freshman in mathematics at an university,34,predictive,3
+1,18,A freshman in mathematics at an university,34,explicit,4
+1,18,A freshman in mathematics at an university,33,control,3
+1,18,A freshman in mathematics at an university,33,predictive,4
+1,18,A freshman in mathematics at an university,33,explicit,4
+1,18,A freshman in mathematics at an university,20,control,2
+1,18,A freshman in mathematics at an university,20,predictive,3
+1,18,A freshman in mathematics at an university,20,explicit,4
+1,18,A freshman in mathematics at an university,18,control,2
+1,18,A freshman in mathematics at an university,18,predictive,3
+1,18,A freshman in mathematics at an university,18,explicit,3
+1,18,A freshman in mathematics at an university,27,control,4
+1,18,A freshman in mathematics at an university,27,predictive,3
+1,18,A freshman in mathematics at an university,27,explicit,3
+1,18,A freshman in mathematics at an university,9,control,2
+1,18,A freshman in mathematics at an university,9,predictive,3
+1,18,A freshman in mathematics at an university,9,explicit,3
+1,18,A freshman in mathematics at an university,11,control,4
+1,18,A freshman in mathematics at an university,11,predictive,4
+1,18,A freshman in mathematics at an university,11,explicit,4
+1,18,A freshman in mathematics at an university,7,control,3
+1,18,A freshman in mathematics at an university,7,predictive,3
+1,18,A freshman in mathematics at an university,7,explicit,2
+1,18,A freshman in mathematics at an university,29,control,3
+1,18,A freshman in mathematics at an university,29,predictive,3
+1,18,A freshman in mathematics at an university,29,explicit,4
+1,18,A freshman in mathematics at an university,16,control,2
+1,18,A freshman in mathematics at an university,16,predictive,2
+1,18,A freshman in mathematics at an university,16,explicit,3
+1,18,A freshman in mathematics at an university,6,control,2
+1,18,A freshman in mathematics at an university,6,predictive,3
+1,18,A freshman in mathematics at an university,6,explicit,3
+1,18,A freshman in mathematics at an university,28,control,3
+1,18,A freshman in mathematics at an university,28,predictive,3
+1,18,A freshman in mathematics at an university,28,explicit,4
+1,18,A freshman in mathematics at an university,17,control,2
+1,18,A freshman in mathematics at an university,17,predictive,2
+1,18,A freshman in mathematics at an university,17,explicit,3
+1,18,A freshman in mathematics at an university,1,control,1
+1,18,A freshman in mathematics at an university,1,predictive,3
+1,18,A freshman in mathematics at an university,1,explicit,3
+1,18,A freshman in mathematics at an university,10,control,1
+1,18,A freshman in mathematics at an university,10,predictive,3
+1,18,A freshman in mathematics at an university,10,explicit,3
+1,18,A freshman in mathematics at an university,19,control,3
+1,18,A freshman in mathematics at an university,19,predictive,4
+1,18,A freshman in mathematics at an university,19,explicit,3
+1,18,A freshman in mathematics at an university,26,control,3
+1,18,A freshman in mathematics at an university,26,predictive,3
+1,18,A freshman in mathematics at an university,26,explicit,3
+1,18,A freshman in mathematics at an university,8,control,3
+1,18,A freshman in mathematics at an university,8,predictive,3
+1,18,A freshman in mathematics at an university,8,explicit,3
+1,18,A freshman in mathematics at an university,21,control,3
+1,18,A freshman in mathematics at an university,21,predictive,3
+1,18,A freshman in mathematics at an university,21,explicit,3
+1,18,A freshman in mathematics at an university,38,control,3
+1,18,A freshman in mathematics at an university,38,predictive,3
+1,18,A freshman in mathematics at an university,38,explicit,3
+1,18,A freshman in mathematics at an university,36,control,2
+1,18,A freshman in mathematics at an university,36,predictive,4
+1,18,A freshman in mathematics at an university,36,explicit,3
+1,18,A freshman in mathematics at an university,31,control,2
+1,18,A freshman in mathematics at an university,31,predictive,4
+1,18,A freshman in mathematics at an university,31,explicit,3
+1,18,A freshman in mathematics at an university,30,control,3
+1,18,A freshman in mathematics at an university,30,predictive,3
+1,18,A freshman in mathematics at an university,30,explicit,3
+1,18,A freshman in mathematics at an university,37,control,3
+1,18,A freshman in mathematics at an university,37,predictive,3
+1,18,A freshman in mathematics at an university,37,explicit,3
+1,18,A freshman in mathematics at an university,39,control,1
+1,18,A freshman in mathematics at an university,39,predictive,1
+1,18,A freshman in mathematics at an university,39,explicit,3
+1,18,A freshman in mathematics at an university,24,control,1
+1,18,A freshman in mathematics at an university,24,predictive,3
+1,18,A freshman in mathematics at an university,24,explicit,2
+1,18,A freshman in mathematics at an university,23,control,1
+1,18,A freshman in mathematics at an university,23,predictive,3
+1,18,A freshman in mathematics at an university,23,explicit,4
+1,18,A freshman in mathematics at an university,4,control,3
+1,18,A freshman in mathematics at an university,4,predictive,3
+1,18,A freshman in mathematics at an university,4,explicit,3
+1,18,A freshman in mathematics at an university,15,control,1
+1,18,A freshman in mathematics at an university,15,predictive,3
+1,18,A freshman in mathematics at an university,15,explicit,4
+1,18,A freshman in mathematics at an university,3,control,2
+1,18,A freshman in mathematics at an university,3,predictive,4
+1,18,A freshman in mathematics at an university,3,explicit,4
+1,18,A freshman in mathematics at an university,12,control,3
+1,18,A freshman in mathematics at an university,12,predictive,2
+1,18,A freshman in mathematics at an university,12,explicit,2
+1,18,A freshman in mathematics at an university,40,control,3
+1,18,A freshman in mathematics at an university,40,predictive,3
+1,18,A freshman in mathematics at an university,40,explicit,3
+1,18,A freshman in mathematics at an university,2,control,3
+1,18,A freshman in mathematics at an university,2,predictive,4
+1,18,A freshman in mathematics at an university,2,explicit,4
+1,18,A freshman in mathematics at an university,13,control,4
+1,18,A freshman in mathematics at an university,13,predictive,3
+1,18,A freshman in mathematics at an university,13,explicit,4
+1,18,A freshman in mathematics at an university,5,control,2
+1,18,A freshman in mathematics at an university,5,predictive,3
+1,18,A freshman in mathematics at an university,5,explicit,3
+1,18,A freshman in mathematics at an university,14,control,2
+1,18,A freshman in mathematics at an university,14,predictive,3
+1,18,A freshman in mathematics at an university,14,explicit,3
+1,18,A freshman in mathematics at an university,22,control,3
+1,18,A freshman in mathematics at an university,22,predictive,4
+1,18,A freshman in mathematics at an university,22,explicit,4
+1,18,A freshman in mathematics at an university,25,control,3
+1,18,A freshman in mathematics at an university,25,predictive,4
+1,18,A freshman in mathematics at an university,25,explicit,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,32,control,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,32,predictive,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,32,explicit,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,35,control,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,35,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,35,explicit,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,34,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,34,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,34,explicit,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,33,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,33,predictive,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,33,explicit,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,20,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,20,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,20,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,18,control,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,18,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,18,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,27,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,27,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,27,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,9,control,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,9,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,9,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,11,control,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,11,predictive,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,11,explicit,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,7,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,7,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,7,explicit,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,29,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,29,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,29,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,16,control,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,16,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,16,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,6,control,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,6,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,6,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,28,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,28,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,28,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,17,control,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,17,predictive,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,17,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,1,control,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,1,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,1,explicit,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,10,control,1
+2,18,A first-year female undergraduate who is majoring in electronics at a university,10,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,10,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,19,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,19,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,19,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,26,control,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,26,predictive,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,26,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,8,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,8,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,8,explicit,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,21,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,21,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,21,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,38,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,38,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,38,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,36,control,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,36,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,36,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,31,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,31,predictive,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,31,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,30,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,30,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,30,explicit,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,37,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,37,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,37,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,39,control,1
+2,18,A first-year female undergraduate who is majoring in electronics at a university,39,predictive,1
+2,18,A first-year female undergraduate who is majoring in electronics at a university,39,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,24,control,1
+2,18,A first-year female undergraduate who is majoring in electronics at a university,24,predictive,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,24,explicit,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,23,control,1
+2,18,A first-year female undergraduate who is majoring in electronics at a university,23,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,23,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,4,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,4,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,4,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,15,control,1
+2,18,A first-year female undergraduate who is majoring in electronics at a university,15,predictive,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,15,explicit,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,3,control,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,3,predictive,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,3,explicit,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,12,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,12,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,12,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,40,control,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,40,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,40,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,2,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,2,predictive,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,2,explicit,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,13,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,13,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,13,explicit,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,5,control,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,5,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,5,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,14,control,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,14,predictive,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,14,explicit,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,22,control,3
+2,18,A first-year female undergraduate who is majoring in electronics at a university,22,predictive,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,22,explicit,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,25,control,2
+2,18,A first-year female undergraduate who is majoring in electronics at a university,25,predictive,4
+2,18,A first-year female undergraduate who is majoring in electronics at a university,25,explicit,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,32,control,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,32,predictive,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,32,explicit,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,35,control,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,35,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,35,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,34,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,34,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,34,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,33,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,33,predictive,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,33,explicit,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,20,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,20,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,20,explicit,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,18,control,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,18,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,18,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,27,control,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,27,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,27,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,9,control,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,9,predictive,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,9,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,11,control,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,11,predictive,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,11,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,7,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,7,predictive,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,7,explicit,1
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,29,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,29,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,29,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,16,control,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,16,predictive,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,16,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,6,control,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,6,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,6,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,28,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,28,predictive,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,28,explicit,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,17,control,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,17,predictive,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,17,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,1,control,1
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,1,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,1,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,10,control,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,10,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,10,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,19,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,19,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,19,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,26,control,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,26,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,26,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,8,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,8,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,8,explicit,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,21,control,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,21,predictive,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,21,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,38,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,38,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,38,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,36,control,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,36,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,36,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,31,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,31,predictive,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,31,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,30,control,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,30,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,30,explicit,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,37,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,37,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,37,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,39,control,1
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,39,predictive,1
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,39,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,24,control,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,24,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,24,explicit,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,23,control,1
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,23,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,23,explicit,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,4,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,4,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,4,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,15,control,2
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,15,predictive,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,15,explicit,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,3,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,3,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,3,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,12,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,12,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,12,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,40,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,40,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,40,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,2,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,2,predictive,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,2,explicit,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,13,control,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,13,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,13,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,5,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,5,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,5,explicit,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,14,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,14,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,14,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,22,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,22,predictive,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,22,explicit,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,25,control,3
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,25,predictive,4
+3,18,A first-year history student at Oregon State University with some interest in environmental topics,25,explicit,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,32,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,32,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,32,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,35,control,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,35,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,35,explicit,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,34,control,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,34,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,34,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,33,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,33,predictive,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,33,explicit,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,20,control,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,20,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,20,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,18,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,18,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,18,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,27,control,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,27,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,27,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,9,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,9,predictive,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,9,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,11,control,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,11,predictive,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,11,explicit,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,7,control,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,7,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,7,explicit,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,29,control,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,29,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,29,explicit,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,16,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,16,predictive,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,16,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,6,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,6,predictive,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,6,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,28,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,28,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,28,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,17,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,17,predictive,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,17,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,1,control,1
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,1,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,1,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,10,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,10,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,10,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,19,control,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,19,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,19,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,26,control,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,26,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,26,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,8,control,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,8,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,8,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,21,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,21,predictive,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,21,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,38,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,38,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,38,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,36,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,36,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,36,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,31,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,31,predictive,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,31,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,30,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,30,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,30,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,37,control,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,37,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,37,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,39,control,1
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,39,predictive,1
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,39,explicit,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,24,control,1
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,24,predictive,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,24,explicit,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,23,control,1
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,23,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,23,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,4,control,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,4,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,4,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,15,control,1
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,15,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,15,explicit,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,3,control,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,3,predictive,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,3,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,12,control,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,12,predictive,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,12,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,40,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,40,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,40,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,2,control,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,2,predictive,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,2,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,13,control,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,13,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,13,explicit,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,5,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,5,predictive,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,5,explicit,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,14,control,2
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,14,predictive,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,14,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,22,control,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,22,predictive,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,22,explicit,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,25,control,3
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,25,predictive,4
+4,18,A budding film music composer currently studying at Berklee College of Music who idolizes established composers and seeks inspiration from their careers,25,explicit,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,32,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,32,predictive,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,32,explicit,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,35,control,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,35,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,35,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,34,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,34,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,34,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,33,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,33,predictive,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,33,explicit,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,20,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,20,predictive,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,20,explicit,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,18,control,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,18,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,18,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,27,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,27,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,27,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,9,control,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,9,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,9,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,11,control,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,11,predictive,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,11,explicit,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,7,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,7,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,7,explicit,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,29,control,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,29,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,29,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,16,control,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,16,predictive,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,16,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,6,control,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,6,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,6,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,28,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,28,predictive,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,28,explicit,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,17,control,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,17,predictive,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,17,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,1,control,1
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,1,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,1,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,10,control,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,10,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,10,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,19,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,19,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,19,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,26,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,26,predictive,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,26,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,8,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,8,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,8,explicit,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,21,control,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,21,predictive,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,21,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,38,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,38,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,38,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,36,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,36,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,36,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,31,control,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,31,predictive,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,31,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,30,control,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,30,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,30,explicit,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,37,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,37,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,37,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,39,control,1
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,39,predictive,1
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,39,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,24,control,1
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,24,predictive,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,24,explicit,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,23,control,1
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,23,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,23,explicit,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,4,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,4,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,4,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,15,control,1
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,15,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,15,explicit,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,3,control,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,3,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,3,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,12,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,12,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,12,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,40,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,40,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,40,explicit,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,2,control,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,2,predictive,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,2,explicit,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,13,control,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,13,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,13,explicit,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,5,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,5,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,5,explicit,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,14,control,2
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,14,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,14,explicit,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,22,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,22,predictive,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,22,explicit,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,25,control,3
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,25,predictive,4
+5,18,A first-year university student who dreams of studying in a foreign country to immerse themselves in a different culture,25,explicit,4
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,32,control,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,32,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,32,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,35,control,4
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,35,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,35,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,34,control,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,34,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,34,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,33,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,33,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,33,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,20,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,20,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,20,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,18,control,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,18,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,18,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,27,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,27,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,27,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,9,control,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,9,predictive,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,9,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,11,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,11,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,11,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,7,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,7,predictive,4
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,7,explicit,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,29,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,29,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,29,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,16,control,1
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,16,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,16,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,6,control,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,6,predictive,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,6,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,28,control,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,28,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,28,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,17,control,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,17,predictive,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,17,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,1,control,1
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,1,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,1,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,10,control,1
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,10,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,10,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,19,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,19,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,19,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,26,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,26,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,26,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,8,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,8,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,8,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,21,control,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,21,predictive,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,21,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,38,control,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,38,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,38,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,36,control,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,36,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,36,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,31,control,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,31,predictive,4
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,31,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,30,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,30,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,30,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,37,control,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,37,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,37,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,39,control,1
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,39,predictive,1
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,39,explicit,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,24,control,1
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,24,predictive,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,24,explicit,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,23,control,1
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,23,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,23,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,4,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,4,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,4,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,15,control,1
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,15,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,15,explicit,4
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,3,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,3,predictive,4
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,3,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,12,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,12,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,12,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,40,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,40,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,40,explicit,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,2,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,2,predictive,4
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,2,explicit,4
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,13,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,13,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,13,explicit,4
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,5,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,5,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,5,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,14,control,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,14,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,14,explicit,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,22,control,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,22,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,22,explicit,4
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,25,control,2
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,25,predictive,3
+6,18,An incoming freshman at Barton College who's interested in studying audio recording technologies,25,explicit,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,32,control,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,32,predictive,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,32,explicit,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,35,control,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,35,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,35,explicit,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,34,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,34,predictive,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,34,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,33,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,33,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,33,explicit,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,20,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,20,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,20,explicit,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,18,control,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,18,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,18,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,27,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,27,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,27,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,9,control,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,9,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,9,explicit,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,11,control,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,11,predictive,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,11,explicit,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,7,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,7,predictive,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,7,explicit,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,29,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,29,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,29,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,16,control,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,16,predictive,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,16,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,6,control,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,6,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,6,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,28,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,28,predictive,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,28,explicit,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,17,control,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,17,predictive,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,17,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,1,control,1
+7,18,A college freshman discovering the world of literature and finding their passion for writing,1,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,1,explicit,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,10,control,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,10,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,10,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,19,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,19,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,19,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,26,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,26,predictive,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,26,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,8,control,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,8,predictive,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,8,explicit,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,21,control,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,21,predictive,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,21,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,38,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,38,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,38,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,36,control,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,36,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,36,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,31,control,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,31,predictive,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,31,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,30,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,30,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,30,explicit,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,37,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,37,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,37,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,39,control,1
+7,18,A college freshman discovering the world of literature and finding their passion for writing,39,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,39,explicit,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,24,control,1
+7,18,A college freshman discovering the world of literature and finding their passion for writing,24,predictive,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,24,explicit,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,23,control,1
+7,18,A college freshman discovering the world of literature and finding their passion for writing,23,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,23,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,4,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,4,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,4,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,15,control,1
+7,18,A college freshman discovering the world of literature and finding their passion for writing,15,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,15,explicit,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,3,control,2
+7,18,A college freshman discovering the world of literature and finding their passion for writing,3,predictive,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,3,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,12,control,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,12,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,12,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,40,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,40,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,40,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,2,control,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,2,predictive,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,2,explicit,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,13,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,13,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,13,explicit,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,5,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,5,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,5,explicit,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,14,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,14,predictive,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,14,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,22,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,22,predictive,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,22,explicit,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,25,control,3
+7,18,A college freshman discovering the world of literature and finding their passion for writing,25,predictive,4
+7,18,A college freshman discovering the world of literature and finding their passion for writing,25,explicit,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,32,control,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,32,predictive,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,32,explicit,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,35,control,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,35,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,35,explicit,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,34,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,34,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,34,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,33,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,33,predictive,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,33,explicit,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,20,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,20,predictive,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,20,explicit,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,18,control,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,18,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,18,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,27,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,27,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,27,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,9,control,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,9,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,9,explicit,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,11,control,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,11,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,11,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,7,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,7,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,7,explicit,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,29,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,29,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,29,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,16,control,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,16,predictive,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,16,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,6,control,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,6,predictive,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,6,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,28,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,28,predictive,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,28,explicit,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,17,control,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,17,predictive,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,17,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,1,control,1
+8,18,A first-year university student majoring in English with little background in chemistry or biology,1,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,1,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,10,control,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,10,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,10,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,19,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,19,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,19,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,26,control,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,26,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,26,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,8,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,8,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,8,explicit,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,21,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,21,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,21,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,38,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,38,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,38,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,36,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,36,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,36,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,31,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,31,predictive,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,31,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,30,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,30,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,30,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,37,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,37,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,37,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,39,control,1
+8,18,A first-year university student majoring in English with little background in chemistry or biology,39,predictive,1
+8,18,A first-year university student majoring in English with little background in chemistry or biology,39,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,24,control,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,24,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,24,explicit,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,23,control,1
+8,18,A first-year university student majoring in English with little background in chemistry or biology,23,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,23,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,4,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,4,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,4,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,15,control,1
+8,18,A first-year university student majoring in English with little background in chemistry or biology,15,predictive,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,15,explicit,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,3,control,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,3,predictive,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,3,explicit,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,12,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,12,predictive,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,12,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,40,control,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,40,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,40,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,2,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,2,predictive,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,2,explicit,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,13,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,13,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,13,explicit,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,5,control,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,5,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,5,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,14,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,14,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,14,explicit,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,22,control,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,22,predictive,3
+8,18,A first-year university student majoring in English with little background in chemistry or biology,22,explicit,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,25,control,2
+8,18,A first-year university student majoring in English with little background in chemistry or biology,25,predictive,4
+8,18,A first-year university student majoring in English with little background in chemistry or biology,25,explicit,4
+9,18,A freshman at the University of Vermont studying Business Administration,32,control,2
+9,18,A freshman at the University of Vermont studying Business Administration,32,predictive,4
+9,18,A freshman at the University of Vermont studying Business Administration,32,explicit,4
+9,18,A freshman at the University of Vermont studying Business Administration,35,control,4
+9,18,A freshman at the University of Vermont studying Business Administration,35,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,35,explicit,4
+9,18,A freshman at the University of Vermont studying Business Administration,34,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,34,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,34,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,33,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,33,predictive,4
+9,18,A freshman at the University of Vermont studying Business Administration,33,explicit,4
+9,18,A freshman at the University of Vermont studying Business Administration,20,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,20,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,20,explicit,4
+9,18,A freshman at the University of Vermont studying Business Administration,18,control,2
+9,18,A freshman at the University of Vermont studying Business Administration,18,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,18,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,27,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,27,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,27,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,9,control,2
+9,18,A freshman at the University of Vermont studying Business Administration,9,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,9,explicit,2
+9,18,A freshman at the University of Vermont studying Business Administration,11,control,4
+9,18,A freshman at the University of Vermont studying Business Administration,11,predictive,4
+9,18,A freshman at the University of Vermont studying Business Administration,11,explicit,4
+9,18,A freshman at the University of Vermont studying Business Administration,7,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,7,predictive,4
+9,18,A freshman at the University of Vermont studying Business Administration,7,explicit,2
+9,18,A freshman at the University of Vermont studying Business Administration,29,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,29,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,29,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,16,control,2
+9,18,A freshman at the University of Vermont studying Business Administration,16,predictive,2
+9,18,A freshman at the University of Vermont studying Business Administration,16,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,6,control,2
+9,18,A freshman at the University of Vermont studying Business Administration,6,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,6,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,28,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,28,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,28,explicit,4
+9,18,A freshman at the University of Vermont studying Business Administration,17,control,2
+9,18,A freshman at the University of Vermont studying Business Administration,17,predictive,2
+9,18,A freshman at the University of Vermont studying Business Administration,17,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,1,control,1
+9,18,A freshman at the University of Vermont studying Business Administration,1,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,1,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,10,control,2
+9,18,A freshman at the University of Vermont studying Business Administration,10,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,10,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,19,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,19,predictive,4
+9,18,A freshman at the University of Vermont studying Business Administration,19,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,26,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,26,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,26,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,8,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,8,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,8,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,21,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,21,predictive,2
+9,18,A freshman at the University of Vermont studying Business Administration,21,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,38,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,38,predictive,4
+9,18,A freshman at the University of Vermont studying Business Administration,38,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,36,control,2
+9,18,A freshman at the University of Vermont studying Business Administration,36,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,36,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,31,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,31,predictive,4
+9,18,A freshman at the University of Vermont studying Business Administration,31,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,30,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,30,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,30,explicit,4
+9,18,A freshman at the University of Vermont studying Business Administration,37,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,37,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,37,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,39,control,1
+9,18,A freshman at the University of Vermont studying Business Administration,39,predictive,1
+9,18,A freshman at the University of Vermont studying Business Administration,39,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,24,control,1
+9,18,A freshman at the University of Vermont studying Business Administration,24,predictive,2
+9,18,A freshman at the University of Vermont studying Business Administration,24,explicit,2
+9,18,A freshman at the University of Vermont studying Business Administration,23,control,1
+9,18,A freshman at the University of Vermont studying Business Administration,23,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,23,explicit,4
+9,18,A freshman at the University of Vermont studying Business Administration,4,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,4,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,4,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,15,control,1
+9,18,A freshman at the University of Vermont studying Business Administration,15,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,15,explicit,4
+9,18,A freshman at the University of Vermont studying Business Administration,3,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,3,predictive,4
+9,18,A freshman at the University of Vermont studying Business Administration,3,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,12,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,12,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,12,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,40,control,2
+9,18,A freshman at the University of Vermont studying Business Administration,40,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,40,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,2,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,2,predictive,4
+9,18,A freshman at the University of Vermont studying Business Administration,2,explicit,4
+9,18,A freshman at the University of Vermont studying Business Administration,13,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,13,predictive,4
+9,18,A freshman at the University of Vermont studying Business Administration,13,explicit,4
+9,18,A freshman at the University of Vermont studying Business Administration,5,control,2
+9,18,A freshman at the University of Vermont studying Business Administration,5,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,5,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,14,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,14,predictive,3
+9,18,A freshman at the University of Vermont studying Business Administration,14,explicit,3
+9,18,A freshman at the University of Vermont studying Business Administration,22,control,3
+9,18,A freshman at the University of Vermont studying Business Administration,22,predictive,4
+9,18,A freshman at the University of Vermont studying Business Administration,22,explicit,4
+9,18,A freshman at the University of Vermont studying Business Administration,25,control,2
+9,18,A freshman at the University of Vermont studying Business Administration,25,predictive,4
+9,18,A freshman at the University of Vermont studying Business Administration,25,explicit,4

@@ -1,0 +1,1201 @@
+global_persona_index,age,persona_text,item_id,condition,score
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,32,control,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,32,predictive,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,32,explicit,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,35,control,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,35,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,35,explicit,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,34,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,34,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,34,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,33,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,33,predictive,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,33,explicit,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,20,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,20,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,20,explicit,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,18,control,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,18,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,18,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,27,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,27,predictive,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,27,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,9,control,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,9,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,9,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,11,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,11,predictive,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,11,explicit,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,7,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,7,predictive,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,7,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,29,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,29,predictive,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,29,explicit,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,16,control,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,16,predictive,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,16,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,6,control,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,6,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,6,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,28,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,28,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,28,explicit,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,17,control,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,17,predictive,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,17,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,1,control,1
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,1,predictive,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,1,explicit,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,10,control,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,10,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,10,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,19,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,19,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,19,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,26,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,26,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,26,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,8,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,8,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,8,explicit,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,21,control,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,21,predictive,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,21,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,38,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,38,predictive,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,38,explicit,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,36,control,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,36,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,36,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,31,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,31,predictive,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,31,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,30,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,30,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,30,explicit,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,37,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,37,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,37,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,39,control,1
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,39,predictive,1
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,39,explicit,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,24,control,1
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,24,predictive,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,24,explicit,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,23,control,1
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,23,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,23,explicit,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,4,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,4,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,4,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,15,control,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,15,predictive,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,15,explicit,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,3,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,3,predictive,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,3,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,12,control,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,12,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,12,explicit,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,40,control,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,40,predictive,2
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,40,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,2,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,2,predictive,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,2,explicit,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,13,control,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,13,predictive,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,13,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,5,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,5,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,5,explicit,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,14,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,14,predictive,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,14,explicit,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,22,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,22,predictive,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,22,explicit,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,25,control,3
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,25,predictive,4
+0,16,A high school student who is just beginning to discover the complexity of post-modernist literature,25,explicit,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,32,control,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,32,predictive,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,32,explicit,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,35,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,35,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,35,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,34,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,34,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,34,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,33,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,33,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,33,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,20,control,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,20,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,20,explicit,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,18,control,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,18,predictive,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,18,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,27,control,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,27,predictive,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,27,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,9,control,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,9,predictive,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,9,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,11,control,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,11,predictive,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,11,explicit,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,7,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,7,predictive,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,7,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,29,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,29,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,29,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,16,control,1
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,16,predictive,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,16,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,6,control,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,6,predictive,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,6,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,28,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,28,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,28,explicit,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,17,control,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,17,predictive,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,17,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,1,control,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,1,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,1,explicit,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,10,control,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,10,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,10,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,19,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,19,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,19,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,26,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,26,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,26,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,8,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,8,predictive,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,8,explicit,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,21,control,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,21,predictive,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,21,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,38,control,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,38,predictive,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,38,explicit,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,36,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,36,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,36,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,31,control,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,31,predictive,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,31,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,30,control,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,30,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,30,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,37,control,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,37,predictive,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,37,explicit,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,39,control,1
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,39,predictive,1
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,39,explicit,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,24,control,1
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,24,predictive,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,24,explicit,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,23,control,1
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,23,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,23,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,4,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,4,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,4,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,15,control,1
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,15,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,15,explicit,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,3,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,3,predictive,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,3,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,12,control,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,12,predictive,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,12,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,40,control,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,40,predictive,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,40,explicit,2
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,2,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,2,predictive,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,2,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,13,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,13,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,13,explicit,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,5,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,5,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,5,explicit,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,14,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,14,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,14,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,22,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,22,predictive,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,22,explicit,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,25,control,3
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,25,predictive,4
+1,16,A 16-year-old high school student in New Zealand who is passionate about learning the Maori culture and has been assigned to write an essay about a significant figure within it.,25,explicit,4
+2,16,A high school student researching African American history for a school project,32,control,2
+2,16,A high school student researching African American history for a school project,32,predictive,4
+2,16,A high school student researching African American history for a school project,32,explicit,4
+2,16,A high school student researching African American history for a school project,35,control,4
+2,16,A high school student researching African American history for a school project,35,predictive,3
+2,16,A high school student researching African American history for a school project,35,explicit,4
+2,16,A high school student researching African American history for a school project,34,control,3
+2,16,A high school student researching African American history for a school project,34,predictive,3
+2,16,A high school student researching African American history for a school project,34,explicit,3
+2,16,A high school student researching African American history for a school project,33,control,3
+2,16,A high school student researching African American history for a school project,33,predictive,3
+2,16,A high school student researching African American history for a school project,33,explicit,3
+2,16,A high school student researching African American history for a school project,20,control,2
+2,16,A high school student researching African American history for a school project,20,predictive,3
+2,16,A high school student researching African American history for a school project,20,explicit,4
+2,16,A high school student researching African American history for a school project,18,control,3
+2,16,A high school student researching African American history for a school project,18,predictive,3
+2,16,A high school student researching African American history for a school project,18,explicit,3
+2,16,A high school student researching African American history for a school project,27,control,3
+2,16,A high school student researching African American history for a school project,27,predictive,3
+2,16,A high school student researching African American history for a school project,27,explicit,3
+2,16,A high school student researching African American history for a school project,9,control,2
+2,16,A high school student researching African American history for a school project,9,predictive,3
+2,16,A high school student researching African American history for a school project,9,explicit,3
+2,16,A high school student researching African American history for a school project,11,control,4
+2,16,A high school student researching African American history for a school project,11,predictive,4
+2,16,A high school student researching African American history for a school project,11,explicit,4
+2,16,A high school student researching African American history for a school project,7,control,3
+2,16,A high school student researching African American history for a school project,7,predictive,4
+2,16,A high school student researching African American history for a school project,7,explicit,2
+2,16,A high school student researching African American history for a school project,29,control,3
+2,16,A high school student researching African American history for a school project,29,predictive,3
+2,16,A high school student researching African American history for a school project,29,explicit,4
+2,16,A high school student researching African American history for a school project,16,control,1
+2,16,A high school student researching African American history for a school project,16,predictive,2
+2,16,A high school student researching African American history for a school project,16,explicit,3
+2,16,A high school student researching African American history for a school project,6,control,2
+2,16,A high school student researching African American history for a school project,6,predictive,2
+2,16,A high school student researching African American history for a school project,6,explicit,3
+2,16,A high school student researching African American history for a school project,28,control,3
+2,16,A high school student researching African American history for a school project,28,predictive,4
+2,16,A high school student researching African American history for a school project,28,explicit,4
+2,16,A high school student researching African American history for a school project,17,control,2
+2,16,A high school student researching African American history for a school project,17,predictive,2
+2,16,A high school student researching African American history for a school project,17,explicit,3
+2,16,A high school student researching African American history for a school project,1,control,1
+2,16,A high school student researching African American history for a school project,1,predictive,3
+2,16,A high school student researching African American history for a school project,1,explicit,3
+2,16,A high school student researching African American history for a school project,10,control,1
+2,16,A high school student researching African American history for a school project,10,predictive,3
+2,16,A high school student researching African American history for a school project,10,explicit,3
+2,16,A high school student researching African American history for a school project,19,control,3
+2,16,A high school student researching African American history for a school project,19,predictive,3
+2,16,A high school student researching African American history for a school project,19,explicit,3
+2,16,A high school student researching African American history for a school project,26,control,3
+2,16,A high school student researching African American history for a school project,26,predictive,3
+2,16,A high school student researching African American history for a school project,26,explicit,3
+2,16,A high school student researching African American history for a school project,8,control,3
+2,16,A high school student researching African American history for a school project,8,predictive,3
+2,16,A high school student researching African American history for a school project,8,explicit,4
+2,16,A high school student researching African American history for a school project,21,control,2
+2,16,A high school student researching African American history for a school project,21,predictive,2
+2,16,A high school student researching African American history for a school project,21,explicit,3
+2,16,A high school student researching African American history for a school project,38,control,3
+2,16,A high school student researching African American history for a school project,38,predictive,3
+2,16,A high school student researching African American history for a school project,38,explicit,3
+2,16,A high school student researching African American history for a school project,36,control,3
+2,16,A high school student researching African American history for a school project,36,predictive,4
+2,16,A high school student researching African American history for a school project,36,explicit,3
+2,16,A high school student researching African American history for a school project,31,control,2
+2,16,A high school student researching African American history for a school project,31,predictive,4
+2,16,A high school student researching African American history for a school project,31,explicit,3
+2,16,A high school student researching African American history for a school project,30,control,2
+2,16,A high school student researching African American history for a school project,30,predictive,3
+2,16,A high school student researching African American history for a school project,30,explicit,3
+2,16,A high school student researching African American history for a school project,37,control,3
+2,16,A high school student researching African American history for a school project,37,predictive,3
+2,16,A high school student researching African American history for a school project,37,explicit,3
+2,16,A high school student researching African American history for a school project,39,control,1
+2,16,A high school student researching African American history for a school project,39,predictive,1
+2,16,A high school student researching African American history for a school project,39,explicit,3
+2,16,A high school student researching African American history for a school project,24,control,1
+2,16,A high school student researching African American history for a school project,24,predictive,2
+2,16,A high school student researching African American history for a school project,24,explicit,2
+2,16,A high school student researching African American history for a school project,23,control,2
+2,16,A high school student researching African American history for a school project,23,predictive,4
+2,16,A high school student researching African American history for a school project,23,explicit,4
+2,16,A high school student researching African American history for a school project,4,control,3
+2,16,A high school student researching African American history for a school project,4,predictive,3
+2,16,A high school student researching African American history for a school project,4,explicit,3
+2,16,A high school student researching African American history for a school project,15,control,1
+2,16,A high school student researching African American history for a school project,15,predictive,4
+2,16,A high school student researching African American history for a school project,15,explicit,4
+2,16,A high school student researching African American history for a school project,3,control,3
+2,16,A high school student researching African American history for a school project,3,predictive,4
+2,16,A high school student researching African American history for a school project,3,explicit,3
+2,16,A high school student researching African American history for a school project,12,control,3
+2,16,A high school student researching African American history for a school project,12,predictive,3
+2,16,A high school student researching African American history for a school project,12,explicit,3
+2,16,A high school student researching African American history for a school project,40,control,2
+2,16,A high school student researching African American history for a school project,40,predictive,3
+2,16,A high school student researching African American history for a school project,40,explicit,3
+2,16,A high school student researching African American history for a school project,2,control,3
+2,16,A high school student researching African American history for a school project,2,predictive,4
+2,16,A high school student researching African American history for a school project,2,explicit,4
+2,16,A high school student researching African American history for a school project,13,control,3
+2,16,A high school student researching African American history for a school project,13,predictive,4
+2,16,A high school student researching African American history for a school project,13,explicit,4
+2,16,A high school student researching African American history for a school project,5,control,3
+2,16,A high school student researching African American history for a school project,5,predictive,4
+2,16,A high school student researching African American history for a school project,5,explicit,3
+2,16,A high school student researching African American history for a school project,14,control,3
+2,16,A high school student researching African American history for a school project,14,predictive,3
+2,16,A high school student researching African American history for a school project,14,explicit,3
+2,16,A high school student researching African American history for a school project,22,control,3
+2,16,A high school student researching African American history for a school project,22,predictive,4
+2,16,A high school student researching African American history for a school project,22,explicit,4
+2,16,A high school student researching African American history for a school project,25,control,2
+2,16,A high school student researching African American history for a school project,25,predictive,4
+2,16,A high school student researching African American history for a school project,25,explicit,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,32,control,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,32,predictive,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,32,explicit,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,35,control,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,35,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,35,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,34,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,34,predictive,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,34,explicit,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,33,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,33,predictive,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,33,explicit,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,20,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,20,predictive,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,20,explicit,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,18,control,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,18,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,18,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,27,control,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,27,predictive,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,27,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,9,control,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,9,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,9,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,11,control,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,11,predictive,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,11,explicit,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,7,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,7,predictive,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,7,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,29,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,29,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,29,explicit,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,16,control,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,16,predictive,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,16,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,6,control,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,6,predictive,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,6,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,28,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,28,predictive,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,28,explicit,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,17,control,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,17,predictive,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,17,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,1,control,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,1,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,1,explicit,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,10,control,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,10,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,10,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,19,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,19,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,19,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,26,control,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,26,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,26,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,8,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,8,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,8,explicit,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,21,control,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,21,predictive,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,21,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,38,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,38,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,38,explicit,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,36,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,36,predictive,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,36,explicit,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,31,control,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,31,predictive,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,31,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,30,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,30,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,30,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,37,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,37,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,37,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,39,control,1
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,39,predictive,1
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,39,explicit,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,24,control,1
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,24,predictive,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,24,explicit,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,23,control,1
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,23,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,23,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,4,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,4,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,4,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,15,control,1
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,15,predictive,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,15,explicit,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,3,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,3,predictive,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,3,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,12,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,12,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,12,explicit,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,40,control,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,40,predictive,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,40,explicit,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,2,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,2,predictive,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,2,explicit,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,13,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,13,predictive,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,13,explicit,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,5,control,2
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,5,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,5,explicit,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,14,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,14,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,14,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,22,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,22,predictive,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,22,explicit,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,25,control,3
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,25,predictive,4
+3,16,A high school student interested in pursuing a career in data science and seeking guidance on building a strong foundation in mathematics,25,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,32,control,2
+4,17,a 17-year-old high school student doing a paper for a history class,32,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,32,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,35,control,4
+4,17,a 17-year-old high school student doing a paper for a history class,35,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,35,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,34,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,34,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,34,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,33,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,33,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,33,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,20,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,20,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,20,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,18,control,2
+4,17,a 17-year-old high school student doing a paper for a history class,18,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,18,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,27,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,27,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,27,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,9,control,2
+4,17,a 17-year-old high school student doing a paper for a history class,9,predictive,2
+4,17,a 17-year-old high school student doing a paper for a history class,9,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,11,control,4
+4,17,a 17-year-old high school student doing a paper for a history class,11,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,11,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,7,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,7,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,7,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,29,control,4
+4,17,a 17-year-old high school student doing a paper for a history class,29,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,29,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,16,control,2
+4,17,a 17-year-old high school student doing a paper for a history class,16,predictive,2
+4,17,a 17-year-old high school student doing a paper for a history class,16,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,6,control,2
+4,17,a 17-year-old high school student doing a paper for a history class,6,predictive,2
+4,17,a 17-year-old high school student doing a paper for a history class,6,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,28,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,28,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,28,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,17,control,2
+4,17,a 17-year-old high school student doing a paper for a history class,17,predictive,2
+4,17,a 17-year-old high school student doing a paper for a history class,17,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,1,control,1
+4,17,a 17-year-old high school student doing a paper for a history class,1,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,1,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,10,control,2
+4,17,a 17-year-old high school student doing a paper for a history class,10,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,10,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,19,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,19,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,19,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,26,control,2
+4,17,a 17-year-old high school student doing a paper for a history class,26,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,26,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,8,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,8,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,8,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,21,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,21,predictive,2
+4,17,a 17-year-old high school student doing a paper for a history class,21,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,38,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,38,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,38,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,36,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,36,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,36,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,31,control,2
+4,17,a 17-year-old high school student doing a paper for a history class,31,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,31,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,30,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,30,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,30,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,37,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,37,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,37,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,39,control,1
+4,17,a 17-year-old high school student doing a paper for a history class,39,predictive,2
+4,17,a 17-year-old high school student doing a paper for a history class,39,explicit,2
+4,17,a 17-year-old high school student doing a paper for a history class,24,control,1
+4,17,a 17-year-old high school student doing a paper for a history class,24,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,24,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,23,control,1
+4,17,a 17-year-old high school student doing a paper for a history class,23,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,23,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,4,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,4,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,4,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,15,control,1
+4,17,a 17-year-old high school student doing a paper for a history class,15,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,15,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,3,control,2
+4,17,a 17-year-old high school student doing a paper for a history class,3,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,3,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,12,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,12,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,12,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,40,control,2
+4,17,a 17-year-old high school student doing a paper for a history class,40,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,40,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,2,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,2,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,2,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,13,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,13,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,13,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,5,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,5,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,5,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,14,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,14,predictive,3
+4,17,a 17-year-old high school student doing a paper for a history class,14,explicit,3
+4,17,a 17-year-old high school student doing a paper for a history class,22,control,3
+4,17,a 17-year-old high school student doing a paper for a history class,22,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,22,explicit,4
+4,17,a 17-year-old high school student doing a paper for a history class,25,control,2
+4,17,a 17-year-old high school student doing a paper for a history class,25,predictive,4
+4,17,a 17-year-old high school student doing a paper for a history class,25,explicit,4
+5,16,A high school senior passionate about social work and considering a career in nursing,32,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,32,predictive,4
+5,16,A high school senior passionate about social work and considering a career in nursing,32,explicit,4
+5,16,A high school senior passionate about social work and considering a career in nursing,35,control,4
+5,16,A high school senior passionate about social work and considering a career in nursing,35,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,35,explicit,4
+5,16,A high school senior passionate about social work and considering a career in nursing,34,control,3
+5,16,A high school senior passionate about social work and considering a career in nursing,34,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,34,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,33,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,33,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,33,explicit,4
+5,16,A high school senior passionate about social work and considering a career in nursing,20,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,20,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,20,explicit,4
+5,16,A high school senior passionate about social work and considering a career in nursing,18,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,18,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,18,explicit,4
+5,16,A high school senior passionate about social work and considering a career in nursing,27,control,4
+5,16,A high school senior passionate about social work and considering a career in nursing,27,predictive,4
+5,16,A high school senior passionate about social work and considering a career in nursing,27,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,9,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,9,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,9,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,11,control,4
+5,16,A high school senior passionate about social work and considering a career in nursing,11,predictive,4
+5,16,A high school senior passionate about social work and considering a career in nursing,11,explicit,4
+5,16,A high school senior passionate about social work and considering a career in nursing,7,control,3
+5,16,A high school senior passionate about social work and considering a career in nursing,7,predictive,4
+5,16,A high school senior passionate about social work and considering a career in nursing,7,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,29,control,3
+5,16,A high school senior passionate about social work and considering a career in nursing,29,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,29,explicit,4
+5,16,A high school senior passionate about social work and considering a career in nursing,16,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,16,predictive,2
+5,16,A high school senior passionate about social work and considering a career in nursing,16,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,6,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,6,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,6,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,28,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,28,predictive,4
+5,16,A high school senior passionate about social work and considering a career in nursing,28,explicit,4
+5,16,A high school senior passionate about social work and considering a career in nursing,17,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,17,predictive,2
+5,16,A high school senior passionate about social work and considering a career in nursing,17,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,1,control,1
+5,16,A high school senior passionate about social work and considering a career in nursing,1,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,1,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,10,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,10,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,10,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,19,control,3
+5,16,A high school senior passionate about social work and considering a career in nursing,19,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,19,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,26,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,26,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,26,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,8,control,3
+5,16,A high school senior passionate about social work and considering a career in nursing,8,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,8,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,21,control,3
+5,16,A high school senior passionate about social work and considering a career in nursing,21,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,21,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,38,control,3
+5,16,A high school senior passionate about social work and considering a career in nursing,38,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,38,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,36,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,36,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,36,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,31,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,31,predictive,4
+5,16,A high school senior passionate about social work and considering a career in nursing,31,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,30,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,30,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,30,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,37,control,3
+5,16,A high school senior passionate about social work and considering a career in nursing,37,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,37,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,39,control,1
+5,16,A high school senior passionate about social work and considering a career in nursing,39,predictive,2
+5,16,A high school senior passionate about social work and considering a career in nursing,39,explicit,2
+5,16,A high school senior passionate about social work and considering a career in nursing,24,control,1
+5,16,A high school senior passionate about social work and considering a career in nursing,24,predictive,2
+5,16,A high school senior passionate about social work and considering a career in nursing,24,explicit,2
+5,16,A high school senior passionate about social work and considering a career in nursing,23,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,23,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,23,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,4,control,3
+5,16,A high school senior passionate about social work and considering a career in nursing,4,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,4,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,15,control,1
+5,16,A high school senior passionate about social work and considering a career in nursing,15,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,15,explicit,4
+5,16,A high school senior passionate about social work and considering a career in nursing,3,control,3
+5,16,A high school senior passionate about social work and considering a career in nursing,3,predictive,4
+5,16,A high school senior passionate about social work and considering a career in nursing,3,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,12,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,12,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,12,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,40,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,40,predictive,2
+5,16,A high school senior passionate about social work and considering a career in nursing,40,explicit,2
+5,16,A high school senior passionate about social work and considering a career in nursing,2,control,3
+5,16,A high school senior passionate about social work and considering a career in nursing,2,predictive,4
+5,16,A high school senior passionate about social work and considering a career in nursing,2,explicit,4
+5,16,A high school senior passionate about social work and considering a career in nursing,13,control,3
+5,16,A high school senior passionate about social work and considering a career in nursing,13,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,13,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,5,control,3
+5,16,A high school senior passionate about social work and considering a career in nursing,5,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,5,explicit,4
+5,16,A high school senior passionate about social work and considering a career in nursing,14,control,3
+5,16,A high school senior passionate about social work and considering a career in nursing,14,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,14,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,22,control,3
+5,16,A high school senior passionate about social work and considering a career in nursing,22,predictive,3
+5,16,A high school senior passionate about social work and considering a career in nursing,22,explicit,3
+5,16,A high school senior passionate about social work and considering a career in nursing,25,control,2
+5,16,A high school senior passionate about social work and considering a career in nursing,25,predictive,4
+5,16,A high school senior passionate about social work and considering a career in nursing,25,explicit,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,32,control,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,32,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,32,explicit,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,35,control,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,35,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,35,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,34,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,34,predictive,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,34,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,33,control,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,33,predictive,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,33,explicit,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,20,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,20,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,20,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,18,control,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,18,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,18,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,27,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,27,predictive,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,27,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,9,control,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,9,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,9,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,11,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,11,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,11,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,7,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,7,predictive,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,7,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,29,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,29,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,29,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,16,control,1
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,16,predictive,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,16,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,6,control,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,6,predictive,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,6,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,28,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,28,predictive,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,28,explicit,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,17,control,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,17,predictive,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,17,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,1,control,1
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,1,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,1,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,10,control,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,10,predictive,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,10,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,19,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,19,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,19,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,26,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,26,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,26,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,8,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,8,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,8,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,21,control,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,21,predictive,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,21,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,38,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,38,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,38,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,36,control,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,36,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,36,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,31,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,31,predictive,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,31,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,30,control,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,30,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,30,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,37,control,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,37,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,37,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,39,control,1
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,39,predictive,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,39,explicit,1
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,24,control,1
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,24,predictive,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,24,explicit,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,23,control,1
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,23,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,23,explicit,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,4,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,4,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,4,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,15,control,1
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,15,predictive,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,15,explicit,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,3,control,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,3,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,3,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,12,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,12,predictive,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,12,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,40,control,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,40,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,40,explicit,2
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,2,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,2,predictive,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,2,explicit,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,13,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,13,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,13,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,5,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,5,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,5,explicit,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,14,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,14,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,14,explicit,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,22,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,22,predictive,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,22,explicit,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,25,control,3
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,25,predictive,4
+6,16,A high school student who is an eSports competitor and considers retro games antiquated,25,explicit,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,32,control,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,32,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,32,explicit,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,35,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,35,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,35,explicit,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,34,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,34,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,34,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,33,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,33,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,33,explicit,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,20,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,20,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,20,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,18,control,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,18,predictive,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,18,explicit,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,27,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,27,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,27,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,9,control,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,9,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,9,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,11,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,11,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,11,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,7,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,7,predictive,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,7,explicit,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,29,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,29,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,29,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,16,control,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,16,predictive,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,16,explicit,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,6,control,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,6,predictive,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,6,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,28,control,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,28,predictive,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,28,explicit,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,17,control,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,17,predictive,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,17,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,1,control,1
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,1,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,1,explicit,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,10,control,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,10,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,10,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,19,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,19,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,19,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,26,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,26,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,26,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,8,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,8,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,8,explicit,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,21,control,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,21,predictive,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,21,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,38,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,38,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,38,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,36,control,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,36,predictive,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,36,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,31,control,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,31,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,31,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,30,control,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,30,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,30,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,37,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,37,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,37,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,39,control,1
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,39,predictive,1
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,39,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,24,control,1
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,24,predictive,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,24,explicit,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,23,control,1
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,23,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,23,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,4,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,4,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,4,explicit,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,15,control,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,15,predictive,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,15,explicit,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,3,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,3,predictive,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,3,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,12,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,12,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,12,explicit,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,40,control,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,40,predictive,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,40,explicit,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,2,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,2,predictive,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,2,explicit,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,13,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,13,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,13,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,5,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,5,predictive,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,5,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,14,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,14,predictive,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,14,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,22,control,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,22,predictive,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,22,explicit,3
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,25,control,2
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,25,predictive,4
+7,16,A high school student inspired by the journalist's articles who starts a voter education club at their school,25,explicit,4
+8,16,A high school student who is struggling with his history studies,32,control,2
+8,16,A high school student who is struggling with his history studies,32,predictive,4
+8,16,A high school student who is struggling with his history studies,32,explicit,4
+8,16,A high school student who is struggling with his history studies,35,control,4
+8,16,A high school student who is struggling with his history studies,35,predictive,3
+8,16,A high school student who is struggling with his history studies,35,explicit,3
+8,16,A high school student who is struggling with his history studies,34,control,3
+8,16,A high school student who is struggling with his history studies,34,predictive,3
+8,16,A high school student who is struggling with his history studies,34,explicit,4
+8,16,A high school student who is struggling with his history studies,33,control,3
+8,16,A high school student who is struggling with his history studies,33,predictive,3
+8,16,A high school student who is struggling with his history studies,33,explicit,4
+8,16,A high school student who is struggling with his history studies,20,control,2
+8,16,A high school student who is struggling with his history studies,20,predictive,3
+8,16,A high school student who is struggling with his history studies,20,explicit,4
+8,16,A high school student who is struggling with his history studies,18,control,2
+8,16,A high school student who is struggling with his history studies,18,predictive,3
+8,16,A high school student who is struggling with his history studies,18,explicit,4
+8,16,A high school student who is struggling with his history studies,27,control,3
+8,16,A high school student who is struggling with his history studies,27,predictive,3
+8,16,A high school student who is struggling with his history studies,27,explicit,3
+8,16,A high school student who is struggling with his history studies,9,control,2
+8,16,A high school student who is struggling with his history studies,9,predictive,2
+8,16,A high school student who is struggling with his history studies,9,explicit,4
+8,16,A high school student who is struggling with his history studies,11,control,3
+8,16,A high school student who is struggling with his history studies,11,predictive,4
+8,16,A high school student who is struggling with his history studies,11,explicit,4
+8,16,A high school student who is struggling with his history studies,7,control,3
+8,16,A high school student who is struggling with his history studies,7,predictive,3
+8,16,A high school student who is struggling with his history studies,7,explicit,2
+8,16,A high school student who is struggling with his history studies,29,control,3
+8,16,A high school student who is struggling with his history studies,29,predictive,3
+8,16,A high school student who is struggling with his history studies,29,explicit,4
+8,16,A high school student who is struggling with his history studies,16,control,2
+8,16,A high school student who is struggling with his history studies,16,predictive,2
+8,16,A high school student who is struggling with his history studies,16,explicit,3
+8,16,A high school student who is struggling with his history studies,6,control,2
+8,16,A high school student who is struggling with his history studies,6,predictive,2
+8,16,A high school student who is struggling with his history studies,6,explicit,3
+8,16,A high school student who is struggling with his history studies,28,control,3
+8,16,A high school student who is struggling with his history studies,28,predictive,3
+8,16,A high school student who is struggling with his history studies,28,explicit,4
+8,16,A high school student who is struggling with his history studies,17,control,2
+8,16,A high school student who is struggling with his history studies,17,predictive,2
+8,16,A high school student who is struggling with his history studies,17,explicit,3
+8,16,A high school student who is struggling with his history studies,1,control,1
+8,16,A high school student who is struggling with his history studies,1,predictive,3
+8,16,A high school student who is struggling with his history studies,1,explicit,4
+8,16,A high school student who is struggling with his history studies,10,control,2
+8,16,A high school student who is struggling with his history studies,10,predictive,3
+8,16,A high school student who is struggling with his history studies,10,explicit,3
+8,16,A high school student who is struggling with his history studies,19,control,3
+8,16,A high school student who is struggling with his history studies,19,predictive,4
+8,16,A high school student who is struggling with his history studies,19,explicit,3
+8,16,A high school student who is struggling with his history studies,26,control,2
+8,16,A high school student who is struggling with his history studies,26,predictive,3
+8,16,A high school student who is struggling with his history studies,26,explicit,3
+8,16,A high school student who is struggling with his history studies,8,control,3
+8,16,A high school student who is struggling with his history studies,8,predictive,3
+8,16,A high school student who is struggling with his history studies,8,explicit,4
+8,16,A high school student who is struggling with his history studies,21,control,3
+8,16,A high school student who is struggling with his history studies,21,predictive,2
+8,16,A high school student who is struggling with his history studies,21,explicit,3
+8,16,A high school student who is struggling with his history studies,38,control,3
+8,16,A high school student who is struggling with his history studies,38,predictive,4
+8,16,A high school student who is struggling with his history studies,38,explicit,3
+8,16,A high school student who is struggling with his history studies,36,control,2
+8,16,A high school student who is struggling with his history studies,36,predictive,3
+8,16,A high school student who is struggling with his history studies,36,explicit,3
+8,16,A high school student who is struggling with his history studies,31,control,3
+8,16,A high school student who is struggling with his history studies,31,predictive,4
+8,16,A high school student who is struggling with his history studies,31,explicit,3
+8,16,A high school student who is struggling with his history studies,30,control,2
+8,16,A high school student who is struggling with his history studies,30,predictive,3
+8,16,A high school student who is struggling with his history studies,30,explicit,3
+8,16,A high school student who is struggling with his history studies,37,control,3
+8,16,A high school student who is struggling with his history studies,37,predictive,3
+8,16,A high school student who is struggling with his history studies,37,explicit,3
+8,16,A high school student who is struggling with his history studies,39,control,1
+8,16,A high school student who is struggling with his history studies,39,predictive,1
+8,16,A high school student who is struggling with his history studies,39,explicit,1
+8,16,A high school student who is struggling with his history studies,24,control,1
+8,16,A high school student who is struggling with his history studies,24,predictive,3
+8,16,A high school student who is struggling with his history studies,24,explicit,2
+8,16,A high school student who is struggling with his history studies,23,control,1
+8,16,A high school student who is struggling with his history studies,23,predictive,4
+8,16,A high school student who is struggling with his history studies,23,explicit,3
+8,16,A high school student who is struggling with his history studies,4,control,3
+8,16,A high school student who is struggling with his history studies,4,predictive,3
+8,16,A high school student who is struggling with his history studies,4,explicit,3
+8,16,A high school student who is struggling with his history studies,15,control,1
+8,16,A high school student who is struggling with his history studies,15,predictive,4
+8,16,A high school student who is struggling with his history studies,15,explicit,4
+8,16,A high school student who is struggling with his history studies,3,control,2
+8,16,A high school student who is struggling with his history studies,3,predictive,4
+8,16,A high school student who is struggling with his history studies,3,explicit,3
+8,16,A high school student who is struggling with his history studies,12,control,4
+8,16,A high school student who is struggling with his history studies,12,predictive,3
+8,16,A high school student who is struggling with his history studies,12,explicit,2
+8,16,A high school student who is struggling with his history studies,40,control,3
+8,16,A high school student who is struggling with his history studies,40,predictive,3
+8,16,A high school student who is struggling with his history studies,40,explicit,3
+8,16,A high school student who is struggling with his history studies,2,control,3
+8,16,A high school student who is struggling with his history studies,2,predictive,4
+8,16,A high school student who is struggling with his history studies,2,explicit,4
+8,16,A high school student who is struggling with his history studies,13,control,3
+8,16,A high school student who is struggling with his history studies,13,predictive,3
+8,16,A high school student who is struggling with his history studies,13,explicit,3
+8,16,A high school student who is struggling with his history studies,5,control,2
+8,16,A high school student who is struggling with his history studies,5,predictive,3
+8,16,A high school student who is struggling with his history studies,5,explicit,4
+8,16,A high school student who is struggling with his history studies,14,control,3
+8,16,A high school student who is struggling with his history studies,14,predictive,3
+8,16,A high school student who is struggling with his history studies,14,explicit,3
+8,16,A high school student who is struggling with his history studies,22,control,3
+8,16,A high school student who is struggling with his history studies,22,predictive,3
+8,16,A high school student who is struggling with his history studies,22,explicit,3
+8,16,A high school student who is struggling with his history studies,25,control,2
+8,16,A high school student who is struggling with his history studies,25,predictive,4
+8,16,A high school student who is struggling with his history studies,25,explicit,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,32,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,32,predictive,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,32,explicit,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,35,control,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,35,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,35,explicit,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,34,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,34,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,34,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,33,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,33,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,33,explicit,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,20,control,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,20,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,20,explicit,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,18,control,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,18,predictive,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,18,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,27,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,27,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,27,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,9,control,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,9,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,9,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,11,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,11,predictive,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,11,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,7,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,7,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,7,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,29,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,29,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,29,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,16,control,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,16,predictive,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,16,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,6,control,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,6,predictive,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,6,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,28,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,28,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,28,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,17,control,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,17,predictive,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,17,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,1,control,1
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,1,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,1,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,10,control,1
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,10,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,10,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,19,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,19,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,19,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,26,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,26,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,26,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,8,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,8,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,8,explicit,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,21,control,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,21,predictive,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,21,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,38,control,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,38,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,38,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,36,control,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,36,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,36,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,31,control,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,31,predictive,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,31,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,30,control,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,30,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,30,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,37,control,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,37,predictive,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,37,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,39,control,1
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,39,predictive,1
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,39,explicit,1
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,24,control,1
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,24,predictive,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,24,explicit,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,23,control,1
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,23,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,23,explicit,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,4,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,4,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,4,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,15,control,1
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,15,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,15,explicit,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,3,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,3,predictive,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,3,explicit,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,12,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,12,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,12,explicit,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,40,control,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,40,predictive,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,40,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,2,control,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,2,predictive,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,2,explicit,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,13,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,13,predictive,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,13,explicit,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,5,control,2
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,5,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,5,explicit,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,14,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,14,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,14,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,22,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,22,predictive,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,22,explicit,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,25,control,3
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,25,predictive,4
+9,16,A curious high schooler passionate about marine life and interested in learning about seagrass conservation,25,explicit,4
